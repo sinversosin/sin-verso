@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Smart Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--soft:#aaaacc;--accent:#a78bfa;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  header{background:linear-gradient(135deg,#080810,#0a0018 50%,#080810);border-bottom:1px solid var(--border);padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:260px;background:radial-gradient(ellipse,rgba(200,200,200,.10),transparent 70%);pointer-events:none;}
+  .site-label{font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);text-transform:uppercase;opacity:.7;margin-bottom:10px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,7vw,76px);letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 30%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:10px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .price-note{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+  main{padding:28px 16px 80px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .card:hover{border-color:rgba(200,200,200,.3);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(77,187,122,.15);color:#4dbb7a;border:1px solid rgba(77,187,122,.3);}
+  .b-mid{background:rgba(200,200,200,.1);color:var(--accent);border:1px solid rgba(200,200,200,.25);}
+  .b-high{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-no{background:rgba(120,120,120,.15);color:#888;border:1px solid rgba(120,120,120,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tt{border-bottom:1px dashed var(--accent);color:var(--accent);cursor:pointer;font-weight:600;display:inline;}
+  #ttBubble{display:none;position:fixed;background:#080810;border:1px solid var(--accent);border-radius:14px;padding:13px 16px;font-size:14px;color:var(--text);line-height:1.6;max-width:270px;z-index:9999;box-shadow:0 8px 40px rgba(0,0,0,.7);pointer-events:none;}
+  #ttBubble.on{display:block;}
+  #ttBubble::before{content:'💡 ';}
+  .tip{background:rgba(200,200,200,.06);border:1px solid rgba(200,200,200,.15);border-radius:14px;padding:16px 18px;margin-top:20px;font-size:14px;line-height:1.65;color:#c8c8e0;}
+  .tip strong{color:var(--accent);}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-green{background:rgba(77,187,122,.06);border:1px solid rgba(77,187,122,.2);color:#a0d8b4;}
+  .tip-green strong{color:#4dbb7a;}
+  .tabla{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+  .tabla th{background:var(--surface);color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);}
+  .tabla td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;line-height:1.5;}
+  .tabla tr:hover td{background:rgba(255,255,255,.02);}
+  .tabla td:first-child{color:var(--text);font-weight:700;}
+  .tabla .hl td{background:rgba(200,200,200,.04);}
+  .tabla .hl td:first-child{color:var(--accent);}
+  .ok::before{content:'✓ ';color:#4dbb7a;}
+  .mal::before{content:'✗ ';color:#f87171;}
+  .meh::before{content:'~ ';color:#ffd700;}
+  .perfiles{display:flex;flex-direction:column;gap:10px;}
+  .perfil{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .perfil:hover{border-color:rgba(200,200,200,.3);}
+  .perfil-ico{font-size:24px;flex-shrink:0;}
+  .perfil-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .perfil-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .perfil-rec{font-size:12px;font-weight:700;color:var(--accent);margin-top:5px;}
+  .checks{display:flex;flex-direction:column;gap:10px;}
+  .check{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .check:hover{border-color:rgba(200,200,200,.3);}
+  .check-ico{font-size:22px;flex-shrink:0;}
+  .check-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .check-desc{font-size:13px;color:var(--muted);line-height:1.55;}
+  .check-desc strong{color:var(--text);}
+  .check-desc em{color:#7a9ab0;font-style:italic;font-size:12px;}
+  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;}
+  @media(max-width:480px){.pgrid{grid-template-columns:1fr;}}
+  .pcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;}
+  .pcard.rec{border-color:rgba(200,200,200,.3);background:rgba(200,200,200,.03);}
+  .pcard.alt{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.03);}
+  .ptag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;}
+  .pcard.rec .ptag{color:var(--accent);}
+  .pcard.alt .ptag{color:#f87171;}
+  .pmarca{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--text);margin-bottom:5px;}
+  .pdesc{font-size:12px;color:var(--muted);line-height:1.6;}
+  .pdesc strong{color:var(--text);}
+  @media(max-width:480px){.card-name{font-size:20px;}.tabla th,.tabla td{padding:8px;}}
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="site-label">SinVerso · Tecnología</div>
+  <h1>Smart Home</h1>
+  <p class="subtitle">La casa que obedece. <strong>Configurada por vos, claro.</strong></p>
+  <div class="price-note">💲 Precios en USD orientativos · Varían según tipo de cambio y mercado local</div>
+</header>
+
+<div class="error-caro"><strong>🏡 El error más caro</strong>Comprar dispositivos de distintos ecosistemas sin verificar si son compatibles entre sí. Un enchufe Tuya, una lámpara de una marca china distinta y una cámara de otra marca más pueden no hablar entre ellos. Elegí un ecosistema (Tuya/Alexa/Google) y quedate en él.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('quees',this)">🏠 ¿Qué es?</div>
+  <div class="tab" onclick="goTab('dispositivos',this)">💡 Dispositivos</div>
+  <div class="tab" onclick="goTab('ecosistemas',this)">🔗 Ecosistemas</div>
+  <div class="tab" onclick="goTab('perfil',this)">🧑 Por dónde empezar</div>
+  <div class="tab" onclick="goTab('checklist',this)">🛒 Antes de comprar</div>
+</div>
+<main>
+<div class="section active" id="quees">
+  <div class="sec-title">¿Qué es el Smart Home?</div>
+  <div class="sec-sub">Dispositivos del hogar conectados a internet y controlables desde el celu o por voz. <em>Desde encender la luz con la voz hasta programar el aire para que encienda antes de llegar.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#a78bfa">
+      <div class="card-head"><div class="card-name">La idea básica</div><span class="badge b-mid">Qué puede hacer</span></div>
+      <div class="card-body">
+        Un hogar inteligente puede controlar: luces, enchufes, aire acondicionado, termostato, persianas, cerraduras, cámaras, alarmas, robots aspiradores y más.
+        <br><br>
+        <strong>Formas de controlar:</strong><br>
+        • App en el celu (desde cualquier lugar).<br>
+        • Voz: "Alexa, apagá las luces del living".<br>
+        • Automatizaciones: "cuando sea las 22hs, bajá las persianas y atenuá las luces".<br>
+        • Sensores: "cuando abran la puerta, prendé la luz del pasillo".
+        <br><em>— "El smart home no es ciencia ficción cara. Una lamparita inteligente cuesta USD 8 y se controla por voz."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">¿Vale la pena o es un juguete?</div><span class="badge b-ok">La pregunta honesta</span></div>
+      <div class="card-body">
+        Depende de cómo lo usés:
+        <br><br>
+        <strong>Vale la pena si:</strong> te olvidás de apagar luces o el aire, querés programar horarios, recibir alertas de movimiento o control remoto mientras estás fuera.<br>
+        <strong>Es un juguete si:</strong> lo configurás, lo usás 2 semanas y después lo olvidás. Pasa más de lo que pensás.
+        <br><br>
+        Lo más práctico: empezar por lo que más molesta en tu vida diaria. ¿Siempre olvidás el aire prendido? Empezá por ahí.
+        <br><em>— "El mejor dispositivo smart home es el que resuelve un problema real, no el que parece más futurista."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="dispositivos">
+  <div class="sec-title">Los dispositivos principales</div>
+  <div class="sec-sub">Los más útiles del mercado y lo que hacen realmente.</div>
+  <div class="cards">
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Lamparitas inteligentes</div><span class="badge b-top">El punto de entrada</span></div>
+      <div class="card-body">
+        Lamparitas LED con WiFi o Zigbee integrado. Se controlan por app o voz. Permiten cambiar el color, la intensidad y programar horarios.
+        <br><br>
+        <strong>Philips Hue</strong> → Las más famosas. Excelente calidad de luz y ecosistema. Caras.<br>
+        <strong>IKEA TRÅDFRI</strong> → Muy buena relación precio/calidad. Zigbee.<br>
+        <strong>Tuya / LSC / Govee</strong> → Las más baratas. WiFi directo, sin hub. Para empezar sin gastar.
+        <br><em>— "Una lamparita Tuya de USD 8 que se controla por Alexa hace el 80% de lo que hace una Philips Hue de USD 50."</em>
+      </div>
+      <div class="chips"><div class="chip">Tuya básica <span>USD 8–15</span></div><div class="chip">Philips Hue <span>USD 40–60</span></div></div>
+    </div>
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">Enchufes inteligentes</div><span class="badge b-high">El más versátil</span></div>
+      <div class="card-body">
+        Un enchufe que se controla por app o voz. Cualquier dispositivo conectado se vuelve "inteligente": ventilador, heater, cafetera, cualquier cosa.
+        <br><br>
+        Muchos también <span class="tt" data-tip="Monitoreo de consumo eléctrico = el enchufe inteligente mide cuántos watts consume el dispositivo en tiempo real. Podés ver cuánto gasta la heladera, el aire o la PC directamente desde la app. Muy útil para detectar dispositivos que consumen de más.">miden el consumo eléctrico</span> en tiempo real. Muy útil para saber cuánto gasta cada electrodoméstico.
+        <br><em>— "Enchufá la cafetera en uno y programala para que encienda 5 minutos antes de que te levantes. Bienvenido al futuro."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 10–25</span></div></div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">Tiras LED inteligentes</div><span class="badge b-mid">Para ambientar</span></div>
+      <div class="card-body">
+        Tiras LED de colores que se pegan detrás del TV, bajo la cama, en el escritorio. Sincronizan colores con la música o el contenido que estás viendo.
+        <br><br>
+        <strong>Govee</strong> y <strong>Philips Hue Play</strong> son las más populares. Las genéricas baratas suelen tener app inestable y los colores no son precisos.
+        <br><em>— "El LED detrás del TV que sincroniza con la película es el upgrade visual más impactante por el precio."</em>
+      </div>
+      <div class="chips"><div class="chip">Govee tira LED 5m <span>USD 20–40</span></div></div>
+    </div>
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Sensores</div><span class="badge b-mid">El cerebro de las automatizaciones</span></div>
+      <div class="card-body">
+        Pequeños dispositivos que detectan y activan automatizaciones:
+        <br><br>
+        <strong>Sensor de movimiento</strong> → Enciende la luz cuando alguien entra al pasillo. Apaga cuando no detecta movimiento por 5 minutos.<br>
+        <strong>Sensor de puerta/ventana</strong> → Avisa cuando abren la puerta. Apaga el aire si se abre una ventana.<br>
+        <strong>Sensor de temperatura/humedad</strong> → Activa el humidificador cuando la humedad baja o el aire cuando la temperatura sube.<br>
+        <strong>Sensor de humo/gas</strong> → Alerta al celu si detecta humo o gas.
+        <br><em>— "Un sensor de movimiento de USD 10 en el pasillo de noche es más cómodo que buscar el interruptor a oscuras."</em>
+      </div>
+      <div class="chips"><div class="chip">Sensor Aqara/Sonoff <span>USD 10–20</span></div></div>
+    </div>
+    <div class="card" style="--ca:#a78bfa">
+      <div class="card-head"><div class="card-name">Control de aire acondicionado</div><span class="badge b-top">De los más útiles</span></div>
+      <div class="card-body">
+        Si tu aire tiene control remoto por infrarrojo, hay dispositivos que aprenden los comandos y los replican desde el celu o por voz.
+        <br><br>
+        <strong>Broadlink RM4 Pro</strong> → El más popular. USD 25–40. Aprende cualquier control remoto infrarrojo: aire, TV, home theater, todo. Lo controlás desde cualquier lado del mundo.
+        <br><em>— "Encender el aire 20 minutos antes de llegar a casa desde el celu. Ese es el lujo que vale."</em>
+      </div>
+      <div class="chips"><div class="chip">Broadlink RM4 <span>USD 25–40</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="ecosistemas">
+  <div class="sec-title">Los ecosistemas</div>
+  <div class="sec-sub">Todos los dispositivos necesitan hablar entre sí. <em>El ecosistema es el idioma que usan para comunicarse.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">Amazon Alexa</div><span class="badge b-high">El más extendido</span></div>
+      <div class="card-body">
+        El ecosistema más popular mundialmente. Compatible con miles de dispositivos. El Echo Dot es el altavoz de entrada. "Alexa, apagá las luces".
+        <br><br>
+        La mayoría de los dispositivos Tuya y económicos son compatibles con Alexa. El mejor ecosistema para el que quiere muchas opciones a bajo costo.
+        <br><em>— "Si querés empezar en smart home con el menor presupuesto: Echo Dot + lamparitas Tuya + enchufe inteligente. USD 50 total."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Google Home</div><span class="badge b-mid">El más integrado con Android</span></div>
+      <div class="card-body">
+        El ecosistema de Google. Mejor integrado con Android y Google Assistant. El Nest Mini o Google Home es el altavoz de entrada.
+        <br><br>
+        Compatible con la mayoría de los dispositivos del mercado. Si tenés Android y usás mucho Google, este es el ecosistema natural.
+        <br><em>— "OK Google, ¿cuál es el tiempo? ¿Prendé las luces del living. ¿Cuánto falta para que llegue mi pedido?"</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#555">
+      <div class="card-head"><div class="card-name">Apple HomeKit / Home</div><span class="badge b-no">Solo para Apple</span></div>
+      <div class="card-body">
+        El ecosistema de Apple. Funciona con iPhone, iPad, Mac, Apple Watch. Control desde la app Hogar. Siri como asistente.
+        <br><br>
+        <strong>Lo mejor:</strong> privacidad superior, integración perfecta con Apple, muy fácil de usar.<br>
+        <strong>Lo limitante:</strong> muchos dispositivos económicos no son compatibles con HomeKit. Los compatibles suelen ser más caros.
+        <br><em>— "Para el que vive en el ecosistema Apple, HomeKit es la opción natural. Para el resto, Alexa o Google."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#a78bfa">
+      <div class="card-head"><div class="card-name">Matter: el estándar universal</div><span class="badge b-top">El futuro</span></div>
+      <div class="card-body">
+        Matter es el nuevo estándar creado por Apple, Google, Amazon y Samsung para que todos los dispositivos sean compatibles entre sí, sin importar la marca.
+        <br><br>
+        Un dispositivo con Matter funciona con Alexa, Google Home y HomeKit al mismo tiempo. El fin de la fragmentación de ecosistemas. Todavía en adopción pero la dirección del mercado.
+        <br><em>— "Comprá dispositivos Matter si podés. La inversión va a durar más y va a ser compatible con lo que sea que uses en el futuro."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="perfil">
+  <div class="sec-title">Por dónde empezar</div>
+  <div class="sec-sub">No intentés convertir toda la casa de un día para otro. <em>El smart home se construye de a poco, empezando por lo que más valor te da.</em></div>
+  <div class="perfiles">
+    <div class="perfil"><div class="perfil-ico">💡</div><div>
+      <div class="perfil-title">Empezar desde cero con poco presupuesto</div>
+      <div class="perfil-desc">Querés probar el smart home sin gastar mucho.</div>
+      <div class="perfil-rec">→ Amazon Echo Dot (USD 30) + 2 lamparitas Tuya (USD 16) + 1 enchufe inteligente (USD 12). Total: USD 60. Controlás luces y un electrodoméstico por voz y app.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">❄️</div><div>
+      <div class="perfil-title">Lo más útil primero: el aire</div>
+      <div class="perfil-desc">Querés controlar el aire desde el celu.</div>
+      <div class="perfil-rec">→ Broadlink RM4 Pro (USD 35). Aprende el control remoto de tu aire y lo controlás desde donde estés. El upgrade más práctico.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🔒</div><div>
+      <div class="perfil-title">Seguridad básica</div>
+      <div class="perfil-desc">Cámara en la entrada, sensor de puerta, alertas al celu.</div>
+      <div class="perfil-rec">→ TP-Link Tapo cámara (USD 25) + sensor de puerta Aqara (USD 15) + Echo Dot para notificaciones por voz (USD 30). Setup básico de seguridad.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🏠</div><div>
+      <div class="perfil-title">Casa completamente conectada</div>
+      <div class="perfil-desc">Querés automatizar todo: luces, persianas, aire, seguridad.</div>
+      <div class="perfil-rec">→ Hub Zigbee (Philips Hue Bridge o Aqara Hub) + dispositivos compatibles. Considera Home Assistant (software gratuito) para automatizaciones avanzadas sin depender de nubes de terceros.</div>
+    </div></div>
+  </div>
+</div>
+
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de Comprar</div>
+  <div class="sec-sub">Lo que hay que pensar antes de llenar la casa de dispositivos conectados.</div>
+  <div class="checks">
+    <div class="check"><div class="check-ico">🔗</div><div>
+      <div class="check-title">Elegí un ecosistema y mantenete en él</div>
+      <div class="check-desc">Mezclar Alexa, Google y HomeKit en la misma casa es un caos. <strong>Elegí uno y comprá dispositivos compatibles con ese ecosistema.</strong> <em>— Un solo ecosistema bien configurado supera a tres mezclados.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">📶</div><div>
+      <div class="check-title">WiFi sólido en toda la casa</div>
+      <div class="check-desc">Los dispositivos smart home se conectan por WiFi o Zigbee. <strong>Si el WiFi llega débil a alguna zona, los dispositivos ahí van a ser inestables.</strong> Mejorá el WiFi antes de agregar dispositivos. <em>— Un smart home inestable es peor que no tener.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">🔒</div><div>
+      <div class="check-title">Privacidad: ¿a quién le das acceso a tu casa?</div>
+      <div class="check-desc">Todos estos dispositivos envían datos a servidores (generalmente en China o EE.UU.). <strong>Usá contraseñas fuertes, red de invitados para los dispositivos IoT y actualizá el firmware.</strong> <em>— Una cámara hackeada en tu casa es una invasión de privacidad real.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">📱</div><div>
+      <div class="check-title">Una app por ecosistema, no 10 apps</div>
+      <div class="check-desc">Si terminás con Tuya, Govee, Broadlink, Philips Hue y TP-Link Tapo cada una en su propia app, el control "inteligente" se vuelve un caos. <strong>Centralizá todo en Alexa o Google Home.</strong></div>
+    </div></div>
+  </div>
+  <div class="tip" style="margin-top:20px">
+    <strong>💡 Empezá simple:</strong> La trampa del smart home es querer automatizar todo de golpe. Empezá con 1–2 dispositivos, aprendé a usarlos bien, y después expandís. La automatización que realmente usás todos los días vale más que la que suena impresionante pero se configura una vez y se olvida.
+  </div>
+</div>
+</main>
+<div id="ttBubble"></div>
+<script>
+  function goTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+  const bubble=document.getElementById('ttBubble');let timer;
+  document.querySelectorAll('.tt').forEach(el=>{el.addEventListener('click',function(e){e.stopPropagation();bubble.textContent=this.dataset.tip;bubble.classList.add('on');const r=this.getBoundingClientRect();let top=r.bottom+10,left=r.left;if(left+280>window.innerWidth)left=window.innerWidth-285;if(top+140>window.innerHeight)top=r.top-145;bubble.style.top=top+'px';bubble.style.left=left+'px';clearTimeout(timer);timer=setTimeout(()=>bubble.classList.remove('on'),5000);});});
+  document.addEventListener('click',()=>bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Smart Home: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="camaras.html" class="rel-link">📷 Cámaras</a><a href="cerraduras.html" class="rel-link">🔐 Cerraduras</a><a href="iluminacion-hogar.html" class="rel-link">💡 Iluminación</a><a href="wifi-routers.html" class="rel-link">📡 WiFi</a></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Relojes Inteligentes</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080810; --surface: #10101c; --card: #13131f;
+    --border: #20203a; --text: #eeeef5; --muted: #9494b8; --soft: #8888aa;
+    --accent: #06b6d4; --accent2: #0891b2;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-size:16px; overflow-x:hidden; }
+
+  header { background:linear-gradient(135deg,#080810,#001a1f 50%,#080810); border-bottom:1px solid var(--border); padding:44px 20px 36px; text-align:center; position:relative; overflow:hidden; }
+  header::before { content:''; position:absolute; top:-80px; left:50%; transform:translateX(-50%); width:500px; height:260px; background:radial-gradient(ellipse,rgba(6,182,212,.12),transparent 70%); pointer-events:none; }
+  .site-label { font-size:11px; font-weight:700; letter-spacing:5px; color:var(--accent); text-transform:uppercase; opacity:.7; margin-bottom:10px; }
+  header h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(40px,8vw,80px); letter-spacing:2px; line-height:1; background:linear-gradient(135deg,#fff 30%,var(--accent) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .subtitle { margin-top:10px; color:var(--muted); font-size:15px; font-style:italic; }
+  .subtitle strong { color:var(--accent); font-style:normal; }
+
+  .tabs { display:flex; gap:8px; overflow-x:auto; padding:20px 16px 0; flex-wrap:nowrap; scrollbar-width:none; }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab { background:var(--surface); border:1px solid var(--border); border-radius:30px; padding:10px 18px; font-size:13px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; white-space:nowrap; flex-shrink:0; }
+  .tab:hover { border-color:var(--accent); color:var(--accent); }
+  .tab.active { background:var(--accent); border-color:var(--accent); color:#000; font-weight:700; }
+
+  main { padding:28px 16px 80px; max-width:640px; margin:0 auto; }
+  .section { display:none; }
+  .section.active { display:block; }
+  .sec-title { font-family:'Bebas Neue',sans-serif; font-size:34px; letter-spacing:1px; color:var(--accent); margin-bottom:4px; }
+  .sec-sub { color:var(--muted); font-size:15px; margin-bottom:24px; line-height:1.6; }
+  .sec-sub em { color:var(--text); font-style:italic; }
+
+  .cards { display:flex; flex-direction:column; gap:14px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:18px; padding:20px 20px 20px 24px; position:relative; overflow:hidden; transition:border-color .2s,transform .2s; }
+  .card:hover { border-color:rgba(6,182,212,.4); transform:translateY(-2px); }
+  .card::before { content:''; position:absolute; top:0; left:0; width:5px; height:100%; background:var(--ca,var(--accent)); border-radius:18px 0 0 18px; }
+  .card-head { display:flex; align-items:center; gap:12px; margin-bottom:8px; flex-wrap:wrap; }
+  .card-name { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:1px; color:var(--text); line-height:1; }
+  .badge { font-size:10px; font-weight:700; letter-spacing:1.5px; padding:3px 10px; border-radius:20px; text-transform:uppercase; }
+  .b-ok   { background:rgba(77,187,122,.15);  color:#4dbb7a;      border:1px solid rgba(77,187,122,.3); }
+  .b-mid  { background:rgba(6,182,212,.12);   color:var(--accent); border:1px solid rgba(6,182,212,.3); }
+  .b-high { background:rgba(168,85,247,.12);  color:#c084fc;       border:1px solid rgba(168,85,247,.3); }
+  .b-top  { background:rgba(255,215,0,.12);   color:#ffd700;       border:1px solid rgba(255,215,0,.3); }
+  .b-no   { background:rgba(120,120,120,.15); color:#888;          border:1px solid rgba(120,120,120,.3); }
+  .b-warn { background:rgba(248,113,113,.15); color:#f87171;       border:1px solid rgba(248,113,113,.3); }
+  .card-body { font-size:14px; color:var(--muted); line-height:1.7; }
+  .card-body strong { color:var(--text); font-weight:600; }
+  .card-body em { color:#8899bb; font-size:13px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .chip { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:4px 10px; font-size:12px; color:var(--muted); }
+  .chip span { color:var(--text); font-weight:600; }
+
+  .tt { border-bottom:1px dashed var(--accent); color:var(--accent); cursor:pointer; font-weight:600; display:inline; }
+  #ttBubble { display:none; position:fixed; background:#001a1f; border:1px solid var(--accent); border-radius:14px; padding:13px 16px; font-size:14px; color:var(--text); line-height:1.6; max-width:270px; z-index:9999; box-shadow:0 8px 40px rgba(0,0,0,.7); pointer-events:none; }
+  #ttBubble.on { display:block; }
+  #ttBubble::before { content:'💡 '; }
+
+  .tip { background:rgba(6,182,212,.06); border:1px solid rgba(6,182,212,.2); border-radius:14px; padding:16px 18px; margin-top:20px; font-size:14px; line-height:1.65; color:#9ae0ea; }
+  .tip strong { color:var(--accent); }
+  .tip-green { background:rgba(77,187,122,.06); border:1px solid rgba(77,187,122,.2); color:#a0d8b4; }
+  .tip-green strong { color:#4dbb7a; }
+  .tip-warn { background:rgba(248,113,113,.06); border:1px solid rgba(248,113,113,.2); color:#f8b4b4; }
+  .tip-warn strong { color:#f87171; }
+
+  /* MARCA CARDS */
+  .marca-card { border-radius:18px; padding:20px; margin-bottom:14px; border:1px solid var(--border); position:relative; overflow:hidden; transition:transform .2s,border-color .2s; }
+  .marca-card:hover { transform:translateY(-2px); }
+  .marca-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; border-radius:18px 18px 0 0; background:var(--mc); }
+  .marca-header { display:flex; align-items:center; gap:14px; margin-bottom:12px; }
+  .marca-logo { font-size:38px; }
+  .marca-nombre { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:1px; color:var(--text); line-height:1; }
+  .marca-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+  .marca-slogan { font-size:13px; color:var(--muted); font-style:italic; margin-bottom:10px; }
+  .marca-body { font-size:14px; color:var(--muted); line-height:1.7; }
+  .marca-body strong { color:var(--text); }
+  .marca-specs { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .marca-spec { background:rgba(255,255,255,.06); border-radius:8px; padding:4px 10px; font-size:12px; color:var(--soft); }
+  .marca-spec span { font-weight:700; color:var(--text); }
+
+  /* SENSORES GRID */
+  .sensores { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; }
+  @media(max-width:480px){ .sensores { grid-template-columns:1fr; } }
+  .sensor { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px; transition:border-color .2s; }
+  .sensor:hover { border-color:rgba(6,182,212,.3); }
+  .sensor-ico { font-size:26px; margin-bottom:6px; }
+  .sensor-name { font-weight:700; color:var(--text); font-size:14px; margin-bottom:3px; }
+  .sensor-desc { font-size:12px; color:var(--muted); line-height:1.4; }
+  .sensor-prec { font-size:11px; color:var(--accent); font-weight:600; margin-top:4px; }
+
+  /* TABLA */
+  .tabla { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; }
+  .tabla th { background:var(--surface); color:var(--accent); font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:1px; padding:10px 12px; text-align:left; border-bottom:2px solid var(--border); }
+  .tabla td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--muted); vertical-align:top; line-height:1.5; }
+  .tabla tr:hover td { background:rgba(255,255,255,.02); }
+  .tabla td:first-child { color:var(--text); font-weight:700; }
+  .tabla .hl td { background:rgba(6,182,212,.05); }
+  .tabla .hl td:first-child { color:var(--accent); }
+  .ok::before  { content:'✓ '; color:#4dbb7a; }
+  .mal::before { content:'✗ '; color:#f87171; }
+  .meh::before { content:'~ '; color:#ffd700; }
+
+  /* PERFILES */
+  .perfiles { display:flex; flex-direction:column; gap:10px; }
+  .perfil { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:15px 16px; display:flex; gap:13px; align-items:flex-start; transition:border-color .2s; }
+  .perfil:hover { border-color:rgba(6,182,212,.3); }
+  .perfil-ico { font-size:24px; flex-shrink:0; }
+  .perfil-title { font-weight:700; color:var(--text); font-size:14px; margin-bottom:3px; }
+  .perfil-desc { font-size:13px; color:var(--muted); line-height:1.5; }
+  .perfil-rec { font-size:12px; font-weight:700; color:var(--accent); margin-top:5px; }
+
+  /* CHECKS */
+  .checks { display:flex; flex-direction:column; gap:10px; }
+  .check { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:15px 16px; display:flex; gap:13px; align-items:flex-start; transition:border-color .2s; }
+  .check:hover { border-color:rgba(6,182,212,.3); }
+  .check-ico { font-size:22px; flex-shrink:0; }
+  .check-title { font-weight:700; color:var(--text); font-size:14px; margin-bottom:3px; }
+  .check-desc { font-size:13px; color:var(--muted); line-height:1.55; }
+  .check-desc strong { color:var(--text); }
+  .check-desc em { color:#7a9ab0; font-style:italic; font-size:12px; }
+
+  .pgrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; }
+  @media(max-width:480px){ .pgrid { grid-template-columns:1fr; } }
+  .pcard { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px; }
+  .pcard.rec { border-color:rgba(6,182,212,.4); background:rgba(6,182,212,.04); }
+  .pcard.alt { border-color:rgba(248,113,113,.3); background:rgba(248,113,113,.03); }
+  .ptag { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:5px; }
+  .pcard.rec .ptag { color:var(--accent); }
+  .pcard.alt .ptag { color:#f87171; }
+  .pmarca { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--text); margin-bottom:5px; }
+  .pdesc { font-size:12px; color:var(--muted); line-height:1.6; }
+  .pdesc strong { color:var(--text); }
+
+  @media(max-width:480px){ .card-name{font-size:20px;} .marca-nombre{font-size:22px;} .tabla th,.tabla td{padding:8px;} }
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="site-label">SinVerso · Tecnología</div>
+  <h1>Relojes Inteligentes</h1>
+  <p class="subtitle">Más que ver la hora. <strong>Aunque a veces cuesta recordar cómo hacer eso.</strong></p>
+  <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;">
+    💲 Precios en USD orientativos · Varían según el tipo de cambio y el mercado local
+  </div>
+</header>
+
+
+<div class="error-caro"><strong>⌚ El error más caro</strong>Comprar por la mayor cantidad de sensores sin verificar la precisión de ninguno. Un reloj con 20 sensores que mide todo mal es peor que uno con 5 que mide bien. Los únicos sensores con validación clínica real son el cardíaco óptico y el oxímetro en marcas premium.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('quees',this)">⌚ ¿Qué son?</div>
+  <div class="tab" onclick="goTab('sensores',this)">❤️ Sensores de salud</div>
+  <div class="tab" onclick="goTab('marcas',this)">🏆 Las marcas</div>
+  <div class="tab" onclick="goTab('tipos',this)">🎯 Tipos</div>
+  <div class="tab" onclick="goTab('perfil',this)">🧑 ¿Cuál es para vos?</div>
+  <div class="tab" onclick="goTab('checklist',this)">🛒 Antes de comprar</div>
+</div>
+
+<main>
+
+<!-- ══ QUÉ SON ══ -->
+<div class="section active" id="quees">
+  <div class="sec-title">¿Qué es un smartwatch?</div>
+  <div class="sec-sub">Una computadora en la muñeca que además da la hora. <em>Y que según cómo lo uses puede ser el gadget más útil o más caro pisapapeles de tu vida.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#06b6d4">
+      <div class="card-head"><div class="card-name">Lo que hace un smartwatch</div><span class="badge b-mid">El resumen</span></div>
+      <div class="card-body">
+        Un reloj inteligente es mucho más que ver la hora. Dependiendo del modelo puede:
+        <br><br>
+        <strong>Salud y deporte:</strong> frecuencia cardíaca, oxígeno en sangre (SpO2), ECG, presión arterial, sueño, pasos, calorías, GPS para correr.
+        <br><strong>Conectividad:</strong> notificaciones del celu, llamadas, mensajes, controlar la música.
+        <br><strong>Practicidad:</strong> pagos sin contacto (NFC), linterna, control del hogar inteligente.
+        <br><br>
+        La pregunta real no es qué puede hacer, sino <strong>qué vas a usar realmente</strong>. El que compra el reloj más completo y solo lo usa para ver notificaciones pagó de más.
+        <br><em>— "El 90% de los usuarios de smartwatch usa el 10% de las funciones. Y ese 10% es ver la hora y las notificaciones."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">Smartwatch vs Smartband</div><span class="badge b-mid">No es lo mismo</span></div>
+      <div class="card-body">
+        <strong>Smartband (pulsera)</strong> → Solo una correa delgada. Básicamente mide pasos, sueño y frecuencia cardíaca. Sin pantalla táctil grande, sin apps. Ejemplo: Xiaomi Mi Band, Fitbit Inspire. Precio: USD 15–USD 50. Batería: 10–20 días.
+        <br><br>
+        <strong>Smartwatch</strong> → Pantalla más grande, apps, GPS, más sensores. Parece un reloj de verdad. Ejemplo: Apple Watch, Galaxy Watch, Garmin. Precio: USD 60–600+. Batería: 1–7 días.
+        <br><br>
+        Si solo querés medir actividad y dormir bien → <strong>smartband</strong>. Si querés todo → <strong>smartwatch</strong>.
+        <br><em>— "La Mi Band 8 por USD 25 mide todo lo que mide un Apple Watch de USD 400. Menos bonita, pero los datos son los datos."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">La batería: el gran tema</div><span class="badge b-ok">Lo que más frustra</span></div>
+      <div class="card-body">
+        La batería es el talón de Aquiles de los smartwatches. A diferencia de un reloj común que dura años con una pila, estos hay que cargarlos seguido:
+        <br><br>
+        <strong>Apple Watch</strong> → 18–36 horas. Todos los días al cargador.
+        <br><strong>Galaxy Watch</strong> → 40–60 horas. Cada 2 días.
+        <br><strong>Garmin gama media</strong> → 7–14 días en modo smartwatch.
+        <br><strong>Garmin gama alta</strong> → Hasta 50 días en modo reloj básico.
+        <br><strong>Smartband (Mi Band)</strong> → 10–20 días.
+        <br><br>
+        <span class="tt" data-tip="El GPS consume mucha batería. Un smartwatch que dura 7 días en uso normal puede durar solo 8-10 horas con GPS activo todo el tiempo. Para maratones o trekking largo, esto importa mucho.">Con GPS activado la batería cae drásticamente.</span>
+        <br><em>— "El Apple Watch es el reloj más avanzado del mundo que hay que cargar todos los días como el celular. Paradoja."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">¿Es precisa la información de salud?</div><span class="badge b-top">La pregunta importante</span></div>
+      <div class="card-body">
+        Depende del sensor y de cómo lo uses. La realidad:
+        <br><br>
+        <strong>Pasos y calorías</strong> → Aproximados. Útiles para tendencias, no para valores exactos.<br>
+        <strong>Frecuencia cardíaca</strong> → Bastante precisa en reposo. Menos precisa durante ejercicio intenso si el reloj se mueve.<br>
+        <strong>SpO2 (oxígeno)</strong> → Orientativo. No reemplaza un oxímetro médico.<br>
+        <strong>ECG</strong> → Detecta fibrilación auricular con buena precisión en los modelos certificados (Apple Watch, Galaxy Watch).<br>
+        <strong>Sueño</strong> → Las fases son estimaciones. La tendencia es útil, los números exactos no tanto.<br>
+        <strong>Presión arterial</strong> → Solo algunos modelos (Galaxy Watch 6). Requiere calibración con esfigmomanómetro.
+        <br><em>— "Un smartwatch es una herramienta de bienestar, no un dispositivo médico. Para el médico, llevá los datos como referencia, no como diagnóstico."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SENSORES ══ -->
+<div class="section" id="sensores">
+  <div class="sec-title">Los sensores de salud</div>
+  <div class="sec-sub">El corazón del smartwatch. <em>Lo que mide, cómo lo mide y qué tan en serio tomarlo.</em></div>
+
+  <div class="sensores">
+    <div class="sensor">
+      <div class="sensor-ico">❤️</div>
+      <div class="sensor-name">Frecuencia cardíaca</div>
+      <div class="sensor-desc">Latidos por minuto. Mide en reposo y durante el ejercicio. Útil para zonas de entrenamiento.</div>
+      <div class="sensor-prec">Precisión: buena en reposo · regular en ejercicio intenso</div>
+    </div>
+    <div class="sensor">
+      <div class="sensor-ico">🩸</div>
+      <div class="sensor-name">SpO2 (oxígeno en sangre)</div>
+      <div class="sensor-desc">Porcentaje de oxígeno en la sangre. Útil para detectar apnea del sueño o problemas respiratorios.</div>
+      <div class="sensor-prec">Precisión: orientativa · no reemplaza oxímetro médico</div>
+    </div>
+    <div class="sensor">
+      <div class="sensor-ico">⚡</div>
+      <div class="sensor-name">ECG (electrocardiograma)</div>
+      <div class="sensor-desc">Detecta ritmos cardíacos irregulares, especialmente fibrilación auricular. Disponible en Apple Watch y Galaxy Watch.</div>
+      <div class="sensor-prec">Precisión: alta para FA · no reemplaza ECG médico completo</div>
+    </div>
+    <div class="sensor">
+      <div class="sensor-ico">🩺</div>
+      <div class="sensor-name">Presión arterial</div>
+      <div class="sensor-desc">Solo en algunos Galaxy Watch. Requiere calibración manual con tensiómetro. Muy útil para seguimiento diario.</div>
+      <div class="sensor-prec">Precisión: buena si se calibra correctamente</div>
+    </div>
+    <div class="sensor">
+      <div class="sensor-ico">😴</div>
+      <div class="sensor-name">Monitoreo de sueño</div>
+      <div class="sensor-desc">Detecta fases (liviano, profundo, REM). Mide apnea del sueño en algunos modelos. Útil para tendencias.</div>
+      <div class="sensor-prec">Precisión: las fases son estimaciones · las tendencias son útiles</div>
+    </div>
+    <div class="sensor">
+      <div class="sensor-ico">🌡️</div>
+      <div class="sensor-name">Temperatura corporal</div>
+      <div class="sensor-desc">Mide la temperatura de la piel durante el sueño. Útil para detectar fiebre o cambios hormonales.</div>
+      <div class="sensor-prec">Precisión: orientativa · no reemplaza termómetro</div>
+    </div>
+    <div class="sensor">
+      <div class="sensor-ico">📍</div>
+      <div class="sensor-name">GPS</div>
+      <div class="sensor-desc">Rastrea rutas de carrera, ciclismo, caminata. GPS integrado vs GPS asistido (usa el del celular).</div>
+      <div class="sensor-prec">GPS integrado: más preciso · GPS asistido: necesitás el celu</div>
+    </div>
+    <div class="sensor">
+      <div class="sensor-ico">😮‍💨</div>
+      <div class="sensor-name">Estrés y VFC</div>
+      <div class="sensor-desc">Mide la variabilidad de la frecuencia cardíaca para estimar el nivel de estrés y la recuperación.</div>
+      <div class="sensor-prec">Precisión: útil como tendencia · no exacto</div>
+    </div>
+  </div>
+
+  <div class="tip" style="margin-top:20px">
+    <strong>💡 Para el médico:</strong> Si usás el reloj para seguimiento de salud, <strong>guardá los datos semanales y lleváselos al médico como referencia</strong>. Un gráfico de frecuencia cardíaca o de SpO2 durante el sueño puede darle información valiosa. No lo uses como diagnóstico, úsalo como historial.
+  </div>
+
+  <div class="cards" style="margin-top:20px">
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">La detección de caídas</div><span class="badge b-warn">Para adultos mayores</span></div>
+      <div class="card-body">
+        Una función que se vuelve crítica con la edad: el reloj detecta si la persona cayó y, si no responde en 30 segundos, llama automáticamente a los contactos de emergencia y al 911.
+        <br><br>
+        <strong>Apple Watch</strong> → Tiene detección de caídas desde el Series 4. Se activa automáticamente para personas mayores de 65.
+        <br><strong>Samsung Galaxy Watch</strong> → También lo tiene en los modelos recientes.
+        <br><br>
+        Para alguien mayor que vive solo, esta función sola justifica la compra de un smartwatch.
+        <br><em>— "Una caída sin ayuda rápida puede ser una emergencia. El reloj puede ser literalmente una cuerda de vida."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MARCAS ══ -->
+<div class="section" id="marcas">
+  <div class="sec-title">Las marcas del mercado</div>
+  <div class="sec-sub">Cada una tiene su filosofía, su ecosistema y su precio. <em>Acá están las que importan.</em></div>
+
+  <!-- APPLE WATCH -->
+  <div class="marca-card" style="--mc:#555;background:linear-gradient(135deg,rgba(100,100,100,.1),transparent)">
+    <div class="marca-header">
+      <div class="marca-logo">⌚</div>
+      <div>
+        <div class="marca-nombre">Apple Watch</div>
+        <div class="marca-sub">Apple · Solo para iPhone</div>
+      </div>
+    </div>
+    <div class="marca-slogan">"El mejor smartwatch del mercado. Con una condición: tenés que tener iPhone."</div>
+    <div class="marca-body">
+      El Apple Watch es el estándar de la industria. La experiencia de usuario más pulida, la mejor integración con el iPhone, el mejor ecosistema de apps de salud y la detección de caídas más confiable.
+      <br><br>
+      <strong>Series SE</strong> → El más accesible. Sin ECG ni temperatura, pero tiene lo esencial.<br>
+      <strong>Series 9 / 10</strong> → El estándar. ECG, temperatura, detección de caídas, pantalla siempre activa.<br>
+      <strong>Ultra 2</strong> → Para deportistas extremos. GPS de doble frecuencia, batería de 60 horas, titanio.
+      <br><br>
+      <strong>La condición fatal:</strong> <span class="tt" data-tip="El Apple Watch requiere un iPhone para configurarse y funcionar al 100%. No funciona con Android. Si tenés Android y comprás un Apple Watch, podés usarlo para ver la hora y los sensores básicos, pero sin notificaciones, apps ni la mayoría de las funciones.">Solo funciona con iPhone</span>. Con Android es un ladrillo caro.
+    </div>
+    <div class="marca-specs">
+      <div class="marca-spec">Compatibilidad <span>Solo iPhone</span></div>
+      <div class="marca-spec">Batería <span>18–36 horas</span></div>
+      <div class="marca-spec">ECG <span>✓</span></div>
+      <div class="marca-spec">Detección caídas <span>✓</span></div>
+      <div class="marca-spec">Precio <span>USD 180–600+</span></div>
+    </div>
+  </div>
+
+  <!-- SAMSUNG GALAXY WATCH -->
+  <div class="marca-card" style="--mc:#1428a0;background:linear-gradient(135deg,rgba(20,40,160,.12),transparent)">
+    <div class="marca-header">
+      <div class="marca-logo">🔵</div>
+      <div>
+        <div class="marca-nombre">Samsung Galaxy Watch</div>
+        <div class="marca-sub">Samsung · Android (mejor con Galaxy)</div>
+      </div>
+    </div>
+    <div class="marca-slogan">"El mejor smartwatch Android. Con presión arterial incluida."</div>
+    <div class="marca-body">
+      El Galaxy Watch es el rival más serio del Apple Watch. Funciona con cualquier Android pero se integra mejor con teléfonos Samsung. Tiene una función que ningún Apple Watch tiene: <strong>medición de presión arterial</strong> (requiere calibración con tensiómetro).
+      <br><br>
+      <strong>Galaxy Watch FE</strong> → El más accesible. Lo esencial sin extras.<br>
+      <strong>Galaxy Watch 7</strong> → El estándar. ECG, presión arterial, temperatura, sueño avanzado.<br>
+      <strong>Galaxy Watch Ultra</strong> → La versión premium. Titanio, GPS de doble frecuencia, batería de 60 horas.
+      <br><em>— "Si tenés Android y querés medirte la presión sin sacar el tensiómetro del cajón, el Galaxy Watch 7 es tu reloj."</em>
+    </div>
+    <div class="marca-specs">
+      <div class="marca-spec">Compatibilidad <span>Android (mejor Samsung)</span></div>
+      <div class="marca-spec">Batería <span>40–60 horas</span></div>
+      <div class="marca-spec">Presión arterial <span>✓</span></div>
+      <div class="marca-spec">ECG <span>✓</span></div>
+      <div class="marca-spec">Precio <span>USD 120–400</span></div>
+    </div>
+  </div>
+
+  <!-- GARMIN -->
+  <div class="marca-card" style="--mc:#007cc2;background:linear-gradient(135deg,rgba(0,124,194,.12),transparent)">
+    <div class="marca-header">
+      <div class="marca-logo">🏃</div>
+      <div>
+        <div class="marca-nombre">Garmin</div>
+        <div class="marca-sub">Para deportistas de verdad</div>
+      </div>
+    </div>
+    <div class="marca-slogan">"Cuando el Apple Watch no alcanza para el maratón."</div>
+    <div class="marca-body">
+      Garmin es la marca de referencia para deportistas serios. Sus relojes no tienen la pantalla más linda ni la integración más fluida con el celu, pero tienen lo que ningún otro da: <strong>batería de días o semanas y GPS de precisión militar</strong>.
+      <br><br>
+      <strong>Forerunner 55 / 165</strong> → Para corredores que empiezan. GPS, planes de entrenamiento, 12–14 días de batería.<br>
+      <strong>Vivoactive / Venu</strong> → Para el que hace de todo: natación, ciclismo, yoga, golf.<br>
+      <strong>Fenix 7 / Epix</strong> → El tope de gama. GPS multibanda, mapas topográficos, hasta 37 días de batería en modo reloj. Para aventureros, ultramaratonistas, alpinistas.
+      <br><em>— "Con un Garmin Fenix salís a una expedición de 3 semanas sin cargador. Con un Apple Watch necesitás el cargador a las 18 horas."</em>
+    </div>
+    <div class="marca-specs">
+      <div class="marca-spec">Batería <span>7–50 días según modelo</span></div>
+      <div class="marca-spec">GPS <span>el mejor del mercado</span></div>
+      <div class="marca-spec">Compatibilidad <span>iOS y Android</span></div>
+      <div class="marca-spec">Precio <span>USD 80–700+</span></div>
+    </div>
+  </div>
+
+  <!-- XIAOMI / HUAWEI -->
+  <div class="marca-card" style="--mc:#ff6900;background:linear-gradient(135deg,rgba(255,105,0,.1),transparent)">
+    <div class="marca-header">
+      <div class="marca-logo">🟠</div>
+      <div>
+        <div class="marca-nombre">Xiaomi / Redmi / Huawei</div>
+        <div class="marca-sub">La relación precio/calidad</div>
+      </div>
+    </div>
+    <div class="marca-slogan">"Todo lo que necesitás sin pagar de más."</div>
+    <div class="marca-body">
+      Las marcas chinas democratizaron el smartwatch. Un Xiaomi Watch S3 o Redmi Watch 4 tiene GPS, frecuencia cardíaca, SpO2, sueño avanzado, notificaciones y hasta 15 días de batería por una fracción del precio de Apple o Samsung.
+      <br><br>
+      <strong>Xiaomi Smart Band 9</strong> → La Mi Band de siempre. La pulsera más vendida del mundo. Discreta, 18 días de batería, hace lo básico muy bien.
+      <br><strong>Xiaomi Watch S3 / S4</strong> → El paso siguiente. Pantalla AMOLED, GPS, llamadas desde el reloj.
+      <br><strong>Huawei Watch GT 4</strong> → Diseño premium, batería de 14 días, GPS preciso. La más bonita del segmento económico.
+      <br><em>— "La Xiaomi Mi Band es la entrada más inteligente al mundo del monitoreo de salud sin gastar una fortuna."</em>
+    </div>
+    <div class="marca-specs">
+      <div class="marca-spec">Precio <span>USD 15–120</span></div>
+      <div class="marca-spec">Batería <span>7–20 días</span></div>
+      <div class="marca-spec">Relación precio/calidad <span>la mejor</span></div>
+    </div>
+  </div>
+
+  <!-- FITBIT -->
+  <div class="marca-card" style="--mc:#00b0b9;background:linear-gradient(135deg,rgba(0,176,185,.1),transparent)">
+    <div class="marca-header">
+      <div class="marca-logo">💚</div>
+      <div>
+        <div class="marca-nombre">Fitbit (Google)</div>
+        <div class="marca-sub">Foco en salud y bienestar</div>
+      </div>
+    </div>
+    <div class="marca-slogan">"El reloj del que quiere mejorar su salud sin complicarse."</div>
+    <div class="marca-body">
+      Fitbit fue pionera en el monitoreo de salud personal. Hoy es de Google y sus relojes son muy completos en salud aunque menos en "smart". La app Fitbit es de las mejores del mercado para seguimiento de bienestar.
+      <br><br>
+      <strong>Fitbit Charge 6</strong> → La pulsera más avanzada. ECG, SpO2, GPS, 7 días de batería. Google Maps integrado.
+      <br><strong>Fitbit Sense 2</strong> → El smartwatch. Estrés, ECG, temperatura, 6 días de batería.
+      <br><em>— "Si el foco es mejorar hábitos de salud y no tanto las notificaciones, la app de Fitbit y su sistema de coaching son muy buenos."</em>
+    </div>
+    <div class="marca-specs">
+      <div class="marca-spec">Batería <span>6–7 días</span></div>
+      <div class="marca-spec">App de salud <span>de las mejores</span></div>
+      <div class="marca-spec">Precio <span>USD 80–150</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TIPOS ══ -->
+<div class="section" id="tipos">
+  <div class="sec-title">Tipos de smartwatch</div>
+  <div class="sec-sub">No todos los relojes inteligentes son para lo mismo. <em>Elegir el tipo correcto es tan importante como elegir la marca.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#06b6d4">
+      <div class="card-head"><div class="card-name">Smartwatch general</div><span class="badge b-mid">Para todos los días</span></div>
+      <div class="card-body">
+        El reloj inteligente de uso cotidiano. Notificaciones, llamadas, música, salud básica, pagos NFC. Diseño que puede ir con ropa de trabajo y de entrenamiento.
+        <br><br>
+        <strong>Ideal para:</strong> la persona que quiere un reloj que haga de todo sin especializarse en nada.
+        <br><strong>Ejemplos:</strong> Apple Watch Series 10, Samsung Galaxy Watch 7, Huawei Watch GT 4.
+        <br><em>— "El 80% de los smartwatches vendidos son de este tipo. Con razón."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Reloj deportivo / GPS</div><span class="badge b-ok">Para el atleta</span></div>
+      <div class="card-body">
+        GPS preciso, planes de entrenamiento, zonas de frecuencia cardíaca, análisis de rendimiento, batería larga. Menos foco en notificaciones y diseño, más en datos de entrenamiento.
+        <br><br>
+        <strong>Ideal para:</strong> corredores, ciclistas, triatletas, nadadores. El que entrena con datos.
+        <br><strong>Ejemplos:</strong> Garmin Forerunner, Polar Pacer, COROS Pace.
+        <br><em>— "Garmin te dice cuándo descansar, a qué ritmo correr y cuánto tardaste en recuperarte. El Apple Watch te dice cuántas calorías quemaste."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Reloj aventurero / outdoor</div><span class="badge b-warn">Para el extremo</span></div>
+      <div class="card-body">
+        Construidos para sobrevivir: carcaza de titanio o acero, cristal de zafiro, mapas topográficos, altímetro, barómetro, brújula, batería de semanas. Para montañismo, expediciones, aventura extrema.
+        <br><br>
+        <strong>Ideal para:</strong> montañistas, aventureros, militares, el que necesita un reloj que aguante todo.
+        <br><strong>Ejemplos:</strong> Garmin Fenix 7, Suunto 9 Peak, Apple Watch Ultra.
+        <br><em>— "El Garmin Fenix 7 Solar se carga con la luz del sol. Literalmente."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Reloj de salud / médico</div><span class="badge b-top">Para el monitoreo</span></div>
+      <div class="card-body">
+        Foco absoluto en los datos de salud: ECG certificado, presión arterial, SpO2, temperatura, detección de arritmias, apnea del sueño. Algunos tienen certificación FDA o CE médica.
+        <br><br>
+        <strong>Ideal para:</strong> personas con condiciones cardíacas, hipertensión, adultos mayores, cualquiera que quiera monitoreo serio.
+        <br><strong>Ejemplos:</strong> Apple Watch Series 10 (ECG certificado), Samsung Galaxy Watch 7 (presión arterial), Withings ScanWatch.
+        <br><em>— "El Withings ScanWatch tiene ECG, SpO2 y detección de fibrilación auricular con certificación médica europea. Y parece un reloj analógico de toda la vida."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">Smartband / pulsera</div><span class="badge b-high">Lo mínimo necesario</span></div>
+      <div class="card-body">
+        El formato más discreto y de mayor autonomía. No parece un reloj con pantalla grande: es una pulsera delgada. Perfecta para dormir, para el que no quiere notar que lleva algo en la muñeca.
+        <br><br>
+        <strong>Ideal para:</strong> el que quiere monitoreo básico sin molestar, seguimiento del sueño, presupuesto bajo.
+        <br><strong>Ejemplos:</strong> Xiaomi Smart Band 9, Fitbit Charge 6, Honor Band 9.
+        <br><em>— "Si dormís con el reloj puesto para medir el sueño, la smartband es mucho más cómoda que un smartwatch grande."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 Una aclaración importante:</strong> Los smartwatches <strong>no son dispositivos médicos certificados</strong> salvo excepciones puntuales (el ECG del Apple Watch y Galaxy Watch tienen certificación). Los datos son una referencia muy útil pero ante cualquier síntoma, el médico siempre primero.
+  </div>
+</div>
+
+<!-- ══ PERFIL ══ -->
+<div class="section" id="perfil">
+  <div class="sec-title">¿Cuál es para vos?</div>
+  <div class="sec-sub">Sin vueltas. <em>Según qué querés hacer con el reloj.</em></div>
+
+  <div class="perfiles">
+    <div class="perfil">
+      <div class="perfil-ico">🍎</div>
+      <div>
+        <div class="perfil-title">Tenés iPhone</div>
+        <div class="perfil-desc">Querés el reloj mejor integrado con tu celu y no te importa cargarlo todos los días.</div>
+        <div class="perfil-rec">→ Apple Watch Series 10 o SE. Sin dudarlo.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">🤖</div>
+      <div>
+        <div class="perfil-title">Tenés Android</div>
+        <div class="perfil-desc">Querés todo: notificaciones, salud, presión arterial, diseño bonito.</div>
+        <div class="perfil-rec">→ Samsung Galaxy Watch 7. El mejor smartwatch Android del mercado.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">🏃</div>
+      <div>
+        <div class="perfil-title">Corredor o ciclista serio</div>
+        <div class="perfil-desc">Entrenás con datos, querés planes de entrenamiento y batería que aguante una semana.</div>
+        <div class="perfil-rec">→ Garmin Forerunner 265 o 965. El estándar para atletas amateurs y profesionales.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">💰</div>
+      <div>
+        <div class="perfil-title">Presupuesto ajustado</div>
+        <div class="perfil-desc">Querés medir salud y actividad sin gastar una fortuna. Lo esencial y punto.</div>
+        <div class="perfil-rec">→ Xiaomi Smart Band 9 (USD 25) o Redmi Watch 4 (USD 50). Hacen el trabajo.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">🧓</div>
+      <div>
+        <div class="perfil-title">Para un adulto mayor</div>
+        <div class="perfil-desc">Detección de caídas, llamadas de emergencia, fácil de usar, monitoreo cardíaco.</div>
+        <div class="perfil-rec">→ Apple Watch SE (si tiene iPhone) o Samsung Galaxy Watch FE. La detección de caídas sola justifica la compra.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">❤️</div>
+      <div>
+        <div class="perfil-title">Foco en salud cardíaca</div>
+        <div class="perfil-desc">Hipertensión, arritmias, quiere datos para llevar al cardiólogo.</div>
+        <div class="perfil-rec">→ Apple Watch Series 10 (ECG certificado) o Samsung Galaxy Watch 7 (ECG + presión arterial). Para hipertensos, el Galaxy Watch es la mejor opción.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">🌄</div>
+      <div>
+        <div class="perfil-title">Aventurero / trekking / montaña</div>
+        <div class="perfil-desc">Salís días o semanas, necesitás GPS confiable y batería que aguante.</div>
+        <div class="perfil-rec">→ Garmin Fenix 7 o Instinct 2. Diseñados para sobrevivir lo que vos sobrevivís.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">😴</div>
+      <div>
+        <div class="perfil-title">Solo quiere medir el sueño</div>
+        <div class="perfil-desc">No le interesan las notificaciones ni el GPS. Solo quiere saber cómo duerme.</div>
+        <div class="perfil-rec">→ Xiaomi Smart Band 9 o Fitbit Inspire 3. Discreta, cómoda para dormir y batería larga.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHECKLIST ══ -->
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de Comprar</div>
+  <div class="sec-sub">Lo que tenés que definir antes de pagar. <em>Un smartwatch mal elegido termina en el cajón a los 3 meses.</em></div>
+
+  <div class="checks">
+    <div class="check">
+      <div class="check-ico">📱</div>
+      <div><div class="check-title">Verificá compatibilidad con tu celular</div>
+      <div class="check-desc">El Apple Watch solo funciona con iPhone. El Galaxy Watch funciona con Android pero mejor con Samsung. <strong>Antes de comprar, verificá que sea compatible con tu celu específico.</strong> <em>— Un Apple Watch con Android es básicamente una pulsera cara.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🔋</div>
+      <div><div class="check-title">¿Cuánto tolerás cargar el reloj?</div>
+      <div class="check-desc">Si el Apple Watch de 18 horas te parece poco, mirá Garmin o Huawei. <strong>La batería es el factor que más afecta la experiencia diaria.</strong> <em>— Un reloj que siempre está cargándose no está en tu muñeca cuando lo necesitás.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🎯</div>
+      <div><div class="check-title">Definí para qué lo vas a usar principalmente</div>
+      <div class="check-desc">¿Notificaciones? ¿Deporte? ¿Salud? ¿Estilo? <strong>No compres el más caro si solo lo vas a usar para ver la hora y los pasos.</strong> Una Mi Band hace eso perfecto a 1/10 del precio.</div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">💧</div>
+      <div><div class="check-title">Resistencia al agua</div>
+      <div class="check-desc">Si nadás o te duchás con el reloj puesto, verificá el nivel de resistencia. <strong>5ATM = hasta 50 metros · 10ATM = hasta 100 metros · ISO 22810:2010 = certificación de buceo.</strong> <em>— La mayoría soporta ducha pero no natación en agua salada.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">📏</div>
+      <div><div class="check-title">Tamaño de la caja</div>
+      <div class="check-desc">Los smartwatches vienen en tallas (40mm, 44mm, 45mm, 49mm). En muñecas pequeñas, una caja grande queda rara. <strong>Probatelo en el local antes de comprar si podés.</strong> <em>— El Apple Watch Ultra de 49mm en una muñeca de 14cm parece un ladrillo.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🔄</div>
+      <div><div class="check-title">Ecosistema y apps disponibles</div>
+      <div class="check-desc">Verificá que las apps que usás (Strava, MyFitnessPal, Spotify, tu app del banco) estén disponibles en el sistema del reloj. <strong>Wear OS (Google), watchOS (Apple) y Tizen (Samsung) tienen distintas apps disponibles.</strong></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🛡️</div>
+      <div><div class="check-title">Garantía y cristal de la pantalla</div>
+      <div class="check-desc">El cristal del reloj se raya. Buscá <strong>cristal de zafiro</strong> en los modelos que te importa que dure sin rayarse. El cristal mineral se raya al mes. <em>— El costo de reponer el cristal a veces supera el valor del reloj barato.</em></div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:28px">
+    <div class="sec-title" style="font-size:24px;margin-bottom:6px">Marcas confiables vs genéricas</div>
+    <div class="pgrid">
+      <div class="pcard rec">
+        <div class="ptag">Marcas serias</div>
+        <div class="pmarca">Apple · Samsung · Garmin · Xiaomi · Fitbit</div>
+        <div class="pdesc"><strong>Lo que ofrecen:</strong><br>• Sensores calibrados y precisos<br>• Apps con historial de datos<br>• Actualizaciones regulares<br>• Garantía real<br>• Repuestos y correas disponibles<br>• Algoritmos de salud probados</div>
+      </div>
+      <div class="pcard alt">
+        <div class="ptag">Genéricos sin historia</div>
+        <div class="pmarca">Marcas de ML sin respaldo</div>
+        <div class="pdesc"><strong>Los riesgos:</strong><br>• Sensores imprecisos o falsos<br>• App que deja de funcionar en meses<br>• Sin actualizaciones<br>• Datos de salud incorrectos<br>• Cristal que se raya al toque<br>• Batería que dura 3 meses</div>
+      </div>
+    </div>
+
+    <div class="tip" style="margin-top:16px">
+      <strong>💡 El punto medio:</strong> <strong>Xiaomi y Redmi</strong> no son genéricos. Tienen sensores reales, app con historial, actualizaciones y garantía. Son la opción más inteligente si el presupuesto es ajustado. Un <strong>Redmi Watch 4 a USD 50</strong> mide lo mismo que un reloj de USD 200 para el usuario promedio.
+    </div>
+
+    <div class="cards" style="margin-top:20px">
+      <div class="card" style="--ca:#f87171">
+        <div class="card-head"><div class="card-name">Señales de alarma</div><span class="badge b-warn">Al comprar</span></div>
+        <div class="card-body">
+          🚩 <strong>"ECG médico certificado"</strong> en reloj de USD 20 → el ECG real cuesta desarrollo y certificación.<br>
+          🚩 <strong>"Mide presión arterial sin calibración"</strong> → los que funcionan bien requieren calibración con tensiómetro.<br>
+          🚩 <strong>Batería de 30 días en smartwatch completo</strong> → con GPS y pantalla activa, imposible.<br>
+          🚩 <strong>Sin marca de app o ecosistema mencionado</strong> → app genérica que van a abandonar.<br>
+          🚩 <strong>Resistencia al agua no especificada con norma</strong> → "resistente al agua" sin ATM o norma ISO no significa nada.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<div id="ttBubble"></div>
+
+<script>
+  function goTab(id, el) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  const bubble = document.getElementById('ttBubble');
+  let timer;
+  document.querySelectorAll('.tt').forEach(el => {
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      bubble.textContent = this.dataset.tip;
+      bubble.classList.add('on');
+      const r = this.getBoundingClientRect();
+      let top = r.bottom + 10, left = r.left;
+      if (left + 280 > window.innerWidth) left = window.innerWidth - 285;
+      if (top + 140 > window.innerHeight) top = r.top - 145;
+      bubble.style.top = top + 'px';
+      bubble.style.left = left + 'px';
+      clearTimeout(timer);
+      timer = setTimeout(() => bubble.classList.remove('on'), 5000);
+    });
+  });
+  document.addEventListener('click', () => bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Relojes: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="celulares.html" class="rel-link">📱 Celulares</a><a href="cables-conectores.html" class="rel-link">🔋 Cables y Cargadores</a></div>
+</div>
+</body>
+</html>

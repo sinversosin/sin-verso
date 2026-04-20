@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Mascotas 2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--soft:#aaaacc;--accent:#fb923c;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  header{background:linear-gradient(135deg,#080810,#180800 50%,#080810);border-bottom:1px solid var(--border);padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:260px;background:radial-gradient(ellipse,rgba(251,146,60,.12),transparent 70%);pointer-events:none;}
+  .site-label{font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);text-transform:uppercase;opacity:.7;margin-bottom:10px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,9vw,88px);letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 30%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:10px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .price-note{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+  main{padding:28px 16px 80px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .card:hover{border-color:rgba(251,146,60,.4);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(77,187,122,.15);color:#4dbb7a;border:1px solid rgba(77,187,122,.3);}
+  .b-mid{background:rgba(251,146,60,.12);color:var(--accent);border:1px solid rgba(251,146,60,.3);}
+  .b-high{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-no{background:rgba(120,120,120,.15);color:#888;border:1px solid rgba(120,120,120,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tt{border-bottom:1px dashed var(--accent);color:var(--accent);cursor:pointer;font-weight:600;display:inline;}
+  #ttBubble{display:none;position:fixed;background:#180800;border:1px solid var(--accent);border-radius:14px;padding:13px 16px;font-size:14px;color:var(--text);line-height:1.6;max-width:270px;z-index:9999;box-shadow:0 8px 40px rgba(0,0,0,.7);pointer-events:none;}
+  #ttBubble.on{display:block;}
+  #ttBubble::before{content:'💡 ';}
+  .tip{background:rgba(251,146,60,.06);border:1px solid rgba(251,146,60,.2);border-radius:14px;padding:16px 18px;margin-top:20px;font-size:14px;line-height:1.65;color:#f8d0b0;}
+  .tip strong{color:var(--accent);}
+  .tip-green{background:rgba(77,187,122,.06);border:1px solid rgba(77,187,122,.2);color:#a0d8b4;}
+  .tip-green strong{color:#4dbb7a;}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+
+  /* PRODUCTO CARDS */
+  .prod-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .prod-card:hover{border-color:rgba(251,146,60,.35);transform:translateY(-2px);}
+  .prod-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:18px 18px 0 0;background:var(--pc,var(--accent));}
+  .prod-header{display:flex;align-items:center;gap:14px;margin-bottom:10px;}
+  .prod-ico{font-size:40px;}
+  .prod-nombre{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--text);line-height:1;}
+  .prod-para{font-size:12px;color:var(--muted);margin-top:2px;}
+  .prod-slogan{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:10px;}
+  .prod-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .prod-body strong{color:var(--text);}
+  .prod-specs{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .prod-spec{background:rgba(255,255,255,.06);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--soft);}
+  .prod-spec span{font-weight:700;color:var(--text);}
+
+  /* PERFILES */
+  .perfiles{display:flex;flex-direction:column;gap:10px;}
+  .perfil{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .perfil:hover{border-color:rgba(251,146,60,.3);}
+  .perfil-ico{font-size:24px;flex-shrink:0;}
+  .perfil-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .perfil-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .perfil-rec{font-size:12px;font-weight:700;color:var(--accent);margin-top:5px;}
+
+  @media(max-width:480px){.card-name{font-size:20px;}.prod-nombre{font-size:20px;}}
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="site-label">SinVerso · Tecnología</div>
+  <h1>Mascotas 2.0 🐾</h1>
+  <p class="subtitle">Tecnología para los que mandan en casa. <strong>Los de cuatro patas.</strong></p>
+  <div class="price-note">💲 Precios en USD orientativos · Varían según tipo de cambio y mercado local</div>
+</header>
+
+
+<div class="error-caro"><strong>🐾 El error más caro</strong>Comprar un rastreador Bluetooth (AirTag, Tile) pensando que funciona como GPS. El Bluetooth solo funciona si hay otro dispositivo de la red cerca. En campo abierto o en zonas poco pobladas, no localiza nada. Para mascota escapista: GPS celular con suscripción mensual, sin excepciones.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('intro',this)">🐾 La movida</div>
+  <div class="tab" onclick="goTab('gps',this)">📍 GPS y rastreo</div>
+  <div class="tab" onclick="goTab('salud',this)">❤️ Salud y monitoreo</div>
+  <div class="tab" onclick="goTab('hogar',this)">🏠 En el hogar</div>
+  <div class="tab" onclick="goTab('juego',this)">🎾 Juego e interacción</div>
+  <div class="tab" onclick="goTab('checklist',this)">🛒 Antes de comprar</div>
+</div>
+
+<main>
+
+<!-- INTRO -->
+<div class="section active" id="intro">
+  <div class="sec-title">La tecnología llegó a las mascotas</div>
+  <div class="sec-sub">El mercado de tecnología para mascotas creció más que el de smartwatches en los últimos años. <em>Porque para mucha gente el perro o el gato son parte de la familia, y la familia merece lo mejor.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">¿Por qué existe esto?</div><span class="badge b-mid">El contexto</span></div>
+      <div class="card-body">
+        El mercado de productos para mascotas en el mundo supera los USD 130 billones anuales. Y la tecnología se metió de lleno: GPS en el collar, cámaras para ver al perro mientras trabajás, dispensadores automáticos de comida, areneros autolimpiables para gatos y collares que miden el sueño de tu mascota.
+        <br><br>
+        No es un capricho: muchos de estos productos resuelven problemas reales de dueños que trabajan todo el día fuera de casa y quieren saber que su mascota está bien.
+        <br><em>— "El GPS para perros no es un lujo cuando tu golden retriever escapa cada vez que abrís la puerta."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">¿Vale la pena o es marketing de mascotas?</div><span class="badge b-ok">Seamos honestos</span></div>
+      <div class="card-body">
+        Depende del producto. Hay cosas que son genuinamente útiles y otras que son gadgets caros que terminan en el cajón:
+        <br><br>
+        <strong>✓ Valen la pena:</strong> GPS para perros escapistas, cámara para monitorear mascotas ansiosas, dispensador automático si salís muchas horas, arenero autolimpiable para gatos.<br>
+        <strong>✗ Son más marketing que solución:</strong> la mayoría de los juguetes interactivos de alta tecnología que el gato ignora a las 2 horas, los "traductores de ladridos", los collares de bienestar para mascotas que "miden el estrés".
+        <br><em>— "Antes de comprar cualquier gadget para tu mascota, preguntate: ¿resuelve un problema real o lo quiero porque es cool?"</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GPS Y RASTREO -->
+<div class="section" id="gps">
+  <div class="sec-title">GPS y Rastreo</div>
+  <div class="sec-sub">Para el perro escapista, el gato aventurero o simplemente la tranquilidad de saber dónde están. <em>El producto de tecnología pet más útil del mercado.</em></div>
+
+  <div class="prod-card" style="--pc:#fb923c">
+    <div class="prod-header">
+      <div class="prod-ico">📍</div>
+      <div>
+        <div class="prod-nombre">GPS para perros y gatos</div>
+        <div class="prod-para">Toda mascota que salga sola o tenga tendencia a escapar</div>
+      </div>
+    </div>
+    <div class="prod-slogan">"Para el que abrió la puerta sin querer y el perro desapareció. Ese momento de terror se acaba."</div>
+    <div class="prod-body">
+      Un pequeño dispositivo que se engancha al collar y transmite la ubicación en tiempo real al celular. Podés ver en el mapa exactamente dónde está tu mascota.
+      <br><br>
+      <strong>Funciones típicas:</strong><br>
+      • Ubicación en tiempo real en el mapa del celu.<br>
+      • Historial de movimientos del día.<br>
+      • Zona segura: te avisa si la mascota sale de un área definida (el jardín, la manzana).<br>
+      • Algunos miden actividad física (pasos, calorías, tiempo durmiendo).
+      <br><br>
+      <strong>El modelo de negocio:</strong> el dispositivo tiene un costo y además hay una <span class="tt" data-tip="Los GPS para mascotas usan la red celular (4G/LTE) para transmitir la ubicación, igual que un celular. Por eso necesitan una SIM card y un plan de datos. El costo mensual suele ser USD 3-10/mes. Sin ese pago, el GPS no funciona. Es como un celular chiquito para tu perro.">suscripción mensual de datos celulares</span> de USD 3–10/mes. Calculalo en el costo total.
+    </div>
+    <div class="prod-specs">
+      <div class="prod-spec">Tractive GPS <span>USD 50 + USD 5/mes</span></div>
+      <div class="prod-spec">Whistle Go <span>USD 80 + USD 8/mes</span></div>
+      <div class="prod-spec">Fi Series 3 <span>USD 150 + USD 10/mes</span></div>
+      <div class="prod-spec">Opciones locales ML <span>USD 20–40 + SIM</span></div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">GPS vs AirTag / GPS Bluetooth</div><span class="badge b-mid">La diferencia importante</span></div>
+      <div class="card-body">
+        No confundas los GPS reales con los rastreadores Bluetooth:
+        <br><br>
+        <strong>GPS celular (Tractive, Whistle)</strong> → Transmite ubicación desde cualquier lugar con cobertura celular. Funciona aunque el perro esté a 10km. Requiere suscripción mensual.<br>
+        <strong>AirTag / Tile (Bluetooth)</strong> → Solo funciona si hay un iPhone u otro dispositivo de la red cerca. En el campo o en lugares sin gente, no funciona. Para mascota que se pierde afuera, es poco confiable.<br>
+        <br>
+        <strong>Para mascota escapista: GPS celular sí o sí.</strong>
+        <br><em>— "Un AirTag en el collar del perro te da falsa seguridad. Si se escapó al campo, no hay iPhones cerca que lo detecten."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">¿Para gatos también?</div><span class="badge b-ok">Sí, con condiciones</span></div>
+      <div class="card-body">
+        Los GPS para gatos existen pero hay que considerar el peso: un GPS pesa 30–50g. Para un gato adulto de 4kg es manejable. Para un gato pequeño puede ser incómodo.
+        <br><br>
+        <strong>Tractive</strong> tiene modelos específicos para gatos, más livianos. Y el collar tiene que tener mecanismo de liberación de seguridad para que el gato no quede enganchado si se enreda.
+        <br><em>— "El gato que sale solo y no aparece en 2 días. El GPS en el collar hubiera ahorrado muchos carteles pegados en postes."</em>
+      </div>
+      <div class="chips"><div class="chip">Peso mínimo para gatos <span>menos de 35g</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SALUD Y MONITOREO -->
+<div class="section" id="salud">
+  <div class="sec-title">Salud y Monitoreo</div>
+  <div class="sec-sub">Cámaras para ver qué hace cuando no estás, collares que miden la actividad y más. <em>Para el dueño ansioso o para la mascota con condición médica.</em></div>
+
+  <div class="prod-card" style="--pc:#00d4ff">
+    <div class="prod-header">
+      <div class="prod-ico">📷</div>
+      <div>
+        <div class="prod-nombre">Cámara de monitoreo para mascotas</div>
+        <div class="prod-para">Para saber qué hace cuando no estás</div>
+      </div>
+    </div>
+    <div class="prod-slogan">"Ver al perro destruyendo el sillón en tiempo real para al menos poder llorar informado."</div>
+    <div class="prod-body">
+      Una cámara IP interior orientada a monitorear mascotas. Muchas tienen funciones específicas para mascotas:
+      <br><br>
+      <strong>Audio bidireccional</strong> → Hablás desde el celu y la mascota te escucha. Sirve para calmar perros ansiosos o con ansiedad de separación.<br>
+      <strong>Lanzador de golosinas</strong> → Algunas cámaras tienen un compartimento de treats que disparás de forma remota. <em>El nivel de relación que tenés con tu mascota a distancia.</em><br>
+      <strong>Detección de ladrido</strong> → Te notifica cuando el perro ladra. Útil para saber si está angustiado o si hay algo raro.<br>
+      <strong>Visión nocturna</strong> → Para ver qué hace de noche o con poca luz.
+    </div>
+    <div class="prod-specs">
+      <div class="prod-spec">Furbo Dog Camera <span>USD 100–170</span></div>
+      <div class="prod-spec">Petcube Bites <span>USD 80–130</span></div>
+      <div class="prod-spec">TP-Link Tapo C200 <span>USD 25 (genérica sin lanzador)</span></div>
+    </div>
+  </div>
+
+  <div class="prod-card" style="--pc:#a855f7">
+    <div class="prod-header">
+      <div class="prod-ico">🏃</div>
+      <div>
+        <div class="prod-nombre">Collar de actividad y salud</div>
+        <div class="prod-para">El smartwatch de tu perro</div>
+      </div>
+    </div>
+    <div class="prod-slogan">"Tu perro también puede tener más tecnología en el cuello que vos en la muñeca."</div>
+    <div class="prod-body">
+      Collares o accesorios que miden la actividad física, el sueño, las calorías y el comportamiento de tu mascota. Algunos también detectan rascado excesivo (posible alergia), temblores (posible epilepsia) o cambios en el patrón de movimiento.
+      <br><br>
+      <strong>Fi Series 3</strong> → GPS + actividad. El más completo. App excelente.<br>
+      <strong>Whistle Health</strong> → Enfocado en salud: detecta lamer, rascarse, beber agua, cambios de comportamiento.<br>
+      <strong>PitPat</strong> → Más económico, solo actividad. Sin GPS ni suscripción cara.
+      <br><br>
+      <strong>La utilidad real:</strong> si tu mascota tiene condición médica (epilepsia, diabetes, artritis) el monitoreo continuo puede alertarte de cambios. Para mascota sana, es más tranquilidad del dueño que necesidad médica.
+      <br><em>— "El veterinario al que le mostrás el historial de actividad de tu perro en el celu ya no puede decirte 'parece bien' sin datos reales."</em>
+    </div>
+    <div class="prod-specs">
+      <div class="prod-spec">PitPat <span>USD 50 sin suscripción</span></div>
+      <div class="prod-spec">Whistle Health <span>USD 80 + USD 10/mes</span></div>
+      <div class="prod-spec">Fi Series 3 <span>USD 150 + plan</span></div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Los "traductores de ladridos"</div><span class="badge b-warn">Spoiler: no funcionan</span></div>
+      <div class="card-body">
+        Existen apps y dispositivos que prometen "traducir" lo que dice tu perro o gato. La realidad: no hay evidencia científica de que funcionen. Los animales no tienen un "idioma" con vocabulario traducible.
+        <br><br>
+        Lo que sí existe y tiene algo de base científica: apps que analizan el <strong>tono y patrón de los ladridos</strong> para categorizar si el perro parece ansioso, juguetón o alarmado. Es una aproximación comportamental, no una traducción.
+        <br><em>— "Si tu perro pudiera hablar, probablemente diría 'comida' y 'paseo' el 90% del tiempo. No necesitás tecnología para saber eso."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EN EL HOGAR -->
+<div class="section" id="hogar">
+  <div class="sec-title">Tecnología en el hogar</div>
+  <div class="sec-sub">Para cuando no podés estar o para hacer la vida más fácil a todos. <em>Incluyendo a la mascota.</em></div>
+
+  <div class="prod-card" style="--pc:#4dbb7a">
+    <div class="prod-header">
+      <div class="prod-ico">🍽️</div>
+      <div>
+        <div class="prod-nombre">Dispensador automático de comida</div>
+        <div class="prod-para">Para el que trabaja muchas horas o viaja</div>
+      </div>
+    </div>
+    <div class="prod-slogan">"Porque el perro no entiende que el asado se extendió hasta las 11 de la noche."</div>
+    <div class="prod-body">
+      Dispensan la comida a horarios programados o en cantidades específicas. Los modelos smart se controlan desde el celu.
+      <br><br>
+      <strong>Funciones que importan:</strong><br>
+      • Programación de horarios y porciones precisas.<br>
+      • Control desde la app en cualquier momento.<br>
+      • Cámara integrada para ver si comió.<br>
+      • Dispensado por voz desde el celu.<br>
+      • Registro de cuándo y cuánto comió.
+      <br><br>
+      <strong>Muy útil para:</strong> mascotas con dietas controladas, dueños con horarios irregulares, viajes cortos de 1–2 días.
+      <br><em>— "El veterinario que te dice que el perro tiene que bajar 3kg y vos no podés resistirle la carita: el dispensador automático no tiene sentimientos."</em>
+    </div>
+    <div class="prod-specs">
+      <div class="prod-spec">Petlibro Granary <span>USD 60–90</span></div>
+      <div class="prod-spec">WOPET Smart <span>USD 50–70</span></div>
+      <div class="prod-spec">Opción económica ML <span>USD 30–50</span></div>
+    </div>
+  </div>
+
+  <div class="prod-card" style="--pc:#818cf8">
+    <div class="prod-header">
+      <div class="prod-ico">🚽</div>
+      <div>
+        <div class="prod-nombre">Arenero autolimpiable para gatos</div>
+        <div class="prod-para">La tecnología que más calidad de vida da a los dueños de gatos</div>
+      </div>
+    </div>
+    <div class="prod-slogan">"El producto que hace que tener gato deje de oler mal. Literalmente."</div>
+    <div class="prod-body">
+      Un arenero con mecanismo automatizado que limpia después de cada uso del gato. El gato hace sus necesidades, el sensor detecta que se fue, y el mecanismo rastrilla y separa los residuos a un compartimento cerrado.
+      <br><br>
+      <strong>Por qué es uno de los mejores gadgets pet:</strong> resuelve un problema real (limpiar el arenero), mejora la higiene, reduce el olor y da información sobre la frecuencia de uso (útil para detectar problemas de salud urinaria o renal en el gato).
+      <br><br>
+      <strong>PETKIT Pura Max</strong> y <strong>Litter-Robot 4</strong> son los más recomendados. El Litter-Robot cuesta USD 700 pero tiene fanáticos devotos que dicen que cambió su vida.
+      <br><em>— "El Litter-Robot es caro. Pero los dueños que lo tienen dicen que nunca más volverían al arenero manual. Es ese nivel de upgrade."</em>
+    </div>
+    <div class="prod-specs">
+      <div class="prod-spec">PETKIT Pura Max <span>USD 300–400</span></div>
+      <div class="prod-spec">Litter-Robot 4 <span>USD 700</span></div>
+      <div class="prod-spec">Opciones básicas <span>USD 80–150</span></div>
+    </div>
+  </div>
+
+  <div class="prod-card" style="--pc:#00d4ff">
+    <div class="prod-header">
+      <div class="prod-ico">🚪</div>
+      <div>
+        <div class="prod-nombre">Puerta/gatera inteligente para gatos</div>
+        <div class="prod-para">Para el gato que sale solo</div>
+      </div>
+    </div>
+    <div class="prod-slogan">"Deja entrar a tu gato. No al del vecino."</div>
+    <div class="prod-body">
+      Gateras con reconocimiento de microchip o collar que solo abren para tu gato específico. Esto evita que entren gatos del vecindario, animales salvajes o que entre un animal indeseado de noche.
+      <br><br>
+      <strong>SureFlap Microchip</strong> → Lee el microchip que ya tiene tu gato implantado. Sin collar adicional. La mejor opción.
+      <br><br>
+      Los modelos más avanzados registran horarios de entrada y salida en la app, permiten configurar toque de queda (a las 22hs no deja salir más) y alertan si el gato no entró.
+      <br><em>— "El toque de queda automático para gatos es una de esas ideas que parece una broma hasta que la usás."</em>
+    </div>
+    <div class="prod-specs">
+      <div class="prod-spec">SureFlap Connect <span>USD 100–130</span></div>
+      <div class="prod-spec">Toque de queda <span>configurable por horario</span></div>
+    </div>
+  </div>
+
+  <div class="prod-card" style="--pc:#fb923c">
+    <div class="prod-header">
+      <div class="prod-ico">💧</div>
+      <div>
+        <div class="prod-nombre">Fuente de agua inteligente</div>
+        <div class="prod-para">Para el gato que no toma agua del tazón estático</div>
+      </div>
+    </div>
+    <div class="prod-slogan">"Los gatos evolucionaron para no confiar en agua quieta. La fuente resuelve eso."</div>
+    <div class="prod-body">
+      Los gatos (y muchos perros) prefieren agua en movimiento por instinto. Las fuentes de agua circulantes incentivan a tomar más agua, lo cual es clave para prevenir problemas renales y urinarios en gatos.
+      <br><br>
+      Los modelos inteligentes miden cuánta agua tomó la mascota y alertan si el consumo cambia (señal temprana de problemas de salud).
+      <br><em>— "La enfermedad renal es la principal causa de muerte en gatos mayores. Hidratarse bien la previene. La fuente no es un capricho."</em>
+    </div>
+    <div class="prod-specs">
+      <div class="prod-spec">PETKIT Eversweet <span>USD 40–60</span></div>
+      <div class="prod-spec">Catit Pixi <span>USD 30–50</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- JUEGO E INTERACCIÓN -->
+<div class="section" id="juego">
+  <div class="sec-title">Juego e Interacción</div>
+  <div class="sec-sub">Para entretener a la mascota mientras no estás. <em>Con resultados muy variables según el animal y sus ganas de cooperar.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Lanzador automático de pelotas</div><span class="badge b-top">Para perros</span></div>
+      <div class="card-body">
+        Una máquina que lanza pelotas de tenis automáticamente. El perro trae la pelota, la mete en la tolva y la máquina la lanza sola. Ejercicio infinito sin que tengas que mover el brazo.
+        <br><br>
+        <strong>iFetch</strong> es la marca más popular. El perro aprende a "cargar" la máquina en 1–3 días (dependiendo del perro). Tiene ajuste de distancia de lanzamiento.
+        <br><br>
+        <strong>Funciona mejor para:</strong> razas retriever (golden, labrador) con alto instinto de buscar. Razas sin ese instinto lo ignoran completamente.
+        <br><em>— "Un labrador con el iFetch es la máquina de movimiento perpetuo que la física dice que no existe."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">iFetch <span>USD 80–120</span></div>
+        <div class="chip">Requiere <span>perro con instinto fetch</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">Juguetes interactivos para gatos</div><span class="badge b-mid">Depende del gato</span></div>
+      <div class="card-body">
+        Plumas automáticas que se mueven, láseres que hacen patrones en el piso, circuitos de bolas. El negocio de mantener al gato entretenido cuando estás en el trabajo.
+        <br><br>
+        <strong>La realidad:</strong> los gatos son impredecibles. Algunos se obsesionan con el juguete, otros lo huelen 30 segundos y nunca más lo miran. Difícil saber antes de probar.
+        <br><br>
+        <strong>Lo que suele funcionar más:</strong> los que imitan presas reales (movimiento errático, pausa, escape). Los de movimiento constante y predecible aburren rápido.
+        <br><em>— "El gato que ignora el juguete de USD 60 y se divierte 3 horas con el envoltorio de papel de regalo. Classic."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Pecute juguete automático <span>USD 20–40</span></div>
+        <div class="chip">Éxito <span>50/50 según el gato</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">Cámara interactiva con treat launcher</div><span class="badge b-high">Para la ansiedad de separación</span></div>
+      <div class="card-body">
+        La combinación cámara + audio bidireccional + lanzador de golosinas es la herramienta más útil para perros con ansiedad de separación.
+        <br><br>
+        Podés ver al perro desde el celu, hablarle ("tranquilo, ya vuelvo") y tirarle una golosina de premio cuando está calmado. Condicionamiento positivo a distancia.
+        <br><br>
+        <strong>Furbo 360°</strong> es la más popular. Detecta ladridos y te manda notificación. Tiene IA que analiza si el ladrido es de angustia o de juego.
+        <br><em>— "Ver al perro en la cama mirando la puerta esperándote y poder decirle 'ya voy' desde el trabajo. El gadget que llega al corazón."</em>
+      </div>
+      <div class="chips"><div class="chip">Furbo 360° <span>USD 140–170</span></div></div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Botones de comunicación (AAC)</div><span class="badge b-ok">El fenómeno viral</span></div>
+      <div class="card-body">
+        Los botones grabados que presionan los perros para comunicar palabras. "Paseo", "comida", "afuera", "jugar". El fenómeno de <strong>Bunny, la perrita</strong> en TikTok que supuestamente se comunica con botones.
+        <br><br>
+        <strong>La ciencia:</strong> la investigación es preliminar y controversial. Los perros claramente aprenden a asociar el botón con la recompensa pero si "hablan" o solo ejecutan comportamientos aprendidos es un debate abierto.
+        <br><strong>El dato concreto:</strong> enseñarle a un perro a usar botones es un ejercicio de entrenamiento muy bueno que estimula la mente. Aunque no "hablen", les hace bien.
+        <br><em>— "Si tu perro aprende a presionar 'paseo' a las 7am todos los días... técnicamente está manejando tu agenda."</em>
+      </div>
+      <div class="chips"><div class="chip">Set de botones <span>USD 30–60</span></div></div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 El juguete más efectivo sigue siendo vos:</strong> Ningún gadget reemplaza 20 minutos de juego real con tu mascota. La tecnología es para cuando no podés estar. Cuando podés, el mejor "dispositivo" es el palo, la pelota y tu tiempo.
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de Comprar</div>
+  <div class="sec-sub">Preguntas que evitan el cajón de gadgets olvidados.</div>
+
+  <div class="perfiles">
+    <div class="perfil"><div class="perfil-ico">🐕</div><div>
+      <div class="perfil-title">Perro que se escapa o se pierde seguido</div>
+      <div class="perfil-desc">Ya pasó una o dos veces y el susto fue real.</div>
+      <div class="perfil-rec">→ GPS celular (Tractive o similar) es la inversión más importante que podés hacer. USD 50 + suscripción mensual. Vale absolutamente cada centavo.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">😰</div><div>
+      <div class="perfil-title">Mascota con ansiedad de separación</div>
+      <div class="perfil-desc">Ladra, destruye, se angustia cuando te vas. Los vecinos ya golpearon la puerta.</div>
+      <div class="perfil-rec">→ Cámara con audio bidireccional (Furbo o similar). Hablale cuando empieza a angustiarse. No reemplaza el entrenamiento conductual pero ayuda significativamente.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🐈</div><div>
+      <div class="perfil-title">Dueño de gato que odia limpiar el arenero</div>
+      <div class="perfil-desc">Todos los dueños de gatos.</div>
+      <div class="perfil-rec">→ Arenero autolimpiable. PETKIT para presupuesto razonable, Litter-Robot si querés lo mejor. El upgrade de calidad de vida es inmediato y permanente.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">⏰</div><div>
+      <div class="perfil-title">Trabajo muchas horas y llegás tarde</div>
+      <div class="perfil-desc">La mascota queda muchas horas sola y come a deshora.</div>
+      <div class="perfil-rec">→ Dispensador automático de comida programado. Porciones exactas, horarios fijos, sin depender de si llegaste a tiempo.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🏥</div><div>
+      <div class="perfil-title">Mascota con condición médica</div>
+      <div class="perfil-desc">Epilepsia, diabetes, enfermedad renal, artritis.</div>
+      <div class="perfil-rec">→ Collar de monitoreo (Whistle Health) para detectar cambios en el comportamiento. Fuente de agua smart para asegurar hidratación. Datos reales para llevarle al veterinario.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🎾</div><div>
+      <div class="perfil-title">Perro con mucha energía que no tiene con quién jugar</div>
+      <div class="perfil-desc">La raza que necesita 2 horas de ejercicio por día y vos tenés 30 minutos.</div>
+      <div class="perfil-rec">→ Lanzador automático de pelotas iFetch (si es de raza retriever). Complementa el ejercicio, no lo reemplaza. Para razas sin instinto fetch, no vale la pena.</div>
+    </div></div>
+  </div>
+
+  <div class="tip tip-warn" style="margin-top:20px">
+    <strong>⚠️ Señales de alarma al comprar gadgets para mascotas:</strong><br>
+    🚩 <strong>"Traductor de ladridos"</strong> → Sin base científica. Marketing puro.<br>
+    🚩 <strong>GPS que no aclara si tiene suscripción mensual</strong> → Todos los GPS celulares la tienen. Si no lo dicen, lo esconden.<br>
+    🚩 <strong>Dispensador sin compartimento hermético</strong> → La comida húmeda se pudre. El seco se humedece. Importa el sellado.<br>
+    🚩 <strong>Collar de bienestar que "mide el estrés"</strong> → Los indicadores de estrés en mascotas por acelerómetro son muy poco confiables científicamente.<br>
+    🚩 <strong>App sin actualizaciones en 1+ año</strong> → El dispositivo va a quedar sin soporte pronto.
+  </div>
+
+  <div class="tip tip-green" style="margin-top:16px">
+    <strong>💡 El ranking de valor real:</strong><br>
+    🥇 <strong>GPS celular</strong> para perros escapistas — el más importante.<br>
+    🥈 <strong>Arenero autolimpiable</strong> para gatos — el que más cambia la rutina.<br>
+    🥉 <strong>Dispensador automático</strong> — imprescindible si salís muchas horas.<br>
+    4° <strong>Cámara con audio</strong> — para ansiedad de separación y tranquilidad propia.<br>
+    5° <strong>Fuente de agua</strong> — especialmente para gatos, prevención de salud real.
+  </div>
+</div>
+
+</main>
+<div id="ttBubble"></div>
+<script>
+  function goTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+  const bubble=document.getElementById('ttBubble');let timer;
+  document.querySelectorAll('.tt').forEach(el=>{el.addEventListener('click',function(e){e.stopPropagation();bubble.textContent=this.dataset.tip;bubble.classList.add('on');const r=this.getBoundingClientRect();let top=r.bottom+10,left=r.left;if(left+280>window.innerWidth)left=window.innerWidth-285;if(top+140>window.innerHeight)top=r.top-145;bubble.style.top=top+'px';bubble.style.left=left+'px';clearTimeout(timer);timer=setTimeout(()=>bubble.classList.remove('on'),5000);});});
+  document.addEventListener('click',()=>bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Mascotas: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="camaras.html" class="rel-link">📷 Cámaras</a><a href="smart-home.html" class="rel-link">🏡 Smart Home</a></div>
+</div>
+</body>
+</html>

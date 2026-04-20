@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Impresoras</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#080810; --surface:#10101c; --card:#13131f; --border:#20203a; --text:#eeeef5; --muted:#9494b8; --soft:#aaaacc; --accent:#fb923c; }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  header{background:linear-gradient(135deg,#080810,#180a00 50%,#080810);border-bottom:1px solid var(--border);padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:260px;background:radial-gradient(ellipse,rgba(251,146,60,.12),transparent 70%);pointer-events:none;}
+  .site-label{font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);text-transform:uppercase;opacity:.7;margin-bottom:10px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,9vw,88px);letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 30%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:10px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .price-note{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+  main{padding:28px 16px 80px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .card:hover{border-color:rgba(251,146,60,.4);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(77,187,122,.15);color:#4dbb7a;border:1px solid rgba(77,187,122,.3);}
+  .b-mid{background:rgba(251,146,60,.12);color:var(--accent);border:1px solid rgba(251,146,60,.3);}
+  .b-high{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-no{background:rgba(120,120,120,.15);color:#888;border:1px solid rgba(120,120,120,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tt{border-bottom:1px dashed var(--accent);color:var(--accent);cursor:pointer;font-weight:600;display:inline;}
+  #ttBubble{display:none;position:fixed;background:#180a00;border:1px solid var(--accent);border-radius:14px;padding:13px 16px;font-size:14px;color:var(--text);line-height:1.6;max-width:270px;z-index:9999;box-shadow:0 8px 40px rgba(0,0,0,.7);pointer-events:none;}
+  #ttBubble.on{display:block;}
+  #ttBubble::before{content:'💡 ';}
+  .tip{background:rgba(251,146,60,.06);border:1px solid rgba(251,146,60,.2);border-radius:14px;padding:16px 18px;margin-top:20px;font-size:14px;line-height:1.65;color:#f8d0b0;}
+  .tip strong{color:var(--accent);}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-green{background:rgba(77,187,122,.06);border:1px solid rgba(77,187,122,.2);color:#a0d8b4;}
+  .tip-green strong{color:#4dbb7a;}
+  .tabla{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+  .tabla th{background:var(--surface);color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);}
+  .tabla td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;line-height:1.5;}
+  .tabla tr:hover td{background:rgba(255,255,255,.02);}
+  .tabla td:first-child{color:var(--text);font-weight:700;}
+  .tabla .hl td{background:rgba(251,146,60,.05);}
+  .tabla .hl td:first-child{color:var(--accent);}
+  .ok::before{content:'✓ ';color:#4dbb7a;}
+  .mal::before{content:'✗ ';color:#f87171;}
+  .meh::before{content:'~ ';color:#ffd700;}
+  .perfiles{display:flex;flex-direction:column;gap:10px;}
+  .perfil{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .perfil:hover{border-color:rgba(251,146,60,.3);}
+  .perfil-ico{font-size:24px;flex-shrink:0;}
+  .perfil-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .perfil-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .perfil-rec{font-size:12px;font-weight:700;color:var(--accent);margin-top:5px;}
+  .checks{display:flex;flex-direction:column;gap:10px;}
+  .check{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .check:hover{border-color:rgba(251,146,60,.3);}
+  .check-ico{font-size:22px;flex-shrink:0;}
+  .check-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .check-desc{font-size:13px;color:var(--muted);line-height:1.55;}
+  .check-desc strong{color:var(--text);}
+  .check-desc em{color:#7a9ab0;font-style:italic;font-size:12px;}
+  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;}
+  @media(max-width:480px){.pgrid{grid-template-columns:1fr;}}
+  .pcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;}
+  .pcard.rec{border-color:rgba(251,146,60,.4);background:rgba(251,146,60,.04);}
+  .pcard.alt{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.03);}
+  .ptag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;}
+  .pcard.rec .ptag{color:var(--accent);}
+  .pcard.alt .ptag{color:#f87171;}
+  .pmarca{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--text);margin-bottom:5px;}
+  .pdesc{font-size:12px;color:var(--muted);line-height:1.6;}
+  .pdesc strong{color:var(--text);}
+  @media(max-width:480px){.card-name{font-size:20px;}.tabla th,.tabla td{padding:8px;}}
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="site-label">SinVerso · Tecnología</div>
+  <h1>Impresoras</h1>
+  <p class="subtitle">La trampa del cartucho. <strong>Y cómo no caer en ella.</strong></p>
+  <div class="price-note">💲 Precios en USD orientativos · Varían según tipo de cambio y mercado local</div>
+</header>
+
+<div class="error-caro"><strong>🖨️ El error más caro</strong>Comprar la impresora más barata del local sin calcular el costo de los cartuchos. Una impresora de USD 30 puede costar USD 200 por año en cartuchos. Una de USD 150 con sistema de tinta continua puede costar USD 20 por año. El precio de la impresora es el anzuelo.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('tipos',this)">🖨️ Tipos</div>
+  <div class="tab" onclick="goTab('trampa',this)">⚠️ La trampa del cartucho</div>
+  <div class="tab" onclick="goTab('marcas',this)">🏆 Marcas</div>
+  <div class="tab" onclick="goTab('perfil',this)">🧑 ¿Cuál es para vos?</div>
+  <div class="tab" onclick="goTab('checklist',this)">🛒 Antes de comprar</div>
+</div>
+<main>
+
+<!-- TIPOS -->
+<div class="section active" id="tipos">
+  <div class="sec-title">Tipos de impresoras</div>
+  <div class="sec-sub">La decisión más importante es el tipo de tecnología. <em>Porque define cuánto vas a gastar de por vida, no solo el día de la compra.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">Inyección de tinta</div><span class="badge b-mid">La más común</span></div>
+      <div class="card-body">
+        Usa cartuchos de tinta líquida que se inyectan sobre el papel. La más barata para comprar, la más cara para mantener si imprimís poco.
+        <br><br>
+        <strong>Para qué es buena:</strong> fotos, color, documentos ocasionales.<br>
+        <strong>El problema:</strong> los cartuchos se secan si no imprimís seguido. Una impresora de USD 50 puede tener cartuchos de USD 40 cada uno. Y vienen 4.
+        <br><em>— "La impresora más barata del mercado es la más cara a largo plazo. El negocio son los cartuchos, no la máquina."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">Láser</div><span class="badge b-high">Para texto y volumen</span></div>
+      <div class="card-body">
+        Usa tóner en polvo que se funde sobre el papel con calor. Más cara para comprar, mucho más barata por hoja impresa. El tóner no se seca aunque no imprimás meses.
+        <br><br>
+        <strong>Para qué es buena:</strong> documentos de texto, facturas, hojas de trabajo. Imprime rápido y barato por hoja.<br>
+        <strong>El problema:</strong> las de color son caras. Las fotos no quedan igual que en tinta.
+        <br><em>— "Si imprimís muchos documentos de texto, la láser se paga sola en 6 meses."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Costo por hoja <span>muy bajo</span></div>
+        <div class="chip">Tóner <span>no se seca</span></div>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Tinta continua (EcoTank / MegaTank)</div><span class="badge b-ok">La revolución</span></div>
+      <div class="card-body">
+        En vez de cartuchos, tiene tanques grandes de tinta recargables con botellitas. La tinta dura años. El costo por hoja es mínimo.
+        <br><br>
+        <strong>Por qué es la mejor opción hoy</strong> para la mayoría: comprás la impresora una vez, la recargás con botellitas baratas, y listo. Sin la trampa del cartucho.
+        <br><br>
+        <strong>Epson EcoTank</strong> y <strong>Canon MegaTank</strong> son las marcas principales. La impresora sale más cara que una de cartucho, pero en 1 año la diferencia se recupera.
+        <br><em>— "La tinta continua es lo que las empresas de impresoras NO querían que existiera. Arruinó el negocio de los cartuchos."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Inversión inicial <span>más alta</span></div>
+        <div class="chip">Costo operativo <span>mínimo</span></div>
+        <div class="chip">Recomendada <span>para uso hogareño</span></div>
+      </div>
+    </div>
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Multifunción</div><span class="badge b-top">La más práctica</span></div>
+      <div class="card-body">
+        Imprime, escanea y fotocopia en un solo aparato. Hoy casi todas las impresoras hogareñas son multifunción. Vale la pena a menos que tengas un uso muy específico.
+        <br><br>
+        <strong>Con WiFi:</strong> imprimís desde el celu sin cables. Casi todas las modernas lo tienen.<br>
+        <strong>Con ADF</strong> <span class="tt" data-tip="ADF = Automatic Document Feeder. El alimentador automático de documentos que va arriba del escáner. Te permite escanear o fotocopiar varias hojas sin tener que ponerlas una por una. Fundamental si escaneás documentos de varias páginas seguido.">explicado acá</span>: alimentador automático para escanear varias hojas sin ponerlas de a una.
+        <br><em>— "Hoy no tiene sentido comprar una impresora que solo imprima. El escáner te salva la vida para trámites."</em>
+      </div>
+    </div>
+  </div>
+
+  <table class="tabla" style="margin-top:20px">
+    <thead><tr><th>Tipo</th><th>Mejor para</th><th>Costo/hoja</th><th>Precio entrada</th></tr></thead>
+    <tbody>
+      <tr><td>Tinta cartucho</td><td>Uso ocasional, fotos</td><td class="mal">Alto</td><td>USD 50–80</td></tr>
+      <tr class="hl"><td>Tinta continua</td><td>⭐ Uso hogareño general</td><td class="ok">Muy bajo</td><td>USD 150–250</td></tr>
+      <tr><td>Láser B&N</td><td>Documentos de texto, oficina</td><td class="ok">Bajo</td><td>USD 120–200</td></tr>
+      <tr><td>Láser color</td><td>Oficina con color</td><td class="meh">Medio</td><td>USD 300–500</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- TRAMPA DEL CARTUCHO -->
+<div class="section" id="trampa">
+  <div class="sec-title">La trampa del cartucho</div>
+  <div class="sec-sub">El negocio real de las impresoras no es la máquina. <em>Son los cartuchos. Y te lo explico con números.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">El modelo de negocio</div><span class="badge b-warn">El gran engaño</span></div>
+      <div class="card-body">
+        Las empresas de impresoras venden la máquina barata (a veces casi a pérdida) y ganan dinero con los cartuchos de por vida. Es el mismo modelo que las máquinas de afeitar: la maquinita es barata, las hojas son carísimas.
+        <br><br>
+        <strong>Ejemplo real:</strong> Impresora de tinta a USD 60. Viene con cartuchos de "arranque" que traen poca tinta. A los 2 meses los cartuchos se agotan. Nuevo juego de cartuchos: USD 50–60. Compraste la impresora dos veces.
+        <br><em>— "Hay cartuchos de impresora que cuestan más por mililitro que el perfume francés más caro. No es chiste."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">Los cartuchos "de arranque"</div><span class="badge b-warn">La primera trampa</span></div>
+      <div class="card-body">
+        La mayoría de las impresoras vienen con cartuchos de "arranque" o "starter" que tienen mucho menos tinta que los cartuchos normales. Imprimen 100–200 hojas cuando el cartucho normal imprime 400–500.
+        <br><br>
+        Es para que te quedes sin tinta rápido y tengas que comprar cartuchos nuevos cuanto antes.
+        <br><em>— "Comprás la impresora, imprimís 3 cosas, y ya te dice que la tinta está baja. Bienvenido al modelo de negocio."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Cartuchos compatibles vs originales</div><span class="badge b-top">El debate eterno</span></div>
+      <div class="card-body">
+        <strong>Originales:</strong> los de la marca. Calidad garantizada, garantía de la impresora. Caros.
+        <br><strong>Compatibles/genéricos:</strong> fabricados por terceros. Mucho más baratos. Calidad variable. Algunas impresoras los rechazan con actualizaciones de firmware.
+        <br><strong>Recargables:</strong> comprás el cartucho vacío y lo recargás con tinta. Muy barato pero puede manchar y dañar el cabezal si la tinta no es la correcta.
+        <br><br>
+        <span class="tt" data-tip="HP y Epson actualizaron firmware de sus impresoras para detectar y bloquear cartuchos no originales. Si tu impresora dice que el cartucho no es válido después de una actualización, probablemente sea esto. Se puede revertir bajando la versión del firmware o desactivando las actualizaciones automáticas.">HP y Epson bloquearon cartuchos compatibles por firmware.</span>
+        <br><em>— "La solución a todo esto: comprá una impresora de tinta continua y olvidarte de los cartuchos para siempre."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">La tinta continua: la solución real</div><span class="badge b-ok">Salida del sistema</span></div>
+      <div class="card-body">
+        Las impresoras de tinta continua (EcoTank de Epson, MegaTank de Canon) tienen tanques grandes que se rellenan con botellitas de tinta muy baratas.
+        <br><br>
+        <strong>Una botellita de tinta Epson EcoTank:</strong> USD 8–12 → imprime 1.000–2.000 hojas.<br>
+        <strong>Un cartucho Epson normal:</strong> USD 15–20 → imprime 200–400 hojas.<br>
+        <br>
+        El costo por hoja de la tinta continua es 5–10 veces menor que con cartuchos.
+        <br><em>— "Sí, la EcoTank cuesta USD 180 vs USD 60 de una de cartucho. Pero en 2 años la diferencia la recuperás con creces."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Costo por hoja <span>~USD 0.003</span></div>
+        <div class="chip">Cartucho convencional <span>~USD 0.05–0.10</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MARCAS -->
+<div class="section" id="marcas">
+  <div class="sec-title">Las marcas</div>
+  <div class="sec-sub">Cuatro grandes dominan el mercado. <em>Cada una con su historia y su negocio.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">Epson</div><span class="badge b-high">La recomendada para hogar</span></div>
+      <div class="card-body">
+        Creó el sistema EcoTank y popularizó la tinta continua. Para uso hogareño es la marca más recomendada hoy. Buena calidad de impresión, especialmente en fotos. La <strong>Epson EcoTank L3250 / L3260</strong> es la más vendida del mercado hogareño: multifunción, WiFi, tinta continua.
+        <br><em>— "Si tuviese que recomendar una sola impresora para el 90% de las casas argentinas, sería una Epson EcoTank."</em>
+      </div>
+      <div class="chips"><div class="chip">EcoTank L3260 <span>USD 150–200</span></div></div>
+    </div>
+    <div class="card" style="--ca:#0066ff">
+      <div class="card-head"><div class="card-name">HP</div><span class="badge b-mid">La más vendida del mundo</span></div>
+      <div class="card-body">
+        La marca más vendida globalmente. Buena calidad, muchos modelos. El problema: HP es agresiva con los cartuchos originales. Actualizaron firmware para bloquear compatibles. Su sistema <strong>HP Instant Ink</strong> es una suscripción mensual de tinta que conviene si imprimís poco y regularmente.
+        <br><em>— "HP hace buenas impresoras. El modelo de cartuchos es el que hay que pensar dos veces."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#e63946">
+      <div class="card-head"><div class="card-name">Canon</div><span class="badge b-mid">Fotos y color</span></div>
+      <div class="card-body">
+        Excelente calidad de color y fotografía. Su sistema MegaTank compite con el EcoTank de Epson. Para el que imprime fotos con frecuencia, Canon es una de las mejores opciones. La <strong>Canon PIXMA MegaTank G3160</strong> es su equivalente al EcoTank de Epson.
+        <br><em>— "Para fotos de calidad en casa, Canon tiene un color más cálido que Epson. Cuestión de gusto."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#333">
+      <div class="card-head"><div class="card-name">Brother</div><span class="badge b-ok">La reina de la láser</span></div>
+      <div class="card-body">
+        Brother domina el segmento de impresoras láser para hogar y pequeña oficina. Sus impresoras láser en blanco y negro son muy confiables, duraderas y con tóner accesible.
+        <br><br>
+        La <strong>Brother HL-L2350DW</strong> es la láser blanco y negro más recomendada para quien imprime muchos documentos de texto.
+        <br><em>— "Para imprimir facturas, contratos y documentación, la láser Brother es la que no falla nunca."</em>
+      </div>
+      <div class="chips"><div class="chip">HL-L2350DW <span>USD 150–180</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PERFIL -->
+<div class="section" id="perfil">
+  <div class="sec-title">¿Cuál es para vos?</div>
+  <div class="sec-sub">Sin rodeos. <em>Según cuánto y qué imprimís.</em></div>
+  <div class="perfiles">
+    <div class="perfil"><div class="perfil-ico">🏠</div><div>
+      <div class="perfil-title">Uso hogareño general</div>
+      <div class="perfil-desc">Tareas del colegio, documentos, fotos ocasionales, trámites.</div>
+      <div class="perfil-rec">→ Epson EcoTank L3260 (USD 150–200). Multifunción, WiFi, tinta continua. La que resuelve todo sin trampa de cartuchos.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">📄</div><div>
+      <div class="perfil-title">Muchos documentos de texto</div>
+      <div class="perfil-desc">Oficina, facturas, contratos. Volumen alto, todo blanco y negro.</div>
+      <div class="perfil-rec">→ Brother HL-L2350DW láser (USD 150–180). Rápida, barata por hoja, el tóner dura años.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">📸</div><div>
+      <div class="perfil-title">Fotos de calidad</div>
+      <div class="perfil-desc">Imprimir fotos en casa con buena calidad de color.</div>
+      <div class="perfil-rec">→ Canon MegaTank G3160 o Epson EcoTank ET-2800. Tinta continua + calidad fotográfica.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">📚</div><div>
+      <div class="perfil-title">Estudiante o colegial</div>
+      <div class="perfil-desc">Trabajos prácticos, apuntes, tareas. Uso moderado y variado.</div>
+      <div class="perfil-rec">→ Epson EcoTank L3260. Aguanta años de uso escolar sin gastar en cartuchos.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🏢</div><div>
+      <div class="perfil-title">Pequeña oficina o negocio</div>
+      <div class="perfil-desc">Volumen medio-alto, necesitás color y texto.</div>
+      <div class="perfil-rec">→ Epson EcoTank Pro ET-5850 o Brother MFC multifunción láser. Velocidad + bajo costo operativo.</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de Comprar</div>
+  <div class="sec-sub">Las preguntas que te ahorran arrepentimiento. <em>Y plata.</em></div>
+  <div class="checks">
+    <div class="check"><div class="check-ico">🖨️</div><div>
+      <div class="check-title">¿Cuánto imprimís por mes?</div>
+      <div class="check-desc">Menos de 50 hojas/mes → tinta continua o láser básica. Más de 200 hojas/mes → láser obligatorio. <strong>El volumen define el tipo.</strong></div>
+    </div></div>
+    <div class="check"><div class="check-ico">🎨</div><div>
+      <div class="check-title">¿Necesitás color o solo blanco y negro?</div>
+      <div class="check-desc">Si el 90% es texto negro, <strong>una láser en blanco y negro es mucho más barata</strong> que una de color. La láser color duplica el precio y el costo del tóner. <em>— No pagues por color si casi no lo usás.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">📡</div><div>
+      <div class="check-title">WiFi: casi obligatorio hoy</div>
+      <div class="check-desc">Para imprimir desde el celu o la tablet sin cables. <strong>Verificá que tenga WiFi integrado</strong>, no solo USB. La mayoría de los modelos modernos lo traen. <em>— Imprimir desde el celu es comodísimo.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">💰</div><div>
+      <div class="check-title">Calculá el costo total a 2 años</div>
+      <div class="check-desc">Precio de la impresora + cartuchos/tóner estimados para tu uso. <strong>La más barata para comprar casi nunca es la más barata para usar.</strong> <em>— Una EcoTank de USD 180 vs una de cartucho de USD 60: en 2 años la EcoTank ganó.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">🔧</div><div>
+      <div class="check-title">Repuestos y tinta disponibles en Argentina</div>
+      <div class="check-desc">Verificá que la tinta o el tóner del modelo que elegís <strong>se consiga fácilmente en tu ciudad</strong>. Algunas marcas tienen poca distribución en el interior. <em>— Importar tinta cuesta más que la impresora.</em></div>
+    </div></div>
+  </div>
+  <div class="tip tip-warn" style="margin-top:20px">
+    <strong>⚠️ Señales de alarma:</strong><br>
+    🚩 Impresora de tinta muy barata (menos de USD 40) → la trampa del cartucho en su máxima expresión.<br>
+    🚩 "Compatible con cartuchos originales solamente" en letra chica → te van a bloquear los genéricos.<br>
+    🚩 Sin WiFi en 2025 → quedás atado al cable USB siempre.<br>
+    🚩 Sin sistema de tinta continua disponible → estás atado a los cartuchos de por vida.
+  </div>
+</div>
+
+</main>
+<div id="ttBubble"></div>
+<script>
+  function goTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+  const bubble=document.getElementById('ttBubble');let timer;
+  document.querySelectorAll('.tt').forEach(el=>{el.addEventListener('click',function(e){e.stopPropagation();bubble.textContent=this.dataset.tip;bubble.classList.add('on');const r=this.getBoundingClientRect();let top=r.bottom+10,left=r.left;if(left+280>window.innerWidth)left=window.innerWidth-285;if(top+140>window.innerHeight)top=r.top-145;bubble.style.top=top+'px';bubble.style.left=left+'px';clearTimeout(timer);timer=setTimeout(()=>bubble.classList.remove('on'),5000);});});
+  document.addEventListener('click',()=>bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Impresoras: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="notebooks.html" class="rel-link">💻 Notebooks</a><a href="wifi-routers.html" class="rel-link">📡 WiFi</a></div>
+</div>
+</body>
+</html>

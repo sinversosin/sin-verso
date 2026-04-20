@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Plata Inteligente</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--soft:#aaaacc;--accent:#4ade80;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  header{background:linear-gradient(135deg,#080810,#001808 50%,#080810);border-bottom:1px solid var(--border);padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:260px;background:radial-gradient(ellipse,rgba(74,222,128,.12),transparent 70%);pointer-events:none;}
+  .site-label{font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);text-transform:uppercase;opacity:.7;margin-bottom:10px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,9vw,86px);letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 30%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:10px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+  main{padding:28px 16px 80px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .card:hover{border-color:rgba(74,222,128,.4);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(74,222,128,.15);color:var(--accent);border:1px solid rgba(74,222,128,.3);}
+  .b-mid{background:rgba(74,222,128,.10);color:var(--accent);border:1px solid rgba(74,222,128,.2);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-high{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tt{border-bottom:1px dashed var(--accent);color:var(--accent);cursor:pointer;font-weight:600;display:inline;}
+  #ttBubble{display:none;position:fixed;background:#001808;border:1px solid var(--accent);border-radius:14px;padding:13px 16px;font-size:14px;color:var(--text);line-height:1.6;max-width:270px;z-index:9999;box-shadow:0 8px 40px rgba(0,0,0,.7);pointer-events:none;}
+  #ttBubble.on{display:block;}
+  #ttBubble::before{content:'💡 ';}
+  .tip{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);border-radius:14px;padding:16px 18px;margin-top:20px;font-size:14px;line-height:1.65;color:#a0e8b4;}
+  .tip strong{color:var(--accent);}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-gold{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);color:#f0e080;}
+  .tip-gold strong{color:#ffd700;}
+  .tip-blue{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);color:#a0d8ea;}
+  .tip-blue strong{color:#00d4ff;}
+  .tabla{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+  .tabla th{background:var(--surface);color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);}
+  .tabla td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;line-height:1.5;}
+  .tabla tr:hover td{background:rgba(255,255,255,.02);}
+  .tabla td:first-child{color:var(--text);font-weight:700;}
+  .tabla .hl td{background:rgba(74,222,128,.05);}
+  .tabla .hl td:first-child{color:var(--accent);}
+  .ok::before{content:'✓ ';color:#4dbb7a;}
+  .mal::before{content:'✗ ';color:#f87171;}
+  .meh::before{content:'~ ';color:#ffd700;}
+  .perfiles{display:flex;flex-direction:column;gap:10px;}
+  .perfil{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;}
+  .perfil-ico{font-size:24px;flex-shrink:0;}
+  .perfil-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .perfil-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .perfil-rec{font-size:12px;font-weight:700;color:var(--accent);margin-top:5px;}
+  /* WA */
+  .wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s;}
+  .wa-share:hover{transform:translateY(-2px);}
+  .wa-share-ico{font-size:20px;}
+  .wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;}
+  .relacionadas{margin:32px 0 0;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;}
+  .rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--muted);letter-spacing:1px;margin-bottom:12px;}
+  .rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .rel-link{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--text);transition:all .2s;}
+  .rel-link:hover{border-color:var(--accent);transform:translateY(-1px);}
+  @media(max-width:480px){.card-name{font-size:20px;}.tabla th,.tabla td{padding:8px;}}
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="site-label">SinVerso · Economía del Hogar</div>
+  <h1>Plata Inteligente</h1>
+  <p class="subtitle">Lo que nadie te enseña sobre comprar. <strong>Y lo que los vendedores esperan que no sepas.</strong></p>
+</header>
+
+<div class="error-caro"><strong>💰 El error más caro</strong>Firmar cuotas con interés sin leer el CFT (Costo Financiero Total). La cuota que parece razonable puede ocultar un CFT del 200% anual. La ley obliga a mostrarlo, pero está en letra chica. El CFT es el número real. Todo lo demás es marketing.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('cuotas',this)">💳 Cuotas vs contado</div>
+  <div class="tab" onclick="goTab('garantia',this)">📋 Garantías</div>
+  <div class="tab" onclick="goTab('mercadolibre',this)">🛒 Mercado Libre</div>
+  <div class="tab" onclick="goTab('negociar',this)">🤝 Negociar precio</div>
+  <div class="tab" onclick="goTab('trampas',this)">⚠️ Las trampas</div>
+</div>
+<main>
+
+<!-- CUOTAS -->
+<div class="section active" id="cuotas">
+  <div class="sec-title">Cuotas vs Contado en Argentina</div>
+  <div class="sec-sub">La pregunta más argentina de todas. <em>La respuesta cambia según la inflación, el momento y si las cuotas tienen interés.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">La regla de oro</div><span class="badge b-ok">El principio</span></div>
+      <div class="card-body">
+        En Argentina, con inflación persistente, <strong>las cuotas sin interés son siempre convenientes</strong> porque pagás en pesos que valen menos con el tiempo.
+        <br><br>
+        <strong>Ejemplo concreto:</strong> TV de $500.000 en 12 cuotas sin interés = $41.667/mes. Si la inflación es del 5% mensual, la última cuota tiene un poder adquisitivo equivalente a $41.667 / (1.05^11) ≈ $24.000 de hoy. Pagaste la mitad en valor real.
+        <br><br>
+        <strong>La trampa:</strong> cuando hay "descuento por contado" del 20–30%, ese descuento puede superar el beneficio inflacionario de las cuotas. Hay que hacer el cálculo.
+        <br><em>— "En Argentina, las cuotas sin interés son un subsidio del vendedor al comprador. Aprovechalas cuando estén disponibles."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Cuotas CON interés: la trampa más cara</div><span class="badge b-warn">Cuidado</span></div>
+      <div class="card-body">
+        Las cuotas con interés en Argentina pueden tener un <span class="tt" data-tip="CFT = Costo Financiero Total. Es el costo real de financiarse, incluyendo intereses, seguros, gastos administrativos y todo lo demás. El CFT siempre es mayor a la tasa nominal de interés. Por ley debe estar publicado en la oferta. Si no está visible, pedilo antes de firmar.">CFT (Costo Financiero Total)</span> del 100–300% anual. Eso significa que un producto de $100.000 a 24 cuotas con CFT del 200% puede terminar costando $300.000.
+        <br><br>
+        <strong>Cómo calcularlo rápido:</strong> mirá el precio de la última cuota. Multiplicalo por la cantidad de cuotas. Si el resultado es más del 30–40% por encima del precio contado, estás pagando caro.
+        <br><br>
+        <strong>La alternativa:</strong> guardar el equivalente de las cuotas en un fondo money market o plazo fijo y comprarlo cuando tenés el dinero. En inflación alta, esto no siempre conviene, pero con tasas activas altas puede.
+        <br><em>— "El cartel que dice '24 cuotas de $8.000' es matemáticamente honesto. Hasta que sumás las 24 cuotas."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">Cuotas sin interés: cómo maximizarlas</div><span class="badge b-high">El truco</span></div>
+      <div class="card-body">
+        Las cuotas sin interés no son todas iguales. Algunos trucos:
+        <br><br>
+        <strong>Fecha de compra:</strong> comprar al principio del período de facturación de la tarjeta te da casi 2 meses gratis antes de la primera cuota.<br>
+        <strong>Banco vs comercio:</strong> el descuento del banco y las cuotas sin interés del comercio a veces son acumulables. Preguntar siempre.<br>
+        <strong>Promociones puntuales:</strong> días como el "Hot Sale", "Cyber Monday" y Día del Consumidor suelen tener cuotas sin interés adicionales.<br>
+        <strong>No usar el límite de la tarjeta para cuotas sin interés si después lo vas a necesitar:</strong> las cuotas consumen límite disponible.
+        <br><em>— "Comprar el lunes 1ro del mes con tarjeta que cierra el 10 te da casi 2 meses hasta la primera cuota. En inflación, esos 2 meses son plata."</em>
+      </div>
+    </div>
+  </div>
+
+  <table class="tabla" style="margin-top:20px">
+    <thead><tr><th>Situación</th><th>¿Qué conviene?</th></tr></thead>
+    <tbody>
+      <tr><td>Cuotas sin interés disponibles</td><td class="ok">Cuotas siempre en inflación alta</td></tr>
+      <tr><td>Descuento contado &gt;25%</td><td class="meh">Calcular: puede convenir contado</td></tr>
+      <tr><td>CFT &gt; inflación esperada</td><td class="mal">Contado o no comprar</td></tr>
+      <tr class="hl"><td>Hot Sale / promociones especiales</td><td class="ok">El mejor momento del año</td></tr>
+      <tr><td>Cuotas con CFT desconocido</td><td class="mal">Pedilo antes de firmar</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- GARANTÍAS -->
+<div class="section" id="garantia">
+  <div class="sec-title">Cómo leer una garantía</div>
+  <div class="sec-sub">La letra chica que nadie lee hasta que el producto se rompe. <em>Y para entonces ya es tarde.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">Lo que la ley garantiza en Argentina</div><span class="badge b-ok">Tus derechos</span></div>
+      <div class="card-body">
+        La <strong>Ley 24.240 de Defensa del Consumidor</strong> establece garantía mínima legal de <strong>6 meses para productos usados</strong> y <strong>6 meses para productos nuevos</strong>. Muchos fabricantes extienden esto voluntariamente a 1, 2 o 3 años.
+        <br><br>
+        <strong>Lo que cubre la garantía legal:</strong> defectos de fabricación. No cubre mal uso, golpes, líquidos o desgaste normal.<br>
+        <strong>Lo que NO puede hacer el vendedor:</strong> negarse a reparar, reemplazar o devolver el dinero si el producto tiene un defecto en el período de garantía. Tampoco puede cobrarte el envío del producto defectuoso al servicio técnico.<br>
+        <strong>El plazo para resolver:</strong> 30 días corridos desde que entregás el producto con el defecto. Si no resuelven en ese plazo, podés pedir la sustitución o la devolución del dinero.
+        <br><em>— "La garantía no es un favor del vendedor. Es una obligación legal. 'No hacemos cambios' viola la Ley 24.240."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Garantía extendida: ¿vale la pena?</div><span class="badge b-warn">Generalmente no</span></div>
+      <div class="card-body">
+        La "garantía extendida" que te ofrecen al comprar electrodomésticos en el local es un seguro que extiende la cobertura más allá de la legal. Te cuesta el 10–20% adicional del precio del producto.
+        <br><br>
+        <strong>Por qué generalmente no conviene:</strong><br>
+        • Los productos modernos rara vez fallan en el año 2–3 (los que van a fallar lo hacen en el primer año, cubierto por garantía legal).<br>
+        • Las exclusiones son muchas: daño accidental, líquidos, mal uso, deterioro estético.<br>
+        • El proceso de reclamo suele ser engorroso.<br>
+        <br>
+        <strong>Cuándo sí puede valer:</strong> para electrodomésticos muy caros (aire acondicionado, heladera premium) en zonas con problemas de tensión eléctrica o si la marca tiene historial de fallas conocidas.
+        <br><em>— "La garantía extendida es el producto financiero más rentable para el vendedor. Por algo te la ofrecen tan insistentemente."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">El kit de supervivencia de garantía</div><span class="badge b-high">Lo práctico</span></div>
+      <div class="card-body">
+        Para poder ejercer tu garantía cuando la necesitás:
+        <br><br>
+        <strong>1. Guardá SIEMPRE el ticket/factura.</strong> Foto con el celu al instante de comprarlo, guardada en la nube. Sin ticket, la garantía es difícil de ejercer.<br>
+        <strong>2. Guardá el embalaje original al menos 30 días.</strong> Si hay que devolver el producto, muchos exigen la caja original.<br>
+        <strong>3. Registrá el producto online</strong> cuando pide registro (Samsung, LG, etc.). Esto puede extender la garantía y facilita el trámite.<br>
+        <strong>4. Ante una negativa del vendedor:</strong> COPREC (Conciliación PreJudicial) o DNDC (Dirección Nacional de Defensa del Consumidor) son los organismos donde podés denunciar online y gratis.
+        <br><em>— "El consumidor que tiene el ticket, la foto del defecto y conoce sus derechos es tratado diferente al que llega solo con el producto roto."</em>
+      </div>
+    </div>
+  </div>
+  <div class="tip tip-blue">
+    <strong>💡 Hotlines útiles:</strong> <strong>0800-666-1518</strong> (DNDC gratuito). <strong>www.consumidor.gob.ar</strong> para denuncias online. En CABA: <strong>Defensa del Consumidor CABA 147</strong>.
+  </div>
+</div>
+
+<!-- MERCADO LIBRE -->
+<div class="section" id="mercadolibre">
+  <div class="sec-title">Comprar en Mercado Libre sin caer</div>
+  <div class="sec-sub">La plataforma más usada en Argentina para compras. <em>Y la que más engaños esconde si no sabés leer las señales.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">Las señales de un vendedor confiable</div><span class="badge b-ok">Lo que mirás primero</span></div>
+      <div class="card-body">
+        <strong>✓ MercadoLíder Gold o Platinum:</strong> más de 1.000 ventas con buena reputación. El estándar mínimo para compras importantes.<br>
+        <strong>✓ Termómetro verde o casi verde:</strong> reputación alta. Evitá los amarillos y rojos para productos de valor.<br>
+        <strong>✓ Muchas ventas del mismo producto:</strong> si el mismo vendedor vendió 500 unidades del mismo producto con buenas calificaciones, el producto es lo que dice ser.<br>
+        <strong>✓ Preguntas respondidas con detalle:</strong> los vendedores serios responden con información real, no genérica.<br>
+        <strong>✓ Fotos propias del producto:</strong> no solo las del fabricante. Las fotos reales muestran que el vendedor tiene el producto físicamente.
+        <br><em>— "Un vendedor Platinum con 2.000 ventas y termómetro verde vale más que cualquier garantía escrita."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Las señales de alarma</div><span class="badge b-warn">Lo que te dice que salgas corriendo</span></div>
+      <div class="card-body">
+        🚩 <strong>Precio muy por debajo del mercado:</strong> si algo cuesta 40% menos que en todos lados, o es robado, o es falso, o es un defectuoso.<br>
+        🚩 <strong>"Stock limitado" o "oferta termina hoy":</strong> presión artificial de venta.<br>
+        🚩 <strong>Vendedor nuevo con pocas calificaciones:</strong> para productos de más de USD 50, es un riesgo innecesario.<br>
+        🚩 <strong>Descripción copiada del fabricante sin fotos propias:</strong> puede no tener el producto.<br>
+        🚩 <strong>Preguntas sin responder o respuestas evasivas:</strong> mala señal de atención postventa.<br>
+        🚩 <strong>Publicación con muchas calificaciones pero recientes concentradas:</strong> compra de reviews.<br>
+        🚩 <strong>Piden pago fuera de MercadoPago:</strong> perdés toda la protección. Nunca lo hagas.
+        <br><em>— "Si pagan fuera de MercadoPago, estás solo. Sin protección al comprador, sin disputa posible, sin recuperar la plata."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">La protección al comprador</div><span class="badge b-top">Tu escudo</span></div>
+      <div class="card-body">
+        MercadoLibre tiene un sistema de protección al comprador que muy poca gente conoce bien:
+        <br><br>
+        <strong>Compra Protegida:</strong> si el producto no llega o no es lo que se describe, ML te devuelve el dinero. El plazo para reclamar es generalmente 30 días desde la entrega estimada.<br>
+        <strong>Cómo activarla:</strong> al recibir el producto, marcalo como "recibido" solo cuando estés satisfecho. Mientras no marcás "recibido", ML retiene el pago al vendedor.<br>
+        <strong>Si hay problema:</strong> abrí una "disputa" desde la compra antes de marcar recibido. ML actúa como árbitro.
+        <br><em>— "Nunca marques 'recibido' si el producto tiene un problema. Eso es la única protección que tenés. Úsala."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#a78bfa">
+      <div class="card-head"><div class="card-name">Los mejores momentos para comprar</div><span class="badge b-high">El timing</span></div>
+      <div class="card-body">
+        <strong>Hot Sale (mayo):</strong> el evento de mayor volumen de descuentos en Argentina. Los mejores precios del año en electrónica.<br>
+        <strong>Cyber Monday (noviembre-diciembre):</strong> segundo gran evento del año. Buenos descuentos en tecnología.<br>
+        <strong>Fin de mes:</strong> muchos vendedores bajan precios para cerrar ventas antes del cierre del período.<br>
+        <strong>Cambio de modelo:</strong> cuando sale la versión nueva de un producto, el modelo anterior baja de precio. El viejo funciona igual.
+        <div class="tip tip-gold">
+          <strong>💡 El truco del historial de precios:</strong> usá Camelcamelcamel (para Amazon) o buscá extensiones de browser que muestren el historial de precios de ML. El "precio tachado" con el "precio de oferta" a veces fue subido artificialmente días antes para parecer una oferta.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NEGOCIAR -->
+<div class="section" id="negociar">
+  <div class="sec-title">Cómo negociar precio</div>
+  <div class="sec-sub">En Argentina se puede negociar casi todo. <em>La mayoría de la gente no lo sabe o le da vergüenza intentarlo.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">La mentalidad correcta</div><span class="badge b-ok">El primer paso</span></div>
+      <div class="card-body">
+        Negociar no es pelear ni robar. Es una conversación donde ambas partes buscan un acuerdo. En comercios medianos y grandes de Argentina, el vendedor casi siempre tiene margen para negociar. Especialmente en electrónica, muebles y electrodomésticos.
+        <br><br>
+        <strong>Lo que el vendedor puede ofrecerte sin consultar:</strong> envío gratis, accesorios adicionales, garantía extendida sin cargo, instalación incluida.<br>
+        <strong>Lo que necesita consultar con el encargado:</strong> descuento en precio directo.
+        <br><em>— "La pregunta más cara del mundo es la que no se hace. '¿Me podés mejorar el precio?' no cuesta nada y a veces vale mucho."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Las frases que funcionan</div><span class="badge b-top">El guión</span></div>
+      <div class="card-body">
+        <strong>"¿Cuál es el precio al contado?"</strong> → Abre la posibilidad de un precio diferente. Siempre preguntá esto primero aunque vayas a pagar con tarjeta.<br><br>
+        <strong>"Vi el mismo producto en [tienda X] a [precio Y]. ¿Lo podés igualar?"</strong> → Competencia como argumento. Tenés que tener el precio real, no inventado.<br><br>
+        <strong>"Si llevo dos, ¿hay algún precio especial?"</strong> → Volumen como argumento.<br><br>
+        <strong>"¿Qué podés incluir de regalo si lo llevo hoy?"</strong> → En vez de pedir descuento (que sale de la comisión del vendedor), pedís un agregado (que sale del stock de accesorios).<br><br>
+        <strong>"Estoy decidido a comprarlo acá si cerramos el precio."</strong> → La señal de compra comprometida activa al vendedor.
+        <br><em>— "El vendedor prefiere venderte con un pequeño descuento a que te vayas. Dale ese argumento."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">El "precio de lista" y qué significa</div><span class="badge b-high">El dato que te falta</span></div>
+      <div class="card-body">
+        El "precio de lista" o "precio sugerido" es el precio máximo que el fabricante recomienda para el producto. No es el precio al que deberías comprarlo.
+        <br><br>
+        En Argentina, los comercios suelen tener un margen del 20–40% sobre el costo en electrodomésticos y electrónica. Eso no significa que te van a dar el 40%, pero sí que hay margen para negociar.
+        <br><br>
+        <strong>El precio con descuento "especial para vos":</strong> si el vendedor te da un descuento muy rápido sin consultar, ese era el precio real desde el principio. El precio original era inflado.
+        <br><em>— "El 30% de descuento que te ofrecen 'solo hoy' debería hacerte pensar dos cosas: cuánto estaban ganando antes, y si realmente es solo hoy."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRAMPAS -->
+<div class="section" id="trampas">
+  <div class="sec-title">Las trampas más comunes</div>
+  <div class="sec-sub">Las que ven los que saben y las que caen los que no. <em>Ahora vas a verlas también.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">El modelo de exhibición y el de caja</div><span class="badge b-warn">El clásico</span></div>
+      <div class="card-body">
+        En algunos locales el modelo expuesto es de una marca reconocida, pero cuando traen la caja del depósito es una marca diferente o un modelo inferior. Siempre verificá que la caja corresponde exactamente al modelo que querías.
+        <br><br>
+        <strong>Cómo evitarlo:</strong> anotá el modelo exacto (número completo, no solo la marca) antes de decidir y verificá que ese número esté en la caja.
+        <br><em>— "El vendedor que 'no tiene en stock ese modelo pero tiene uno similar que es mejor': generalmente es más caro y peor."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">El upsell en el momento de pago</div><span class="badge b-warn">El más frecuente</span></div>
+      <div class="card-body">
+        Cuando estás a punto de pagar, el vendedor ofrece: garantía extendida, cable HDMI "de mayor calidad", funda "especial", seguro del producto. Todo en el momento de menor resistencia psicológica (ya decidiste comprar).
+        <br><br>
+        <strong>La regla:</strong> cualquier accesorio o servicio que no decidiste antes de entrar al local, no lo decidas en el mostrador. Pedí pensarlo y buscalo luego en MercadoLibre donde costará la mitad o menos.
+        <br><em>— "El cable HDMI de $8.000 que te ofrecen en el local de electrónica cuando comprás el TV sale $1.500 en ML. Exactamente igual."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#a78bfa">
+      <div class="card-head"><div class="card-name">El "precio especial de hoy"</div><span class="badge b-warn">La urgencia falsa</span></div>
+      <div class="card-body">
+        Las ofertas con tiempo límite artificial: "solo por hoy", "último en stock", "precio que no se va a repetir". La psicología de la escasez es una técnica de venta documentada.
+        <br><br>
+        <strong>La realidad:</strong> el 95% de las veces el precio va a seguir igual mañana. O va a haber más stock. La urgencia real existe ocasionalmente (Hot Sale, liquidaciones de cierre) pero es minoría.
+        <br><br>
+        <strong>La prueba:</strong> si "ya no queda" hoy, buscá el mismo producto en otra tienda o en ML. Si está disponible al mismo precio, la escasez era falsa.
+        <br><em>— "La oferta que termina hoy que termina todas las semanas. La reconocés cuando la ves tres veces seguidas."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">Especificaciones infladas / engañosas</div><span class="badge b-high">El técnico</span></div>
+      <div class="card-body">
+        Los números que no significan lo que parecen:
+        <br><br>
+        <strong>Watts en parlantes y subwoofers:</strong> "1000W PMPO" es potencia de pico de corto plazo. Los "watts RMS" son la potencia real continua. Un equipo de "1000W PMPO" puede tener solo 30W RMS reales.<br>
+        <strong>Megapíxeles en cámaras baratas:</strong> ya explicado en otras guías. El sensor importa, no los MP.<br>
+        <strong>Velocidad de pendrives:</strong> la velocidad de lectura siempre es mayor a la de escritura. La que importa para copiar archivos es la escritura, que raramente se publica.<br>
+        <strong>"Compatible con" vs "funciona con":</strong> compatible puede significar que físicamente entra. Funciona significa que hace lo que prometió.
+        <br><em>— "El equipo de música de '2000 watts' que suena más flojo que el viejo equipo de 50 watts reales. Los números importan menos que la unidad en la que están."</em>
+      </div>
+    </div>
+  </div>
+  <div class="tip tip-gold" style="margin-top:20px">
+    <strong>💡 El resumen de plata inteligente:</strong><br>
+    ✓ Cuotas sin interés en inflación alta: siempre convenientes.<br>
+    ✓ Garantía: conocé tus derechos antes de necesitarlos.<br>
+    ✓ ML: vendedor con historial + pago por MercadoPago + no marcar recibido ante problemas.<br>
+    ✓ Negociar: siempre preguntá. La peor respuesta es "no".<br>
+    ✓ Trampas: verificá el modelo, ignorá la urgencia falsa, comprá los accesorios aparte.
+  </div>
+</div>
+
+</main>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Plata Inteligente — cuotas, garantías y cómo comprar sin caer:" class="wa-share" target="_blank">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+
+<div class="relacionadas" style="max-width:640px;margin:20px auto 0;padding:0 16px 32px;">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid">
+    <a href="grandes-electrodomesticos.html" class="rel-link">🧊 Grandes Electrodomésticos</a>
+    <a href="celulares.html" class="rel-link">📱 Celulares</a>
+    <a href="notebooks.html" class="rel-link">💻 Notebooks</a>
+    <a href="tv-tecnologias.html" class="rel-link">📺 Televisores</a>
+  </div>
+</div>
+
+<div id="ttBubble"></div>
+<script>
+  function goTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+  const bubble=document.getElementById('ttBubble');let timer;
+  document.querySelectorAll('.tt').forEach(el=>{el.addEventListener('click',function(e){e.stopPropagation();bubble.textContent=this.dataset.tip;bubble.classList.add('on');const r=this.getBoundingClientRect();let top=r.bottom+10,left=r.left;if(left+280>window.innerWidth)left=window.innerWidth-285;if(top+140>window.innerHeight)top=r.top-145;bubble.style.top=top+'px';bubble.style.left=left+'px';clearTimeout(timer);timer=setTimeout(()=>bubble.classList.remove('on'),5000);});});
+  document.addEventListener('click',()=>bubble.classList.remove('on'));
+</script>
+</body>
+</html>

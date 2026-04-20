@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — UPS y Estabilizadores</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--soft:#aaaacc;--accent:#facc15;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  header{background:linear-gradient(135deg,#080810,#181000 50%,#080810);border-bottom:1px solid var(--border);padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:260px;background:radial-gradient(ellipse,rgba(200,200,200,.10),transparent 70%);pointer-events:none;}
+  .site-label{font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);text-transform:uppercase;opacity:.7;margin-bottom:10px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,7vw,76px);letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 30%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:10px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .price-note{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+  main{padding:28px 16px 80px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .card:hover{border-color:rgba(200,200,200,.3);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(77,187,122,.15);color:#4dbb7a;border:1px solid rgba(77,187,122,.3);}
+  .b-mid{background:rgba(200,200,200,.1);color:var(--accent);border:1px solid rgba(200,200,200,.25);}
+  .b-high{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-no{background:rgba(120,120,120,.15);color:#888;border:1px solid rgba(120,120,120,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tt{border-bottom:1px dashed var(--accent);color:var(--accent);cursor:pointer;font-weight:600;display:inline;}
+  #ttBubble{display:none;position:fixed;background:#080810;border:1px solid var(--accent);border-radius:14px;padding:13px 16px;font-size:14px;color:var(--text);line-height:1.6;max-width:270px;z-index:9999;box-shadow:0 8px 40px rgba(0,0,0,.7);pointer-events:none;}
+  #ttBubble.on{display:block;}
+  #ttBubble::before{content:'💡 ';}
+  .tip{background:rgba(200,200,200,.06);border:1px solid rgba(200,200,200,.15);border-radius:14px;padding:16px 18px;margin-top:20px;font-size:14px;line-height:1.65;color:#c8c8e0;}
+  .tip strong{color:var(--accent);}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-green{background:rgba(77,187,122,.06);border:1px solid rgba(77,187,122,.2);color:#a0d8b4;}
+  .tip-green strong{color:#4dbb7a;}
+  .tabla{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+  .tabla th{background:var(--surface);color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);}
+  .tabla td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;line-height:1.5;}
+  .tabla tr:hover td{background:rgba(255,255,255,.02);}
+  .tabla td:first-child{color:var(--text);font-weight:700;}
+  .tabla .hl td{background:rgba(200,200,200,.04);}
+  .tabla .hl td:first-child{color:var(--accent);}
+  .ok::before{content:'✓ ';color:#4dbb7a;}
+  .mal::before{content:'✗ ';color:#f87171;}
+  .meh::before{content:'~ ';color:#ffd700;}
+  .perfiles{display:flex;flex-direction:column;gap:10px;}
+  .perfil{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .perfil:hover{border-color:rgba(200,200,200,.3);}
+  .perfil-ico{font-size:24px;flex-shrink:0;}
+  .perfil-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .perfil-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .perfil-rec{font-size:12px;font-weight:700;color:var(--accent);margin-top:5px;}
+  .checks{display:flex;flex-direction:column;gap:10px;}
+  .check{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .check:hover{border-color:rgba(200,200,200,.3);}
+  .check-ico{font-size:22px;flex-shrink:0;}
+  .check-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .check-desc{font-size:13px;color:var(--muted);line-height:1.55;}
+  .check-desc strong{color:var(--text);}
+  .check-desc em{color:#7a9ab0;font-style:italic;font-size:12px;}
+  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;}
+  @media(max-width:480px){.pgrid{grid-template-columns:1fr;}}
+  .pcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;}
+  .pcard.rec{border-color:rgba(200,200,200,.3);background:rgba(200,200,200,.03);}
+  .pcard.alt{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.03);}
+  .ptag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;}
+  .pcard.rec .ptag{color:var(--accent);}
+  .pcard.alt .ptag{color:#f87171;}
+  .pmarca{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--text);margin-bottom:5px;}
+  .pdesc{font-size:12px;color:var(--muted);line-height:1.6;}
+  .pdesc strong{color:var(--text);}
+  @media(max-width:480px){.card-name{font-size:20px;}.tabla th,.tabla td{padding:8px;}}
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="site-label">SinVerso · Tecnología</div>
+  <h1>UPS y Estabilizadores</h1>
+  <p class="subtitle">El seguro de vida de tus dispositivos. <strong>Especialmente en Argentina.</strong></p>
+  <div class="price-note">💲 Precios en USD orientativos · Varían según tipo de cambio y mercado local</div>
+</header>
+
+<div class="error-caro"><strong>⚡ El error más caro</strong>Comprar el UPS más barato sin calcular la carga real de los dispositivos. Un UPS subdimensionado se apaga instantáneamente bajo carga real. Calculá la suma de watts de todo lo que vas a conectar, multiplicalo por 1.6 y ese es el mínimo en VA que necesitás.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('quees',this)">⚡ ¿Qué son?</div>
+  <div class="tab" onclick="goTab('tipos',this)">🔋 Tipos</div>
+  <div class="tab" onclick="goTab('como_elegir',this)">📐 Cómo elegir</div>
+  <div class="tab" onclick="goTab('perfil',this)">🧑 ¿Cuál es para vos?</div>
+  <div class="tab" onclick="goTab('checklist',this)">🛒 Antes de comprar</div>
+</div>
+<main>
+<div class="section active" id="quees">
+  <div class="sec-title">¿Qué son y para qué sirven?</div>
+  <div class="sec-sub">En Argentina, los cortes de luz y las variaciones de tensión son parte del paisaje. <em>Cada corte sin protección puede dañar un dispositivo. No es dramático, es estadística.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#facc15">
+      <div class="card-head"><div class="card-name">UPS (Uninterruptible Power Supply)</div><span class="badge b-mid">El que da tiempo</span></div>
+      <div class="card-body">
+        Un UPS tiene batería interna. Cuando se va la luz, la batería entra automáticamente y el dispositivo sigue funcionando. Te da entre 5 y 30 minutos (según el tamaño) para guardar el trabajo y apagar bien la PC.
+        <br><br>
+        <strong>También protege contra:</strong> picos de tensión, bajones de voltaje, ruido eléctrico.
+        <br><br>
+        <strong>Para qué es esencial:</strong> PC de escritorio, servidor, router, cámaras de seguridad, cualquier dispositivo que no puede apagarse abruptamente.
+        <br><em>— "Una PC que se apaga de golpe por corte de luz puede dañar el disco o perder datos. Con UPS, eso no pasa."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">Estabilizador de tensión</div><span class="badge b-high">El que regula el voltaje</span></div>
+      <div class="card-body">
+        No tiene batería. Su función es mantener el voltaje estable en 220V aunque la red suba o baje. Protege contra daños por variaciones de tensión pero no contra cortes totales.
+        <br><br>
+        <strong>Para qué sirve:</strong> TV, heladera, lavarropas, aire acondicionado en zonas con tensión inestable.
+        <br><br>
+        En Argentina, la tensión puede variar entre 180V y 240V en muchas zonas. Esa variación daña los componentes electrónicos con el tiempo.
+        <br><em>— "El televisor que se quemó 'solo' probablemente lo mató un pico de tensión. Un estabilizador de USD 30 lo hubiera evitado."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 20–60</span></div></div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Protector de sobretensión (regleta)</div><span class="badge b-ok">Lo mínimo</span></div>
+      <div class="card-body">
+        Una regleta con protección contra sobretensiones. No regula el voltaje ni tiene batería, pero protege contra picos bruscos (rayos, volver la luz después de un corte).
+        <br><br>
+        Es lo mínimo que deberías tener para cualquier dispositivo electrónico importante. Cuesta poco y puede salvar un equipo de miles de dólares.
+        <br><em>— "La regleta con protección no es un lujo. Es lo mínimo razonable para cualquier TV, PC o consola."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 8–25</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="tipos">
+  <div class="sec-title">Tipos de UPS</div>
+  <div class="sec-sub">No todos los UPS son iguales. <em>El tipo define la calidad de protección que ofrece.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#facc15">
+      <div class="card-head"><div class="card-name">Offline / Standby</div><span class="badge b-ok">El más común</span></div>
+      <div class="card-body">
+        El más básico y barato. En funcionamiento normal la corriente pasa directo de la red al dispositivo. Cuando detecta un corte, en 8–20 ms cambia a batería.
+        <br><br>
+        <strong>Para qué alcanza:</strong> PC doméstica, router, cámaras. La conmutación es rápida pero no instantánea.
+        <br><strong>Para qué no alcanza:</strong> servidores críticos o equipos muy sensibles a la conmutación.
+        <br><em>— "Para la PC de casa y el router, el UPS offline es todo lo que necesitás."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 40–100</span></div></div>
+    </div>
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">Line Interactive</div><span class="badge b-high">El equilibrio</span></div>
+      <div class="card-body">
+        Tiene regulador de voltaje integrado (AVR). Mantiene el voltaje estable sin cambiar a batería cada vez que hay una bajón leve. La batería solo entra en cortes totales.
+        <br><br>
+        Mucho mejor para Argentina donde los bajones de tensión son frecuentes. Un UPS offline cambiaría a batería en cada bajón, gastando los ciclos de la batería innecesariamente.
+        <br><em>— "En Argentina el line interactive es el UPS que tiene sentido para el hogar. El offline es demasiado básico para nuestra red eléctrica."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 80–200</span></div><div class="chip">AVR incluido <span>✓</span></div></div>
+    </div>
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">Online / Doble conversión</div><span class="badge b-top">Para lo crítico</span></div>
+      <div class="card-body">
+        Siempre convierte la corriente alterna a continua y de nuevo a alterna. El dispositivo siempre corre desde la batería, que siempre está cargada. Protección perfecta sin conmutación.
+        <br><br>
+        Para servidores, equipos médicos, data centers. En hogar no tiene sentido por el costo a menos que tengas un servidor o NAS importante.
+        <br><em>— "Para el hogar es overkill. Para el servidor del negocio, es el estándar."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 300–2000+</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="como_elegir">
+  <div class="sec-title">Cómo elegir el tamaño correcto</div>
+  <div class="sec-sub">La potencia del UPS tiene que ser mayor que la suma de los equipos que conectás. <em>Si no, el UPS no aguanta la carga.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#facc15">
+      <div class="card-head"><div class="card-name">VA y Watts: los números del UPS</div><span class="badge b-mid">Lo técnico</span></div>
+      <div class="card-body">
+        Los UPS se miden en <span class="tt" data-tip="VA = Volt-Ampere. Es la potencia aparente. Watts es la potencia real. La relación entre ellos es el factor de potencia. Regla práctica: Watts reales ≈ VA × 0.6 a 0.7. Un UPS de 1000VA da aproximadamente 600-700 Watts reales.">VA (Volt-Ampere)</span> y Watts.
+        <br><br>
+        <strong>Cómo calcularlo:</strong><br>
+        1. Sumá los Watts de consumo de todo lo que conectás.<br>
+        2. Multiplicá por 1.25 (margen de seguridad).<br>
+        3. Ese número tiene que ser menor que los Watts del UPS.<br>
+        <br>
+        <strong>Ejemplo:</strong> PC (300W) + monitor (50W) + router (20W) = 370W × 1.25 = 462W. Necesitás un UPS de al menos 500W (≈700VA).
+        <br><em>— "Siempre comprá el UPS más grande del que calculás necesitar. Más capacidad = más autonomía = más tiempo para guardar y apagar."</em>
+      </div>
+    </div>
+  </div>
+  <table class="tabla" style="margin-top:16px">
+    <thead><tr><th>Uso</th><th>Consumo aprox</th><th>UPS recomendado</th></tr></thead>
+    <tbody>
+      <tr><td>Router + modem</td><td>30–50W</td><td>300VA / 180W</td></tr>
+      <tr><td>PC básica + monitor</td><td>200–350W</td><td>700VA / 420W</td></tr>
+      <tr class="hl"><td>PC gamer + monitor</td><td>400–700W</td><td>1200VA / 720W</td></tr>
+      <tr><td>Servidor / NAS</td><td>50–200W</td><td>1000VA / 600W</td></tr>
+      <tr><td>TV + decodificador</td><td>100–200W</td><td>500VA / 300W</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section" id="perfil">
+  <div class="sec-title">¿Cuál es para vos?</div>
+  <div class="sec-sub">Según qué querés proteger.</div>
+  <div class="perfiles">
+    <div class="perfil"><div class="perfil-ico">💻</div><div>
+      <div class="perfil-title">PC de trabajo o escritorio</div>
+      <div class="perfil-desc">No querés perder datos ni dañar el disco por un corte.</div>
+      <div class="perfil-rec">→ APC Back-UPS 700VA o line interactive de 1000VA. Marcas: APC, CyberPower, Powerware. Presupuesto USD 80–150.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">📡</div><div>
+      <div class="perfil-title">Router y cámaras de seguridad</div>
+      <div class="perfil-desc">Que el internet y las cámaras sigan funcionando durante un corte.</div>
+      <div class="perfil-rec">→ UPS pequeño de 300–500VA (USD 40–70). Alcanza para el router y hasta 4 cámaras IP fácilmente.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">📺</div><div>
+      <div class="perfil-title">TV y electrodomésticos</div>
+      <div class="perfil-desc">Proteger contra picos de tensión y variaciones de voltaje.</div>
+      <div class="perfil-rec">→ Estabilizador de tensión regulado de 1000W (USD 30–50). No necesitás UPS para el TV, solo estabilización.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🎮</div><div>
+      <div class="perfil-title">PC gamer o consola</div>
+      <div class="perfil-desc">No perder la partida y proteger el hardware caro.</div>
+      <div class="perfil-rec">→ UPS line interactive 1200VA+ (USD 120–200). La PC gamer consume mucho. Calculá bien la carga antes de comprar.</div>
+    </div></div>
+  </div>
+</div>
+
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de Comprar</div>
+  <div class="sec-sub">Lo que tenés que verificar antes de pagar.</div>
+  <div class="checks">
+    <div class="check"><div class="check-ico">🔢</div><div>
+      <div class="check-title">Calculá la carga total en Watts</div>
+      <div class="check-desc">Sumá el consumo de todos los dispositivos que vas a conectar. <strong>El UPS tiene que soportar esa carga con margen.</strong> Nunca cargues el UPS al 100%. <em>— Un UPS sobrecargado falla justo cuando más lo necesitás.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">🔋</div><div>
+      <div class="check-title">Autonomía: cuánto tiempo da</div>
+      <div class="check-desc">Los fabricantes dan la autonomía con carga parcial. <strong>Con carga completa, dividí el tiempo por 2 o 3.</strong> Para guardar y apagar la PC, con 5 minutos alcanza. Para el router durante un corte largo, necesitás más capacidad. <em>— La autonomía depende de cuánto cargás el UPS.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">🔌</div><div>
+      <div class="check-title">Contá los enchufes disponibles</div>
+      <div class="check-desc">Los UPS tienen enchufes con batería y enchufes solo con protección (sin batería). <strong>Conectá solo lo esencial a los enchufes con batería.</strong> Los monitores o impresoras pueden ir en los de solo protección. <em>— Menos carga en batería = más autonomía para lo importante.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">📅</div><div>
+      <div class="check-title">La batería tiene vida útil</div>
+      <div class="check-desc">Las baterías de UPS duran 3–5 años. Después hay que reemplazarlas. <strong>Verificá que las baterías de repuesto del modelo estén disponibles en Argentina.</strong> Un UPS sin batería disponible es un adorno pesado.</div>
+    </div></div>
+  </div>
+  <div class="tip tip-green" style="margin-top:20px">
+    <strong>💡 Marcas confiables:</strong> <strong>APC (Schneider)</strong> es el estándar mundial en UPS. <strong>CyberPower</strong> y <strong>Eaton</strong> son alternativas muy buenas. Evitá marcas genéricas sin nombre: un UPS que falla en el momento del corte es peor que no tener nada.
+  </div>
+</div>
+</main>
+<div id="ttBubble"></div>
+<script>
+  function goTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+  const bubble=document.getElementById('ttBubble');let timer;
+  document.querySelectorAll('.tt').forEach(el=>{el.addEventListener('click',function(e){e.stopPropagation();bubble.textContent=this.dataset.tip;bubble.classList.add('on');const r=this.getBoundingClientRect();let top=r.bottom+10,left=r.left;if(left+280>window.innerWidth)left=window.innerWidth-285;if(top+140>window.innerHeight)top=r.top-145;bubble.style.top=top+'px';bubble.style.left=left+'px';clearTimeout(timer);timer=setTimeout(()=>bubble.classList.remove('on'),5000);});});
+  document.addEventListener('click',()=>bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Ups Estabilizadores: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="energia-renovable.html" class="rel-link">☀️ Energía Renovable</a><a href="luces-emergencia.html" class="rel-link">🔦 Luces de Emergencia</a><a href="grandes-electrodomesticos.html" class="rel-link">🧊 Grandes Electrodomésticos</a></div>
+</div>
+</body>
+</html>

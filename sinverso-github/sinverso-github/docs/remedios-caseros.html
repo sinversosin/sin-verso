@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Remedios Caseros y Plantas</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--accent:#86efac;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  header{background:linear-gradient(135deg,#080810,#001a08 50%,#080810);border-bottom:1px solid var(--border);padding:48px 20px 40px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(134,239,172,.1) 0%,rgba(74,222,128,.06) 50%,transparent 70%);pointer-events:none;}
+  .site-label{font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);text-transform:uppercase;opacity:.7;margin-bottom:8px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,7vw,72px);letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 20%,#86efac 60%,#4ade80 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:12px;color:var(--muted);font-size:15px;font-style:italic;line-height:1.5;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .aviso{background:rgba(134,239,172,.07);border:1px solid rgba(134,239,172,.2);border-radius:14px;padding:12px 16px;margin:14px 16px 0;font-size:13px;color:#b8f5d0;text-align:center;}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+  main{padding:28px 16px 80px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+
+  /* PLANTA CARD */
+  .planta-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:14px;transition:transform .2s;}
+  .planta-card:hover{transform:translateY(-2px);border-color:rgba(134,239,172,.3);}
+  .planta-header{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px;padding:18px 20px 14px;}
+  .planta-ico{font-size:36px;}
+  .planta-nombre{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  .planta-nombre-lat{font-size:11px;color:var(--muted);font-style:italic;margin-top:2px;}
+  .evidencia{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+  .ev-tag{font-size:10px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;white-space:nowrap;}
+  .ev-alta{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3);}
+  .ev-media{background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.3);}
+  .ev-baja{background:rgba(167,139,250,.12);color:#a78bfa;border:1px solid rgba(167,139,250,.3);}
+  .ev-nula{background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .planta-usos{display:flex;flex-wrap:wrap;gap:6px;padding:0 20px 12px;}
+  .uso-tag{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:3px 10px;font-size:11px;color:var(--muted);}
+  .planta-body{padding:12px 20px 18px;font-size:14px;color:var(--muted);line-height:1.7;border-top:1px solid var(--border);}
+  .planta-body strong{color:var(--text);font-weight:600;}
+  .planta-body em{color:#9090bb;font-size:13px;}
+  .planta-prep{background:rgba(134,239,172,.06);border:1px solid rgba(134,239,172,.2);border-radius:10px;padding:12px 14px;margin-top:10px;font-size:13px;color:#b8f5d0;}
+  .planta-prep strong{color:var(--accent);}
+  .planta-cuidado{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);border-radius:10px;padding:10px 14px;margin-top:8px;font-size:12px;color:#f8b4b4;}
+  .planta-cuidado strong{color:#f87171;}
+
+  .intro-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;margin-bottom:14px;}
+  .intro-card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .intro-card .card-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--text);line-height:1;margin-bottom:8px;}
+  .intro-card p{font-size:14px;color:var(--muted);line-height:1.7;}
+  .intro-card p strong{color:var(--text);}
+
+  .tip{background:rgba(134,239,172,.06);border:1px solid rgba(134,239,172,.2);border-radius:14px;padding:16px 18px;margin-top:20px;font-size:14px;line-height:1.65;color:#b8f5d0;}
+  .tip strong{color:var(--accent);}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-gold{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);color:#f0e080;}
+  .tip-gold strong{color:#ffd700;}
+
+  .ev-legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+  .ev-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);}
+
+  .receta-card{background:var(--card);border:1px solid rgba(134,239,172,.2);border-radius:16px;padding:18px;margin-bottom:12px;}
+  .receta-titulo{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--accent);margin-bottom:8px;}
+  .receta-ingredientes{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:8px;}
+  .receta-prep{font-size:13px;color:var(--text);line-height:1.7;}
+
+  .wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s;}
+  .wa-share:hover{transform:translateY(-2px);}
+  .wa-share-ico{font-size:20px;}
+  .wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;}
+  .relacionadas{margin:32px 0 0;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;}
+  .rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--muted);letter-spacing:1px;margin-bottom:12px;}
+  .rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .rel-link{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:8px 14px;text-decoration:none;font-size:13px;font-weight:600;color:var(--text);transition:all .2s;}
+  .rel-link:hover{border-color:var(--accent);transform:translateY(-1px);}
+  @media(max-width:480px){.planta-header{grid-template-columns:auto 1fr;}.evidencia{display:none;}.planta-nombre{font-size:20px;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="site-label">SinVerso · Salud</div>
+  <h1>Remedios Caseros y Plantas</h1>
+  <p class="subtitle">Lo que hacían nuestros ancestros.<br><strong>Con honestidad sobre qué funciona, qué no y por qué igual vale la pena.</strong></p>
+</header>
+<div class="aviso">🌿 La fitoterapia tiene milenios de historia. Algunos remedios tienen evidencia científica sólida. Otros, no. Esta guía es honesta con ambos casos. Nunca reemplaza la consulta médica.</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="goTab('intro',this)">🌱 La sabiduría ancestral</div>
+  <div class="tab" onclick="goTab('digestivo',this)">🫃 Digestivo</div>
+  <div class="tab" onclick="goTab('respiratorio',this)">🫁 Respiratorio</div>
+  <div class="tab" onclick="goTab('calma',this)">😌 Calma y sueño</div>
+  <div class="tab" onclick="goTab('piel',this)">🧴 Piel y heridas</div>
+  <div class="tab" onclick="goTab('recetas',this)">📜 Recetas completas</div>
+</div>
+
+<main>
+
+<!-- INTRO -->
+<div class="section active" id="intro">
+  <div class="sec-title">La sabiduría que precede a la farmacia</div>
+  <div class="sec-sub">Por milenios, las plantas fueron la única medicina disponible. <em>La farmacología moderna nació de ellas.</em></div>
+
+  <div class="ev-legend">
+    <div class="ev-legend-item"><span class="ev-tag ev-alta">Evidencia alta</span> Estudios clínicos sólidos</div>
+    <div class="ev-legend-item"><span class="ev-tag ev-media">Evidencia media</span> Estudios prometedores</div>
+    <div class="ev-legend-item"><span class="ev-tag ev-baja">Evidencia baja</span> Uso tradicional, poca ciencia</div>
+    <div class="ev-legend-item"><span class="ev-tag ev-nula">Sin evidencia</span> No comprobado</div>
+  </div>
+
+  <div class="intro-card" style="--ca:#86efac">
+    <div class="card-name">¿Por qué la medicina moderna viene de las plantas?</div>
+    <p>
+      El 25% de los medicamentos modernos tienen origen vegetal o están inspirados en compuestos vegetales:
+      <br><br>
+      <strong>Aspirina</strong> → deriva del ácido salicílico de la corteza del sauce blanco. Los griegos antiguos usaban infusiones de sauce para el dolor y la fiebre.<br>
+      <strong>Morfina</strong> → del opio (amapola). Usada en medicina sumeria hace 5.000 años.<br>
+      <strong>Digitoxina</strong> (para el corazón) → de la dedalera. Los herboristas europeos medievales la usaban para la "hidropesía".<br>
+      <strong>Taxol</strong> (quimioterapia) → del tejo del Pacífico.<br>
+      <strong>Artemisinina</strong> (antipalúdico, Premio Nobel 2015) → del artemisa chino, usado en medicina tradicional china hace 2.000 años.
+      <br><br>
+      La medicina moderna no refutó la fitoterapia: la estudió, identificó los compuestos activos, determinó dosis seguras y los sintetizó. El conocimiento ancestral fue el punto de partida, no el opuesto.
+      <br><br>
+      <em>— "Cada planta medicinal que funciona funciona porque tiene compuestos químicos activos. El que los descubrió primero no fue el laboratorio: fue la abuela."</em>
+    </p>
+  </div>
+
+  <div class="intro-card" style="--ca:#fbbf24">
+    <div class="card-name">Cómo usar esta guía</div>
+    <p>
+      Cada planta tiene un nivel de evidencia científica (alta, media, baja o sin evidencia), los usos tradicionales, la preparación correcta y las precauciones importantes.
+      <br><br>
+      <strong>Natural no significa inofensivo.</strong> El ricino es natural y es extremadamente tóxico. La cicuta es natural y mató a Sócrates. Las plantas medicinales tienen dosis, contraindicaciones e interacciones con medicamentos como cualquier fármaco.
+      <br><br>
+      Tratamos el conocimiento ancestral con el respeto que merece y la honestidad que requiere.
+    </p>
+  </div>
+</div>
+
+<!-- DIGESTIVO -->
+<div class="section" id="digestivo">
+  <div class="sec-title">Sistema digestivo</div>
+  <div class="sec-sub">Las plantas más usadas para el estómago, el hígado y los intestinos. <em>Muchas con buena evidencia.</em></div>
+
+  <div class="planta-card">
+    <div class="planta-header">
+      <div class="planta-ico">🌼</div>
+      <div><div class="planta-nombre">Manzanilla</div><div class="planta-nombre-lat">Matricaria chamomilla</div></div>
+      <div class="evidencia"><span class="ev-tag ev-alta">Evidencia alta</span></div>
+    </div>
+    <div class="planta-usos"><span class="uso-tag">Espasmos digestivos</span><span class="uso-tag">Náuseas</span><span class="uso-tag">Inflamación intestinal</span><span class="uso-tag">Ansiedad leve</span></div>
+    <div class="planta-body">
+      La manzanilla es la planta medicinal con mayor evidencia científica en gastroenterología. Sus flavonoides (apigenina, luteolina) y aceites esenciales (bisabolol) tienen efectos antiespasmódicos, antiinflamatorios y ansiolíticos documentados en múltiples estudios clínicos.
+      <br><br>
+      <strong>Para qué sirve de verdad:</strong> espasmos digestivos, cólicos, distensión abdominal, gastritis leve, náuseas, síndrome de intestino irritable leve. También como calmante suave (la apigenina se une a receptores de benzodiacepinas con efecto ansiolítico moderado).
+      <br><br>
+      <strong>Para qué no sirve:</strong> no trata infecciones bacterianas, no cura úlceras establecidas ni gastritis severa.
+      <div class="planta-prep"><strong>📋 Preparación:</strong> 1 cucharada de flores secas por taza de agua hirviendo. Tapar y dejar reposar 10 minutos. Colar. 2–3 tazas por día. El tapar es importante: los aceites esenciales se evaporan con el vapor.</div>
+      <div class="planta-cuidado"><strong>⚠️ Cuidado:</strong> alergia en personas sensibles a la familia de las Asteráceas (girasol, margarita). Interacción leve con anticoagulantes en dosis muy altas. Evitar en embarazo en dosis terapéuticas altas.</div>
+    </div>
+  </div>
+
+  <div class="planta-card">
+    <div class="planta-header">
+      <div class="planta-ico">🌿</div>
+      <div><div class="planta-nombre">Boldo</div><div class="planta-nombre-lat">Peumus boldus</div></div>
+      <div class="evidencia"><span class="ev-tag ev-media">Evidencia media</span></div>
+    </div>
+    <div class="planta-usos"><span class="uso-tag">Hígado</span><span class="uso-tag">Digestión difícil</span><span class="uso-tag">Vesícula</span></div>
+    <div class="planta-body">
+      El boldo es una planta originaria de Chile y Argentina, profundamente arraigada en la medicina popular del Cono Sur. Su principio activo más estudiado es la boldina, con propiedades colagogas (estimula la producción de bilis) y hepatoprotectoras en modelos animales.
+      <br><br>
+      <strong>Uso tradicional:</strong> "para el hígado" después de comidas pesadas, con exceso de alcohol, pesadez digestiva.
+      <br><br>
+      <strong>Lo que dice la ciencia:</strong> hay estudios en animales positivos, estudios clínicos en humanos limitados pero sugestivos. La ANMAT y agencias europeas reconocen su uso tradicional. No hay evidencia suficiente para afirmar que "cura" el hígado, pero tampoco para descartarlo.
+      <div class="planta-prep"><strong>📋 Preparación:</strong> 1 hoja seca o 1 bolsita comercial por taza. Agua caliente (no hirviendo a 100°C, quema los principios activos). 5–10 minutos de reposo. Máximo 2 tazas por día.</div>
+      <div class="planta-cuidado"><strong>⚠️ Cuidado:</strong> contraindicado en colestasis (bilis bloqueada) y cálculos biliares grandes. No usar durante el embarazo (estimula la contracción de la vesícula). Hepatotóxico en dosis muy altas o uso prolongado. No supera los 4 semanas de uso continuo.</div>
+    </div>
+  </div>
+
+  <div class="planta-card">
+    <div class="planta-header">
+      <div class="planta-ico">🌱</div>
+      <div><div class="planta-nombre">Menta / Peperina</div><div class="planta-nombre-lat">Mentha × piperita / Minthostachys mollis</div></div>
+      <div class="evidencia"><span class="ev-tag ev-alta">Evidencia alta</span></div>
+    </div>
+    <div class="planta-usos"><span class="uso-tag">Espasmos intestinales</span><span class="uso-tag">Síndrome colon irritable</span><span class="uso-tag">Náuseas</span><span class="uso-tag">Digestión</span></div>
+    <div class="planta-body">
+      El aceite esencial de menta piperita tiene la evidencia más sólida de todas las plantas digestivas. El mentol relaja el músculo liso del tracto digestivo (antiespasmódico). Estudios clínicos controlados muestran reducción de dolor abdominal en síndrome de colon irritable.
+      <br><br>
+      <strong>La peperina</strong> (nativa del noroeste argentino) tiene propiedades similares a la menta y es la planta medicinal más característica de la herboristería cordobesa y serrana.
+      <br><br>
+      <strong>El mate con peperina:</strong> la tradición serrana de tomar mate con peperina tiene base fitoquímica real. No es solo folklore.
+      <div class="planta-prep"><strong>📋 Preparación:</strong> té: hojas frescas o secas en agua caliente. Para el colon irritable: cápsulas de aceite esencial de menta entérico recubiertas (pasan el estómago y actúan en el intestino) tienen la evidencia más sólida.</div>
+      <div class="planta-cuidado"><strong>⚠️ Cuidado:</strong> el aceite esencial puro es tóxico. No dar menta a bebés menores de 2 años (riesgo de espasmo laríngeo). Puede agravar el reflujo gastroesofágico.</div>
+    </div>
+  </div>
+
+  <div class="planta-card">
+    <div class="planta-header">
+      <div class="planta-ico">🫚</div>
+      <div><div class="planta-nombre">Jengibre</div><div class="planta-nombre-lat">Zingiber officinale</div></div>
+      <div class="evidencia"><span class="ev-tag ev-alta">Evidencia alta</span></div>
+    </div>
+    <div class="planta-usos"><span class="uso-tag">Náuseas</span><span class="uso-tag">Vómitos embarazo</span><span class="uso-tag">Mareo de transporte</span><span class="uso-tag">Antiinflamatorio</span></div>
+    <div class="planta-body">
+      El jengibre tiene evidencia científica sólida para el tratamiento de náuseas, especialmente las del embarazo y las del mareo de transporte. Los gingeroles y shogaoles son sus principios activos. También tiene efectos antiinflamatorios documentados (inhibe COX-1 y COX-2, similar al ibuprofeno pero más débil).
+      <br><br>
+      <strong>Para náuseas del embarazo:</strong> evidencia de múltiples estudios clínicos. Es uno de los pocos remedios naturales seguros y eficaces en el primer trimestre cuando los antieméticos farmacológicos se evitan.
+      <div class="planta-prep"><strong>📋 Preparación:</strong> té: ralladura de jengibre fresco (1 cm aprox) en agua hirviendo, 10 min. Con limón y miel potencia el efecto. Cápsulas de jengibre: 250mg 3–4 veces por día para náuseas.</div>
+      <div class="planta-cuidado"><strong>⚠️ Cuidado:</strong> puede interactuar con anticoagulantes (warfarina) en dosis altas. Puede provocar acidez en algunas personas. El embarazada que lo use para náuseas: dosis moderadas y consultar al médico.</div>
+    </div>
+  </div>
+</div>
+
+<!-- RESPIRATORIO -->
+<div class="section" id="respiratorio">
+  <div class="sec-title">Sistema respiratorio</div>
+  <div class="sec-sub">Los que ayudan con la tos, la congestión y las infecciones. <em>Algunos con más base que otros.</em></div>
+
+  <div class="planta-card">
+    <div class="planta-header">
+      <div class="planta-ico">🌺</div>
+      <div><div class="planta-nombre">Tomillo</div><div class="planta-nombre-lat">Thymus vulgaris</div></div>
+      <div class="evidencia"><span class="ev-tag ev-alta">Evidencia alta</span></div>
+    </div>
+    <div class="planta-usos"><span class="uso-tag">Tos</span><span class="uso-tag">Bronquitis</span><span class="uso-tag">Expectorante</span><span class="uso-tag">Antiséptico vías aéreas</span></div>
+    <div class="planta-body">
+      El tomillo tiene el aceite esencial más estudiado en enfermedades respiratorias. El timol y el carvacrol tienen propiedades expectorantes (fluidifican el moco), antiespasmódicas bronquiales y antisépticas.
+      <br><br>
+      <strong>Evidencia clínica:</strong> estudios europeos (Alemania es el país con más investigación en fitoterapia) muestran que el extracto de tomillo es tan efectivo como los mucolíticos farmacológicos para bronquitis aguda con tos productiva.
+      <div class="planta-prep"><strong>📋 Preparación:</strong> té: 1–2 cucharaditas de hojas secas por taza. Infusión de 10 min tapada. 3 tazas por día. Para inhalación: 5–6 ramitas en agua hirviendo, tapar la cabeza con toalla e inhalar el vapor 10 minutos.</div>
+    </div>
+  </div>
+
+  <div class="planta-card">
+    <div class="planta-header">
+      <div class="planta-ico">🍯</div>
+      <div><div class="planta-nombre">Miel de abejas</div><div class="planta-nombre-lat">No es planta pero es natural</div></div>
+      <div class="evidencia"><span class="ev-tag ev-alta">Evidencia alta</span></div>
+    </div>
+    <div class="planta-usos"><span class="uso-tag">Tos</span><span class="uso-tag">Antibacteriano</span><span class="uso-tag">Cicatrización</span></div>
+    <div class="planta-body">
+      La miel tiene evidencia de calidad para reducir la tos nocturna en niños. Un estudio de 2007 en la revista Archives of Pediatric Medicine mostró que la miel era más efectiva que el dextrometorfano (el ingrediente activo de muchos jarabes para la tos infantil).
+      <br><br>
+      <strong>Propiedades antibacterianas:</strong> reales y documentadas. El peróxido de hidrógeno que genera y el pH ácido inhiben el crecimiento bacteriano. La miel de Manuka (Nueva Zelanda) tiene la actividad antibacteriana más alta documentada y se usa en apósitos para heridas en hospitales.
+      <div class="planta-prep"><strong>📋 Para la tos:</strong> 1 cucharadita de miel sola o en infusión templada (no hirviendo, destruye enzimas). Para heridas menores: cubrir la herida limpia con miel pura y tapar con gasa.</div>
+      <div class="planta-cuidado"><strong>⚠️ CRÍTICO:</strong> nunca dar miel a bebés menores de 12 meses. Riesgo de botulismo infantil. Las esporas de Clostridium botulinum pueden estar en la miel y son inofensivas para adultos pero peligrosas para lactantes.</div>
+    </div>
+  </div>
+
+  <div class="planta-card">
+    <div class="planta-header">
+      <div class="planta-ico">🧄</div>
+      <div><div class="planta-nombre">Ajo</div><div class="planta-nombre-lat">Allium sativum</div></div>
+      <div class="evidencia"><span class="ev-tag ev-media">Evidencia media</span></div>
+    </div>
+    <div class="planta-usos"><span class="uso-tag">Antimicrobiano</span><span class="uso-tag">Cardiovascular</span><span class="uso-tag">Colesterol</span></div>
+    <div class="planta-body">
+      La alicina (el compuesto activo del ajo) tiene propiedades antimicrobianas demostradas in vitro. En humanos, la evidencia clínica es más modesta pero real para algunas aplicaciones cardiovasculares: reducción leve de la presión arterial y del colesterol LDL en estudios clínicos.
+      <br><br>
+      <strong>Para infecciones respiratorias:</strong> la evidencia de que el ajo previene o trata el resfrío es débil. Un estudio Cochrane de 2015 encontró evidencia insuficiente para recomendarlo como preventivo del resfrío.
+      <div class="planta-prep"><strong>📋 Máximo beneficio:</strong> ajo crudo machacado o picado (la alicina se forma al romper las células). Dejarlo reposar 10 minutos antes de consumir activa las enzimas. Cocinarlo destruye gran parte de la alicina.</div>
+      <div class="planta-cuidado"><strong>⚠️ Cuidado:</strong> interacción importante con anticoagulantes (especialmente warfarina). Puede potenciar el efecto de medicamentos para la presión. Evitar en grandes cantidades antes de cirugías.</div>
+    </div>
+  </div>
+
+  <div class="planta-card">
+    <div class="planta-header">
+      <div class="planta-ico">🌲</div>
+      <div><div class="planta-nombre">Propóleo</div><div class="planta-nombre-lat">Resina de abeja</div></div>
+      <div class="evidencia"><span class="ev-tag ev-media">Evidencia media</span></div>
+    </div>
+    <div class="planta-usos"><span class="uso-tag">Antibacteriano</span><span class="uso-tag">Antiinflamatorio</span><span class="uso-tag">Oral e inmune</span></div>
+    <div class="planta-body">
+      El propóleo es la resina que las abejas recolectan de los árboles para sellar la colmena. Contiene más de 300 compuestos, muchos con actividad antimicrobiana y antiinflamatoria documentada.
+      <br><br>
+      <strong>Evidencia en humanos:</strong> enjuagues bucales con propóleo muestran actividad contra Streptococcus mutans (bacteria de las caries). Estudios muestran reducción de la duración del resfrío. Para aftas y heridas bucales, evidencia positiva.
+      <div class="planta-prep"><strong>📋 Preparación:</strong> tintura de propóleo (con alcohol o glicerina): 10–20 gotas en agua, 3 veces por día. Para enjuague bucal: 10 gotas en un vaso de agua.</div>
+      <div class="planta-cuidado"><strong>⚠️ Cuidado:</strong> alergia en personas sensibles a productos de abeja. Evitar en alérgicos a la miel, cera o veneno de abeja.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CALMA Y SUEÑO -->
+<div class="section" id="calma">
+  <div class="sec-title">Calma, ansiedad y sueño</div>
+  <div class="sec-sub">Lo que los ancestros usaban antes de que existieran los ansiolíticos. <em>Algunos son sorprendentemente efectivos.</em></div>
+
+  <div class="planta-card">
+    <div class="planta-header">
+      <div class="planta-ico">🌸</div>
+      <div><div class="planta-nombre">Valeriana</div><div class="planta-nombre-lat">Valeriana officinalis</div></div>
+      <div class="evidencia"><span class="ev-tag ev-media">Evidencia media</span></div>
+    </div>
+    <div class="planta-usos"><span class="uso-tag">Insomnio</span><span class="uso-tag">Ansiedad leve</span><span class="uso-tag">Relajante muscular</span></div>
+    <div class="planta-body">
+      Usada en Europa desde la Grecia antigua para tratar insomnio y ansiedad. Sus ácidos valerénicos interactúan con receptores GABA (los mismos que las benzodiacepinas, pero de forma más suave y sin adicción).
+      <br><br>
+      <strong>La evidencia:</strong> estudios clínicos muestran mejora en la calidad del sueño con uso continuado de 2–4 semanas. El efecto es leve a moderado. No produce el efecto inmediato de un somnífero: requiere uso regular.
+      <br><br>
+      <strong>Importante:</strong> la valeriana fresca huele terrible. Las cápsulas son más prácticas.
+      <div class="planta-prep"><strong>📋 Preparación:</strong> cápsulas estandarizadas: 300–600mg de extracto 30–60 minutos antes de dormir. Té: difícil de preparar por el sabor/olor. Si usás raíz seca: 3g por taza.</div>
+      <div class="planta-cuidado"><strong>⚠️ Cuidado:</strong> no combinar con alcohol ni con benzodiacepinas (efecto aditivo). No manejar maquinaria en las primeras tomas. No usar por más de 4–6 semanas sin descanso.</div>
+    </div>
+  </div>
+
+  <div class="planta-card">
+    <div class="planta-header">
+      <div class="planta-ico">💜</div>
+      <div><div class="planta-nombre">Lavanda / Espliego</div><div class="planta-nombre-lat">Lavandula angustifolia</div></div>
+      <div class="evidencia"><span class="ev-tag ev-media">Evidencia media</span></div>
+    </div>
+    <div class="planta-usos"><span class="uso-tag">Ansiedad</span><span class="uso-tag">Insomnio leve</span><span class="uso-tag">Aromaterapia</span></div>
+    <div class="planta-body">
+      El aceite esencial de lavanda tiene evidencia clínica de efecto ansiolítico. El medicamento Silexan (extracto de lavanda) está aprobado en Alemania para el tratamiento de la ansiedad y tiene estudios clínicos de calidad comparables a los de las benzodiacepinas de baja dosis.
+      <br><br>
+      <strong>La aromaterapia:</strong> no es solo marketing. Los compuestos del aceite de lavanda (linalool, acetato de linalilo) son absorbidos por las vías respiratorias y tienen efecto sobre el sistema nervioso central documentado. No es lo mismo que simplemente "oler algo rico".
+      <div class="planta-prep"><strong>📋 Uso:</strong> unas gotas de aceite esencial en la almohada o en un difusor antes de dormir. Para ansiedad: cápsulas de Silexan o extracto estandarizado (80mg/día). Para el baño: 10 gotas en la bañera.</div>
+    </div>
+  </div>
+
+  <div class="planta-card">
+    <div class="planta-header">
+      <div class="planta-ico">🍋</div>
+      <div><div class="planta-nombre">Melisa / Toronjil</div><div class="planta-nombre-lat">Melissa officinalis</div></div>
+      <div class="evidencia"><span class="ev-tag ev-media">Evidencia media</span></div>
+    </div>
+    <div class="planta-usos"><span class="uso-tag">Ansiedad</span><span class="uso-tag">Insomnio</span><span class="uso-tag">Espasmos digestivos</span></div>
+    <div class="planta-body">
+      La melisa (también llamada toronjil en Argentina) tiene historia como calmante desde la Edad Media. El ácido rosmarínico y los flavonoides inhiben la enzima que degrada el GABA (ácido gamma-aminobutírico), el neurotransmisor inhibidor principal. Efecto similar a la valeriana, más suave.
+      <br><br>
+      Combinar melisa con valeriana en infusión es una práctica tradicional con base científica: los efectos son sinérgicos.
+      <div class="planta-prep"><strong>📋 Preparación:</strong> 2 cucharaditas de hojas frescas o 1 de secas por taza. 10 minutos de reposo tapado. 2–3 tazas por día o 1 taza antes de dormir. La melisa + valeriana es la combinación más estudiada.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PIEL -->
+<div class="section" id="piel">
+  <div class="sec-title">Piel y uso externo</div>
+  <div class="sec-sub">Los que van de afuera hacia adentro. <em>Con aplicación directa en la piel o heridas.</em></div>
+
+  <div class="planta-card">
+    <div class="planta-header">
+      <div class="planta-ico">🌵</div>
+      <div><div class="planta-nombre">Aloe vera / Sábila</div><div class="planta-nombre-lat">Aloe barbadensis miller</div></div>
+      <div class="evidencia"><span class="ev-tag ev-alta">Evidencia alta (uso externo)</span></div>
+    </div>
+    <div class="planta-usos"><span class="uso-tag">Quemaduras solares</span><span class="uso-tag">Heridas menores</span><span class="uso-tag">Irritación piel</span><span class="uso-tag">Psoriasis leve</span></div>
+    <div class="planta-body">
+      El gel del interior de las hojas de aloe vera tiene evidencia sólida para uso externo. Acelera la cicatrización de quemaduras superficiales, reduce la inflamación y tiene propiedades antimicrobianas.
+      <br><br>
+      <strong>Uso en quemaduras solares:</strong> el aloe vera enfrío es el tratamiento de primera línea más efectivo disponible en casa para la quemadura solar leve. Reduce el dolor, la inflamación y acelera la recuperación.
+      <br><br>
+      <strong>Para uso oral:</strong> la evidencia es mucho más débil y hay preguntas de seguridad sobre el uso interno crónico del aloína (compuesto en la corteza, diferente del gel interno).
+      <div class="planta-prep"><strong>📋 Preparación:</strong> cortar una hoja, extraer el gel transparente del interior (evitar el líquido amarillento de la corteza que irrita). Aplicar directamente en la zona afectada. Puede guardarse en heladera 3–5 días. El gel frío del refrigerador es especialmente aliviadero para quemaduras.</div>
+      <div class="planta-cuidado"><strong>⚠️ Cuidado:</strong> el jugo amarillo de la corteza (aloína) es laxante e irritante. Para uso externo, usar solo el gel claro del interior.</div>
+    </div>
+  </div>
+
+  <div class="planta-card">
+    <div class="planta-header">
+      <div class="planta-ico">🌻</div>
+      <div><div class="planta-nombre">Árnica</div><div class="planta-nombre-lat">Arnica montana</div></div>
+      <div class="evidencia"><span class="ev-tag ev-media">Evidencia media (uso externo)</span></div>
+    </div>
+    <div class="planta-usos"><span class="uso-tag">Golpes y moretones</span><span class="uso-tag">Esguinces</span><span class="uso-tag">Dolor muscular</span></div>
+    <div class="planta-body">
+      La árnica aplicada externamente en forma de crema o gel tiene estudios clínicos que muestran reducción del dolor y la inflamación en moretones, esguinces y dolor muscular post-ejercicio. La helenalinina inhibe la activación del factor NF-κB (pro-inflamatorio).
+      <br><br>
+      <strong>El árnica homeopático:</strong> el árnica en geles con concentración real (no homeopático) tiene evidencia. El árnica homeopático (diluciones extremas) no tiene evidencia de eficacia más allá del placebo. Son productos distintos.
+      <div class="planta-prep"><strong>📋 Uso:</strong> crema o gel de árnica al 15–25% de concentración en el área afectada. 3–4 aplicaciones por día. Nunca en piel con heridas abiertas.</div>
+      <div class="planta-cuidado"><strong>⚠️ Cuidado:</strong> solo uso externo. El árnica ingerido es tóxico. Nunca aplicar en piel lesionada o cerca de mucosas. Puede causar dermatitis de contacto.</div>
+    </div>
+  </div>
+
+  <div class="planta-card">
+    <div class="planta-header">
+      <div class="planta-ico">🌿</div>
+      <div><div class="planta-nombre">Cola de caballo / Maravilla</div><div class="planta-nombre-lat">Equisetum arvense / Calendula officinalis</div></div>
+      <div class="evidencia"><span class="ev-tag ev-media">Evidencia media</span></div>
+    </div>
+    <div class="planta-usos"><span class="uso-tag">Caléndula: piel irritada</span><span class="uso-tag">Cola de caballo: retención líquidos</span></div>
+    <div class="planta-body">
+      <strong>Caléndula:</strong> antiinflamatoria y cicatrizante para piel irritada, dermatitis del pañal, pequeñas heridas. Las cremas de caléndula están entre las más recomendadas en pediatría natural.
+      <br><br>
+      <strong>Cola de caballo:</strong> diurético suave con evidencia moderada. Rica en sílice para uñas y cabello (con base científica modesta).
+      <div class="planta-prep"><strong>📋 Caléndula:</strong> cremas comerciales al 5–10% o infusión para lavar heridas menores (20g de flores por litro de agua, hervir 10 min, usar tibio).</div>
+    </div>
+  </div>
+</div>
+
+<!-- RECETAS COMPLETAS -->
+<div class="section" id="recetas">
+  <div class="sec-title">Recetas completas de los ancestros</div>
+  <div class="sec-sub">Las preparaciones tradicionales con base en lo que funciona. <em>Como siempre se hicieron.</em></div>
+
+  <div class="receta-card">
+    <div class="receta-titulo">🍵 Té digestivo de la abuela (3 plantas)</div>
+    <div class="receta-ingredientes">
+      <strong>Ingredientes:</strong> 1 cdita manzanilla seca · 1 cdita menta seca · 1/2 cdita anís verde (no estrellado) · 250ml agua caliente (no hirviendo a 100°C, 85°C ideal)
+    </div>
+    <div class="receta-prep">
+      <strong>Preparación:</strong> Mezclar las hierbas en la taza. Cubrir con agua caliente. Tapar con un platito. Reposar 8 minutos. Colar. Tomar sin azúcar o con miel (no caliente para preservar la miel).<br><br>
+      <strong>Para qué sirve:</strong> digestión pesada, gases, distensión, espasmos intestinales. La manzanilla relaja, la menta es antiespasmódica, el anís carminativo (ayuda a expulsar gases).
+    </div>
+  </div>
+
+  <div class="receta-card">
+    <div class="receta-titulo">🫚 Jarabe de jengibre y miel para la tos</div>
+    <div class="receta-ingredientes">
+      <strong>Ingredientes:</strong> 1 raíz de jengibre mediana · 1 limón · 3 cucharadas de miel · 500ml agua
+    </div>
+    <div class="receta-prep">
+      <strong>Preparación:</strong> Pelar y cortar el jengibre en rodajas. Hervir en el agua 15 minutos. Bajar el fuego. Añadir el jugo del limón. Dejar tibiar a menos de 50°C (para no destruir las enzimas de la miel). Añadir la miel y mezclar. Guardar en frasco en heladera hasta 1 semana.<br><br>
+      <strong>Dosis:</strong> 1 cucharada cada 3–4 horas para la tos. Niños mayores de 1 año: media cucharada. Nunca en menores de 1 año (por la miel).
+    </div>
+  </div>
+
+  <div class="receta-card">
+    <div class="receta-titulo">🌸 Infusión relajante de noche</div>
+    <div class="receta-ingredientes">
+      <strong>Ingredientes:</strong> 1 cdita valeriana seca · 1 cdita melisa · 1 cdita lavanda seca · 1 taza agua caliente
+    </div>
+    <div class="receta-prep">
+      <strong>Preparación:</strong> Mezclar hierbas. Agua caliente (no hirviendo). Tapar herméticamente 10 minutos. Colar bien (la valeriana tiene sabor fuerte). Con miel si querés.<br><br>
+      <strong>Cuándo tomarlo:</strong> 30–60 minutos antes de ir a dormir. Efecto acumulativo: mejora con el uso regular de 2 semanas. No esperar un efecto sedante inmediato como el de un somnífero.
+    </div>
+  </div>
+
+  <div class="receta-card">
+    <div class="receta-titulo">🌿 Inhalación de vapor con tomillo y eucalipto</div>
+    <div class="receta-ingredientes">
+      <strong>Ingredientes:</strong> 5–6 ramitas de tomillo fresco (o 2 cditas seco) · 4–5 hojas de eucalipto · 1 litro agua hirviendo
+    </div>
+    <div class="receta-prep">
+      <strong>Preparación:</strong> Poner las plantas en un bol grande. Verter el agua hirviendo encima. Esperar 1–2 minutos que baje un poco la temperatura. Inclinar la cara sobre el vapor (a 20–30cm, no te quemes). Cubrirse la cabeza con una toalla para concentrar el vapor. Inhalar durante 5–10 minutos.<br><br>
+      <strong>Para qué sirve:</strong> congestión nasal, bronquitis, tos con moco. El vapor hidrata las mucosas. El timol del tomillo y el eucaliptol del eucalipto tienen efecto antiséptico y mucolítico real.
+    </div>
+  </div>
+
+  <div class="tip tip-gold" style="margin-top:20px">
+    <strong>💡 La regla de oro de los remedios caseros:</strong> son complementos, no reemplazos. El té de manzanilla para el dolor de estómago leve: perfecto. El té de manzanilla para un cólico que no cede en 2 horas: ir al médico. El jengibre para las náuseas del embarazo: respaldado. El jengibre para una infección grave: insuficiente. La línea entre el remedio casero apropiado y el que retrasa una atención necesaria es el criterio clínico que solo un médico puede dar.
+  </div>
+</div>
+
+</main>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre remedios caseros y plantas medicinales:" class="wa-share" target="_blank">
+  <span class="wa-share-ico">💬</span><span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas" style="max-width:640px;margin:0 auto;padding:0 16px 40px;">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid">
+    <a href="salud-tecnologia.html" class="rel-link">❤️ Salud y Tecnología</a>
+    <a href="mitos-salud.html" class="rel-link">🧿 Mitos y Verdades</a>
+  </div>
+</div>
+<script>
+  function goTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+</script>
+</body>
+</html>

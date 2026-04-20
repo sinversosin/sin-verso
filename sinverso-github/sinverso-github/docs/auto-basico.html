@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Auto Básico</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--soft:#aaaacc;--accent:#fb923c;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  header{background:linear-gradient(135deg,#080810,#180800 50%,#080810);border-bottom:1px solid var(--border);padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:260px;background:radial-gradient(ellipse,rgba(200,200,200,.10),transparent 70%);pointer-events:none;}
+  .site-label{font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);text-transform:uppercase;opacity:.7;margin-bottom:10px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,7vw,76px);letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 30%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:10px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .price-note{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+  main{padding:28px 16px 80px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .card:hover{border-color:rgba(200,200,200,.3);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--text);line-height:1;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(77,187,122,.15);color:#4dbb7a;border:1px solid rgba(77,187,122,.3);}
+  .b-mid{background:rgba(200,200,200,.1);color:var(--accent);border:1px solid rgba(200,200,200,.25);}
+  .b-high{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tt{border-bottom:1px dashed var(--accent);color:var(--accent);cursor:pointer;font-weight:600;display:inline;}
+  #ttBubble{display:none;position:fixed;background:#080810;border:1px solid var(--accent);border-radius:14px;padding:13px 16px;font-size:14px;color:var(--text);line-height:1.6;max-width:270px;z-index:9999;box-shadow:0 8px 40px rgba(0,0,0,.7);pointer-events:none;}
+  #ttBubble.on{display:block;}
+  #ttBubble::before{content:'💡 ';}
+  .tip{background:rgba(200,200,200,.05);border:1px solid rgba(200,200,200,.15);border-radius:14px;padding:16px 18px;margin-top:20px;font-size:14px;line-height:1.65;color:#c8c8d8;}
+  .tip strong{color:var(--accent);}
+  .tip-green{background:rgba(77,187,122,.06);border:1px solid rgba(77,187,122,.2);color:#a0d8b4;}
+  .tip-green strong{color:#4dbb7a;}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-gold{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);color:#f0e080;}
+  .tip-gold strong{color:#ffd700;}
+  .tabla{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+  .tabla th{background:var(--surface);color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);}
+  .tabla td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;line-height:1.5;}
+  .tabla tr:hover td{background:rgba(255,255,255,.02);}
+  .tabla td:first-child{color:var(--text);font-weight:700;}
+  .tabla .hl td{background:rgba(200,200,200,.04);}
+  .tabla .hl td:first-child{color:var(--accent);}
+  .ok::before{content:'✓ ';color:#4dbb7a;}
+  .mal::before{content:'✗ ';color:#f87171;}
+  .meh::before{content:'~ ';color:#ffd700;}
+  .perfiles{display:flex;flex-direction:column;gap:10px;}
+  .perfil{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;}
+  .perfil-ico{font-size:24px;flex-shrink:0;}
+  .perfil-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .perfil-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .perfil-rec{font-size:12px;font-weight:700;color:var(--accent);margin-top:5px;}
+  .checks{display:flex;flex-direction:column;gap:10px;}
+  .check{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;}
+  .check-ico{font-size:22px;flex-shrink:0;}
+  .check-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .check-desc{font-size:13px;color:var(--muted);line-height:1.55;}
+  .check-desc strong{color:var(--text);}
+  .check-desc em{color:#7a9ab0;font-style:italic;font-size:12px;}
+  .tech-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);border-radius:8px;padding:3px 10px;font-size:11px;font-weight:700;color:#c084fc;margin-top:8px;}
+  .tech-tag::before{content:'⚡';}
+  
+  .wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s;}
+  .wa-share:hover{transform:translateY(-2px);}
+  .wa-share-ico{font-size:20px;}
+  .wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;}
+  .relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+  .rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+  .rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+  .rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+  @media(max-width:480px){.card-name{font-size:18px;}.tabla th,.tabla td{padding:8px;}}
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="site-label">SinVerso · Lo que todo dueño de auto debería saber</div>
+  <h1>Auto Básico</h1>
+  <p class="subtitle">Lo que todo dueño de auto debería saber. <strong>Sin ser mecánico.</strong></p>
+  <div class="price-note">💲 Precios en USD orientativos · Varían según tipo de cambio y mercado local</div>
+</header>
+
+<div class="error-caro"><strong>🚗 El error más caro</strong>Ignorar la presión de los neumáticos durante meses. Un neumático desinflado al 20% aumenta el consumo de combustible, se desgasta irregularmente y aumenta el riesgo de reventón a alta velocidad. Verificar la presión una vez al mes tarda 3 minutos y evita todos esos problemas.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('neumaticos',this)">🛞 Neumáticos</div>
+  <div class="tab" onclick="goTab('liquidos',this)">🧴 Fluidos</div>
+  <div class="tab" onclick="goTab('bateria',this)">🔋 Batería</div>
+  <div class="tab" onclick="goTab('alertas',this)">⚠️ Luces de tablero</div>
+  <div class="tab" onclick="goTab('itv',this)">📋 Inspección técnica</div>
+</div>
+<main>
+<div class="section active" id="neumaticos">
+  <div class="sec-title">Neumáticos</div>
+  <div class="sec-sub">El número en el costado del neumático tiene toda la información. <em>Nadie te enseñó a leerlo.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">Cómo leer el número del neumático</div><span class="badge b-top">El código secreto</span></div>
+      <div class="card-body">
+        El número que dice algo como <strong>205/55 R16 91V</strong> tiene toda la info:
+        <br><br>
+        <strong>205</strong> → Ancho del neumático en milímetros.<br>
+        <strong>55</strong> → Perfil: el alto del flanco como % del ancho. 55% de 205mm = 113mm de alto de goma.<br>
+        <strong>R</strong> → Radial (el estándar actual).<br>
+        <strong>16</strong> → Diámetro de la llanta en pulgadas.<br>
+        <strong>91</strong> → Índice de carga: cuántos kg soporta cada neumático. 91 = 615 kg.<br>
+        <strong>V</strong> → Índice de velocidad máxima. V = hasta 240 km/h.<br>
+        <br>
+        <strong>La fecha de fabricación</strong> → Un número de 4 dígitos grabado en el lateral. Ejemplo: "2319" = semana 23 del año 2019. Los neumáticos tienen vida útil de 5–7 años <em>independientemente del desgaste</em>. La goma se endurece y agrieta con el tiempo.
+        <br><em>— "El neumático de 2015 que 'tiene dibujo' es igualmente peligroso en lluvia. La goma vieja no agarra igual."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Presión de inflado</div><span class="badge b-ok">Lo más ignorado</span></div>
+      <div class="card-body">
+        La presión correcta está en la tapa de la nafta o en el borde de la puerta del conductor. No en el neumático (ese número es la presión máxima, no la recomendada).
+        <br><br>
+        <strong>¿Por qué importa?</strong><br>
+        • Desinflado → Más consumo, el neumático se calienta y desgasta por los costados, riesgo de reventón.<br>
+        • Sobreinflado → Se desgasta en el centro, menor agarre, golpes más duros.<br>
+        <br>
+        <strong>Con qué frecuencia verificar:</strong> una vez al mes o antes de viaje largo. Los neumáticos pierden naturalmente 0.1–0.5 PSI por semana.
+        <br><em>— "Un neumático bien inflado ahorra el 3% de combustible. En Argentina con el precio actual de la nafta, eso es plata real."</em>
+      </div>
+      <div class="chips"><div class="chip">Inflador portátil digital <span>USD 25–50</span></div></div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Profundidad del dibujo</div><span class="badge b-mid">Cuándo cambiarlos</span></div>
+      <div class="card-body">
+        La profundidad mínima legal en Argentina es <strong>1.6mm</strong>. En la práctica, con menos de 3mm la capacidad de evacuación de agua se reduce drásticamente.
+        <br><br>
+        <strong>Cómo medirlo:</strong> con un calibre (los mejores), con una regla milimétrica en las ranuras, o con el truco de la moneda (un peso de 10 centavos: si se ve toda la cara, el dibujo es insuficiente).
+        <br><br>
+        Los indicadores de desgaste (TWI) son pequeñas elevaciones dentro de las ranuras del dibujo. Cuando el dibujo llega al nivel de esos indicadores, el neumático llegó al mínimo legal.
+        <br><em>— "El neumático con 1.5mm de dibujo en lluvia es básicamente un neumático liso con decoración."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="liquidos">
+  <div class="sec-title">Los fluidos del auto</div>
+  <div class="sec-sub">Los que hay que verificar y los que el taller usa para cobrarte más de lo necesario.</div>
+  <div class="cards">
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">Aceite del motor</div><span class="badge b-top">El más importante</span></div>
+      <div class="card-body">
+        <strong>Cómo verificarlo:</strong> con el motor frío o 10 minutos parado, sacá la varilla, limpiala, volvé a introducirla y sacala. El nivel tiene que estar entre las marcas MIN y MAX. El color debe ser ámbar o marrón. Si está negro espeso, hay que cambiarlo.
+        <br><br>
+        <strong>Cuándo cambiarlo de verdad:</strong> la regla de "cada 5.000 km" es del siglo pasado. Los aceites sintéticos modernos y los motores actuales aguantan 10.000–15.000 km o lo que diga el manual del fabricante. Seguí el manual, no al taller que quiere facturar.
+        <br><br>
+        <strong>La viscosidad:</strong> el número como "5W-30" indica la viscosidad en frío y en caliente. Usá siempre la que especifica el manual del fabricante. No pidas "el mejor aceite que tengan", pedí el que indica el manual.
+        <br><em>— "El taller que te cambia el aceite cada 5.000 km con motor moderno y aceite sintético te está haciendo un servicio innecesario y cobrándolo."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">Refrigerante (agua del radiador)</div><span class="badge b-high">El que se olvida</span></div>
+      <div class="card-body">
+        El refrigerante (anticongelante) mantiene el motor a temperatura correcta y evita la corrosión interna. <strong>No es agua destilada sola.</strong> Es una mezcla de agua destilada + anticongelante.
+        <br><br>
+        <strong>Cómo verificarlo:</strong> el depósito de expansión (el recipiente de plástico translúcido cerca del radiador) tiene marcas MIN y MAX. Con el motor frío, el nivel tiene que estar entre ellas.
+        <br><br>
+        <strong>El color importa:</strong> verde = refrigerante convencional. Naranja/rojo = refrigerante orgánico (OAT). No mezcles tipos distintos, se reacciona y forma lodo.
+        <br><em>— "El motor que se sobrecalienta porque le pusiste solo agua del grifo: la corrosión interna que ese error genera no se ve hasta que es tarde."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Los otros fluidos</div><span class="badge b-ok">Verificación rápida</span></div>
+      <div class="card-body">
+        <strong>Líquido de frenos (DOT):</strong> depósito cerca del volante, lado del conductor. Nivel entre MIN y MAX. Si baja mucho, puede indicar desgaste de pastillas o pérdida. Cambiar cada 2 años independientemente del nivel porque absorbe humedad y baja el punto de ebullición.<br><br>
+        <strong>Dirección hidráulica:</strong> depósito cerca del motor. Nivel entre marcas. Si baja, hay pérdida en el sistema.<br><br>
+        <strong>Líquido limpiaparabrisas:</strong> el único que podés mezclar con agua del grifo sin problema. En invierno usar concentración mayor para evitar que congele en el sistema.
+        <br><em>— "Los cinco fluidos que verificás en 5 minutos cada mes evitan el 80% de las roturas mecánicas por descuido."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="bateria">
+  <div class="sec-title">La batería del auto</div>
+  <div class="sec-sub">La que muere siempre en el momento más inoportuno. <em>Conocerla evita ese momento.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">Vida útil y señales de deterioro</div><span class="badge b-mid">Cuándo cambiarla</span></div>
+      <div class="card-body">
+        Una batería de auto dura entre 3 y 5 años en condiciones normales. Las señales de que está por morir:
+        <br><br>
+        • El motor arranca más lento de lo normal (el motor "ruge" antes de arrancar).<br>
+        • Las luces se atenúan al arrancar.<br>
+        • La batería tiene más de 4 años.<br>
+        • Necesitó pasacorriente más de una vez en poco tiempo.<br>
+        <br>
+        <strong>Cómo verificarla:</strong> con un tester de batería (multímetro). Una batería cargada debe dar 12.6V con el motor apagado. Con el motor en marcha, entre 13.5V y 14.7V (el alternador cargando). Por debajo de 12.4V, la batería está semi-descargada.
+        <br><em>— "El auto que no arranca a las 8am antes del trabajo. El 70% de las veces es la batería. El 30% restante también es la batería."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Cómo leer una batería de auto</div><span class="badge b-top">El número que importa</span></div>
+      <div class="card-body">
+        Las baterías tienen dos números clave:
+        <br><br>
+        <strong>Ah (amperios-hora):</strong> la capacidad. Más Ah = más energía almacenada. Seguí el mínimo que indica el manual.<br>
+        <strong>CCA (Cold Cranking Amps):</strong> la corriente que puede entregar en frío para arrancar el motor. Más importante que los Ah para el arranque. Un motor diésel grande necesita más CCA que uno naftero pequeño.
+        <br><br>
+        <strong>Para reemplazar:</strong> igual o mayor en Ah y CCA que la original. No pongas una de menos capacidad.
+        <br><em>— "La batería más barata de igual capacidad que la original es la elección correcta. No hay que pagar más por tecnología 'gel' o 'AGM' salvo que el auto lo requiera específicamente."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="alertas">
+  <div class="sec-title">Las luces del tablero</div>
+  <div class="sec-sub">Los íconos que aparecen y que la mayoría ignora. <em>Algunos son urgentes. Otros no.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">🔴 Las que requieren parar ya</div><span class="badge b-warn">Urgente</span></div>
+      <div class="card-body">
+        <strong>🛢️ Aceite (presión de aceite):</strong> parar inmediatamente. Conducir con esta luz puede fundir el motor en minutos. No confundir con la luz de nivel de aceite (amarilla).<br><br>
+        <strong>🌡️ Temperatura del motor:</strong> el motor se está sobrecalentando. Apagar el aire, abrir la calefacción al máximo para disipar calor. Si sigue subiendo, parar y no abrir el capot hasta que enfríe.<br><br>
+        <strong>⚡ Batería / carga:</strong> el sistema eléctrico no está cargando. Puede ser el alternador. El auto tiene pocos minutos de batería.
+        <br><em>— "Las tres luces rojas del tablero no son sugerencias. Son órdenes. Ignorarlas puede costar miles de dólares en motor fundido."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">🟡 Las que requieren atención pronto</div><span class="badge b-mid">Importante</span></div>
+      <div class="card-body">
+        <strong>🔧 Check Engine:</strong> el sistema de diagnóstico detectó un error. Puede ser algo menor (tapón de nafta mal cerrado) o mayor (sensor de oxígeno). Con el OBD2 scanner (explicado en herramientas) podés leer el código y saber exactamente qué es.<br><br>
+        <strong>🛞 Presión de neumáticos (TPMS):</strong> uno o más neumáticos tienen presión baja. Inflar al valor correcto y verificar si hay pérdida.<br><br>
+        <strong>🔋 Nivel de aceite:</strong> el nivel bajó. Verificar y completar según la capacidad del motor.
+        <br><em>— "El check engine que lleva 3 meses encendido no se apaga solo. Y mientras ignorás la causa, puede estar dañando algo más."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">🔵 Informativas (no urgentes)</div><span class="badge b-ok">Tranquilo</span></div>
+      <div class="card-body">
+        <strong>❄️ Temperatura exterior baja:</strong> aviso de posible hielo en la calzada. No es una falla.<br>
+        <strong>🚪 Puerta/baúl abierto:</strong> verificar que todo esté bien cerrado.<br>
+        <strong>⛽ Reserva de combustible:</strong> quedan aprox. 40–50 km según el modelo. Cargar nafta.<br>
+        <strong>💺 Cinturón desabrochado:</strong> pasajero sin cinturón.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="itv">
+  <div class="sec-title">Inspección Técnica Vehicular (VTV)</div>
+  <div class="sec-sub">Lo que verifican, cómo prepararse y los errores comunes que hacen reprobar.</div>
+  <div class="cards">
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">Qué verifican en la VTV</div><span class="badge b-mid">El checklist</span></div>
+      <div class="card-body">
+        La inspección técnica (VTV en Buenos Aires, RTO en otras provincias) verifica:
+        <br><br>
+        <strong>Luces:</strong> todas las luces deben funcionar y estar alineadas (alineación de faros es la causa más frecuente de rechazo).<br>
+        <strong>Frenos:</strong> frenómetro que mide la fuerza de frenado de cada rueda. Si hay mucha diferencia entre izquierda y derecha, rechaza.<br>
+        <strong>Emisiones:</strong> gases del escape. Un motor con problemas de mezcla o sin catalizador no pasa.<br>
+        <strong>Suspensión:</strong> amortiguadores en buen estado.<br>
+        <strong>Documentación:</strong> cédula, seguro vigente.<br>
+        <strong>Neumáticos:</strong> profundidad mínima del dibujo, sin cortes ni bultos.
+        <br><em>— "Los faros mal alineados son la primera causa de rechazo en la VTV. Antes de ir, pedí alineación de faros en cualquier electricista de autos."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Cómo preparar el auto</div><span class="badge b-ok">Para no ir dos veces</span></div>
+      <div class="card-body">
+        <strong>La semana antes:</strong><br>
+        ✓ Verificar que TODAS las luces funcionen (freno, marcha atrás, giro, posición, bajas, altas, balizas).<br>
+        ✓ Verificar presión de neumáticos y profundidad del dibujo.<br>
+        ✓ Verificar que no haya luces de tablero encendidas (especialmente check engine).<br>
+        ✓ Verificar nivel de fluidos.<br>
+        ✓ Extintor vigente y cinturón funcional.<br>
+        ✓ Alineación de faros en electricista (USD 8–15, evita el 40% de los rechazos).<br>
+        <br>
+        <strong>El día antes:</strong><br>
+        ✓ Cargar nafta (el auto no puede llegar en reserva).<br>
+        ✓ Tener documentación completa y seguro vigente.
+        <br><em>— "10 minutos de verificación la semana antes evitan ir dos veces. Ir dos veces es tiempo y plata."</em>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre auto básico — neumáticos, fluidos y tablero:" class="wa-share" target="_blank">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas" style="max-width:640px;margin:0 auto;padding:0 16px 40px;">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="herramientas-hogar.html" class="rel-link">🔧 Herramientas del Hogar</a><a href="luces-emergencia.html" class="rel-link">🔦 Emergencia</a><a href="plata-inteligente.html" class="rel-link">💰 Plata Inteligente</a></div>
+</div>
+<div id="ttBubble"></div>
+<script>
+  function goTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+  const bubble=document.getElementById('ttBubble');let timer;
+  document.querySelectorAll('.tt').forEach(el=>{el.addEventListener('click',function(e){e.stopPropagation();bubble.textContent=this.dataset.tip;bubble.classList.add('on');const r=this.getBoundingClientRect();let top=r.bottom+10,left=r.left;if(left+280>window.innerWidth)left=window.innerWidth-285;if(top+140>window.innerHeight)top=r.top-145;bubble.style.top=top+'px';bubble.style.left=left+'px';clearTimeout(timer);timer=setTimeout(()=>bubble.classList.remove('on'),5000);});});
+  document.addEventListener('click',()=>bubble.classList.remove('on'));
+</script>
+</body>
+</html>

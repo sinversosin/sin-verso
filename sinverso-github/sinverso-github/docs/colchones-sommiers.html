@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Colchones y Sommiers</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--soft:#aaaacc;--accent:#a78bfa;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  header{background:linear-gradient(135deg,#080810,#0a0018 50%,#080810);border-bottom:1px solid var(--border);padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:260px;background:radial-gradient(ellipse,rgba(200,200,200,.10),transparent 70%);pointer-events:none;}
+  .site-label{font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);text-transform:uppercase;opacity:.7;margin-bottom:6px;}
+  .hogar-badge{display:inline-block;background:rgba(200,200,200,.1);border:1px solid rgba(200,200,200,.2);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:700;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,7vw,74px);letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 30%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:10px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .price-note{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+  main{padding:28px 16px 80px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .card:hover{border-color:rgba(200,200,200,.3);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--text);line-height:1;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(77,187,122,.15);color:#4dbb7a;border:1px solid rgba(77,187,122,.3);}
+  .b-mid{background:rgba(200,200,200,.1);color:var(--accent);border:1px solid rgba(200,200,200,.25);}
+  .b-high{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-no{background:rgba(120,120,120,.15);color:#888;border:1px solid rgba(120,120,120,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tt{border-bottom:1px dashed var(--accent);color:var(--accent);cursor:pointer;font-weight:600;display:inline;}
+  #ttBubble{display:none;position:fixed;background:#080810;border:1px solid var(--accent);border-radius:14px;padding:13px 16px;font-size:14px;color:var(--text);line-height:1.6;max-width:270px;z-index:9999;box-shadow:0 8px 40px rgba(0,0,0,.7);pointer-events:none;}
+  #ttBubble.on{display:block;}
+  #ttBubble::before{content:'💡 ';}
+  .tip{background:rgba(200,200,200,.05);border:1px solid rgba(200,200,200,.15);border-radius:14px;padding:16px 18px;margin-top:20px;font-size:14px;line-height:1.65;color:#c8c8d8;}
+  .tip strong{color:var(--accent);}
+  .tip-green{background:rgba(77,187,122,.06);border:1px solid rgba(77,187,122,.2);color:#a0d8b4;}
+  .tip-green strong{color:#4dbb7a;}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-gold{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);color:#f0e080;}
+  .tip-gold strong{color:#ffd700;}
+  .tabla{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+  .tabla th{background:var(--surface);color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);}
+  .tabla td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;line-height:1.5;}
+  .tabla tr:hover td{background:rgba(255,255,255,.02);}
+  .tabla td:first-child{color:var(--text);font-weight:700;}
+  .tabla .hl td{background:rgba(200,200,200,.04);}
+  .tabla .hl td:first-child{color:var(--accent);}
+  .ok::before{content:'✓ ';color:#4dbb7a;}
+  .mal::before{content:'✗ ';color:#f87171;}
+  .meh::before{content:'~ ';color:#ffd700;}
+  .perfiles{display:flex;flex-direction:column;gap:10px;}
+  .perfil{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .perfil:hover{border-color:rgba(200,200,200,.25);}
+  .perfil-ico{font-size:24px;flex-shrink:0;}
+  .perfil-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .perfil-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .perfil-rec{font-size:12px;font-weight:700;color:var(--accent);margin-top:5px;}
+  .checks{display:flex;flex-direction:column;gap:10px;}
+  .check{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;}
+  .check-ico{font-size:22px;flex-shrink:0;}
+  .check-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .check-desc{font-size:13px;color:var(--muted);line-height:1.55;}
+  .check-desc strong{color:var(--text);}
+  .check-desc em{color:#7a9ab0;font-style:italic;font-size:12px;}
+  .tech-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);border-radius:8px;padding:3px 10px;font-size:11px;font-weight:700;color:#c084fc;margin-top:8px;}
+  .tech-tag::before{content:'⚡';}
+  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;}
+  @media(max-width:480px){.pgrid{grid-template-columns:1fr;}.card-name{font-size:18px;}.tabla th,.tabla td{padding:8px;}}
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="site-label">SinVerso · Hogar</div>
+  <div class="hogar-badge">🏠 Sección Hogar</div>
+  <h1>Colchones y Sommiers</h1>
+  <p class="subtitle">Pasás un tercio de tu vida durmiendo. <strong>El colchón es la inversión por hora más inteligente que existe.</strong></p>
+  <div class="price-note">💲 Precios en USD orientativos · Varían según tipo de cambio y mercado local</div>
+</header>
+
+<div class="error-caro"><strong>🛏️ El error más caro</strong>Comprar el colchón más caro creyendo que precio = calidad para tu cuerpo. El colchón correcto depende de tu peso, posición al dormir y preferencia de firmeza, no del precio. Un colchón de USD 800 puede ser peor para vos que uno de USD 400 si la firmeza no es la adecuada.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('tipos',this)">🛏️ Tipos de colchón</div>
+  <div class="tab" onclick="goTab('sommiers',this)">🏆 Sommiers</div>
+  <div class="tab" onclick="goTab('tech',this)">⚡ Smart y tecnología</div>
+  <div class="tab" onclick="goTab('perfil',this)">🧑 ¿Cuál es para vos?</div>
+  <div class="tab" onclick="goTab('checklist',this)">🛒 Antes de comprar</div>
+</div>
+<main>
+<div class="section active" id="tipos">
+  <div class="sec-title">Tipos de colchón</div>
+  <div class="sec-sub">No todos los colchones son iguales ni para todos los cuerpos. <em>Lo que dormís en un colchón malo lo pagás con la espalda.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#a78bfa">
+      <div class="card-head"><div class="card-name">Resortes</div><span class="badge b-mid">El clásico</span></div>
+      <div class="card-body">
+        El más vendido históricamente. Bobinas metálicas como sistema de soporte.
+        <br><br>
+        <strong>Resorte continuo</strong> → Una sola espiral entrelazada. Transfiere movimiento de un lado al otro: si tu pareja se mueve, vos lo sentís. Económico.<br>
+        <strong>Resorte individual (pocket spring)</strong> → Cada resorte en su bolsillo independiente. No transfiere movimiento. Mucho mejor para parejas. El estándar en colchones de calidad.<br><br>
+        <strong>Ventajas:</strong> buen soporte para personas pesadas, transpira bien, duradero.<br>
+        <strong>Desventajas:</strong> los resortes se pueden sentir con el tiempo, más pesado.
+        <br><em>— "Los resortes individuales (pocket) son la revolución silenciosa del colchón: no te enterás si tu pareja se levanta a las 3am."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio 2 plazas <span>USD 200–600</span></div></div>
+    </div>
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">Memory Foam (espuma viscoelástica)</div><span class="badge b-high">El que se adapta</span></div>
+      <div class="card-body">
+        Espuma que se moldea con el calor del cuerpo y vuelve a su forma lentamente al levantarse. Distribuye el peso uniformemente, alivia los puntos de presión en caderas y hombros.
+        <br><br>
+        <strong>Para quién es ideal:</strong> personas con dolores articulares, quienes duermen de costado (mayor presión en cadera y hombro), parejas con diferentes pesos.
+        <br><strong>Lo que puede molestar:</strong> retiene el calor corporal (duerme más caliente), al principio puede sentirse "hundido".
+        <br><em>— "El memory foam es muy popular en EE.UU. y Europa. Los primeros 10 días se siente raro. Después no querés volver atrás."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio 2 plazas <span>USD 300–800</span></div></div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Látex</div><span class="badge b-ok">El más higiénico</span></div>
+      <div class="card-body">
+        Látex natural o sintético. Elástico, transpirable, naturalmente antimicrobiano y antiácaros. Muy duraderp (hasta 25 años de vida).
+        <br><br>
+        <strong>Natural vs sintético:</strong> el látex natural es de goma de árbol. Más caro, más ecológico, mejor transpirabilidad. El sintético (poliuretano) imita las propiedades a menor costo.<br><br>
+        <strong>Para quién es ideal:</strong> alérgicos a los ácaros, quienes buscan durabilidad máxima, clima húmedo donde la transpirabilidad importa.
+        <br><em>— "Un colchón de látex de buena calidad dura el doble que uno de memory foam. La inversión a largo plazo más inteligente."</em>
+      </div>
+      <div class="chips"><div class="chip">Natural <span>USD 600–1500</span></div><div class="chip">Sintético <span>USD 300–700</span></div></div>
+    </div>
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Híbrido</div><span class="badge b-top">Lo mejor de los dos</span></div>
+      <div class="card-body">
+        Combina resortes individuales (para soporte y transpirabilidad) con capas de memory foam o látex arriba (para confort y adaptación). El estándar de las marcas premium actuales.
+        <br><br>
+        <strong>La lógica:</strong> el resorte da soporte firme y deja circular el aire. El memory foam o látex da el confort superficial. Mejor que cualquiera de los dos solos.
+        <br><em>— "Los colchones híbridos son la respuesta de la industria a 30 años de debate entre resortes y foam. Ambos. Al mismo tiempo."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio 2 plazas <span>USD 400–1200</span></div></div>
+    </div>
+  </div>
+
+  <table class="tabla" style="margin-top:20px">
+    <thead><tr><th>Tipo</th><th>Mejor para</th><th>Vida útil</th><th>Transpirabilidad</th></tr></thead>
+    <tbody>
+      <tr><td>Resorte cont.</td><td>Presupuesto, posición boca arriba</td><td>8–10 años</td><td class="ok">Buena</td></tr>
+      <tr><td>Resorte pocket</td><td>Parejas, buen soporte</td><td>10–15 años</td><td class="ok">Buena</td></tr>
+      <tr><td>Memory foam</td><td>Dolores articulares, costado</td><td>8–12 años</td><td class="meh">Regular</td></tr>
+      <tr><td>Látex</td><td>Alérgicos, clima húmedo</td><td>15–25 años</td><td class="ok">Excelente</td></tr>
+      <tr class="hl"><td>Híbrido</td><td>⭐ Equilibrio total</td><td>10–15 años</td><td class="ok">Buena</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section" id="sommiers">
+  <div class="sec-title">Sommiers</div>
+  <div class="sec-sub">No es solo el "cajón donde va el colchón". <em>El sommier afecta la calidad del sueño tanto como el colchón.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#a78bfa">
+      <div class="card-head"><div class="card-name">Sommier de resortes</div><span class="badge b-ok">El clásico</span></div>
+      <div class="card-body">
+        El sommier tradicional tiene resortes propios que trabajan en conjunto con el colchón. Amortiguación doble. La desventaja: es básicamente una caja cerrada que no permite almacenamiento.
+        <br><em>— "El sommier de resortes es el que te dejaron tus padres. Funciona pero no aprovecha el espacio bajo la cama."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Sommier con cajones</div><span class="badge b-top">Almacenamiento integrado</span></div>
+      <div class="card-body">
+        Base firme (no amortiguada) con cajones laterales o frontales para almacenamiento. El que más se vende en departamentos chicos.
+        <br><br>
+        <strong>Capacidad:</strong> 2–4 cajones que guardan ropa fuera de temporada, frazadas, sábanas extras. El equivalente a un placard extra debajo de la cama.
+        <br><em>— "En un departamento de 50m2, el sommier con cajones es metros cuadrados de almacenamiento que el ambiente no tiene."</em>
+      </div>
+      <div class="chips"><div class="chip">2 plazas con cajones <span>USD 200–500</span></div></div>
+    </div>
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">Sommier reclinable / articulado</div><span class="badge b-high">Para leer y ver TV</span></div>
+      <div class="card-body">
+        El sommier que levanta la parte superior (para la espalda) o la inferior (para las piernas) con un control remoto o eléctrico. Ideal para quien lee en la cama, ve TV o tiene problemas de reflujo o circulación.
+        <br><br>
+        <strong>Con masaje integrado:</strong> motores de vibración en distintas zonas. Más relajante que terapéutico, pero para el momento de dormir o descanso, muy agradable.
+        <div class="tech-tag">Modelos premium: control por app, ajuste de posición por voz, USB en la cabecera</div>
+        <br><em>— "El sommier reclinable eléctrico es el upgrade del dormitorio que parece exagerado hasta que lo probás 5 minutos."</em>
+      </div>
+      <div class="chips"><div class="chip">Articulado básico <span>USD 300–600</span></div><div class="chip">Con masaje <span>USD 500–1200</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="tech">
+  <div class="sec-title">La tecnología en el dormitorio</div>
+  <div class="sec-sub">Los sommiers y colchones inteligentes ya existen. <em>Y algunos realmente mejoran la calidad del sueño.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#a78bfa">
+      <div class="card-head"><div class="card-name">Sleep Number: el colchón con firmeza ajustable</div><span class="badge b-top">El más avanzado</span></div>
+      <div class="card-body">
+        Sleep Number (EE.UU.) tiene colchones donde ajustás la firmeza con una app, de 0 a 100. Cada lado de la cama puede tener diferente firmeza. El modelo i8/i10 además monitorea el sueño, el ritmo cardíaco y la respiración durante la noche sin sensores externos.
+        <br><br>
+        <strong>Lo que hace con los datos:</strong> analiza las fases del sueño, detecta ronquidos y ajusta automáticamente la posición del sommier para reducirlos. Reportes diarios de calidad de sueño.
+        <div class="tech-tag">App, ajuste por voz con Alexa, integración con Apple Health</div>
+        <br><em>— "El Sleep Number p6 ($USD 2.000) ajusta la firmeza de cada lado de la cama. Nunca más la pelea de 'el colchón es muy blando'."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 1.200–5.000+</span></div><div class="chip">Disponibilidad AR <span>importación/pedido</span></div></div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Eight Sleep: el colchón que se calienta y enfría</div><span class="badge b-high">Para quienes duermen con calor</span></div>
+      <div class="card-body">
+        Eight Sleep tiene una cubierta que circula agua para enfriar o calentar cada lado de la cama de forma independiente entre -9°C y +12°C respecto a la temperatura ambiente.
+        <br><br>
+        Para quienes duermen con calor: enfriar el colchón mejora dramáticamente la calidad del sueño. Los estudios muestran que bajar la temperatura corporal es la señal más eficaz para inducir el sueño.
+        <div class="tech-tag">Monitoreo de sueño, alarma inteligente, app con análisis nocturno</div>
+        <br><em>— "Eight Sleep es el gadget de sueño favorito de la mayoría de atletas y biohackers de élite. Caro pero los que lo tienen dicen que cambió su sueño para siempre."</em>
+      </div>
+      <div class="chips"><div class="chip">Pod Cover <span>USD 1.995+</span></div></div>
+    </div>
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Almohada inteligente</div><span class="badge b-mid">El accesorio</span></div>
+      <div class="card-body">
+        Desde almohadas con altavoces integrados para música o sonidos de ambiente mientras dormís, hasta almohadas anti-ronquido que detectan el sonido y ajustan la posición automáticamente.
+        <br><br>
+        <strong>La más práctica:</strong> almohadas con sensores de sueño que no requieren usar reloj o rastreador adicional. Los datos de sueño se capturan a través de la almohada sola.
+        <br><em>— "La almohada con altavoces para escuchar white noise o podcast de dormirse es más útil de lo que parece. Sin auriculares, sin que moleste a la pareja."</em>
+      </div>
+      <div class="chips"><div class="chip">Con altavoces <span>USD 40–100</span></div><div class="chip">Smart con sensores <span>USD 150–300</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="perfil">
+  <div class="sec-title">¿Cuál es para vos?</div>
+  <div class="sec-sub">Según cómo dormís, con quién y qué problemas tenés.</div>
+  <div class="perfiles">
+    <div class="perfil"><div class="perfil-ico">💑</div><div>
+      <div class="perfil-title">Pareja con distintos pesos o preferencias de firmeza</div>
+      <div class="perfil-desc">Uno quiere blando, el otro firme. Uno pesa 60kg, el otro 90kg.</div>
+      <div class="perfil-rec">→ Colchón de resortes individuales (pocket) de cada lado, o colchón dual (diferente firmeza en cada mitad). El sommier articulado eléctrico permite ajuste independiente de posición.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">😰</div><div>
+      <div class="perfil-title">Dolores de espalda o articulaciones</div>
+      <div class="perfil-desc">Te levantás con dolor. El colchón tiene la culpa.</div>
+      <div class="perfil-rec">→ Memory foam o látex de firmeza media. Los colchones muy blandos hunden la cadera, los muy firmes crean puntos de presión. Probalo 30 días antes de decidir si es el correcto.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🌡️</div><div>
+      <div class="perfil-title">Durmiente caluroso</div>
+      <div class="perfil-desc">Siempre con calor de noche, despertás transpirado.</div>
+      <div class="perfil-rec">→ Látex natural (el más transpirable) o colchón híbrido con resortes (más ventilado que el foam sólido). Para casos extremos: Eight Sleep Pod Cover.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🤧</div><div>
+      <div class="perfil-title">Alérgico a los ácaros</div>
+      <div class="perfil-desc">Rinitis, asma o alergias relacionadas con el dormitorio.</div>
+      <div class="perfil-rec">→ Látex natural (naturalmente antimicrobiano). Funda protectora de colchón antiácaros. Almohadas de bambú o microfibra antiácaros. Aspiradora con filtro HEPA para el sommier.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">📺</div><div>
+      <div class="perfil-title">El que lee o ve TV en la cama</div>
+      <div class="perfil-desc">La cama es también tu sala de estar.</div>
+      <div class="perfil-rec">→ Sommier articulado eléctrico que levanta el respaldo. Transforma el dormitorio en sala. Con USB integrado para cargar el celu mientras ves Netflix.</div>
+    </div></div>
+  </div>
+</div>
+
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de Comprar</div>
+  <div class="sec-sub">Un colchón que dura 15 años merece 15 minutos de investigación.</div>
+  <div class="checks">
+    <div class="check"><div class="check-ico">🛏️</div><div>
+      <div class="check-title">Probalo en el local mínimo 10 minutos</div>
+      <div class="check-desc">Acostarte en posición de dormir real, no sentarte en el borde. <strong>En la posición que dormís habitualmente (boca arriba, costado, boca abajo).</strong> <em>— Si el local no te deja probar el colchón 10 minutos, cambiá de local.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">📅</div><div>
+      <div class="check-title">Buscá garantía de prueba en casa</div>
+      <div class="check-desc">Muchas marcas ofrecen 90–100 noches de prueba en casa. Si no te convence, lo devolvés. <strong>El cuerpo necesita 2–4 semanas para adaptarse a un colchón nuevo.</strong> Un colchón que después de 3 semanas sigue siendo incómodo, no es para vos.</div>
+    </div></div>
+    <div class="check"><div class="check-ico">📐</div><div>
+      <div class="check-title">Medí el sommier o la cama antes</div>
+      <div class="check-desc">Los tamaños están semi-estandarizados pero no del todo. <strong>Medí el espacio disponible en la cama o el sommier existente antes de comprar el colchón.</strong> <em>— Un colchón de 140cm en una cama de 135cm es un problema.</em></div>
+    </div></div>
+  </div>
+  <div class="tip tip-gold" style="margin-top:20px">
+    <strong>💡 La regla de los 7–10 años:</strong> Un colchón de buena calidad dura entre 7 y 15 años. Si el tuyo tiene más de 10 años, aunque se sienta "bien", probablemente ya perdió el 30–40% de su capacidad de soporte. El cuerpo se adapta gradualmente y no nota el deterioro. Pero la espalda sí lo paga.
+  </div>
+</div>
+</main>
+<div id="ttBubble"></div>
+<script>
+  function goTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+  const bubble=document.getElementById('ttBubble');let timer;
+  document.querySelectorAll('.tt').forEach(el=>{el.addEventListener('click',function(e){e.stopPropagation();bubble.textContent=this.dataset.tip;bubble.classList.add('on');const r=this.getBoundingClientRect();let top=r.bottom+10,left=r.left;if(left+280>window.innerWidth)left=window.innerWidth-285;if(top+140>window.innerHeight)top=r.top-145;bubble.style.top=top+'px';bubble.style.left=left+'px';clearTimeout(timer);timer=setTimeout(()=>bubble.classList.remove('on'),5000);});});
+  document.addEventListener('click',()=>bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Colchones Sommiers: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="living-sillones.html" class="rel-link">🛋️ Living y Sillones</a><a href="iluminacion-hogar.html" class="rel-link">💡 Iluminación</a></div>
+</div>
+</body>
+</html>

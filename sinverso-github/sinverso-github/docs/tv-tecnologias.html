@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SinVerso — Televisores</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f; --surface: #12121a; --card: #1a1a26;
+    --border: #2a2a3e; --accent: #00d4ff; --gold: #ffd700;
+    --green: #6bc88a; --purple: #c084fc; --red: #f87171;
+    --text: #e8e8f0; --muted: #9494b8;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-size:16px; min-height:100vh; overflow-x:hidden; }
+
+  /* HEADER */
+  header { background:linear-gradient(135deg,#0a0a0f,#0d0d20 50%,#0a0a0f); border-bottom:1px solid var(--border); padding:44px 24px 36px; text-align:center; position:relative; overflow:hidden; }
+  header::before { content:''; position:absolute; top:-80px; left:50%; transform:translateX(-50%); width:600px; height:260px; background:radial-gradient(ellipse,rgba(0,212,255,.10),transparent 70%); pointer-events:none; }
+  .site-label { font-size:11px; font-weight:700; letter-spacing:5px; color:var(--accent); text-transform:uppercase; opacity:.7; margin-bottom:10px; }
+  header h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(46px,9vw,88px); letter-spacing:2px; line-height:1; background:linear-gradient(135deg,#fff 30%,var(--accent) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .subtitle { margin-top:10px; color:var(--muted); font-size:15px; font-style:italic; }
+  .subtitle strong { color:var(--accent); font-style:normal; }
+
+  /* TABS */
+  .tabs { display:flex; gap:8px; overflow-x:auto; padding:20px 16px 0; justify-content:center; flex-wrap:wrap; scrollbar-width:none; }
+  .tab { background:var(--surface); border:1px solid var(--border); border-radius:30px; padding:10px 20px; font-size:14px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; white-space:nowrap; }
+  .tab:hover { border-color:var(--accent); color:var(--accent); }
+  .tab.active { background:var(--accent); border-color:var(--accent); color:#000; font-weight:700; }
+
+  /* MAIN */
+  main { padding:30px 18px 80px; max-width:860px; margin:0 auto; }
+  .section { display:none; }
+  .section.active { display:block; }
+  .sec-title { font-family:'Bebas Neue',sans-serif; font-size:34px; letter-spacing:1px; color:var(--accent); margin-bottom:4px; }
+  .sec-sub { color:var(--muted); font-size:15px; margin-bottom:24px; line-height:1.6; }
+  .sec-sub em { color:var(--text); font-style:italic; }
+
+  /* CARDS */
+  .cards { display:flex; flex-direction:column; gap:14px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:18px; padding:22px 22px 22px 26px; position:relative; overflow:hidden; transition:border-color .2s,transform .2s; }
+  .card:hover { border-color:rgba(0,212,255,.4); transform:translateY(-2px); }
+  .card::before { content:''; position:absolute; top:0; left:0; width:5px; height:100%; background:var(--ca,var(--accent)); border-radius:18px 0 0 18px; }
+  .card-head { display:flex; align-items:center; gap:12px; margin-bottom:8px; flex-wrap:wrap; }
+  .card-name { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:1px; color:var(--text); line-height:1; }
+  .badge { font-size:10px; font-weight:700; letter-spacing:1.5px; padding:3px 11px; border-radius:20px; text-transform:uppercase; }
+  .b-ok   { background:rgba(107,200,138,.15); color:var(--green);  border:1px solid rgba(107,200,138,.3); }
+  .b-mid  { background:rgba(0,212,255,.12);   color:var(--accent); border:1px solid rgba(0,212,255,.3); }
+  .b-high { background:rgba(192,132,252,.15); color:var(--purple); border:1px solid rgba(192,132,252,.3); }
+  .b-top  { background:rgba(255,215,0,.12);   color:var(--gold);   border:1px solid rgba(255,215,0,.3); }
+  .b-no   { background:rgba(120,120,120,.15); color:#888;          border:1px solid rgba(120,120,120,.3); }
+  .b-warn { background:rgba(248,113,113,.15); color:var(--red);    border:1px solid rgba(248,113,113,.3); }
+  .card-body { font-size:15px; color:var(--muted); line-height:1.7; }
+  .card-body strong { color:var(--text); font-weight:600; }
+  .card-body em { color:#8ba0b4; font-size:14px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .chip { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:5px 11px; font-size:13px; color:var(--muted); }
+  .chip span { color:var(--text); font-weight:600; }
+
+  /* TOOLTIP */
+  .tt { border-bottom:1px dashed var(--accent); color:var(--accent); cursor:pointer; font-weight:600; display:inline; }
+  #ttBubble { display:none; position:fixed; background:#1c1c2e; border:1px solid var(--accent); border-radius:14px; padding:13px 16px; font-size:14px; color:var(--text); line-height:1.6; max-width:270px; z-index:9999; box-shadow:0 8px 40px rgba(0,0,0,.7); pointer-events:none; }
+  #ttBubble.on { display:block; }
+  #ttBubble::before { content:'💡 '; }
+
+  /* TIP BOX */
+  .tip { background:rgba(0,212,255,.06); border:1px solid rgba(0,212,255,.2); border-radius:14px; padding:16px 18px; margin-top:20px; font-size:14px; line-height:1.65; color:#a8d8ea; }
+  .tip strong { color:var(--accent); }
+
+  /* TABLA */
+  .tabla { width:100%; border-collapse:collapse; font-size:14px; margin-top:8px; }
+  .tabla th { background:var(--surface); color:var(--accent); font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:1px; padding:11px 13px; text-align:left; border-bottom:2px solid var(--border); }
+  .tabla td { padding:11px 13px; border-bottom:1px solid var(--border); color:var(--muted); vertical-align:top; line-height:1.5; }
+  .tabla tr:hover td { background:rgba(255,255,255,.02); }
+  .tabla td:first-child { color:var(--text); font-weight:700; }
+  .tabla .hl td { background:rgba(0,212,255,.05); }
+  .tabla .hl td:first-child { color:var(--accent); }
+  .ok::before  { content:'✓ '; color:var(--green); }
+  .mal::before { content:'✗ '; color:var(--red); }
+  .meh::before { content:'~ '; color:var(--gold); }
+
+  /* RESOLUCIÓN */
+  .res-list { display:flex; flex-direction:column; gap:14px; margin-top:4px; }
+  .res-row { display:flex; align-items:center; gap:14px; }
+  .res-tag { width:72px; font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--text); flex-shrink:0; }
+  .res-wrap { flex:1; }
+  .res-bar { height:30px; border-radius:7px; display:flex; align-items:center; padding-left:12px; font-size:13px; font-weight:700; color:#000; }
+  .res-info { font-size:12px; color:var(--muted); margin-top:4px; }
+
+  /* DISTANCIA */
+  .dist-table { width:100%; border-collapse:collapse; font-size:14px; margin-top:8px; }
+  .dist-table th { background:var(--surface); color:var(--accent); font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:1px; padding:10px 13px; text-align:left; border-bottom:2px solid var(--border); }
+  .dist-table td { padding:11px 13px; border-bottom:1px solid var(--border); color:var(--muted); }
+  .dist-table tr:hover td { background:rgba(255,255,255,.02); }
+  .dist-table td:first-child { color:var(--text); font-weight:700; font-size:18px; font-family:'Bebas Neue',sans-serif; }
+  .dist-table .hl td { background:rgba(0,212,255,.05); }
+  .dist-table .hl td:first-child { color:var(--accent); }
+
+  /* CONSUMO */
+  .c-item { margin-bottom:18px; }
+  .c-head { display:flex; justify-content:space-between; margin-bottom:6px; }
+  .c-name { font-weight:600; color:var(--text); font-size:15px; }
+  .c-w { font-size:13px; color:var(--muted); }
+  .c-bg { background:var(--surface); border-radius:6px; height:11px; overflow:hidden; }
+  .c-bar { height:100%; border-radius:6px; }
+  .c-note { font-size:13px; color:var(--muted); margin-top:4px; font-style:italic; }
+  .clases { display:flex; gap:7px; flex-wrap:wrap; margin-top:14px; }
+  .clase { flex:1; min-width:52px; border-radius:10px; padding:10px 6px; text-align:center; font-weight:700; font-size:20px; font-family:'Bebas Neue',sans-serif; }
+
+  /* CHECKLIST */
+  .checks { display:flex; flex-direction:column; gap:11px; }
+  .check { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px 18px; display:flex; gap:14px; align-items:flex-start; transition:border-color .2s; }
+  .check:hover { border-color:rgba(0,212,255,.35); }
+  .check-ico { font-size:22px; flex-shrink:0; margin-top:1px; }
+  .check-title { font-weight:700; color:var(--text); font-size:15px; margin-bottom:4px; }
+  .check-desc { font-size:14px; color:var(--muted); line-height:1.6; }
+  .check-desc strong { color:var(--text); }
+  .check-desc em { color:#7ab; font-style:italic; font-size:13px; }
+
+  /* PRECIO GRID */
+  .precio-grid { display:grid; grid-template-columns:1fr 1fr; gap:13px; margin-top:10px; }
+  @media(max-width:520px){ .precio-grid { grid-template-columns:1fr; } }
+  .precio-card { background:var(--card); border:1px solid var(--border); border-radius:15px; padding:18px; }
+  .precio-card.rec { border-color:rgba(0,212,255,.4); background:rgba(0,212,255,.04); }
+  .precio-card.alt { border-color:rgba(192,132,252,.4); background:rgba(192,132,252,.04); }
+  .p-tag { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:6px; }
+  .precio-card.rec .p-tag { color:var(--accent); }
+  .precio-card.alt .p-tag { color:var(--purple); }
+  .p-marca { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--text); margin-bottom:6px; }
+  .p-desc { font-size:13px; color:var(--muted); line-height:1.6; }
+  .p-desc strong { color:var(--text); }
+
+  @media(max-width:500px){ .card-name { font-size:22px; } .tabla th,.tabla td,.dist-table th,.dist-table td { padding:9px 9px; } }
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="site-label">SinVerso · Tecnología</div>
+  <h1>Televisores</h1>
+  <p class="subtitle">Todo lo que necesitás saber. <strong>Sin que te vendan humo.</strong></p>
+  <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;">
+    💲 Precios en USD orientativos · Varían según el tipo de cambio y el mercado local
+  </div>
+</header>
+
+
+<div class="error-caro"><strong>📺 El error más caro</strong>Elegir el tamaño por lo que entra en el auto para llevarlo a casa, no por la distancia de visión real. Un TV de 65" en un living de 3 metros es demasiado cerca. Un TV de 50" en un living de 5 metros es demasiado chico. La fórmula: distancia en cm ÷ 2.5 = pulgadas ideales.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('resolucion',this)">📺 Resolución</div>
+  <div class="tab" onclick="goTab('pantalla',this)">💡 Tipo de pantalla</div>
+  <div class="tab" onclick="goTab('imagen',this)">🎨 Imagen</div>
+  <div class="tab" onclick="goTab('audio',this)">🔊 Audio & Smart</div>
+  <div class="tab" onclick="goTab('tamano',this)">📐 Tamaño</div>
+  <div class="tab" onclick="goTab('consumo',this)">⚡ Consumo</div>
+  <div class="tab" onclick="goTab('checklist',this)">🛒 Antes de comprar</div>
+  <div class="tab" onclick="goTab('comparativa',this)">⚖️ Comparativa</div>
+</div>
+
+<main>
+
+<!-- RESOLUCIÓN -->
+<div class="section active" id="resolucion">
+  <div class="sec-title">Resolución</div>
+  <div class="sec-sub">Cuántos puntitos tiene la imagen. Más puntitos = más nítido. <em>Aunque no siempre vale la pena pagar de más por eso.</em></div>
+
+  <div class="res-list">
+    <div class="res-row">
+      <div class="res-tag">HD</div>
+      <div class="res-wrap">
+        <div class="res-bar" style="width:28%;background:linear-gradient(90deg,#4a5568,#718096)">1280×720</div>
+        <div class="res-info">720p · Para la cocina, el cuarto del nene o el garage. Y punto.</div>
+      </div>
+    </div>
+    <div class="res-row">
+      <div class="res-tag">Full HD</div>
+      <div class="res-wrap">
+        <div class="res-bar" style="width:50%;background:linear-gradient(90deg,#2b6cb0,#4299e1)">1920×1080</div>
+        <div class="res-info">1080p · El estándar decente. En 43"–50" se ve muy bien y no te arruinás.</div>
+      </div>
+    </div>
+    <div class="res-row">
+      <div class="res-tag">4K</div>
+      <div class="res-wrap">
+        <div class="res-bar" style="width:78%;background:linear-gradient(90deg,#6b46c1,#a855f7)">3840×2160</div>
+        <div class="res-info">UHD · 4 veces más detalle que Full HD. Vale la pena en 55" o más.</div>
+      </div>
+    </div>
+    <div class="res-row">
+      <div class="res-tag">8K</div>
+      <div class="res-wrap">
+        <div class="res-bar" style="width:100%;background:linear-gradient(90deg,#c05621,#ed8936)">7680×4320</div>
+        <div class="res-info">Para el que tiene 75"+ y le sobra la plata. Casi no hay contenido 8K todavía.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip"><strong>💡 UHD y 4K son lo mismo.</strong> UHD es el nombre técnico, 4K el nombre de marketing. Cuando el vendedor te dice los dos juntos como si fueran distintos... ya sabés.</div>
+
+  <div class="cards" style="margin-top:22px">
+    <div class="card" style="--ca:#718096">
+      <div class="card-head"><div class="card-name">HD Ready</div><span class="badge b-no">Dinosaurio</span></div>
+      <div class="card-body"><strong>1280×720 píxeles.</strong> Si ves uno en oferta "irresistible", cerrá la billetera y seguí caminando. Solo tiene sentido en un TV de 24"–32" para un ambiente secundario donde nadie exige nada.<br><em>— "Cumple y punto, pero justo."</em></div>
+    </div>
+    <div class="card" style="--ca:#4299e1">
+      <div class="card-head"><div class="card-name">Full HD</div><span class="badge b-ok">El del medio, siempre gana</span></div>
+      <div class="card-body"><strong>1920×1080.</strong> El mínimo razonable hoy. Netflix, YouTube, cable en HD... todo se ve bien. En pantallas hasta 55" la diferencia con 4K es casi imperceptible si no te sentás encima.<br><em>— "No es el más lindo del baile, pero tampoco pisa mal."</em></div>
+      <div class="chips"><div class="chip">Precio <span>accesible</span></div><div class="chip">Ideal hasta <span>50"</span></div></div>
+    </div>
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">4K / UHD</div><span class="badge b-high">Recomendado</span></div>
+      <div class="card-body"><strong>3840×2160.</strong> Cuatro veces más detalle que Full HD. Para notarlo de verdad necesitás un TV de 55"+ y sentarte a menos de 2.5 metros. Netflix 4K y las consolas nuevas lo aprovechan bien.<br><em>— "El punto dulce para el que quiere calidad sin pasarse de rosca."</em></div>
+      <div class="chips"><div class="chip">Precio <span>moderado</span></div><div class="chip">Vale en <span>55"+</span></div></div>
+    </div>
+    <div class="card" style="--ca:#ed8936">
+      <div class="card-head"><div class="card-name">8K</div><span class="badge b-top">Para el que le sobra</span></div>
+      <div class="card-body"><strong>7680×4320.</strong> Impresionante en papel. En la práctica, el contenido nativo 8K casi no existe. El TV <span class="tt" data-tip="Upscaling = el TV toma una imagen de menor calidad y la estira inteligentemente para llenar los 8K de píxeles. Como ampliar una foto: hasta cierto punto se ve bien, después se nota que está inventando detalles.">escala el 4K a 8K</span> y cruza los dedos.<br><em>— "Como comprar un Ferrari para ir al súper."</em></div>
+    </div>
+  </div>
+</div>
+
+<!-- TIPO DE PANTALLA -->
+<div class="section" id="pantalla">
+  <div class="sec-title">Tipo de Pantalla</div>
+  <div class="sec-sub">La tecnología del panel es lo que más define la calidad de imagen. Más que los píxeles. Más que los Hz. <em>Acá está la plata de verdad.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#4299e1">
+      <div class="card-head"><div class="card-name">LCD / LED</div><span class="badge b-ok">El más común</span></div>
+      <div class="card-body">El 80% de los TV del mercado. Un panel de <span class="tt" data-tip="El cristal líquido no emite luz propia: necesita una fuente de luz detrás (retroiluminación LED) para funcionar. Es como una persiana que deja pasar más o menos luz según la imagen que se muestra.">cristal líquido (LCD)</span> iluminado por LEDs. Baratos, brillantes y duran mucho. El problema: los negros no son negros del todo porque la luz de fondo siempre filtra algo.<br><em>— "Hace el trabajo. No te va a enamorar, pero tampoco te va a decepcionar."</em></div>
+      <div class="chips"><div class="chip">Precio <span>bajo</span></div><div class="chip">Brillo <span>muy bueno</span></div><div class="chip">Negros <span>grises oscuros</span></div></div>
+    </div>
+    <div class="card" style="--ca:#00b4d8">
+      <div class="card-head"><div class="card-name">IPS vs VA</div><span class="badge b-mid">Subtipo LCD</span></div>
+      <div class="card-body">Dos sabores de panel LCD:<br><br><strong>IPS</strong> → Colores precisos y buenos <span class="tt" data-tip="Ángulo de visión = hasta cuántos grados de costado podés mirar el TV sin que los colores se distorsionen. El IPS aguanta bien hasta 60°. El VA empieza a verse raro a partir de los 30°.">ángulos de visión</span>. Si el sillón está de costado al TV, este es tu amigo.<br><br><strong>VA</strong> → Mejores negros y más contraste. Ideal para películas en habitación oscura. Visto de costado no, gracias.<br><em>— "IPS para el que mira con gente. VA para el cinéfilo solitario."</em></div>
+    </div>
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">OLED</div><span class="badge b-top">El Rolls Royce</span></div>
+      <div class="card-body">Cada píxel genera su propia luz y puede apagarse completamente. Resultado: <strong>negros perfectos, contraste infinito.</strong> La imagen más cinematográfica del mercado.<br><br>El lado B: el precio duele, y existe el riesgo de <span class="tt" data-tip="Burn-in = cuando una imagen fija (logo de canal, barra de videojuego) se muestra muchas horas seguidas y deja una sombra permanente. Con uso normal viendo series y películas el riesgo es muy bajo. Si lo dejás en CNN todo el día... ahí sí rezá.">burn-in</span> si lo usás mal.<br><em>— "Y el precio lo confirma."</em></div>
+      <div class="chips"><div class="chip">Negros <span>perfectos</span></div><div class="chip">Contraste <span>infinito</span></div><div class="chip">Precio <span>alto</span></div><div class="chip">Riesgo <span>burn-in</span></div></div>
+    </div>
+    <div class="card" style="--ca:#48bb78">
+      <div class="card-head"><div class="card-name">QLED</div><span class="badge b-high">El primo rico del LED</span></div>
+      <div class="card-body">No es OLED. Es un LCD mejorado con <span class="tt" data-tip="Puntos cuánticos = nanocristales que al recibir luz emiten colores muy puros. Le dan al TV colores más vivos y mayor brillo que un LED común. Lo popularizó Samsung y lo explotó bastante en marketing.">puntos cuánticos</span> que mejoran los colores y el brillo. Brilla más que el OLED (bueno para habitaciones con luz), pero los negros no son perfectos.<br><em>— "Mejor que el LED, sin llegar al OLED. El punto medio para el que no quiere llorar al pagar."</em></div>
+      <div class="chips"><div class="chip">Brillo <span>excelente</span></div><div class="chip">Sin riesgo <span>burn-in</span></div><div class="chip">Precio <span>moderado-alto</span></div></div>
+    </div>
+    <div class="card" style="--ca:#fc8181">
+      <div class="card-head"><div class="card-name">Mini LED</div><span class="badge b-high">QLED con esteroides</span></div>
+      <div class="card-body">QLED con miles de zonas de luz pequeñísimas que se atenúan de forma independiente. Contraste mucho mejor, casi rozando el OLED. Sin el riesgo de burn-in.<br><em>— "Para el que quiere lo mejor del LED sin hipotecar el departamento."</em></div>
+      <div class="chips"><div class="chip">Contraste <span>muy alto</span></div><div class="chip">Sin burn-in <span>✓</span></div><div class="chip">Precio <span>alto</span></div></div>
+    </div>
+    <div class="card" style="--ca:#c084fc">
+      <div class="card-head"><div class="card-name">QD-OLED</div><span class="badge b-top">Lo mejor de los dos mundos</span></div>
+      <div class="card-body">OLED con puntos cuánticos encima. Negros perfectos + colores brutales + más brillo que el OLED clásico. Lo más avanzado del mercado hoy.<br><em>— "Si tenés que preguntar el precio, no es para vos."</em></div>
+    </div>
+  </div>
+</div>
+
+<!-- IMAGEN -->
+<div class="section" id="imagen">
+  <div class="sec-title">Calidad de Imagen</div>
+  <div class="sec-sub">Más allá de la resolución, estas tecnologías son las que hacen que una imagen se vea de verdad bien. <em>O que parezca transmitida desde un sótano.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">HDR</div><span class="badge b-mid">Muy importante</span></div>
+      <div class="card-body"><span class="tt" data-tip="HDR = High Dynamic Range. La imagen tiene mayor diferencia entre lo más oscuro y lo más brillante. Las luces brillan de verdad y las sombras tienen detalle. Sin HDR, todo parece aplanado y lavado.">HDR</span> hace que los brillos brillen de verdad y las sombras tengan detalle. Hay varios formatos:<br><br><strong>HDR10</strong> → El básico. Casi todos lo tienen.<br><strong>HDR10+</strong> → Versión mejorada de Samsung. Ajusta imagen por escena.<br><strong>Dolby Vision</strong> → El mejor. Ajusta imagen cuadro por cuadro.<br><strong>HLG</strong> → Para TV en vivo. No te preocupés mucho por este.<br><em>— "Dolby Vision es como tener un técnico afinando la imagen en tiempo real."</em></div>
+      <div class="chips"><div class="chip">Prioridad <span>Dolby Vision &gt; HDR10+ &gt; HDR10</span></div></div>
+    </div>
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">Hz / Refresh Rate</div><span class="badge b-mid">Fluidez</span></div>
+      <div class="card-body">Cuántas veces por segundo se actualiza la imagen. Más Hz = más fluido.<br><br><strong>60Hz</strong> → Suficiente para series, películas y cable.<br><strong>120Hz reales</strong> → Esencial para gaming con PS5 o Xbox Series X.<br><br>⚠️ Cuidado: "Motion Rate 240" o "TruMotion 120" son Hz <span class="tt" data-tip="Hz interpolados = el TV genera cuadros falsos entre los reales para simular más fluidez. El resultado a veces es el famoso 'efecto telenovela' donde las películas parecen filmadas en casa. No es lo mismo que 120Hz reales del panel.">interpolados</span>, no reales.<br><em>— "Como el vendedor que infla el CV."</em></div>
+      <div class="chips"><div class="chip">Gaming <span>→ 120Hz reales sí o sí</span></div></div>
+    </div>
+    <div class="card" style="--ca:#f6ad55">
+      <div class="card-head"><div class="card-name">Local Dimming</div><span class="badge b-mid">Mejora el contraste</span></div>
+      <div class="card-body">En TV LCD, divide la retroiluminación en zonas que se atenúan de forma independiente. Mejora mucho el contraste. El <span class="tt" data-tip="Mini LED lleva el local dimming al extremo: en lugar de pocas zonas grandes, tiene miles de zonas minúsculas. Resultado: el contraste se acerca mucho al OLED, sin sus problemas de burn-in.">Mini LED</span> tiene miles de zonas y es el que más se acerca al OLED.<br><em>— "Sin local dimming, una escena oscura con subtítulos blancos te ilumina media pantalla."</em></div>
+    </div>
+    <div class="card" style="--ca:#b794f4">
+      <div class="card-head"><div class="card-name">VRR / ALLM</div><span class="badge b-mid">Gaming</span></div>
+      <div class="card-body">Para los que conectan consolas o PC:<br><br><strong>VRR</strong> → El TV sincroniza sus Hz con los fotogramas de la consola. <span class="tt" data-tip="Sin VRR, si la consola genera 87 fotogramas por segundo y el TV va a 60Hz fijo, hay desincronía: la imagen se rompe visualmente (tearing). VRR hace que el TV se adapte al ritmo de la consola en tiempo real.">Sin cortes, sin parpadeos.</span><br><strong>ALLM</strong> → El TV detecta que conectaste una consola y activa el modo juego solo.<br><em>— "ALLM es para el que no quiere buscar configuraciones con el control a las 2 de la mañana."</em></div>
+    </div>
+  </div>
+</div>
+
+<!-- AUDIO & SMART -->
+<div class="section" id="audio">
+  <div class="sec-title">Audio & Smart TV</div>
+  <div class="sec-sub">Los parlantes del TV suelen ser lo más olvidado. Y el sistema operativo es lo que usás todos los días. <em>Los dos importan más de lo que parece.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Parlantes integrados</div><span class="badge b-warn">El gran olvidado</span></div>
+      <div class="card-body">La triste verdad: los parlantes de casi todos los TV son mediocres. Como el TV se hace cada vez más delgado, no hay espacio para buenos parlantes. En el local suenan bien porque están a todo volumen en un ambiente enorme.<br><em>— "En casa, a volumen normal, vas a escuchar como radio AM de los 90."</em><br><br>Una <span class="tt" data-tip="Soundbar = barra de sonido que se pone debajo del TV. Mejora dramáticamente el audio sin ocupar mucho espacio ni costar una fortuna. Una soundbar básica de entrada transforma por completo la experiencia de sonido.">soundbar</span> básica lo transforma completamente. Vale la pena aunque sea una de entrada.</div>
+    </div>
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">Dolby Atmos</div><span class="badge b-high">Sonido 3D</span></div>
+      <div class="card-body">Sonido envolvente que incluye el eje vertical: el sonido viene de arriba también, no solo de los costados. Para aprovecharlo necesitás una <strong>soundbar o home theater compatible</strong>. El TV pasa la señal aunque sus propios parlantes no lo reproduzcan bien.<br><em>— "Es como la diferencia entre ver un partido en la tele y estar en la cancha. Bueno, casi."</em></div>
+    </div>
+    <div class="card" style="--ca:#68d391">
+      <div class="card-head"><div class="card-name">Sistema Operativo</div><span class="badge b-mid">Lo usás todos los días</span></div>
+      <div class="card-body">Ya no existe el TV "tonto". Todos traen sistema operativo. La diferencia está en cuál:<br><br><strong>Google TV</strong> (Sony, TCL, Hisense) → <span class="tt" data-tip="Google TV tiene casi todas las apps que usarías: Netflix, Disney+, Max, YouTube, Spotify y lo que se te ocurra. Se actualiza regularmente y tiene Google Assistant integrado.">Play Store completa</span>, el más completo en apps.<br><strong>Tizen</strong> (Samsung) → Rápido, fluido, bien diseñado.<br><strong>webOS</strong> (LG) → Muy fácil de usar, buen diseño.<br><strong>VIDAA</strong> (Hisense entry) → Funciona. No emociona.<br><strong>Fire TV</strong> (Amazon/Xiaomi) → Ecosistema Amazon, Alexa.<br><em>— "El SO es como el vecino: no lo elegís mucho, pero lo tenés que aguantar todos los días."</em></div>
+      <div class="chips"><div class="chip">Más apps <span>→ Google TV</span></div><div class="chip">Más fluido <span>→ Tizen / webOS</span></div></div>
+    </div>
+    <div class="card" style="--ca:#fbd38d">
+      <div class="card-head"><div class="card-name">HDMI 2.1</div><span class="badge b-high">Indispensable para gaming</span></div>
+      <div class="card-body">El estándar nuevo. Soporta <strong>4K a 120Hz, VRR y <span class="tt" data-tip="eARC = Enhanced Audio Return Channel. Manda audio de alta calidad del TV hacia la soundbar por el mismo cable HDMI. Sin eARC, el audio llega comprimido y pierde calidad. Con eARC llega completo.">eARC</span></strong>. Si tenés PS5 o Xbox Series X, es obligatorio tener al menos un puerto HDMI 2.1 real.<br><em>— "Algunos fabricantes dicen que lo tienen pero lo implementan a medias. Preguntá específico."</em></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAMAÑO -->
+<div class="section" id="tamano">
+  <div class="sec-title">¿Qué tamaño compro?</div>
+  <div class="sec-sub">Ni tan chico que no se vea, ni tan grande que parezcas un murciélago mirando de cerca. <em>El tamaño sí importa, pero depende de dónde te sentás.</em></div>
+
+  <table class="dist-table">
+    <thead><tr><th>Pulgadas</th><th>Distancia ideal</th><th>Para qué ambiente</th><th>Resolución mínima</th></tr></thead>
+    <tbody>
+      <tr><td>32"</td><td>1.0 – 1.5 m</td><td>Cocina, cuarto chico, garage</td><td>Full HD</td></tr>
+      <tr><td>40"–43"</td><td>1.5 – 2.0 m</td><td>Habitación mediana, living chico</td><td>Full HD</td></tr>
+      <tr class="hl"><td>50"–55"</td><td>2.0 – 2.5 m</td><td>⭐ El living estándar argentino</td><td>4K recomendado</td></tr>
+      <tr class="hl"><td>65"</td><td>2.5 – 3.0 m</td><td>Living amplio, cine en casa</td><td>4K obligatorio</td></tr>
+      <tr><td>75"–85"</td><td>3.0 – 3.5 m</td><td>Sala grande. O para el miope de la casa 🕶️</td><td>4K obligatorio</td></tr>
+      <tr><td>98"+</td><td>4.0 m+</td><td>Sala enorme, negocio, o mucho ego</td><td>4K / 8K</td></tr>
+    </tbody>
+  </table>
+
+  <div class="tip"><strong>📏 Regla rápida:</strong> Distancia al sillón en metros × 40 = tamaño mínimo en centímetros de diagonal. A 2.5m → mínimo 100cm ≈ 40 pulgadas mínimo.</div>
+
+  <div class="cards" style="margin-top:22px">
+    <div class="card" style="--ca:#f6ad55">
+      <div class="card-head"><div class="card-name">Pulgadas a centímetros</div><span class="badge b-mid">Conversión</span></div>
+      <div class="card-body">El mueble se mide en cm, el TV en pulgadas. Para convertir: <strong>pulgadas × 2.54</strong>.<br><br><strong>43" = 109 cm · 55" = 140 cm · 65" = 165 cm · 75" = 190 cm</strong><br><br>Eso es la diagonal. El ancho real del TV es el <strong>87% de esa medida</strong> (sin el marco).<br><em>— "Muchos 65" terminaron apoyados contra la pared porque no entraban en el mueble."</em></div>
+    </div>
+    <div class="card" style="--ca:#68d391">
+      <div class="card-head"><div class="card-name">Altura de montaje</div><span class="badge b-mid">Importante</span></div>
+      <div class="card-body">El <strong>centro de la pantalla a la altura de tus ojos sentado</strong>: aproximadamente 100–110 cm del suelo.<br><br>Error clásico: colgarlo altísimo como si fuera un cuadro. Después de 2 horas de película tenés el cuello como si hubieras dormido en el colectivo.<br><em>— "Y dejá 10–15 cm de aire detrás, especialmente si es OLED. Necesita respirar, como todos."</em></div>
+    </div>
+    <div class="card" style="--ca:#b794f4">
+      <div class="card-head"><div class="card-name">Ángulo de visión</div><span class="badge b-mid">Si mirás de costado</span></div>
+      <div class="card-body">Si el sillón está diagonal al TV (más de 45°), el panel importa:<br><br><strong>IPS / OLED</strong> → Los colores se mantienen bien ✓<br><strong>VA / LCD genérico</strong> → Los colores se lavan, los negros se ponen grises ✗<br><em>— "Si toda la familia mira desde ángulos distintos, IPS u OLED es tu amigo."</em></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONSUMO -->
+<div class="section" id="consumo">
+  <div class="sec-title">Consumo Energético</div>
+  <div class="sec-sub">Lo que te van a cobrar en la factura de luz todos los meses. <em>Nadie te lo explica en el local. Nosotros sí.</em></div>
+
+  <div class="card" style="--ca:#ffd700;margin-bottom:20px">
+    <div class="card-head"><div class="card-name">Clases de eficiencia</div><span class="badge b-mid">La etiqueta energética</span></div>
+    <div class="card-body"><strong>A = ahorra más</strong>, G = consume más. Hoy la mayoría entra en A, A+ o A++.</div>
+    <div class="clases">
+      <div class="clase" style="background:rgba(0,180,0,.2);color:#4ade80">A+++</div>
+      <div class="clase" style="background:rgba(0,200,0,.15);color:#86efac">A++</div>
+      <div class="clase" style="background:rgba(100,220,0,.15);color:#bef264">A+</div>
+      <div class="clase" style="background:rgba(200,220,0,.15);color:#fde047">A</div>
+      <div class="clase" style="background:rgba(255,180,0,.15);color:#fbbf24">B</div>
+      <div class="clase" style="background:rgba(255,120,0,.15);color:#fb923c">C</div>
+      <div class="clase" style="background:rgba(255,60,0,.15);color:#f87171">D–G</div>
+    </div>
+  </div>
+
+  <div class="card" style="--ca:#00d4ff;margin-bottom:20px">
+    <div class="card-head"><div class="card-name">Consumo por tecnología</div></div>
+    <div class="card-body">
+      <div class="c-item">
+        <div class="c-head"><span class="c-name">LED / LCD 55" Full HD</span><span class="c-w">~70–100W</span></div>
+        <div class="c-bg"><div class="c-bar" style="width:32%;background:linear-gradient(90deg,#4299e1,#63b3ed)"></div></div>
+        <div class="c-note">El más barato de mantener. La heladera consume más.</div>
+      </div>
+      <div class="c-item">
+        <div class="c-head"><span class="c-name">OLED 55" 4K</span><span class="c-w">~100–150W</span></div>
+        <div class="c-bg"><div class="c-bar" style="width:42%;background:linear-gradient(90deg,#a855f7,#c084fc)"></div></div>
+        <div class="c-note">Sorpresa: es eficiente. Cada píxel solo gasta cuando está encendido.</div>
+      </div>
+      <div class="c-item">
+        <div class="c-head"><span class="c-name">QLED 55" 4K</span><span class="c-w">~120–180W</span></div>
+        <div class="c-bg"><div class="c-bar" style="width:54%;background:linear-gradient(90deg,#00b4d8,#00d4ff)"></div></div>
+        <div class="c-note">Más brillo = más consumo. Lógico.</div>
+      </div>
+      <div class="c-item">
+        <div class="c-head"><span class="c-name">Mini LED 65" 4K</span><span class="c-w">~200–300W</span></div>
+        <div class="c-bg"><div class="c-bar" style="width:76%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"></div></div>
+        <div class="c-note">Miles de zonas de luz. Paga el precio en la factura.</div>
+      </div>
+      <div class="c-item">
+        <div class="c-head"><span class="c-name">8K 75"</span><span class="c-w">~300–500W</span></div>
+        <div class="c-bg"><div class="c-bar" style="width:100%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div>
+        <div class="c-note">Casi como prender un lavarropas. Permanentemente.</div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:6px">*Estimado referencial según uso y tarifa.</div>
+    </div>
+  </div>
+
+  <div class="tip"><strong>💡 El truco del modo de imagen:</strong> En el local ponen modo "Vívido" o "Dinámico" para que todo brille. Ese modo consume hasta un <strong>40% más</strong> de luz. Pasarlo a "Cine" o "Estándar" cuando llegás a casa te ahorra plata y la imagen se ve más natural. Doble win.</div>
+
+  <div class="cards" style="margin-top:20px">
+    <div class="card" style="--ca:#68d391">
+      <div class="card-head"><div class="card-name">El consumo silencioso</div><span class="badge b-mid">Standby</span></div>
+      <div class="card-body">Un TV "apagado" pero enchufado consume entre <strong>0.5W y 3W</strong> para poder responder al control remoto. No es mucho, pero existe. En un año son varios kWh menos en la factura si lo desenchufás.<br><em>— "Cada peso cuenta, especialmente en Argentina."</em></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de Comprar</div>
+  <div class="sec-sub">Lo que tenés que preguntar y revisar antes de pagar. <em>Para que no salgas del local con cara de "¿qué acabo de hacer?"</em></div>
+
+  <div class="checks">
+    <div class="check">
+      <div class="check-ico">📐</div>
+      <div><div class="check-title">Medí el espacio antes de salir de casa</div>
+      <div class="check-desc">Llevá el número escrito. <strong>Ancho real ≈ pulgadas × 2.2 cm.</strong> <em>— Muchos compran un 65" y llegan a casa a descubrir que no entra en el mueble. La pared no se agranda.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🔌</div>
+      <div><div class="check-title">Contá los HDMI y preguntá cuántos son 2.1 reales</div>
+      <div class="check-desc">Necesitás al menos 3 HDMI para las cosas típicas. Si tenés PS5 o Xbox, <strong>al menos uno tiene que ser HDMI 2.1 real.</strong> <em>— Algunos dicen 2.1 pero lo implementan a medias. Preguntá específico.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">📺</div>
+      <div><div class="check-title">Preguntá los Hz del panel, no los "efectivos"</div>
+      <div class="check-desc">Preguntá: <strong>"¿Cuántos Hz tiene el panel nativo?"</strong> Para gaming necesitás 120Hz reales. Para series y películas, 60Hz alcanza. <em>— "Efectivo" es palabra de marketing, no de ingeniería.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🎨</div>
+      <div><div class="check-title">Pedí que cambien el modo de imagen</div>
+      <div class="check-desc">En el local siempre ponen modo "Vívido". Pedí que lo pasen a <strong>"Cine"</strong> o <strong>"Filmmaker Mode"</strong> para ver cómo se ve realmente en casa. <em>— Si el vendedor no sabe cómo cambiarlo, ese es otro problema.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">📡</div>
+      <div><div class="check-title">¿Tiene sintonizador TDA?</div>
+      <div class="check-desc">La TV digital abierta en Argentina usa el estándar <strong>ISDB-T</strong>. Algunos modelos importados no lo traen. Si querés ver canales gratis sin pagar nada, verificalo antes. <em>— El 13 y el 11 son gratis. Pero solo si el TV los sintoniza.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🛡️</div>
+      <div><div class="check-title">Garantía escrita y service en tu ciudad</div>
+      <div class="check-desc">Garantía de <strong>al menos 1 año</strong> y service autorizado en tu zona. Las marcas genéricas a veces no tienen red fuera de Buenos Aires. <em>— Si no está escrita, no existe. Como las promesas del vendedor.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">📶</div>
+      <div><div class="check-title">WiFi cerca del router o cable de red</div>
+      <div class="check-desc">Para streaming 4K necesitás <strong>25 Mbps estables como mínimo</strong>. Si el router está lejos o hay paredes de por medio, mejor usá cable de red. <em>— El WiFi más veloz del mundo no sirve si la señal no llega.</em></div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:32px">
+    <div class="sec-title" style="font-size:26px">Marca conocida vs. genérica</div>
+    <div class="sec-sub">¿Por qué el Samsung cuesta el doble con las mismas pulgadas? Acá el desglose sin verso.</div>
+    <div class="precio-grid">
+      <div class="precio-card rec">
+        <div class="p-tag">Marca reconocida</div>
+        <div class="p-marca">Samsung · LG · Sony · TCL</div>
+        <div class="p-desc"><strong>Lo que pagás de más:</strong><br>• Panel propio o auditado por ellos<br>• Procesador de imagen para upscaling<br>• SO con actualizaciones 4–6 años<br>• Red de service en todo el país<br>• Calibración de fábrica más precisa<br>• Soporte Dolby Vision / HDR10+</div>
+      </div>
+      <div class="precio-card alt">
+        <div class="p-tag">Marca genérica</div>
+        <div class="p-marca">Sin historia conocida</div>
+        <div class="p-desc"><strong>Lo que sacrificás:</strong><br>• Panel de menor calidad<br>• Procesador básico, imagen más cruda<br>• SO sin actualizaciones, apps limitadas<br>• Service solo en grandes ciudades<br>• Sin Dolby Vision ni HDR avanzado<br>• Garantía difícil de ejecutar</div>
+      </div>
+    </div>
+    <div class="tip" style="margin-top:16px"><strong>💡 El punto medio real:</strong> <strong>TCL</strong> y <strong>Hisense gama media</strong> son la mejor relación precio/calidad si Samsung o LG se van del presupuesto. No son genéricos. <strong>Noblex</strong> puede funcionar bien o darte problemas al año. La ruleta rusa de los televisores.</div>
+
+    <div class="cards" style="margin-top:20px">
+      <div class="card" style="--ca:#f87171">
+        <div class="card-head"><div class="card-name">Señales de alarma en el local</div><span class="badge b-warn">Salí corriendo</span></div>
+        <div class="card-body">
+          🚩 <strong>"4K HDR"</strong> sin decir qué tipo de HDR → puede ser falso o básico.<br>
+          🚩 <strong>"240Hz efectivos"</strong> en un TV barato → interpolación, no real.<br>
+          🚩 <strong>Sin marca de sistema operativo</strong> → SO propio que no se actualiza nunca.<br>
+          🚩 <strong>Solo 2 puertos HDMI</strong> → Te vas a quedar sin entradas en un mes.<br>
+          🚩 <strong>Garantía solo verbal</strong> → Si no está en el ticket, no existe.<br>
+          🚩 <strong>"Es lo mismo que el Samsung pero más barato"</strong> → No es lo mismo.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARATIVA -->
+<div class="section" id="comparativa">
+  <div class="sec-title">Comparativa Rápida</div>
+  <div class="sec-sub">Para el que quiere la respuesta directa sin leer todo. <em>Aunque deberías leer todo.</em></div>
+
+  <table class="tabla">
+    <thead><tr><th>Tecnología</th><th>Ideal para</th><th>Lo bueno</th><th>Lo malo</th></tr></thead>
+    <tbody>
+      <tr><td>Full HD LED</td><td>Uso diario, TV secundario</td><td class="ok">Precio bajo</td><td class="mal">Contraste limitado</td></tr>
+      <tr><td>4K QLED</td><td>Sala con luz natural</td><td class="ok">Brillo y colores</td><td class="meh">Negros no perfectos</td></tr>
+      <tr><td>4K Mini LED</td><td>Cine + gaming</td><td class="ok">Contraste muy alto</td><td class="meh">Precio elevado</td></tr>
+      <tr><td>4K OLED</td><td>Películas, series, gaming</td><td class="ok">Imagen perfecta</td><td class="mal">Precio + burn-in</td></tr>
+      <tr><td>4K QD-OLED</td><td>El máximo en 55"–77"</td><td class="ok">Lo mejor de todo</td><td class="mal">Precio muy alto</td></tr>
+      <tr><td>8K</td><td>75"+ con presupuesto</td><td class="ok">Resolución máxima</td><td class="mal">Sin contenido nativo</td></tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:28px">
+    <table class="tabla">
+      <thead><tr><th>¿Qué hacés con el TV?</th><th>Lo que necesitás</th></tr></thead>
+      <tbody>
+        <tr><td>Series y películas en streaming</td><td>4K + Dolby Vision + OLED o QLED</td></tr>
+        <tr><td>Gaming con PS5 / Xbox Series X</td><td>4K + 120Hz reales + HDMI 2.1 + VRR</td></tr>
+        <tr><td>Cable y deportes</td><td>Full HD o 4K con buen procesador</td></tr>
+        <tr><td>Sala con mucha luz solar</td><td>QLED o Mini LED (no OLED, se lava)</td></tr>
+        <tr><td>Sala oscura, cine en casa</td><td>OLED, sin dudas</td></tr>
+        <tr><td>Presupuesto ajustado</td><td>Full HD 55" &gt; 4K 40" (el tamaño importa más)</td></tr>
+        <tr><td>No sabés qué comprás 😄</td><td>Leé esta guía de nuevo</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tip"><strong>💡 El orden de prioridades:</strong> <strong>1) Panel</strong> (OLED > QLED > LED) → <strong>2) HDR</strong> (Dolby Vision si podés) → <strong>3) Resolución</strong> (4K si es 55"+) → <strong>4) Hz</strong> (120 si jugás). Un OLED Full HD puede verse mejor que un LED 4K barato. Los megapíxeles no lo son todo.</div>
+</div>
+
+</main>
+
+<div id="ttBubble"></div>
+
+<script>
+  function goTab(id, el) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  const bubble = document.getElementById('ttBubble');
+  let timer;
+  document.querySelectorAll('.tt').forEach(el => {
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      bubble.textContent = this.dataset.tip;
+      bubble.classList.add('on');
+      const r = this.getBoundingClientRect();
+      let top = r.bottom + 10, left = r.left;
+      if (left + 280 > window.innerWidth) left = window.innerWidth - 285;
+      if (top + 140 > window.innerHeight) top = r.top - 145;
+      bubble.style.top = top + 'px';
+      bubble.style.left = left + 'px';
+      clearTimeout(timer);
+      timer = setTimeout(() => bubble.classList.remove('on'), 5000);
+    });
+  });
+  document.addEventListener('click', () => bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Tv Tecnologias: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="sonido.html" class="rel-link">🔊 Sonido</a><a href="streaming-sticks.html" class="rel-link">🔌 Streaming Sticks</a><a href="proyectores.html" class="rel-link">🎬 Proyectores</a><a href="cables-conectores.html" class="rel-link">🔋 Cables y Cargadores</a></div>
+</div>
+</body>
+</html>

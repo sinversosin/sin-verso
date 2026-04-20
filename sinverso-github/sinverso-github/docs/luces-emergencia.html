@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Luces de Emergencia</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--soft:#aaaacc;--accent:#facc15;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  header{background:linear-gradient(135deg,#080810,#181200 50%,#080810);border-bottom:1px solid var(--border);padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:260px;background:radial-gradient(ellipse,rgba(200,200,200,.10),transparent 70%);pointer-events:none;}
+  .site-label{font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);text-transform:uppercase;opacity:.7;margin-bottom:6px;}
+  .hogar-badge{display:inline-block;background:rgba(200,200,200,.08);border:1px solid rgba(200,200,200,.2);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:700;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,7vw,72px);letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 30%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:10px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .price-note{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+  main{padding:28px 16px 80px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .card:hover{border-color:rgba(200,200,200,.3);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--text);line-height:1;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(77,187,122,.15);color:#4dbb7a;border:1px solid rgba(77,187,122,.3);}
+  .b-mid{background:rgba(200,200,200,.1);color:var(--accent);border:1px solid rgba(200,200,200,.25);}
+  .b-high{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-no{background:rgba(120,120,120,.15);color:#888;border:1px solid rgba(120,120,120,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tt{border-bottom:1px dashed var(--accent);color:var(--accent);cursor:pointer;font-weight:600;display:inline;}
+  #ttBubble{display:none;position:fixed;background:#080810;border:1px solid var(--accent);border-radius:14px;padding:13px 16px;font-size:14px;color:var(--text);line-height:1.6;max-width:270px;z-index:9999;box-shadow:0 8px 40px rgba(0,0,0,.7);pointer-events:none;}
+  #ttBubble.on{display:block;}
+  #ttBubble::before{content:'💡 ';}
+  .tip{background:rgba(200,200,200,.05);border:1px solid rgba(200,200,200,.15);border-radius:14px;padding:16px 18px;margin-top:20px;font-size:14px;line-height:1.65;color:#c8c8d8;}
+  .tip strong{color:var(--accent);}
+  .tip-green{background:rgba(77,187,122,.06);border:1px solid rgba(77,187,122,.2);color:#a0d8b4;}
+  .tip-green strong{color:#4dbb7a;}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-gold{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);color:#f0e080;}
+  .tip-gold strong{color:#ffd700;}
+  .tip-blue{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);color:#a0d8ea;}
+  .tip-blue strong{color:#00d4ff;}
+  .tabla{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+  .tabla th{background:var(--surface);color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);}
+  .tabla td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;line-height:1.5;}
+  .tabla tr:hover td{background:rgba(255,255,255,.02);}
+  .tabla td:first-child{color:var(--text);font-weight:700;}
+  .tabla .hl td{background:rgba(200,200,200,.04);}
+  .tabla .hl td:first-child{color:var(--accent);}
+  .ok::before{content:'✓ ';color:#4dbb7a;}
+  .mal::before{content:'✗ ';color:#f87171;}
+  .meh::before{content:'~ ';color:#ffd700;}
+  .perfiles{display:flex;flex-direction:column;gap:10px;}
+  .perfil{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .perfil:hover{border-color:rgba(200,200,200,.25);}
+  .perfil-ico{font-size:24px;flex-shrink:0;}
+  .perfil-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .perfil-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .perfil-rec{font-size:12px;font-weight:700;color:var(--accent);margin-top:5px;}
+  .checks{display:flex;flex-direction:column;gap:10px;}
+  .check{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;}
+  .check-ico{font-size:22px;flex-shrink:0;}
+  .check-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .check-desc{font-size:13px;color:var(--muted);line-height:1.55;}
+  .check-desc strong{color:var(--text);}
+  .check-desc em{color:#7a9ab0;font-style:italic;font-size:12px;}
+  .tech-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);border-radius:8px;padding:3px 10px;font-size:11px;font-weight:700;color:#c084fc;margin-top:8px;}
+  .tech-tag::before{content:'⚡';}
+  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+  @media(max-width:480px){.pgrid{grid-template-columns:1fr;}.card-name{font-size:18px;}.tabla th,.tabla td{padding:8px;}}
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="site-label">SinVerso · Hogar</div>
+  <div class="hogar-badge">🏠 Sección Hogar</div>
+  <h1>Luces de Emergencia</h1>
+  <p class="subtitle">Cuando se va la luz no tenés que buscar a tientas. <strong>Tenés que estar preparado.</strong></p>
+  <div class="price-note">💲 Precios en USD orientativos · Varían según tipo de cambio y mercado local</div>
+</header>
+
+<div class="error-caro"><strong>🔦 El error más caro</strong>Confiar en una sola linterna a pilas que nadie comprobó desde hace un año. Las pilas se descargan solas. El 80% de las linternas de casa tienen la batería muerta cuando se necesitan. La única luz de emergencia confiable es la que se carga automáticamente y siempre.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('tipos',this)">🔦 Tipos</div>
+  <div class="tab" onclick="goTab('autonomia',this)">🔋 Autonomía y tecnología</div>
+  <div class="tab" onclick="goTab('donde',this)">📍 Dónde colocarlas</div>
+  <div class="tab" onclick="goTab('perfil',this)">🧑 ¿Cuál es para vos?</div>
+  <div class="tab" onclick="goTab('checklist',this)">🛒 Antes de comprar</div>
+</div>
+<main>
+<div class="section active" id="tipos">
+  <div class="sec-title">Tipos de luces de emergencia</div>
+  <div class="sec-sub">No existe una sola solución. <em>Hay opciones para cada necesidad, presupuesto y tipo de corte.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#facc15">
+      <div class="card-head"><div class="card-name">Luz de emergencia automática</div><span class="badge b-top">La más importante</span></div>
+      <div class="card-body">
+        Se enchufan y se cargan constantemente desde la red. Cuando se va la luz, se encienden <strong>automáticamente en menos de 1 segundo</strong>. Sin tocar nada, sin buscar nada a oscuras.
+        <br><br>
+        Son el estándar en edificios y comercios por normativa. En el hogar deberían ser obligatorias pero pocas personas las tienen.
+        <br><br>
+        <strong>Tipos de lámpara:</strong><br>
+        • <strong>Formato bulbo (E27)</strong> → Se enrosca en cualquier portalámpara normal. La más práctica para el hogar.<br>
+        • <strong>Formato regleta</strong> → Aplique de pared con batería interna. Típico de escaleras y pasillos de edificios.<br>
+        • <strong>Formato plafón</strong> → Reemplaza el plafón del techo. Funciona normal con corriente, de emergencia sin ella.
+        <br><em>— "La luz de emergencia que se enciende sola cuando se va la luz es la única que funciona cuando estás dormido y hay un corte a las 3am."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Bulbo E27 emergencia <span>USD 8–20</span></div>
+        <div class="chip">Regleta de emergencia <span>USD 15–40</span></div>
+        <div class="chip">Plafón emergencia <span>USD 20–50</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">Linterna recargable de mano</div><span class="badge b-ok">Para el que busca</span></div>
+      <div class="card-body">
+        La linterna clásica pero recargable por USB-C. Mucho mejor que pilas porque las pilas siempre están descargadas justo cuando las necesitás.
+        <br><br>
+        <strong>Lo que importa al elegir:</strong><br>
+        • <strong>Lúmenes:</strong> 200–500lm para uso doméstico. 1.000lm+ para exteriores o emergencias serias.<br>
+        • <strong>Modos:</strong> alta / baja / intermitencia / SOS. El modo bajo alarga la autonomía x4.<br>
+        • <strong>Autonomía:</strong> mínimo 6 horas en modo bajo.<br>
+        • <strong>Resistencia al agua:</strong> mínimo IPX4 (salpicaduras).
+        <div class="tech-tag">Modelos con carga solar + USB, doble función powerbank para cargar el celu</div>
+        <br><em>— "La linterna que también carga el celular durante un corte prolongado es la más útil de tener."</em>
+      </div>
+      <div class="chips"><div class="chip">Básica USB-C <span>USD 8–20</span></div><div class="chip">Con powerbank <span>USD 20–50</span></div></div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Lámpara de camping / ambiente</div><span class="badge b-ok">Para cortes largos</span></div>
+      <div class="card-body">
+        Lámparas LED portátiles recargables que iluminan un ambiente completo. No son una linterna puntual sino una fuente de luz difusa que ilumina toda la habitación. Perfectas para cortes de varias horas.
+        <br><br>
+        <strong>Lutec, Goal Zero, Alpina, Xiaomi:</strong> lámparas de camping que funcionan perfectamente en el hogar. Algunas tienen regulador de intensidad y temperatura de color.
+        <br><br>
+        <strong>Las de tipo linterna colgante:</strong> se pueden colgar del techo o de un mueble para iluminar el comedor durante una cena sin luz.
+        <br><em>— "Una lámpara de camping de USD 30 ilumina el comedor durante 8 horas. La cena con velas tiene su encanto, pero con esto ves lo que comés."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 20–60</span></div><div class="chip">Autonomía <span>6–20 horas según potencia</span></div></div>
+    </div>
+
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">Luz nocturna con batería (enchufable)</div><span class="badge b-mid">El mínimo para cada habitación</span></div>
+      <div class="card-body">
+        Se enchufan en la pared y funcionan como luz nocturna suave. Cuando se va la luz se convierten en emergencia automática. Pequeñas, discretas, permanecen enchufadas 24/7.
+        <br><br>
+        <strong>Con sensor de movimiento:</strong> se encienden solo cuando detectan movimiento. Ideal para pasillos, baños y habitaciones de chicos.
+        <br><br>
+        Colocar una en cada habitación y una en cada baño cuesta USD 40–60 total y garantiza nunca quedar completamente a oscuras.
+        <br><em>— "El que se golpeó el dedo del pie en la oscuridad buscando el baño a las 2am sabe exactamente para qué sirve esto."</em>
+      </div>
+      <div class="chips"><div class="chip">Con sensor movimiento <span>USD 6–15 c/u</span></div></div>
+    </div>
+
+    <div class="card" style="--ca:#e879f9">
+      <div class="card-head"><div class="card-name">Tira LED de emergencia</div><span class="badge b-high">Para corredores y escaleras</span></div>
+      <div class="card-body">
+        Tiras LED con batería interna que se instalan bajo los escalones, en el borde de los pasillos o bajo los muebles. Se encienden automáticamente cuando se va la luz. Baja intensidad pero suficiente para no tropezar.
+        <br><br>
+        Muy populares en países con cortes frecuentes. En Argentina con los apagones nocturnos son especialmente útiles en escaleras interiores.
+        <br><em>— "La tira bajo los escalones que se enciende sola cuando se va la luz es la que evita la caída que nadie espera."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Grupo electrógeno / generador</div><span class="badge b-warn">Para cortes muy largos</span></div>
+      <div class="card-body">
+        Para cortes de 24–72 horas o zonas con problemas eléctricos crónicos. Un generador a nafta o a gas mantiene la heladera, las luces y algunos electrodomésticos funcionando.
+        <br><br>
+        <strong>Lo que hay que saber:</strong><br>
+        • <strong>Nunca adentro de la casa</strong>: genera monóxido de carbono. Siempre en exterior o garaje bien ventilado.<br>
+        • <strong>Potencia en VA:</strong> calculá la suma de los equipos que querés mantener.<br>
+        • <strong>Inversores + batería</strong> (ver sección Energía Renovable): la alternativa silenciosa y sin combustible.
+        <div class="tech-tag">Generadores inverter: motor variable, más silencioso y eficiente que los convencionales</div>
+        <br><em>— "El generador a nafta en el garaje no es paranoia en zonas rurales o con cortes de varios días. Es infraestructura básica."</em>
+      </div>
+      <div class="chips"><div class="chip">1000–2000W <span>USD 200–400</span></div><div class="chip">3000–5000W <span>USD 400–1000</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="autonomia">
+  <div class="sec-title">Autonomía y tecnología</div>
+  <div class="sec-sub">Cuánto duran, qué tecnología usan y las últimas novedades.</div>
+  <div class="cards">
+    <div class="card" style="--ca:#facc15">
+      <div class="card-head"><div class="card-name">Tecnologías de batería en luces de emergencia</div><span class="badge b-mid">Lo que hay adentro</span></div>
+      <div class="card-body">
+        <strong>NiCd (Nickel-Cadmio)</strong> → El más antiguo. Las regletas de emergencia de edificios de muchos años. Tóxico, efecto memoria (pierde capacidad si no se descarga completamente). En retirada.<br><br>
+        <strong>NiMH (Nickel-Metal Hidruro)</strong> → Mejor que NiCd, sin efecto memoria tan pronunciado. El estándar actual en luces de emergencia económicas.<br><br>
+        <strong>Li-Ion / LiFePO4</strong> → Las más modernas. Mayor densidad energética, sin efecto memoria, más ciclos de carga, más livianas. Las luces de emergencia premium las usan.
+        <br><em>— "Una luz de emergencia con batería LiFePO4 dura 10 años sin perder capacidad. Una con NiCd se degrada visiblemente en 3–4 años."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Tiempos de autonomía reales</div><span class="badge b-ok">Lo que te importa</span></div>
+      <div class="card-body">
+        Los fabricantes declaran autonomía en modo de baja intensidad. Los tiempos reales varían:
+        <br><br>
+        <strong>Luces de emergencia automáticas (bulbo/regleta)</strong> → 1–3 horas en modo emergencia. Suficiente para la mayoría de los cortes urbanos.<br>
+        <strong>Lámparas de camping LED</strong> → 6–20 horas según la potencia elegida.<br>
+        <strong>Linternas USB-C</strong> → 3–8 horas en modo alto, 15–30 horas en modo bajo.<br>
+        <strong>Luces nocturnas enchufables</strong> → 4–8 horas de emergencia.
+        <br><br>
+        Para cortes de más de 4 horas: necesitás una batería externa (powerstation) o generador.
+        <br><em>— "El corte de 30 minutos es para la luz de emergencia automática. El de 8 horas necesita la lámpara de camping y el powerbank."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">Powerstation doméstica: la solución integral</div><span class="badge b-high">Para el preparado</span></div>
+      <div class="card-body">
+        Una powerstation (batería grande portátil) como las de <strong>EcoFlow, Jackery o Bluetti</strong> puede alimentar luces, el router, el celu, la TV y hasta la heladera durante horas o días según la capacidad.
+        <br><br>
+        <strong>EcoFlow Delta 2:</strong> 1.024Wh. Alimenta la heladera 8–10 horas, todas las luces del departamento 20+ horas, carga el celu decenas de veces. Se recarga desde el enchufe (en 80 min con carga rápida) o desde paneles solares.<br><br>
+        La powerstation reemplaza al generador a nafta en muchos casos: silenciosa, sin combustible, sin CO, funciona adentro.
+        <div class="tech-tag">Control por app, datos de consumo en tiempo real, recarga solar compatible</div>
+        <br><em>— "EcoFlow Delta 2 más 2 paneles solares de 200W: independencia energética real para un departamento durante 2–3 días de corte."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">EcoFlow Delta 2 <span>USD 700–900</span></div>
+        <div class="chip">Jackery 1000 <span>USD 600–800</span></div>
+        <div class="chip">Bluetti AC200P <span>USD 1.000–1.300</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="donde">
+  <div class="sec-title">¿Dónde colocarlas?</div>
+  <div class="sec-sub">Una sola luz de emergencia no alcanza. <em>El plan mínimo para una casa o departamento.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#facc15">
+      <div class="card-head"><div class="card-name">El kit mínimo de una casa</div><span class="badge b-top">El plan básico</span></div>
+      <div class="card-body">
+        <strong>1. Pasillo principal</strong> → Una luz de emergencia automática. Es la ruta de escape de cualquier habitación.<br>
+        <strong>2. Baño</strong> → Luz nocturna con sensor de movimiento. Los accidentes nocturnos ocurren aquí.<br>
+        <strong>3. Habitación principal</strong> → Una luz nocturna enchufable. Para no quedar completamente a oscuras al despertar.<br>
+        <strong>4. Cocina</strong> → Linterna recargable USB-C accesible (no guardada en un cajón).<br>
+        <strong>5. Escalera interna (si aplica)</strong> → Tira LED de emergencia bajo los escalones.<br>
+        <br>
+        <strong>Costo total:</strong> USD 50–80 para el kit completo. El seguro más barato del hogar.
+        <br><em>— "Cinco posiciones cubiertas, USD 60 gastados, ningún corte de luz que te agarre desprevenido."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">El kit del preparado</div><span class="badge b-ok">Para zonas con cortes frecuentes</span></div>
+      <div class="card-body">
+        Para zonas del interior o conurbano con cortes prolongados y frecuentes:
+        <br><br>
+        <strong>+</strong> Lámpara de camping recargable (8+ horas de iluminación ambiente).<br>
+        <strong>+</strong> Powerbank de 20.000–30.000 mAh para cargar celulares y linternas.<br>
+        <strong>+</strong> Powerstation de 500–1.000Wh para el router, TV y heladera.<br>
+        <strong>+</strong> Panel solar portátil de 100W para recargar la powerstation durante el corte.<br>
+        <br>
+        <strong>Costo total:</strong> USD 300–600. Autonomía real: 12–24 horas con todos los dispositivos esenciales.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="perfil">
+  <div class="sec-title">¿Cuál es para vos?</div>
+  <div class="sec-sub">Según la frecuencia de cortes y el tipo de vivienda.</div>
+  <div class="perfiles">
+    <div class="perfil"><div class="perfil-ico">🏢</div><div>
+      <div class="perfil-title">Departamento en ciudad — cortes ocasionales</div>
+      <div class="perfil-desc">Cortes de 30 min a 2 horas, pocas veces al año.</div>
+      <div class="perfil-rec">→ Kit mínimo: 3 luces de emergencia automáticas (pasillo, baño, cocina) + linterna USB-C. USD 40–60. Cubre el 95% de las situaciones.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🏠</div><div>
+      <div class="perfil-title">Casa — cortes frecuentes de 4–8 horas</div>
+      <div class="perfil-desc">Zona con problemas eléctricos crónicos, tormentas frecuentes.</div>
+      <div class="perfil-rec">→ Kit completo + lámpara de camping + powerstation de 500Wh + panel solar 100W. USD 400–600. Autonomía de 12–16 horas con heladera y luces.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🌾</div><div>
+      <div class="perfil-title">Zona rural — cortes de días</div>
+      <div class="perfil-desc">Cortes de 24–72 horas, lejos de la red eléctrica confiable.</div>
+      <div class="perfil-rec">→ Generador + sistema solar básico con batería (ver sección Energía Renovable). Es infraestructura, no gadget.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">👶</div><div>
+      <div class="perfil-title">Casa con bebés o chicos pequeños</div>
+      <div class="perfil-desc">Cualquier corte de luz es una situación de estrés.</div>
+      <div class="perfil-rec">→ Luces nocturnas con sensor en CADA habitación + luz de emergencia automática en pasillo + lámpara de camping cerca del cuarto del bebé. Nunca tenés que buscar nada a oscuras.</div>
+    </div></div>
+  </div>
+</div>
+
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de Comprar</div>
+  <div class="sec-sub">Lo que marca la diferencia entre la luz que funciona y la que quedó en el cajón.</div>
+  <div class="checks">
+    <div class="check"><div class="check-ico">🔌</div><div>
+      <div class="check-title">Siempre enchufadas, siempre cargadas</div>
+      <div class="check-desc">Las luces de emergencia que hay que "acordarse de cargar" no sirven en una emergencia. <strong>Comprá las que se cargan automáticamente al estar enchufadas.</strong> <em>— El 80% de las linternas de casa tienen la batería muerta cuando se necesitan.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">⏱️</div><div>
+      <div class="check-title">Verificá el tiempo de conmutación</div>
+      <div class="check-desc">Las buenas luces de emergencia cambian a batería en menos de 1 segundo. <strong>Las baratas tardan 3–5 segundos que se sienten eternos en la oscuridad.</strong></div>
+    </div></div>
+    <div class="check"><div class="check-ico">🔋</div><div>
+      <div class="check-title">Probala una vez al mes</div>
+      <div class="check-desc">Desenchufá la luz de emergencia y verificá que se enciende. <strong>Las baterías se degradan con el tiempo aunque no las uses.</strong> Una luz de emergencia que no enciende en la emergencia es peor que no tenerla porque te genera falsa seguridad.</div>
+    </div></div>
+  </div>
+  <div class="tip tip-warn" style="margin-top:20px">
+    <strong>⚠️ Lo que NO es una solución:</strong><br>
+    🚩 <strong>Velas</strong> → Riesgo de incendio, especialmente con chicos y mascotas. La solución de emergencia más peligrosa que existe.<br>
+    🚩 <strong>El celu como linterna</strong> → Consume batería rápido y quedás sin comunicación.<br>
+    🚩 <strong>Linterna a pilas que nunca probaste</strong> → Las pilas se descargan solas. En el 90% de los casos, las pilas están muertas.
+  </div>
+</div>
+</main>
+<div id="ttBubble"></div>
+<script>
+  function goTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+  const bubble=document.getElementById('ttBubble');let timer;
+  document.querySelectorAll('.tt').forEach(el=>{el.addEventListener('click',function(e){e.stopPropagation();bubble.textContent=this.dataset.tip;bubble.classList.add('on');const r=this.getBoundingClientRect();let top=r.bottom+10,left=r.left;if(left+280>window.innerWidth)left=window.innerWidth-285;if(top+140>window.innerHeight)top=r.top-145;bubble.style.top=top+'px';bubble.style.left=left+'px';clearTimeout(timer);timer=setTimeout(()=>bubble.classList.remove('on'),5000);});});
+  document.addEventListener('click',()=>bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Luces Emergencia: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="ups-estabilizadores.html" class="rel-link">⚡ UPS</a><a href="energia-renovable.html" class="rel-link">☀️ Energía Renovable</a><a href="herramientas-hogar.html" class="rel-link">🔧 Herramientas</a></div>
+</div>
+</body>
+</html>

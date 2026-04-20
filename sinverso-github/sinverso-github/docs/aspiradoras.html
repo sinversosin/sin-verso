@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Aspiradoras Inteligentes</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080810; --surface: #10101c; --card: #13131f;
+    --border: #20203a; --text: #eeeef5; --muted: #9494b8; --soft: #aaaacc;
+    --accent: #34d399; --accent2: #10b981;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-size:16px; overflow-x:hidden; }
+
+  header { background:linear-gradient(135deg,#080810,#001810 50%,#080810); border-bottom:1px solid var(--border); padding:44px 20px 36px; text-align:center; position:relative; overflow:hidden; }
+  header::before { content:''; position:absolute; top:-80px; left:50%; transform:translateX(-50%); width:500px; height:260px; background:radial-gradient(ellipse,rgba(52,211,153,.12),transparent 70%); pointer-events:none; }
+  .site-label { font-size:11px; font-weight:700; letter-spacing:5px; color:var(--accent); text-transform:uppercase; opacity:.7; margin-bottom:10px; }
+  header h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(40px,8vw,78px); letter-spacing:2px; line-height:1; background:linear-gradient(135deg,#fff 30%,var(--accent) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .subtitle { margin-top:10px; color:var(--muted); font-size:15px; font-style:italic; }
+  .subtitle strong { color:var(--accent); font-style:normal; }
+  .price-note { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:10px; padding:8px 16px; margin-top:14px; font-size:12px; color:#8888aa; display:inline-block; }
+
+  .tabs { display:flex; gap:8px; overflow-x:auto; padding:20px 16px 0; flex-wrap:nowrap; scrollbar-width:none; }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab { background:var(--surface); border:1px solid var(--border); border-radius:30px; padding:10px 18px; font-size:13px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; white-space:nowrap; flex-shrink:0; }
+  .tab:hover { border-color:var(--accent); color:var(--accent); }
+  .tab.active { background:var(--accent); border-color:var(--accent); color:#000; font-weight:700; }
+
+  main { padding:28px 16px 80px; max-width:640px; margin:0 auto; }
+  .section { display:none; }
+  .section.active { display:block; }
+  .sec-title { font-family:'Bebas Neue',sans-serif; font-size:34px; letter-spacing:1px; color:var(--accent); margin-bottom:4px; }
+  .sec-sub { color:var(--muted); font-size:15px; margin-bottom:24px; line-height:1.6; }
+  .sec-sub em { color:var(--text); font-style:italic; }
+
+  .cards { display:flex; flex-direction:column; gap:14px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:18px; padding:20px 20px 20px 24px; position:relative; overflow:hidden; transition:border-color .2s,transform .2s; }
+  .card:hover { border-color:rgba(52,211,153,.4); transform:translateY(-2px); }
+  .card::before { content:''; position:absolute; top:0; left:0; width:5px; height:100%; background:var(--ca,var(--accent)); border-radius:18px 0 0 18px; }
+  .card-head { display:flex; align-items:center; gap:12px; margin-bottom:8px; flex-wrap:wrap; }
+  .card-name { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:1px; color:var(--text); line-height:1; }
+  .badge { font-size:10px; font-weight:700; letter-spacing:1.5px; padding:3px 10px; border-radius:20px; text-transform:uppercase; }
+  .b-ok   { background:rgba(52,211,153,.15);  color:var(--accent); border:1px solid rgba(52,211,153,.3); }
+  .b-mid  { background:rgba(52,211,153,.10);  color:var(--accent); border:1px solid rgba(52,211,153,.25); }
+  .b-high { background:rgba(0,212,255,.12);   color:#00d4ff;       border:1px solid rgba(0,212,255,.3); }
+  .b-top  { background:rgba(255,215,0,.12);   color:#ffd700;       border:1px solid rgba(255,215,0,.3); }
+  .b-no   { background:rgba(120,120,120,.15); color:#888;          border:1px solid rgba(120,120,120,.3); }
+  .b-warn { background:rgba(248,113,113,.15); color:#f87171;       border:1px solid rgba(248,113,113,.3); }
+  .card-body { font-size:14px; color:var(--muted); line-height:1.7; }
+  .card-body strong { color:var(--text); font-weight:600; }
+  .card-body em { color:#9090bb; font-size:13px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .chip { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:4px 10px; font-size:12px; color:var(--muted); }
+  .chip span { color:var(--text); font-weight:600; }
+
+  .tt { border-bottom:1px dashed var(--accent); color:var(--accent); cursor:pointer; font-weight:600; display:inline; }
+  #ttBubble { display:none; position:fixed; background:#001810; border:1px solid var(--accent); border-radius:14px; padding:13px 16px; font-size:14px; color:var(--text); line-height:1.6; max-width:270px; z-index:9999; box-shadow:0 8px 40px rgba(0,0,0,.7); pointer-events:none; }
+  #ttBubble.on { display:block; }
+  #ttBubble::before { content:'💡 '; }
+
+  .tip { background:rgba(52,211,153,.06); border:1px solid rgba(52,211,153,.2); border-radius:14px; padding:16px 18px; margin-top:20px; font-size:14px; line-height:1.65; color:#a0e8cc; }
+  .tip strong { color:var(--accent); }
+  .tip-warn { background:rgba(248,113,113,.06); border:1px solid rgba(248,113,113,.2); color:#f8b4b4; }
+  .tip-warn strong { color:#f87171; }
+  .tip-blue { background:rgba(0,212,255,.06); border:1px solid rgba(0,212,255,.2); color:#a0d8ea; }
+  .tip-blue strong { color:#00d4ff; }
+
+  /* TABLA */
+  .tabla { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; }
+  .tabla th { background:var(--surface); color:var(--accent); font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:1px; padding:10px 12px; text-align:left; border-bottom:2px solid var(--border); }
+  .tabla td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--muted); vertical-align:top; line-height:1.5; }
+  .tabla tr:hover td { background:rgba(255,255,255,.02); }
+  .tabla td:first-child { color:var(--text); font-weight:700; }
+  .tabla .hl td { background:rgba(52,211,153,.05); }
+  .tabla .hl td:first-child { color:var(--accent); }
+  .ok::before  { content:'✓ '; color:#4dbb7a; }
+  .mal::before { content:'✗ '; color:#f87171; }
+  .meh::before { content:'~ '; color:#ffd700; }
+
+  /* MARCA CARDS */
+  .marca-card { border-radius:18px; padding:20px; margin-bottom:14px; border:1px solid var(--border); position:relative; overflow:hidden; transition:transform .2s,border-color .2s; }
+  .marca-card:hover { transform:translateY(-2px); }
+  .marca-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; border-radius:18px 18px 0 0; background:var(--mc); }
+  .marca-header { display:flex; align-items:center; gap:14px; margin-bottom:12px; }
+  .marca-logo { font-size:38px; }
+  .marca-nombre { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:1px; color:var(--text); line-height:1; }
+  .marca-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+  .marca-slogan { font-size:13px; color:var(--muted); font-style:italic; margin-bottom:10px; }
+  .marca-body { font-size:14px; color:var(--muted); line-height:1.7; }
+  .marca-body strong { color:var(--text); }
+  .marca-specs { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .marca-spec { background:rgba(255,255,255,.06); border-radius:8px; padding:4px 10px; font-size:12px; color:var(--soft); }
+  .marca-spec span { font-weight:700; color:var(--text); }
+
+  /* PERFILES */
+  .perfiles { display:flex; flex-direction:column; gap:10px; }
+  .perfil { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:15px 16px; display:flex; gap:13px; align-items:flex-start; transition:border-color .2s; }
+  .perfil:hover { border-color:rgba(52,211,153,.3); }
+  .perfil-ico { font-size:24px; flex-shrink:0; }
+  .perfil-title { font-weight:700; color:var(--text); font-size:14px; margin-bottom:3px; }
+  .perfil-desc { font-size:13px; color:var(--muted); line-height:1.5; }
+  .perfil-rec { font-size:12px; font-weight:700; color:var(--accent); margin-top:5px; }
+
+  /* CHECKS */
+  .checks { display:flex; flex-direction:column; gap:10px; }
+  .check { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:15px 16px; display:flex; gap:13px; align-items:flex-start; transition:border-color .2s; }
+  .check:hover { border-color:rgba(52,211,153,.3); }
+  .check-ico { font-size:22px; flex-shrink:0; }
+  .check-title { font-weight:700; color:var(--text); font-size:14px; margin-bottom:3px; }
+  .check-desc { font-size:13px; color:var(--muted); line-height:1.55; }
+  .check-desc strong { color:var(--text); }
+  .check-desc em { color:#7a9ab0; font-style:italic; font-size:12px; }
+
+  .pgrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; }
+  @media(max-width:480px){ .pgrid { grid-template-columns:1fr; } }
+  .pcard { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px; }
+  .pcard.rec { border-color:rgba(52,211,153,.4); background:rgba(52,211,153,.04); }
+  .pcard.alt { border-color:rgba(248,113,113,.3); background:rgba(248,113,113,.03); }
+  .ptag { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:5px; }
+  .pcard.rec .ptag { color:var(--accent); }
+  .pcard.alt .ptag { color:#f87171; }
+  .pmarca { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--text); margin-bottom:5px; }
+  .pdesc { font-size:12px; color:var(--muted); line-height:1.6; }
+  .pdesc strong { color:var(--text); }
+
+  @media(max-width:480px){ .card-name{font-size:20px;} .marca-nombre{font-size:22px;} .tabla th,.tabla td{padding:8px;} }
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="site-label">SinVerso · Tecnología</div>
+  <h1>Aspiradoras Inteligentes</h1>
+  <p class="subtitle">El robot que limpia mientras vos hacés otra cosa. <strong>O mientras dormís. O mientras ves Netflix. La idea es esa.</strong></p>
+  <div class="price-note">💲 Precios en USD orientativos · Varían según tipo de cambio y mercado local</div>
+</header>
+
+
+<div class="error-caro"><strong>🤖 El error más caro</strong>Comprar el robot más barato sin LiDAR en una casa con muebles oscuros, alfombras de flecos o escalones. Los robots sin LiDAR navegan por rebote y chocan, se pierden y atascán. En una casa con obstáculos complejos, el robot barato es una fuente de frustración.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('quees',this)">🤖 ¿Cómo funciona?</div>
+  <div class="tab" onclick="goTab('tecnologia',this)">🧭 Tecnología</div>
+  <div class="tab" onclick="goTab('marcas',this)">🏆 Las marcas</div>
+  <div class="tab" onclick="goTab('tipos',this)">🧹 Tipos</div>
+  <div class="tab" onclick="goTab('perfil',this)">🧑 ¿Cuál es para vos?</div>
+  <div class="tab" onclick="goTab('checklist',this)">🛒 Antes de comprar</div>
+</div>
+
+<main>
+
+<!-- ══ CÓMO FUNCIONA ══ -->
+<div class="section active" id="quees">
+  <div class="sec-title">¿Cómo funciona un robot aspirador?</div>
+  <div class="sec-sub">Un disco que rueda solo por tu casa y aspira el polvo. <em>Suena simple. La tecnología detrás no lo es tanto.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#34d399">
+      <div class="card-head"><div class="card-name">La idea básica</div><span class="badge b-ok">Simple y genial</span></div>
+      <div class="card-body">
+        Un robot aspirador es básicamente una aspiradora autónoma con forma de disco. Tiene sensores para no chocarse, un motor para aspirar, cepillos para barrer hacia la entrada y una batería que lo devuelve solo a la base cuando termina o se queda sin carga.
+        <br><br>
+        <strong>Lo que hace bien:</strong> mantener el piso limpio de polvo, pelo, migas y suciedad del día a día con cero esfuerzo de tu parte.<br>
+        <strong>Lo que no hace:</strong> reemplazar una aspiradora manual completa. Los rincones, debajo de los muebles bajos y la limpieza profunda ocasional siguen necesitando intervención humana.
+        <br><em>— "Un robot aspirador no limpia tu casa. Mantiene limpia la casa que ya limpiaste. La diferencia es importante."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">¿Vale la pena?</div><span class="badge b-high">La pregunta honesta</span></div>
+      <div class="card-body">
+        Sí, para el que tiene:
+        <br><br>
+        <strong>Mascotas</strong> → El pelo de perros y gatos es implacable. Un robot aspirando todos los días hace una diferencia brutal.<br>
+        <strong>Chicos pequeños</strong> → Migas, polvo, lo que cae. El robot después de cada comida es oro.<br>
+        <strong>Poco tiempo</strong> → Programarlo para que aspire mientras trabajás o salís es libertad real.<br>
+        <strong>Piso liso</strong> → Madera, porcelanato, cerámico. En estos pisos el robot da el máximo.
+        <br><br>
+        <strong>Cuándo no vale tanto:</strong> Casa con muchas alfombras gruesas, muchos muebles bajos, desniveles o escaleras.
+        <br><em>— "Si tenés un golden retriever, el robot aspirador no es un lujo. Es supervivencia."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Robot aspirador vs aspiradora tradicional</div><span class="badge b-top">No es una competencia</span></div>
+      <div class="card-body">
+        No se reemplazan, se complementan:
+        <br><br>
+        <strong>Robot:</strong> limpieza diaria automática, mantenimiento, pelo de mascotas.<br>
+        <strong>Aspiradora manual:</strong> limpieza profunda semanal o quincenal, alfombras, sofás, rincones difíciles.
+        <br><br>
+        El robot hace el trabajo sucio todos los días para que cuando usés la aspiradora manual, ya no haya tanta suciedad acumulada.
+        <br><em>— "Con robot aspirador, la limpieza manual que hacías 2 veces por semana la hacés una vez cada 10 días. Ese es el beneficio real."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TECNOLOGÍA ══ -->
+<div class="section" id="tecnologia">
+  <div class="sec-title">La tecnología por dentro</div>
+  <div class="sec-sub">Lo que diferencia un robot básico de uno inteligente de verdad. <em>Acá está la diferencia entre USD 100 y USD 500.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#34d399">
+      <div class="card-head"><div class="card-name">Navegación: el cerebro del robot</div><span class="badge b-ok">Lo más importante</span></div>
+      <div class="card-body">
+        Cómo el robot "ve" tu casa y decide por dónde ir. La diferencia es enorme:
+        <br><br>
+        <strong>Navegación aleatoria (bump and run)</strong> → Va para adelante, choca, gira al azar. Los más baratos. Eventualmente cubre toda la superficie pero de forma ineficiente. Tarda mucho y puede perderse.<br><br>
+        <strong>Navegación sistemática con LiDAR</strong> → <span class="tt" data-tip="LiDAR = Light Detection and Ranging. Un láser giratorio que mide distancias en todas direcciones y construye un mapa del ambiente en tiempo real. El mismo sistema que usan los autos autónomos, en versión miniatura. Permite limpiar en líneas ordenadas y recordar el mapa para limpiezas futuras.">Láser que mapea la casa</span> y limpia en líneas ordenadas como si cortara el pasto. Mucho más eficiente. Los modelos medios y altos.<br><br>
+        <strong>Navegación con cámara + IA</strong> → Reconoce objetos (cables, zapatos, heces de mascotas) y los esquiva. Los más avanzados.
+        <br><em>— "El de navegación aleatoria es como una cucaracha con aspiradora. El de LiDAR es un profesional con plano de la casa."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">Potencia de succión: Pascales (Pa)</div><span class="badge b-mid">La fuerza</span></div>
+      <div class="card-body">
+        Los <span class="tt" data-tip="Pascal (Pa) = unidad de presión. En aspiradoras mide la fuerza de succión. Más Pa = aspira cosas más pesadas o incrustadas. Para pelo de mascotas en alfombras necesitás más potencia que para polvo en piso liso.">Pascales</span> miden la fuerza de succión:
+        <br><br>
+        <strong>1.000–2.000 Pa</strong> → Básico. Para polvo y migas en piso liso.<br>
+        <strong>2.000–4.000 Pa</strong> → Bueno. Para pelo de mascotas y alfombras finas.<br>
+        <strong>4.000–8.000 Pa</strong> → Potente. Alfombras medianas, suciedad persistente.<br>
+        <strong>10.000+ Pa</strong> → Los top. Para alfombras gruesas y limpieza profunda.<br>
+        <br>
+        <strong>Importante:</strong> más Pa consume más batería. Los robots ajustan la potencia según la superficie automáticamente.
+        <br><em>— "Para pelo de perro en alfombra necesitás al menos 3.000 Pa. Para polvo en porcelanato, 2.000 Pa es más que suficiente."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">Fregado (mop): el extra que vale</div><span class="badge b-high">2 en 1</span></div>
+      <div class="card-body">
+        Los modelos más modernos además de aspirar, friegan el piso con un paño húmedo. Algunos básicos simplemente arrastran el trapo mojado. Los avanzados tienen sistemas más sofisticados:
+        <br><br>
+        <strong>Trapo estático</strong> → Solo arrastra el paño. Para quitar polvo fino y manchas leves.<br>
+        <strong>Vibración sónica</strong> → El paño vibra para fregar mejor. Quita manchas más persistentes.<br>
+        <strong>Rotación del paño</strong> → El paño gira sobre el piso como si fregara manualmente. El más efectivo.<br>
+        <strong>Levantamiento automático del paño</strong> → Detecta alfombras y levanta el paño para no mojarlas.
+        <br><em>— "El levantamiento automático del paño es la función más práctica si tenés mezcla de pisos y alfombras."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Base de vaciado automático</div><span class="badge b-ok">El upgrade más cómodo</span></div>
+      <div class="card-body">
+        El robot termina de limpiar, vuelve a la base y la base le <strong>succiona el depósito</strong> y almacena el polvo en una bolsa que dura semanas. Sin que tengas que vaciar el robot después de cada limpieza.
+        <br><br>
+        <strong>Con base de vaciado:</strong> vaciás la bolsa grande cada 2–4 semanas.<br>
+        <strong>Sin base:</strong> vaciás el depósito del robot después de cada uso (o cada 2–3 usos).
+        <br><br>
+        Las bases más completas también tienen tanque de agua limpia y sucia para el fregado automático.
+        <br><em>— "La base de vaciado automático es el verdadero nivel de 'cero intervención'. Sin ella, el robot todavía necesita atención frecuente."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Con base vaciado <span>+USD 100–200 al precio base</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Reconocimiento de obstáculos con IA</div><span class="badge b-warn">El que evita sorpresas</span></div>
+      <div class="card-body">
+        Los robots top tienen cámaras y IA que reconocen objetos específicos y los evitan:
+        <br><br>
+        <strong>Cables</strong> → Los robots sin IA se enredan en cables constantemente. Con IA los detectan y rodean.<br>
+        <strong>Zapatos y ropa en el piso</strong> → Los detecta y esquiva.<br>
+        <strong>Heces de mascotas</strong> → El caso más delicado. Los robots sin reconocimiento de heces pueden distribuirlas por toda la casa. Con IA las detectan y evitan.<br>
+        <strong>Juguetes chicos</strong> → Los detecta para no aspirarlos.
+        <br><em>— "El robot que no reconoce heces de mascota y limpia de noche es una ruleta rusa. Preguntale a quien lo vivió."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LAS MARCAS ══ -->
+<div class="section" id="marcas">
+  <div class="sec-title">Las marcas del mercado</div>
+  <div class="sec-sub">Quién domina el mercado y qué ofrece cada uno. <em>Spoiler: los chinos ganaron esta batalla.</em></div>
+
+  <!-- ROOMBA -->
+  <div class="marca-card" style="--mc:#e63946;background:linear-gradient(135deg,rgba(230,57,70,.1),transparent)">
+    <div class="marca-header">
+      <div class="marca-logo">🔴</div>
+      <div>
+        <div class="marca-nombre">iRobot Roomba</div>
+        <div class="marca-sub">El pionero y la marca más conocida</div>
+      </div>
+    </div>
+    <div class="marca-slogan">"El que popularizó los robots aspiradores. Hoy le cuesta mantener el liderazgo."</div>
+    <div class="marca-body">
+      iRobot y su Roomba son los que pusieron el robot aspirador en el mapa. Llevan décadas en el mercado y tienen los mejores sistemas de limpieza de alfombras. El sistema <strong>Dirt Detect</strong> identifica zonas más sucias y las limpia más.
+      <br><br>
+      <strong>Combo i y j series</strong> → La gama alta actual. LiDAR, reconocimiento de objetos, base de vaciado.<br>
+      <strong>Braava Jet</strong> → El robot fregador puro de iRobot. Para pisos duros.<br>
+      <br>
+      <strong>Lo que tiene de menos:</strong> precio alto comparado con la competencia china que ofrece funciones similares por menos dinero. iRobot fue comprado por Amazon en 2023.
+    </div>
+    <div class="marca-specs">
+      <div class="marca-spec">Roomba i3 <span>USD 250–300</span></div>
+      <div class="marca-spec">Roomba j7+ <span>USD 500–600</span></div>
+      <div class="marca-spec">Especialidad <span>alfombras</span></div>
+    </div>
+  </div>
+
+  <!-- ROBOROCK -->
+  <div class="marca-card" style="--mc:#e63946;background:linear-gradient(135deg,rgba(230,57,70,.08),transparent)">
+    <div class="marca-header">
+      <div class="marca-logo">🤖</div>
+      <div>
+        <div class="marca-nombre">Roborock</div>
+        <div class="marca-sub">El favorito de los que saben</div>
+      </div>
+    </div>
+    <div class="marca-slogan">"El que hace todo bien. La referencia real del mercado hoy."</div>
+    <div class="marca-body">
+      Roborock empezó como una división de Xiaomi y hoy es marca propia. Es el robot aspirador más recomendado por los que investigan antes de comprar. Excelente LiDAR, aspirado y fregado combinados, app muy completa con mapas editables.
+      <br><br>
+      <strong>Roborock Q5+</strong> → Gama media-alta. LiDAR, 5.500 Pa, base de vaciado. Excelente relación precio/calidad.<br>
+      <strong>Roborock S8 / S8 Pro</strong> → Gama alta. Doble cepillo principal, 6.000 Pa, fregado con rodillo giratorio, base completa con tanques de agua.<br>
+      <strong>Roborock S7 MaxV Ultra</strong> → El top de la línea. Todo automático: aspira, friega, vacía y se limpia solo.
+      <br><em>— "Si preguntás en cualquier foro cuál comprar, el Roborock aparece en el 60% de las respuestas."</em>
+    </div>
+    <div class="marca-specs">
+      <div class="marca-spec">Q5+ <span>USD 350–400</span></div>
+      <div class="marca-spec">S8 Pro Ultra <span>USD 700–900</span></div>
+      <div class="marca-spec">App <span>de las mejores</span></div>
+    </div>
+  </div>
+
+  <!-- DREAME -->
+  <div class="marca-card" style="--mc:#3b82f6;background:linear-gradient(135deg,rgba(59,130,246,.1),transparent)">
+    <div class="marca-header">
+      <div class="marca-logo">🔵</div>
+      <div>
+        <div class="marca-nombre">Dreame</div>
+        <div class="marca-sub">El que compite de igual a igual con Roborock</div>
+      </div>
+    </div>
+    <div class="marca-slogan">"El rival silencioso que muchos no conocen y deberían."</div>
+    <div class="marca-body">
+      Dreame es otra marca china que en los últimos años se convirtió en el rival más directo de Roborock. Sus modelos tienen potencias de succión altísimas, excelente fregado y diseño moderno.
+      <br><br>
+      <strong>Dreame L10s Ultra</strong> → Uno de los mejores del mercado. 5.300 Pa, fregado con paños giratorios que se levantan en alfombras, base completa con autolimpieza.<br>
+      <strong>Dreame D10 Plus</strong> → Gama media. LiDAR, buena succión, base de vaciado. Muy competitivo en precio.
+      <br><em>— "En potencia de succión bruta, Dreame suele superar a Roborock en el mismo rango de precio."</em>
+    </div>
+    <div class="marca-specs">
+      <div class="marca-spec">D10 Plus <span>USD 300–350</span></div>
+      <div class="marca-spec">L10s Ultra <span>USD 600–800</span></div>
+      <div class="marca-spec">Succión <span>entre las más altas</span></div>
+    </div>
+  </div>
+
+  <!-- XIAOMI -->
+  <div class="marca-card" style="--mc:#ff6900;background:linear-gradient(135deg,rgba(255,105,0,.1),transparent)">
+    <div class="marca-header">
+      <div class="marca-logo">🟠</div>
+      <div>
+        <div class="marca-nombre">Xiaomi Robot Vacuum</div>
+        <div class="marca-sub">La entrada más inteligente al mercado</div>
+      </div>
+    </div>
+    <div class="marca-slogan">"Cuando querés empezar sin gastarte todo el sueldo."</div>
+    <div class="marca-body">
+      Xiaomi tiene robots de gama de entrada y media que ofrecen buena relación precio/calidad para quienes quieren entrar al mundo de los robots aspiradores sin gastar demasiado.
+      <br><br>
+      <strong>Xiaomi Robot Vacuum E10</strong> → El más básico. Sin LiDAR, navegación sistemática con giroscopio, 4.000 Pa. Para pisos lisos y casas ordenadas.<br>
+      <strong>Xiaomi Robot Vacuum X10+</strong> → LiDAR, fregado, base de vaciado. Un salto importante en calidad.
+      <br><em>— "El Xiaomi E10 es el 'Fire HD 8' de los robots aspiradores. Hace el trabajo básico sin drama a un precio razonable."</em>
+    </div>
+    <div class="marca-specs">
+      <div class="marca-spec">E10 <span>USD 150–200</span></div>
+      <div class="marca-spec">X10+ <span>USD 400–500</span></div>
+      <div class="marca-spec">Ecosistema <span>Mi Home App</span></div>
+    </div>
+  </div>
+
+  <!-- ECOVACS -->
+  <div class="marca-card" style="--mc:#34d399;background:linear-gradient(135deg,rgba(52,211,153,.1),transparent)">
+    <div class="marca-header">
+      <div class="marca-logo">🟢</div>
+      <div>
+        <div class="marca-nombre">Ecovacs Deebot</div>
+        <div class="marca-sub">El innovador en funciones</div>
+      </div>
+    </div>
+    <div class="marca-slogan">"El que siempre tiene alguna función que nadie más tiene todavía."</div>
+    <div class="marca-body">
+      Ecovacs es conocida por ser innovadora en features: fue de las primeras en tener brazo para limpiar rincones, reconocimiento de objetos avanzado y cámara para vigilancia del hogar integrada.
+      <br><br>
+      <strong>Deebot T20 Omni</strong> → Base completa con lavado y secado de paños automático. Muy completo.<br>
+      <strong>Deebot X2 Omni</strong> → Diseño cuadrado para mejor acceso a rincones. Alta succión.
+      <br><em>— "Ecovacs suele lanzar funciones innovadoras que Roborock incorpora 1–2 años después."</em>
+    </div>
+    <div class="marca-specs">
+      <div class="marca-spec">T20 Omni <span>USD 500–600</span></div>
+      <div class="marca-spec">X2 Omni <span>USD 700–900</span></div>
+      <div class="marca-spec">Innovación <span>líder en features</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TIPOS ══ -->
+<div class="section" id="tipos">
+  <div class="sec-title">Tipos y funciones</div>
+  <div class="sec-sub">No todos los robots son iguales. <em>El que solo aspira vs el que aspira, friega, se vacía y se limpia solo.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#34d399">
+      <div class="card-head"><div class="card-name">Solo aspirado</div><span class="badge b-ok">El básico</span></div>
+      <div class="card-body">
+        Aspira el polvo, pelo y suciedad del piso. Sin fregar. Para la mayoría de los hogares con piso liso o alfombras es suficiente para el mantenimiento diario.
+        <br><br>
+        <strong>Ideal para:</strong> casas con mascotas, mucho polvo, mantenimiento diario de pisos duros o alfombras.<br>
+        <strong>Precio:</strong> desde USD 100 hasta USD 400+ según tecnología de navegación y succión.
+        <br><em>— "Para el 60% de los usuarios, un robot de solo aspirado con LiDAR de gama media es todo lo que necesitan."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">Aspirado + fregado (2 en 1)</div><span class="badge b-high">El más popular hoy</span></div>
+      <div class="card-body">
+        Aspira y friega en el mismo pasaje. La mayoría de los modelos modernos traen esta función. La calidad del fregado varía mucho:
+        <br><br>
+        <strong>Trapo fijo</strong> → Arrastra el paño húmedo. Quita el polvo fino pero no manchas reales.<br>
+        <strong>Vibración</strong> → Mejor que el trapo fijo. Quita algo más.<br>
+        <strong>Rotación</strong> → El más efectivo. Friega como una persona con paño circular.
+        <br><br>
+        <strong>Los modelos con levantamiento de paño</strong> son importantes si tenés alfombras: detectan la alfombra y levantan el paño para no mojarla.
+        <br><em>— "Un 2 en 1 con fregado de rotación y levantamiento de paño hace el 80% del trabajo de trapear manualmente."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Base de vaciado automático</div><span class="badge b-top">El upgrade de comodidad</span></div>
+      <div class="card-body">
+        Cuando el robot termina, se acopla a la base que succiona todo el polvo del depósito del robot y lo guarda en una bolsa que dura semanas.
+        <br><br>
+        <strong>Base solo vaciado</strong> → La más básica. Solo vacía el depósito.<br>
+        <strong>Base con agua limpia y sucia</strong> → Lava los paños del robot automáticamente. Básica para los 2 en 1.<br>
+        <strong>Base todo en uno (Ultra/Omni)</strong> → Vacía el polvo, lava los paños, llena el tanque de agua limpia y seca los paños con calor. Cero intervención humana por semanas.
+        <br><em>— "La base Ultra/Omni es el sueño del vago: el robot hace todo solo. El precio también es de ensueño."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Base básica <span>+USD 50–100</span></div>
+        <div class="chip">Base Ultra/Omni <span>+USD 200–400</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">Control y programación</div><span class="badge b-mid">La inteligencia</span></div>
+      <div class="card-body">
+        Los robots modernos se controlan desde el celular con apps muy completas:
+        <br><br>
+        • <strong>Mapas de la casa</strong> editables: podés nombrar habitaciones y decirle "limpiá solo la cocina".<br>
+        • <strong>Zonas prohibidas virtuales</strong>: marcás en la app dónde no querés que entre el robot.<br>
+        • <strong>Horarios</strong>: programás que limpie todos los días a las 10am.<br>
+        • <strong>Modos de succión por zona</strong>: más potente en alfombras, más suave en madera.<br>
+        • <strong>Integración con Google Home / Alexa</strong>: "Alexa, decile al robot que limpie la cocina".
+        <br><em>— "Decirle por voz 'limpiá el living' mientras desayunás es el nivel de comodidad que uno no sabe que necesita hasta que lo tiene."</em>
+      </div>
+    </div>
+  </div>
+
+  <table class="tabla" style="margin-top:20px">
+    <thead><tr><th>Tipo</th><th>Para quién</th><th>Precio aprox</th></tr></thead>
+    <tbody>
+      <tr><td>Solo aspirado básico</td><td>Casas ordenadas, sin mascotas</td><td>USD 100–200</td></tr>
+      <tr><td>Aspirado LiDAR gama media</td><td>La mayoría de los hogares</td><td>USD 200–350</td></tr>
+      <tr class="hl"><td>Aspirado + fregado LiDAR</td><td>⭐ El más recomendado</td><td>USD 300–500</td></tr>
+      <tr><td>Con base de vaciado</td><td>Comodidad total</td><td>USD 400–600</td></tr>
+      <tr><td>Base Ultra/Omni completa</td><td>Cero intervención</td><td>USD 600–1000+</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══ PERFIL ══ -->
+<div class="section" id="perfil">
+  <div class="sec-title">¿Cuál es para vos?</div>
+  <div class="sec-sub">Sin rodeos. <em>La recomendación directa según tu casa y tus necesidades.</em></div>
+
+  <div class="perfiles">
+    <div class="perfil">
+      <div class="perfil-ico">💰</div>
+      <div>
+        <div class="perfil-title">Presupuesto ajustado — primer robot</div>
+        <div class="perfil-desc">Querés probar si te cambia la vida sin gastar demasiado.</div>
+        <div class="perfil-rec">→ Xiaomi Robot Vacuum E10 (USD 150–200). Hace el trabajo básico. Si después querés más, lo vendés y subís de categoría.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">🐾</div>
+      <div>
+        <div class="perfil-title">Tenés mascotas</div>
+        <div class="perfil-desc">Pelo por todos lados, todos los días. Necesitás potencia y que detecte obstáculos.</div>
+        <div class="perfil-rec">→ Roborock Q5+ o Dreame D10 Plus (USD 300–400). Alta succión, LiDAR, reconocimiento de cables. Si tenés mascotas que hacen sus necesidades adentro, buscá uno con reconocimiento de heces.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">🏠</div>
+      <div>
+        <div class="perfil-title">Casa mixta: piso y alfombras</div>
+        <div class="perfil-desc">Tenés pisos duros en algunas habitaciones y alfombras en otras.</div>
+        <div class="perfil-rec">→ Cualquier modelo con levantamiento automático del paño. Roborock S8 o Dreame L10s. Sin esta función, las alfombras quedan mojadas.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">🦥</div>
+      <div>
+        <div class="perfil-title">El máximo de comodidad</div>
+        <div class="perfil-desc">No querés intervenir en nada. Que lo haga todo solo por semanas.</div>
+        <div class="perfil-rec">→ Roborock S8 Pro Ultra o Ecovacs Deebot T20 Omni (USD 700–900). Base que vacía, lava paños, recarga el agua y seca. Literalmente cero intervención.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">🏡</div>
+      <div>
+        <div class="perfil-title">Casa grande o con muchas habitaciones</div>
+        <div class="perfil-desc">Más de 100m², muchas habitaciones, necesitás batería larga y mapa completo.</div>
+        <div class="perfil-rec">→ Modelos con LiDAR multi-piso, batería de 5.000+ mAh y base de vaciado. Roborock S8 o superior. Para casas muy grandes puede necesitar más de un ciclo de carga.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">👶</div>
+      <div>
+        <div class="perfil-title">Chicos chicos en casa</div>
+        <div class="perfil-desc">Migas, suciedad, juguetes en el piso. Necesitás que sea inteligente para esquivar todo.</div>
+        <div class="perfil-rec">→ Roborock S8 o Dreame L10s con reconocimiento de objetos. Que detecte juguetes, ropa y cables antes de aspirarlos o enredarse.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip tip-blue">
+    <strong>💡 El truco del horario:</strong> Programá el robot para que limpie cuando no estés en casa o cuando dormís. El ruido de algunos puede molestar. La mayoría rondan los 65–70 dB, similar a una conversación normal. Con la puerta cerrada en el cuarto se escucha pero no molesta.
+  </div>
+</div>
+
+<!-- ══ CHECKLIST ══ -->
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de Comprar</div>
+  <div class="sec-sub">Lo que tenés que definir antes de pagar. <em>Y cómo preparar la casa para que el robot funcione bien desde el día uno.</em></div>
+
+  <div class="checks">
+    <div class="check">
+      <div class="check-ico">📐</div>
+      <div><div class="check-title">Medí qué tan libres están los pisos</div>
+      <div class="check-desc">El robot necesita al menos <strong>10–15cm de altura</strong> para pasar bajo los muebles. Si tenés muchos muebles bajos o cosas en el piso, el robot va a tener problemas. <em>— La primera semana es de "entrenamiento": aprendés qué mover y qué dejar.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🔌</div>
+      <div><div class="check-title">Recogé los cables del piso</div>
+      <div class="check-desc">Los cables son el peor enemigo del robot. <strong>Organizá los cables antes de que llegue el robot</strong>, o comprá uno con reconocimiento de cables. Sin reconocimiento, el robot los va a pisar, enredar y posiblemente dañar. <em>— Gestión de cables + robot aspirador es la inversión más inteligente que podés hacer.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🐾</div>
+      <div><div class="check-title">Si tenés mascotas: reconocimiento de obstáculos</div>
+      <div class="check-desc">Si tu mascota hace sus necesidades adentro, <strong>es obligatorio tener reconocimiento de heces</strong>. Sin eso, el robot puede distribuir los residuos por toda la casa. Pasó. Pasa. Buscá reviews que confirmen que el modelo detecta heces correctamente.</div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🏠</div>
+      <div><div class="check-title">¿Dónde va la base?</div>
+      <div class="check-desc">La base necesita estar cerca de un enchufe y con al menos <strong>50cm libres a cada lado</strong> para que el robot pueda acoplarse bien. Idealmente contra una pared y en zona de fácil acceso. <em>— Una base mal ubicada hace que el robot no llegue o tenga problemas para acoplarse.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">📶</div>
+      <div><div class="check-title">WiFi que llegue a todos los ambientes</div>
+      <div class="check-desc">El robot se controla por WiFi y necesita señal en toda la casa para funcionar desde la app. <strong>Si el WiFi llega débil a alguna habitación, el robot puede perder conexión</strong> y quedarse colgado ahí. <em>— Mejorá el WiFi antes de comprar el robot si tenés zonas sin señal.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🔧</div>
+      <div><div class="check-title">Repuestos disponibles</div>
+      <div class="check-desc">Los robots necesitan mantenimiento: cepillos, filtros y paños se reemplazan cada 3–6 meses. <strong>Verificá que los repuestos del modelo que elegís estén disponibles en Argentina.</strong> <em>— Comprar un robot cuyos repuestos no se consiguen localmente es un problema en el mediano plazo.</em></div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:28px">
+    <div class="pgrid">
+      <div class="pcard rec">
+        <div class="ptag">Marcas confiables</div>
+        <div class="pmarca">Roborock · Dreame · Ecovacs · iRobot</div>
+        <div class="pdesc"><strong>Lo que ofrecen:</strong><br>• Apps con actualizaciones regulares<br>• Repuestos disponibles<br>• Mapas precisos y editables<br>• Garantía real<br>• Comunidad activa de usuarios<br>• Soporte técnico</div>
+      </div>
+      <div class="pcard alt">
+        <div class="ptag">Evitá</div>
+        <div class="pmarca">Genéricos sin nombre</div>
+        <div class="pdesc"><strong>Los riesgos:</strong><br>• Navegación aleatoria disfrazada de "LiDAR"<br>• App abandonada en meses<br>• Sin repuestos disponibles<br>• Potencia real muy por debajo<br>• Mapas imprecisos o inexistentes<br>• Se pierde en la casa</div>
+      </div>
+    </div>
+
+    <div class="tip" style="margin-top:16px">
+      <strong>💡 La recomendación más honesta:</strong> Para la mayoría de los hogares argentinos, el <strong>Roborock Q5+ o el Dreame D10 Plus (USD 300–400)</strong> son el punto dulce. LiDAR real, buena succión, fregado, base de vaciado. Todo lo que necesitás sin pagar demás por funciones que no vas a usar. Si el presupuesto es el factor, el <strong>Xiaomi E10 (USD 150)</strong> es la entrada más inteligente al mercado.
+    </div>
+
+    <div class="cards" style="margin-top:20px">
+      <div class="card" style="--ca:#f87171">
+        <div class="card-head"><div class="card-name">Señales de alarma</div><span class="badge b-warn">Al comprar</span></div>
+        <div class="card-body">
+          🚩 <strong>"LiDAR" en robot de USD 50</strong> → probablemente sea un sensor infrarrojo básico disfrazado.<br>
+          🚩 <strong>"10.000 Pa" sin datos de uso real</strong> → la potencia máxima es para marketing, la constante es lo que importa.<br>
+          🚩 <strong>Sin app propia o app genérica</strong> → en 6 meses deja de funcionar.<br>
+          🚩 <strong>"Friega el piso" con trapo estático</strong> → solo moja el polvo, no limpia manchas reales.<br>
+          🚩 <strong>Sin repuestos disponibles</strong> → en 6 meses los cepillos se desgastan y no los conseguís.<br>
+          🚩 <strong>Batería de menos de 2.500 mAh</strong> → no termina una limpieza de casa mediana con una sola carga.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<div id="ttBubble"></div>
+
+<script>
+  function goTab(id, el) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  const bubble = document.getElementById('ttBubble');
+  let timer;
+  document.querySelectorAll('.tt').forEach(el => {
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      bubble.textContent = this.dataset.tip;
+      bubble.classList.add('on');
+      const r = this.getBoundingClientRect();
+      let top = r.bottom + 10, left = r.left;
+      if (left + 280 > window.innerWidth) left = window.innerWidth - 285;
+      if (top + 140 > window.innerHeight) top = r.top - 145;
+      bubble.style.top = top + 'px';
+      bubble.style.left = left + 'px';
+      clearTimeout(timer);
+      timer = setTimeout(() => bubble.classList.remove('on'), 5000);
+    });
+  });
+  document.addEventListener('click', () => bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Aspiradoras: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="grandes-electrodomesticos.html" class="rel-link">🧊 Electrodomésticos</a><a href="smart-home.html" class="rel-link">🏡 Smart Home</a></div>
+</div>
+</body>
+</html>
