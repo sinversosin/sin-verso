@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Celulares</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080810; --surface: #10101c; --card: #13131f;
+    --border: #20203a; --text: #eeeef5; --muted: #9494b8; --soft: #8888aa;
+    --accent: #ff6b35; --accent2: #ff4500;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-size:16px; overflow-x:hidden; }
+
+  /* HEADER */
+  header { background:linear-gradient(135deg,#080810,#180a05 50%,#080810); border-bottom:1px solid var(--border); padding:44px 20px 36px; text-align:center; position:relative; overflow:hidden; }
+  header::before { content:''; position:absolute; top:-80px; left:50%; transform:translateX(-50%); width:500px; height:260px; background:radial-gradient(ellipse,rgba(255,107,53,.12),transparent 70%); pointer-events:none; }
+  .site-label { font-size:11px; font-weight:700; letter-spacing:5px; color:var(--accent); text-transform:uppercase; opacity:.7; margin-bottom:10px; }
+  header h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(46px,9vw,88px); letter-spacing:2px; line-height:1; background:linear-gradient(135deg,#fff 30%,var(--accent) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .subtitle { margin-top:10px; color:var(--muted); font-size:15px; font-style:italic; }
+  .subtitle strong { color:var(--accent); font-style:normal; }
+
+  /* TABS */
+  .tabs { display:flex; gap:8px; overflow-x:auto; padding:20px 16px 0; justify-content:flex-start; flex-wrap:nowrap; scrollbar-width:none; }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab { background:var(--surface); border:1px solid var(--border); border-radius:30px; padding:10px 18px; font-size:13px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; white-space:nowrap; flex-shrink:0; }
+  .tab:hover { border-color:var(--accent); color:var(--accent); }
+  .tab.active { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:700; }
+
+  /* MAIN */
+  main { padding:28px 16px 80px; max-width:640px; margin:0 auto; }
+  .section { display:none; }
+  .section.active { display:block; }
+  .sec-title { font-family:'Bebas Neue',sans-serif; font-size:34px; letter-spacing:1px; color:var(--accent); margin-bottom:4px; }
+  .sec-sub { color:var(--muted); font-size:15px; margin-bottom:24px; line-height:1.6; }
+  .sec-sub em { color:var(--text); font-style:italic; }
+
+  /* CARDS */
+  .cards { display:flex; flex-direction:column; gap:14px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:18px; padding:20px 20px 20px 24px; position:relative; overflow:hidden; transition:border-color .2s,transform .2s; }
+  .card:hover { border-color:rgba(255,107,53,.4); transform:translateY(-2px); }
+  .card::before { content:''; position:absolute; top:0; left:0; width:5px; height:100%; background:var(--ca,var(--accent)); border-radius:18px 0 0 18px; }
+  .card-head { display:flex; align-items:center; gap:12px; margin-bottom:8px; flex-wrap:wrap; }
+  .card-name { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:1px; color:var(--text); line-height:1; }
+  .badge { font-size:10px; font-weight:700; letter-spacing:1.5px; padding:3px 10px; border-radius:20px; text-transform:uppercase; }
+  .b-ok   { background:rgba(77,187,122,.15);  color:#4dbb7a;      border:1px solid rgba(77,187,122,.3); }
+  .b-mid  { background:rgba(255,107,53,.12);  color:var(--accent); border:1px solid rgba(255,107,53,.3); }
+  .b-high { background:rgba(0,212,255,.12);   color:#00d4ff;       border:1px solid rgba(0,212,255,.3); }
+  .b-top  { background:rgba(255,215,0,.12);   color:#ffd700;       border:1px solid rgba(255,215,0,.3); }
+  .b-no   { background:rgba(120,120,120,.15); color:#888;          border:1px solid rgba(120,120,120,.3); }
+  .b-warn { background:rgba(248,113,113,.15); color:#f87171;       border:1px solid rgba(248,113,113,.3); }
+  .card-body { font-size:14px; color:var(--muted); line-height:1.7; }
+  .card-body strong { color:var(--text); font-weight:600; }
+  .card-body em { color:#8899bb; font-size:13px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .chip { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:4px 10px; font-size:12px; color:var(--muted); }
+  .chip span { color:var(--text); font-weight:600; }
+
+  /* TOOLTIP */
+  .tt { border-bottom:1px dashed var(--accent); color:var(--accent); cursor:pointer; font-weight:600; display:inline; }
+  #ttBubble { display:none; position:fixed; background:#1c1008; border:1px solid var(--accent); border-radius:14px; padding:13px 16px; font-size:14px; color:var(--text); line-height:1.6; max-width:270px; z-index:9999; box-shadow:0 8px 40px rgba(0,0,0,.7); pointer-events:none; }
+  #ttBubble.on { display:block; }
+  #ttBubble::before { content:'💡 '; }
+
+  /* TIP */
+  .tip { background:rgba(255,107,53,.06); border:1px solid rgba(255,107,53,.2); border-radius:14px; padding:16px 18px; margin-top:20px; font-size:14px; line-height:1.65; color:#e8b49a; }
+  .tip strong { color:var(--accent); }
+  .tip-green { background:rgba(77,187,122,.06); border:1px solid rgba(77,187,122,.2); color:#a0d8b4; }
+  .tip-green strong { color:#4dbb7a; }
+  .tip-blue { background:rgba(0,212,255,.06); border:1px solid rgba(0,212,255,.2); color:#a0d8ea; }
+  .tip-blue strong { color:#00d4ff; }
+
+  /* TABLA */
+  .tabla { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; }
+  .tabla th { background:var(--surface); color:var(--accent); font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:1px; padding:10px 12px; text-align:left; border-bottom:2px solid var(--border); }
+  .tabla td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--muted); vertical-align:top; line-height:1.5; }
+  .tabla tr:hover td { background:rgba(255,255,255,.02); }
+  .tabla td:first-child { color:var(--text); font-weight:700; }
+  .tabla .hl td { background:rgba(255,107,53,.05); }
+  .tabla .hl td:first-child { color:var(--accent); }
+  .ok::before  { content:'✓ '; color:#4dbb7a; }
+  .mal::before { content:'✗ '; color:#f87171; }
+  .meh::before { content:'~ '; color:#ffd700; }
+
+  /* GAMA VISUAL */
+  .gama-grid { display:flex; flex-direction:column; gap:10px; margin-top:8px; }
+  .gama-row { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px 18px; display:flex; align-items:flex-start; gap:14px; }
+  .gama-icon { font-size:28px; flex-shrink:0; }
+  .gama-title { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--text); margin-bottom:3px; }
+  .gama-precio { font-size:12px; font-weight:700; letter-spacing:1px; padding:2px 8px; border-radius:10px; display:inline-block; margin-bottom:6px; }
+  .gama-desc { font-size:13px; color:var(--muted); line-height:1.5; }
+  .gama-desc strong { color:var(--text); }
+
+  /* CHECKLIST */
+  .checks { display:flex; flex-direction:column; gap:10px; }
+  .check { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:15px 16px; display:flex; gap:13px; align-items:flex-start; transition:border-color .2s; }
+  .check:hover { border-color:rgba(255,107,53,.35); }
+  .check-ico { font-size:22px; flex-shrink:0; }
+  .check-title { font-weight:700; color:var(--text); font-size:14px; margin-bottom:3px; }
+  .check-desc { font-size:13px; color:var(--muted); line-height:1.55; }
+  .check-desc strong { color:var(--text); }
+  .check-desc em { color:#7a9ab0; font-style:italic; font-size:12px; }
+
+  /* PRECIO GRID */
+  .pgrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; }
+  @media(max-width:480px){ .pgrid { grid-template-columns:1fr; } }
+  .pcard { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px; }
+  .pcard.rec { border-color:rgba(255,107,53,.4); background:rgba(255,107,53,.04); }
+  .pcard.alt { border-color:rgba(248,113,113,.3); background:rgba(248,113,113,.03); }
+  .ptag { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:5px; }
+  .pcard.rec .ptag { color:var(--accent); }
+  .pcard.alt .ptag { color:#f87171; }
+  .pmarca { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--text); margin-bottom:5px; }
+  .pdesc { font-size:12px; color:var(--muted); line-height:1.6; }
+  .pdesc strong { color:var(--text); }
+
+  /* ANDROID VS IOS */
+  .versus { display:grid; grid-template-columns:1fr auto 1fr; gap:12px; align-items:center; margin:16px 0; }
+  .vs-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px; }
+  .vs-card.android { border-color:rgba(77,187,122,.3); background:rgba(77,187,122,.04); }
+  .vs-card.ios { border-color:rgba(0,212,255,.3); background:rgba(0,212,255,.04); }
+  .vs-title { font-family:'Bebas Neue',sans-serif; font-size:22px; margin-bottom:8px; }
+  .vs-card.android .vs-title { color:#4dbb7a; }
+  .vs-card.ios .vs-title { color:#00d4ff; }
+  .vs-item { font-size:12px; color:var(--muted); margin-bottom:5px; line-height:1.4; }
+  .vs-item strong { color:var(--text); }
+  .vs-mid { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--muted); text-align:center; }
+  @media(max-width:480px){ .versus { grid-template-columns:1fr; } .vs-mid { display:none; } }
+
+  @media(max-width:480px){ .card-name{font-size:20px;} .tabla th,.tabla td{padding:8px 8px;} }
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="site-label">SinVerso · Tecnología</div>
+  <h1>Celulares</h1>
+  <p class="subtitle">Los megapíxeles mienten. <strong>Nosotros, no.</strong></p>
+  <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;">
+    💲 Precios en USD orientativos · Varían según el tipo de cambio y el mercado local
+  </div>
+</header>
+
+
+<div class="error-caro"><strong>📱 El error más caro</strong>Comprar el modelo más nuevo cuando el de hace 2 años hace exactamente lo mismo para el 95% de los usos. La diferencia entre un flagship de 2022 y uno de 2024 es imperceptible en el uso diario. El de 2022 cuesta la mitad.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('pantalla',this)">📱 Pantalla</div>
+  <div class="tab" onclick="goTab('procesador',this)">⚙️ Procesador</div>
+  <div class="tab" onclick="goTab('camara',this)">📷 Cámara</div>
+  <div class="tab" onclick="goTab('bateria',this)">🔋 Batería</div>
+  <div class="tab" onclick="goTab('android_ios',this)">🤖 Android vs iOS</div>
+  <div class="tab" onclick="goTab('gamas',this)">💰 Gamas y precios</div>
+  <div class="tab" onclick="goTab('checklist',this)">🛒 Antes de comprar</div>
+</div>
+
+<main>
+
+<!-- ══ PANTALLA ══ -->
+<div class="section active" id="pantalla">
+  <div class="sec-title">La Pantalla</div>
+  <div class="sec-sub">Lo que mirás todo el día. <em>Y lo que más diferencia a un celular barato de uno caro.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">LCD vs AMOLED</div><span class="badge b-mid">La diferencia clave</span></div>
+      <div class="card-body">
+        <strong>LCD</strong> → Tiene retroiluminación, como los TV baratos. Colores más naturales y precisos pero negros grises. Consume batería pareja porque la luz siempre está encendida.<br><br>
+        <strong>AMOLED / OLED</strong> → Cada píxel genera su propia luz. Negros perfectos, colores vivos, consume menos con fondos oscuros. El modo oscuro en AMOLED ahorra batería de verdad.
+        <br><em>— "Si usás modo oscuro en un LCD, el fondo se ve gris, no negro. La diferencia se nota al toque."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Gama media-alta <span>→ AMOLED</span></div>
+        <div class="chip">Gama baja <span>→ LCD</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">Hz en celulares</div><span class="badge b-mid">Fluidez</span></div>
+      <div class="card-body">
+        Lo mismo que en los TV pero más notorio porque el celular lo tenés a 20cm de la cara.
+        <br><br>
+        <strong>60Hz</strong> → Estándar básico. Funciona bien.<br>
+        <strong>90Hz</strong> → Ya se nota más fluido al scrollear.<br>
+        <strong>120Hz</strong> → La diferencia es inmediata y brutal. El scroll parece manteca.<br>
+        <strong>144Hz+</strong> → Para gaming. En uso normal ya no se nota la diferencia con 120Hz.
+        <br><br>
+        Ojo: la <span class="tt" data-tip="Tasa de refresco adaptativa = el celular baja los Hz automáticamente cuando la pantalla está quieta (leyendo, mirando foto) y los sube cuando scrolleás. Ahorra batería sin sacrificar fluidez. LTPO es la tecnología que lo permite.">tasa adaptativa (LTPO)</span> es la mejor opción porque ahorra batería ajustando los Hz según lo que hacés.
+        <br><em>— "Probá un 120Hz y después volvé a uno de 60Hz. No vas a poder."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Resolución y tamaño</div><span class="badge b-ok">Cuánto importa</span></div>
+      <div class="card-body">
+        En celulares, la resolución importa menos que en TV porque la pantalla es chica y la tenés cerca. Una pantalla FHD+ (1080p) en un celular de 6.5" se ve perfecta.
+        <br><br>
+        <strong>HD+ (720p)</strong> → Gama baja. Se nota pixelado en texto fino.<br>
+        <strong>FHD+ (1080p)</strong> → El punto dulce. Suficiente para todo.<br>
+        <strong>QHD+ (1440p)</strong> → Solo en flagships. El ojo humano apenas lo distingue de 1080p en pantalla de 6".
+        <br><em>— "Más resolución = más batería gastada. No siempre es un beneficio."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Brillo: los nits</div><span class="badge b-ok">Para el sol</span></div>
+      <div class="card-body">
+        Los <span class="tt" data-tip="Nits = unidad de medida de brillo de pantalla. 1 nit = 1 candela por metro cuadrado. En interiores con 400 nits vas bien. Para usar en el sol directo necesitás mínimo 800 nits. Los flagships llegan a 2000-3000 nits pico para HDR.">nits</span> miden el brillo máximo. Importa cuando usás el celular en el sol.
+        <br><br>
+        <strong>400–600 nits</strong> → Gama baja/media. En el sol directo cuesta leer.<br>
+        <strong>800–1000 nits</strong> → Gama media-alta. Usable en exteriores.<br>
+        <strong>1500+ nits</strong> → Flagship. Perfectamente legible a pleno sol.
+        <br><em>— "Si trabajás afuera o vivís en una ciudad soleada, los nits importan más que los megapíxeles."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROCESADOR ══ -->
+<div class="section" id="procesador">
+  <div class="sec-title">El Procesador</div>
+  <div class="sec-sub">El cerebro del celular. <em>Y donde más te pueden vender humo con números que no dicen nada.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#ff6b35">
+      <div class="card-head"><div class="card-name">¿Qué es el SoC?</div><span class="badge b-mid">La base</span></div>
+      <div class="card-body">
+        <span class="tt" data-tip="SoC = System on a Chip. En un solo chip están el procesador, la GPU (gráficos), el módem 5G, el procesador de imagen para la cámara, el procesador de IA y más. Es la diferencia fundamental entre la industria móvil y las PC donde cada componente es separado.">SoC</span> es todo el procesamiento en un solo chip: CPU, GPU, módem 5G, IA y procesador de cámara. Los principales fabricantes son:
+        <br><br>
+        <strong>Qualcomm Snapdragon</strong> → El más común en Android. Gama desde 4 hasta 8 Elite.<br>
+        <strong>MediaTek Dimensity</strong> → Muy competitivo en gama media. Antes era "el barato", hoy ya no.<br>
+        <strong>Apple A-series</strong> → Solo en iPhones. El más potente del mercado, sin discusión.<br>
+        <strong>Samsung Exynos</strong> → Solo en algunos Galaxy según la región.
+        <br><em>— "Cualcomm 8 Gen 3 vs Apple A17: es como comparar un buen auto europeo con un F1."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">Snapdragon: no todos son iguales</div><span class="badge b-warn">El más confuso</span></div>
+      <div class="card-body">
+        El número importa MUcho. No es lo mismo un Snapdragon 4 que un Snapdragon 8:
+        <br><br>
+        <strong>Snapdragon 4xx</strong> → Gama baja. Para llamadas, redes sociales y poco más.<br>
+        <strong>Snapdragon 6xx</strong> → Gama media baja. Fluido para el día a día.<br>
+        <strong>Snapdragon 7xx</strong> → Gama media alta. Muy buena relación precio/rendimiento.<br>
+        <strong>Snapdragon 8xx</strong> → Flagship. El máximo rendimiento Android.
+        <br><br>
+        Y dentro de cada serie, hay generaciones: el 8 Gen 1 es muy distinto al 8 Gen 3.
+        <br><em>— "Un vendedor que te dice 'tiene Snapdragon' sin decir el número, te está ocultando algo."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">RAM: cuánta necesitás</div><span class="badge b-ok">Sin exagerar</span></div>
+      <div class="card-body">
+        La RAM define cuántas apps podés tener abiertas al mismo tiempo sin que el celular las cierre y tenga que recargarlas.
+        <br><br>
+        <strong>4GB</strong> → Mínimo para Android hoy. Justo y con problemas.<br>
+        <strong>6–8GB</strong> → El punto dulce para uso normal.<br>
+        <strong>12GB</strong> → Multitarea pesada, gaming, edición.<br>
+        <strong>16GB+</strong> → Para el que quiere el número más grande en la caja.
+        <br><br>
+        En iPhone, iOS gestiona la RAM tan bien que un iPhone con 6GB supera a Android con 12GB en fluidez.
+        <br><em>— "Más RAM no siempre es mejor si el procesador no la puede aprovechar."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">Almacenamiento: GB internos</div><span class="badge b-mid">No te quedes corto</span></div>
+      <div class="card-body">
+        El espacio donde guardás fotos, apps, videos y todo lo demás.
+        <br><br>
+        <strong>64GB</strong> → Mínimo y ya se queda corto si hacés fotos.<br>
+        <strong>128GB</strong> → El estándar recomendable hoy.<br>
+        <strong>256GB</strong> → Para el que graba mucho video o no quiere pensar en espacio.<br>
+        <strong>512GB+</strong> → Fotógrafo o videoasta profesional.
+        <br><br>
+        <span class="tt" data-tip="UFS 3.1 y UFS 4.0 son los estándares de velocidad del almacenamiento interno. UFS 4.0 es significativamente más rápido para abrir apps, transferir archivos y editar video. Los celulares baratos usan eMMC, mucho más lento.">La velocidad del almacenamiento</span> también importa: UFS 4.0 abre apps mucho más rápido que eMMC.
+        <br><em>— "64GB en 2025 es como ir a una fiesta con el tanque de nafta vacío."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">5G: ¿lo necesitás?</div><span class="badge b-mid">La pregunta del millón</span></div>
+      <div class="card-body">
+        El 5G es la red celular de nueva generación. Más velocidad y menos latencia que el 4G.
+        <br><br>
+        <strong>¿Cuándo conviene?</strong> Si vivís en una ciudad grande donde ya hay cobertura 5G y tu operadora lo ofrece. Y si pensás tener el celular 3–4 años.
+        <br><br>
+        <strong>¿Cuándo no importa?</strong> Si vivís en el interior donde el 5G tarda en llegar, o si cambiás el celular frecuentemente.
+        <br><em>— "En Argentina el 5G todavía está en pañales. Pero en 2–3 años va a ser estándar."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CÁMARA ══ -->
+<div class="section" id="camara">
+  <div class="sec-title">La Cámara</div>
+  <div class="sec-sub">El spec más mentido de la industria. <em>Los megapíxeles son el colesterol de los celulares: todo el mundo habla de ellos y pocos entienden qué significan.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#ff6b35">
+      <div class="card-head"><div class="card-name">El mito de los megapíxeles</div><span class="badge b-warn">La gran mentira</span></div>
+      <div class="card-body">
+        Un megapíxel = un millón de píxeles en la foto. <strong>Más megapíxeles no significa mejor foto.</strong>
+        <br><br>
+        Lo que realmente importa es el <span class="tt" data-tip="El sensor es el componente físico que captura la luz. Un sensor más grande capta más luz por píxel, lo que mejora dramáticamente las fotos en condiciones de poca luz. Un sensor grande con menos megapíxeles supera a uno chico con más megapíxeles.">tamaño del sensor</span> y el procesamiento de imagen con IA.
+        <br><br>
+        Un iPhone 15 con 48MP le saca fotos mejores a un celular barato de 108MP porque el sensor es más grande y el procesador de imagen es superior.
+        <br><em>— "200MP en un celular de USD 80 es marketing puro. El sensor es del tamaño de una uña."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">Las cámaras múltiples</div><span class="badge b-mid">Qué hace cada una</span></div>
+      <div class="card-body">
+        Los celulares modernos traen 2, 3 o hasta 5 cámaras traseras. No todas sirven lo mismo:
+        <br><br>
+        <strong>Principal</strong> → La que usás el 90% del tiempo. La más importante.<br>
+        <strong>Ultra gran angular</strong> → Capta más campo visual. Para paisajes y grupos grandes. Suele tener peor calidad que la principal.<br>
+        <strong>Teleobjetivo</strong> → Zoom óptico real. <span class="tt" data-tip="Zoom óptico = lente físico que acerca la imagen sin perder calidad. Zoom digital = recorta la imagen y la amplía, perdiendo calidad. Un celular con 3x óptico saca mejores fotos de lejos que uno con 10x digital.">Mucho mejor que el zoom digital</span>. Solo en gama media-alta y flagship.<br>
+        <strong>Macro</strong> → Para fotos muy de cerca. En gama baja suele ser una cámara de 2MP que no sirve para nada.<br>
+        <strong>Profundidad</strong> → Solo ayuda al modo retrato. Muchos celulares ya lo hacen por software sin este sensor.
+        <br><em>— "Tres cámaras buenas &gt; cinco cámaras mediocres. Siempre."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Video</div><span class="badge b-ok">Cada vez más importante</span></div>
+      <div class="card-body">
+        Si grabás videos, estos specs importan:
+        <br><br>
+        <strong>4K 30fps</strong> → Estándar de buena calidad.<br>
+        <strong>4K 60fps</strong> → Movimiento más fluido. Consume más espacio.<br>
+        <strong>Estabilización óptica (OIS)</strong> → <span class="tt" data-tip="OIS = Optical Image Stabilization. El lente se mueve físicamente para compensar el movimiento de la mano. EIS = Electronic Image Stabilization, recorta el video digitalmente. OIS es superior, especialmente en movimiento.">Mucho mejor que la digital (EIS)</span> para video en movimiento.<br>
+        <strong>Log / 10 bit</strong> → Para edición profesional de color. Solo en flagships.
+        <br><em>— "Para grabar los cumpleaños de los chicos, 4K 30fps con OIS es todo lo que necesitás."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Cámara frontal</div><span class="badge b-mid">El selfie y las videollamadas</span></div>
+      <div class="card-body">
+        La frontal importa para selfies, videollamadas de trabajo y videollamadas familiares.
+        <br><br>
+        <strong>Qué mirar:</strong> apertura (f/2.0 o menor es mejor para poca luz), autoenfoque (para fotos de grupo donde no todos están a la misma distancia), y que grabe al menos 1080p para videollamadas decentes.
+        <br><em>— "Una frontal de 12MP con buena apertura le gana a una de 32MP con apertura f/2.4 en cualquier videollamada nocturna."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 El truco real:</strong> Buscá reviews en DxOMark o en YouTube con fotos en condiciones de <strong>poca luz</strong>. Ahí es donde se separan los celulares de verdad. Cualquiera saca buenas fotos al sol del mediodía. La calidad se ve a las 8 de la noche en un restorán con poca luz.
+  </div>
+</div>
+
+<!-- ══ BATERÍA ══ -->
+<div class="section" id="bateria">
+  <div class="sec-title">Batería</div>
+  <div class="sec-sub">Lo que más importa en el uso diario y lo que menos se muestra en los avisos. <em>De nada sirve la mejor cámara del mundo si el celular se apaga al mediodía.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#ff6b35">
+      <div class="card-head"><div class="card-name">mAh: la capacidad</div><span class="badge b-mid">El número engañoso</span></div>
+      <div class="card-body">
+        Los <span class="tt" data-tip="mAh = miliamperios por hora. Mide cuánta energía puede almacenar la batería. Pero el consumo real depende del procesador, la pantalla y el software. Un iPhone con 3200mAh puede durar más que un Android con 5000mAh porque el procesador y el sistema son más eficientes.">mAh</span> miden la capacidad, no la duración real. Un celular con 5000mAh puede durar menos que uno con 4000mAh si el procesador consume más.
+        <br><br>
+        <strong>3000–3500mAh</strong> → Justo para un día con uso moderado.<br>
+        <strong>4000–4500mAh</strong> → El estándar actual. Día completo garantizado.<br>
+        <strong>5000mAh+</strong> → Día y medio o dos días con uso normal.<br>
+        <strong>6000mAh+</strong> → Para los que no quieren saber nada con el cargador.
+        <br><em>— "El iPhone con 3200mAh dura más que muchos Android con 5000mAh. Los mAh no lo dicen todo."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Carga rápida</div><span class="badge b-high">La revolución silenciosa</span></div>
+      <div class="card-body">
+        Los watts (W) de carga determinan qué tan rápido se carga el celular.
+        <br><br>
+        <strong>15–18W</strong> → Carga estándar. Una hora y media para carga completa.<br>
+        <strong>30–45W</strong> → Carga rápida real. 30 minutos al 50%.<br>
+        <strong>65–120W</strong> → Algunos Xiaomi y OnePlus. Carga completa en 15–20 minutos.<br>
+        <strong>240W</strong> → Xiaomi 14T Pro. De 0 a 100% en 9 minutos. Impresionante.
+        <br><br>
+        <strong>Importante:</strong> el cargador en la caja. Apple no incluye cargador. Samsung incluye uno lento. Algunos Xiaomi incluyen el cargador rápido. <span class="tt" data-tip="Muchas marcas venden los celulares con carga rápida de 65W pero incluyen un cargador de 25W en la caja. Para aprovechar la carga rápida real tenés que comprar el cargador compatible por separado.">Verificá qué viene en la caja.</span>
+        <br><em>— "Apple te cobra el celular más caro del mercado y no te incluye el cargador. Genios del marketing."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Mínimo recomendable <span>30W</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">Carga inalámbrica</div><span class="badge b-mid">Comodidad vs velocidad</span></div>
+      <div class="card-body">
+        Ponés el celular en una base y se carga sin cable. Cómodo pero más lento que el cable.
+        <br><br>
+        <strong>Qi</strong> → El estándar universal. 5–15W. Lento pero funciona con cualquier base.<br>
+        <strong>MagSafe (Apple)</strong> → 15W inalámbrico. Rápido para ser inalámbrico y con imán.<br>
+        <strong>Carga inalámbrica inversa</strong> → El celular carga otros dispositivos (auriculares, otro celular). Útil para los auriculares.
+        <br><em>— "La carga inalámbrica es para la mesita de luz de noche. Nadie espera cargar el celular con ella en 20 minutos."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Salud de la batería</div><span class="badge b-ok">Para que dure</span></div>
+      <div class="card-body">
+        Las baterías de litio se degradan con los ciclos de carga. Algunas recomendaciones para que dure más:
+        <br><br>
+        • No dejarla llegar a 0% habitualmente.<br>
+        • No cargarla al 100% siempre si no la vas a usar (el rango 20–80% es el ideal).<br>
+        • No dejarla cargando toda la noche sin protección de carga inteligente.<br>
+        • Los celulares modernos tienen <span class="tt" data-tip="Carga inteligente = el celular aprende tu rutina. Si siempre desenchufás a las 7am, carga hasta el 80% rápido y completa el último 20% justo antes de que lo uses. Reduce el estrés en la batería y alarga su vida útil.">carga inteligente</span> que protege la batería automáticamente.
+        <br><em>— "Una batería bien cuidada llega al 80% de capacidad a los 2 años. Una maltratada, al 60%."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ANDROID VS IOS ══ -->
+<div class="section" id="android_ios">
+  <div class="sec-title">Android vs iOS</div>
+  <div class="sec-sub">La guerra que no termina. <em>La verdad es que los dos son buenos. La diferencia está en qué tipo de persona sos.</em></div>
+
+  <div class="versus">
+    <div class="vs-card android">
+      <div class="vs-title">🤖 Android</div>
+      <div class="vs-item"><strong>Libertad total:</strong> instalás lo que querés, personalizás todo.</div>
+      <div class="vs-item"><strong>Más opciones:</strong> desde USD 50 hasta USD 500+, todas las marcas.</div>
+      <div class="vs-item"><strong>USB-C universal:</strong> cualquier cable funciona.</div>
+      <div class="vs-item"><strong>Más innovación:</strong> las funciones nuevas llegan primero acá.</div>
+      <div class="vs-item"><strong>Contra:</strong> las actualizaciones llegan tarde o no llegan.</div>
+      <div class="vs-item"><strong>Contra:</strong> más fragmentación, no todos los Android son iguales.</div>
+    </div>
+    <div class="vs-mid">VS</div>
+    <div class="vs-card ios">
+      <div class="vs-title">🍎 iOS</div>
+      <div class="vs-item"><strong>Integración total:</strong> iPhone + Mac + iPad + Apple Watch = ecosistema perfecto.</div>
+      <div class="vs-item"><strong>Actualizaciones:</strong> 6–7 años de soporte garantizado.</div>
+      <div class="vs-item"><strong>Privacidad:</strong> menos rastreo de datos que Android.</div>
+      <div class="vs-item"><strong>Rendimiento:</strong> el procesador A-series no tiene rival.</div>
+      <div class="vs-item"><strong>Contra:</strong> precio altísimo, poca personalización.</div>
+      <div class="vs-item"><strong>Contra:</strong> el ecosistema te atrapa. Salir cuesta.</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 La respuesta honesta:</strong> Si ya tenés Mac, iPad o Apple Watch → <strong>iPhone</strong> sin dudarlo, el ecosistema lo vale. Si no tenés nada de Apple o no querés gastar una fortuna → <strong>Android de gama media-alta</strong> (Samsung A55, Xiaomi 13T, Motorola Edge) te da el 90% del rendimiento de un flagship al 50% del precio.
+  </div>
+
+  <div class="cards" style="margin-top:22px">
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Las marcas Android que importan</div><span class="badge b-ok">El mapa</span></div>
+      <div class="card-body">
+        <strong>Samsung</strong> → La más vendida del mundo. Galaxy S (flagship), A (media), M (baja). Buen soporte, buenas cámaras, precio alto en flagships.<br><br>
+        <strong>Xiaomi / Redmi / POCO</strong> → La mejor relación precio/rendimiento del mercado. Hardware de flagship a precio de gama media. El software puede tener publicidad en algunos modelos.<br><br>
+        <strong>Motorola</strong> → Android casi puro, actualizaciones prolijas, muy buena relación precio/calidad en gama media. Ideal para el que no quiere complicaciones.<br><br>
+        <strong>OnePlus</strong> → Velocidad y carga rápida como prioridad. Para el usuario más técnico.<br><br>
+        <strong>Google Pixel</strong> → La mejor cámara de Android gracias al procesamiento de IA. Actualizaciones directas de Google. Poco distribuido en Argentina.
+        <br><em>— "Motorola es el Toyota de los celulares: no el más glamoroso, pero confiable y sin sorpresas."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ GAMAS Y PRECIOS ══ -->
+<div class="section" id="gamas">
+  <div class="sec-title">Gamas y Precios</div>
+  <div class="sec-sub">Qué esperás en cada rango de precio. <em>Para no pagar de más ni llevarte una decepción.</em></div>
+
+  <div class="gama-grid">
+    <div class="gama-row">
+      <div class="gama-icon">🪨</div>
+      <div>
+        <div class="gama-title">Gama baja</div>
+        <div class="gama-precio" style="background:rgba(120,120,120,.2);color:#888">Hasta USD 150</div>
+        <div class="gama-desc">Llamadas, WhatsApp, redes sociales básicas y fotos de día. <strong>No más que eso.</strong> Procesador lento para gaming o multitarea, cámara mediocre de noche, pantalla HD, batería que alcanza para el día justo. Para el abuelo que solo necesita llamar o como celular de emergencia.</div>
+      </div>
+    </div>
+    <div class="gama-row">
+      <div class="gama-icon">⚡</div>
+      <div>
+        <div class="gama-title">Gama media</div>
+        <div class="gama-precio" style="background:rgba(77,187,122,.15);color:#4dbb7a">USD 150 – USD 300</div>
+        <div class="gama-desc">El punto dulce del mercado. <strong>Cubre el 95% de las necesidades de la mayoría.</strong> Pantalla AMOLED FHD+ 90Hz, procesador fluido para el día a día, cámara decente de noche, 128GB, batería de 5000mAh. Motorola G84, Redmi Note 13, Samsung A35.</div>
+      </div>
+    </div>
+    <div class="gama-row">
+      <div class="gama-icon">🚀</div>
+      <div>
+        <div class="gama-titulo" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--text);margin-bottom:3px">Gama media-alta</div>
+        <div class="gama-precio" style="background:rgba(0,212,255,.12);color:#00d4ff">USD 300 – USD 600</div>
+        <div class="gama-desc">Acá empieza lo bueno de verdad. <strong>Pantalla 120Hz, procesador Snapdragon 7xx o 8xx gama anterior, cámara con teleobjetivo, carga rápida 45W+.</strong> Samsung A55, Xiaomi 13T, Motorola Edge 50. La mejor relación calidad/precio del mercado.</div>
+      </div>
+    </div>
+    <div class="gama-row">
+      <div class="gama-icon">👑</div>
+      <div>
+        <div class="gama-titulo" style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--text);margin-bottom:3px">Flagship</div>
+        <div class="gama-precio" style="background:rgba(255,215,0,.12);color:#ffd700">USD 600+</div>
+        <div class="gama-desc">Lo mejor que existe. <strong>Procesador tope, cámara con zoom óptico múltiple, pantalla QHD 120Hz, carga rápida 65W+, 5G.</strong> Samsung S24, iPhone 15, Xiaomi 14. La diferencia con la gama media-alta es real pero no justifica el doble de precio para el usuario promedio.<br><em>— "Compralo si tenés el presupuesto y lo vas a usar 4 años. Si lo cambiás cada 2 años, la gama media-alta es más inteligente."</em></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 El consejo más importante:</strong> En Argentina, con la variación de precios que hay, <strong>la gama media-alta es la decisión más inteligente</strong> casi siempre. Un Xiaomi 13T o Samsung A55 te da el 90% de un flagship al 55% del precio. El 10% restante no se justifica en el uso cotidiano.
+  </div>
+</div>
+
+<!-- ══ CHECKLIST ══ -->
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de Comprar</div>
+  <div class="sec-sub">Lo que tenés que verificar antes de pagar. <em>Porque el arrepentimiento del celular mal comprado dura exactamente hasta el próximo modelo.</em></div>
+
+  <div class="checks">
+    <div class="check">
+      <div class="check-ico">📱</div>
+      <div><div class="check-title">Probalo en el local antes de pagar</div>
+      <div class="check-desc">Abrí apps, scrolleá, sacá fotos. El celular que se traba en el local se va a trabar más en casa. <strong>Si el vendedor no te deja probarlo, sospechá.</strong> <em>— El speed test en el local no te dice nada. La fluidez del sistema sí.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🔢</div>
+      <div><div class="check-title">Verificá el número completo del procesador</div>
+      <div class="check-desc">No aceptes "tiene Snapdragon" o "tiene MediaTek". Preguntá el modelo completo: <strong>Snapdragon 7s Gen 2, Dimensity 7200, etc.</strong> Buscalo en Google antes de comprar. <em>— 30 segundos de búsqueda pueden ahorrarte meses de frustración.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🔋</div>
+      <div><div class="check-title">Preguntá qué cargador viene en la caja</div>
+      <div class="check-desc">Muchos celulares vienen sin cargador o con uno lento. Si el celular tiene carga de 65W pero viene con cargador de 25W, <strong>el cargador rápido es un costo extra.</strong> <em>— Sumá ese costo al precio final antes de comparar.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🔒</div>
+      <div><div class="check-title">Cuántos años de actualizaciones garantiza</div>
+      <div class="check-desc">Google garantiza 7 años de updates al Pixel. Samsung garantiza 4 años al Galaxy S. Motorola: 2–3 años. <strong>Un celular sin actualizaciones es un celular inseguro.</strong> <em>— En 3 años tu app del banco puede dejar de funcionar en Android desactualizado.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🌐</div>
+      <div><div class="check-title">Bandas de red: que funcione en Argentina</div>
+      <div class="check-desc">Los celulares importados de EE.UU. o China a veces no tienen las bandas de 4G que usan Claro, Personal y Movistar en Argentina. <strong>Verificá que soporte las bandas B2, B4, B7 y B28.</strong> <em>— Un celular que en otra país anda perfecto puede tener señal pésima acá.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🛡️</div>
+      <div><div class="check-title">Garantía oficial en Argentina</div>
+      <div class="check-desc">Los celulares traídos del exterior o de importación paralela no tienen garantía oficial. Si se rompe, el service te puede decir que es gris y no atenderte. <strong>Comprá siempre con garantía oficial del fabricante en Argentina.</strong></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">💧</div>
+      <div><div class="check-title">Resistencia al agua (IP)</div>
+      <div class="check-desc"><strong>IP67</strong> = sumergible 1 metro por 30 min. <strong>IP68</strong> = sumergible 1.5–2 metros. En gama baja no suele haber certificación IP. Si lo usás cerca del agua o en lluvia, verificá que tenga al menos <strong>IP53 (salpicaduras)</strong>. <em>— Sin certificación, el agua es garantía vencida.</em></div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:28px">
+    <div class="sec-title" style="font-size:24px;margin-bottom:6px">Marca conocida vs importado sin garantía</div>
+    <div class="sec-sub">La tentación del precio bajo en ML o el viaje de alguien.</div>
+    <div class="pgrid">
+      <div class="pcard rec">
+        <div class="ptag">Compra oficial</div>
+        <div class="pmarca">Local autorizado · Tienda oficial</div>
+        <div class="pdesc"><strong>Lo que pagás de más:</strong><br>• Garantía oficial 1 año<br>• Service autorizado en Argentina<br>• Bandas de red correctas<br>• Software en español<br>• Actualizaciones de la región<br>• Podés reclamar si falla</div>
+      </div>
+      <div class="pcard alt">
+        <div class="ptag">Importado / gris</div>
+        <div class="pmarca">ML vendedor dudoso · Viaje</div>
+        <div class="pdesc"><strong>Lo que arriesgás:</strong><br>• Sin garantía local<br>• Puede no tener bandas AR<br>• Software en otro idioma<br>• Sin actualizaciones regionales<br>• Si se rompe, problema tuyo<br>• Puede ser reacondicionado</div>
+      </div>
+    </div>
+
+    <div class="tip" style="margin-top:16px">
+      <strong>💡 La excepción:</strong> Xiaomi y Motorola tienen distribución oficial en Argentina con garantía real. Si comprás en su tienda oficial o en un distribuidor autorizado, no hay drama aunque el modelo sea "importado". El problema es el vendedor particular de ML que trae del exterior sin garantía.
+    </div>
+
+    <div class="cards" style="margin-top:20px">
+      <div class="card" style="--ca:#f87171">
+        <div class="card-head"><div class="card-name">Señales de alarma</div><span class="badge b-warn">En el local o en ML</span></div>
+        <div class="card-body">
+          🚩 <strong>"200MP cámara"</strong> en celular de USD 80 → sensor microscópico, fotos mediocres.<br>
+          🚩 <strong>"Snapdragon" sin número</strong> → probablemente un 4xx o 6xx de gama baja.<br>
+          🚩 <strong>64GB en 2025</strong> → se va a quedar sin espacio en meses.<br>
+          🚩 <strong>Sin certificación IP</strong> → cualquier salpicadura es tu problema.<br>
+          🚩 <strong>"Igual al iPhone pero más barato"</strong> → no es igual.<br>
+          🚩 <strong>Sin especificar versión de Android ni años de actualizaciones</strong> → probablemente Android 11 sin updates.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<div id="ttBubble"></div>
+
+<script>
+  function goTab(id, el) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  const bubble = document.getElementById('ttBubble');
+  let timer;
+  document.querySelectorAll('.tt').forEach(el => {
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      bubble.textContent = this.dataset.tip;
+      bubble.classList.add('on');
+      const r = this.getBoundingClientRect();
+      let top = r.bottom + 10, left = r.left;
+      if (left + 280 > window.innerWidth) left = window.innerWidth - 285;
+      if (top + 140 > window.innerHeight) top = r.top - 145;
+      bubble.style.top = top + 'px';
+      bubble.style.left = left + 'px';
+      clearTimeout(timer);
+      timer = setTimeout(() => bubble.classList.remove('on'), 5000);
+    });
+  });
+  document.addEventListener('click', () => bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Celulares: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="relojes.html" class="rel-link">⌚ Relojes Inteligentes</a><a href="tablets.html" class="rel-link">🪄 Tablets</a><a href="cables-conectores.html" class="rel-link">🔋 Cables y Cargadores</a><a href="discos-pendrives.html" class="rel-link">💾 Discos y Pendrives</a></div>
+</div>
+</body>
+</html>

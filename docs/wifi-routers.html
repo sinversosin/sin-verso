@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — WiFi y Routers</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080810; --surface: #10101c; --card: #13131f;
+    --border: #20203a; --text: #eeeef5; --muted: #9494b8; --soft: #8888aa;
+    --accent: #f59e0b; --accent2: #d97706;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-size:16px; overflow-x:hidden; }
+
+  header { background:linear-gradient(135deg,#080810,#130e00 50%,#080810); border-bottom:1px solid var(--border); padding:44px 20px 36px; text-align:center; position:relative; overflow:hidden; }
+  header::before { content:''; position:absolute; top:-80px; left:50%; transform:translateX(-50%); width:500px; height:260px; background:radial-gradient(ellipse,rgba(245,158,11,.12),transparent 70%); pointer-events:none; }
+  .site-label { font-size:11px; font-weight:700; letter-spacing:5px; color:var(--accent); text-transform:uppercase; opacity:.7; margin-bottom:10px; }
+  header h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(46px,9vw,88px); letter-spacing:2px; line-height:1; background:linear-gradient(135deg,#fff 30%,var(--accent) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .subtitle { margin-top:10px; color:var(--muted); font-size:15px; font-style:italic; }
+  .subtitle strong { color:var(--accent); font-style:normal; }
+
+  .tabs { display:flex; gap:8px; overflow-x:auto; padding:20px 16px 0; flex-wrap:nowrap; scrollbar-width:none; }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab { background:var(--surface); border:1px solid var(--border); border-radius:30px; padding:10px 18px; font-size:13px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; white-space:nowrap; flex-shrink:0; }
+  .tab:hover { border-color:var(--accent); color:var(--accent); }
+  .tab.active { background:var(--accent); border-color:var(--accent); color:#000; font-weight:700; }
+
+  main { padding:28px 16px 80px; max-width:640px; margin:0 auto; }
+  .section { display:none; }
+  .section.active { display:block; }
+  .sec-title { font-family:'Bebas Neue',sans-serif; font-size:34px; letter-spacing:1px; color:var(--accent); margin-bottom:4px; }
+  .sec-sub { color:var(--muted); font-size:15px; margin-bottom:24px; line-height:1.6; }
+  .sec-sub em { color:var(--text); font-style:italic; }
+
+  .cards { display:flex; flex-direction:column; gap:14px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:18px; padding:20px 20px 20px 24px; position:relative; overflow:hidden; transition:border-color .2s,transform .2s; }
+  .card:hover { border-color:rgba(245,158,11,.4); transform:translateY(-2px); }
+  .card::before { content:''; position:absolute; top:0; left:0; width:5px; height:100%; background:var(--ca,var(--accent)); border-radius:18px 0 0 18px; }
+  .card-head { display:flex; align-items:center; gap:12px; margin-bottom:8px; flex-wrap:wrap; }
+  .card-name { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:1px; color:var(--text); line-height:1; }
+  .badge { font-size:10px; font-weight:700; letter-spacing:1.5px; padding:3px 10px; border-radius:20px; text-transform:uppercase; }
+  .b-ok   { background:rgba(77,187,122,.15);  color:#4dbb7a;      border:1px solid rgba(77,187,122,.3); }
+  .b-mid  { background:rgba(245,158,11,.12);  color:var(--accent); border:1px solid rgba(245,158,11,.3); }
+  .b-high { background:rgba(0,212,255,.12);   color:#00d4ff;       border:1px solid rgba(0,212,255,.3); }
+  .b-top  { background:rgba(255,215,0,.12);   color:#ffd700;       border:1px solid rgba(255,215,0,.3); }
+  .b-no   { background:rgba(120,120,120,.15); color:#888;          border:1px solid rgba(120,120,120,.3); }
+  .b-warn { background:rgba(248,113,113,.15); color:#f87171;       border:1px solid rgba(248,113,113,.3); }
+  .card-body { font-size:14px; color:var(--muted); line-height:1.7; }
+  .card-body strong { color:var(--text); font-weight:600; }
+  .card-body em { color:#8899bb; font-size:13px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .chip { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:4px 10px; font-size:12px; color:var(--muted); }
+  .chip span { color:var(--text); font-weight:600; }
+
+  .tt { border-bottom:1px dashed var(--accent); color:var(--accent); cursor:pointer; font-weight:600; display:inline; }
+  #ttBubble { display:none; position:fixed; background:#130e00; border:1px solid var(--accent); border-radius:14px; padding:13px 16px; font-size:14px; color:var(--text); line-height:1.6; max-width:270px; z-index:9999; box-shadow:0 8px 40px rgba(0,0,0,.7); pointer-events:none; }
+  #ttBubble.on { display:block; }
+  #ttBubble::before { content:'💡 '; }
+
+  .tip { background:rgba(245,158,11,.06); border:1px solid rgba(245,158,11,.2); border-radius:14px; padding:16px 18px; margin-top:20px; font-size:14px; line-height:1.65; color:#e8d09a; }
+  .tip strong { color:var(--accent); }
+  .tip-green { background:rgba(77,187,122,.06); border:1px solid rgba(77,187,122,.2); color:#a0d8b4; }
+  .tip-green strong { color:#4dbb7a; }
+  .tip-warn { background:rgba(248,113,113,.06); border:1px solid rgba(248,113,113,.2); color:#f8b4b4; }
+  .tip-warn strong { color:#f87171; }
+
+  .tabla { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; }
+  .tabla th { background:var(--surface); color:var(--accent); font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:1px; padding:10px 12px; text-align:left; border-bottom:2px solid var(--border); }
+  .tabla td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--muted); vertical-align:top; line-height:1.5; }
+  .tabla tr:hover td { background:rgba(255,255,255,.02); }
+  .tabla td:first-child { color:var(--text); font-weight:700; }
+  .tabla .hl td { background:rgba(245,158,11,.05); }
+  .tabla .hl td:first-child { color:var(--accent); }
+  .ok::before  { content:'✓ '; color:#4dbb7a; }
+  .mal::before { content:'✗ '; color:#f87171; }
+  .meh::before { content:'~ '; color:#ffd700; }
+
+  /* CASA VISUAL */
+  .casa { background:var(--card); border:1px solid var(--border); border-radius:18px; padding:20px; margin-bottom:20px; }
+  .casa-title { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--accent); margin-bottom:14px; letter-spacing:1px; }
+  .piso { display:flex; flex-direction:column; gap:8px; }
+  .piso-row { display:flex; align-items:center; gap:12px; }
+  .piso-ico { font-size:22px; width:36px; text-align:center; flex-shrink:0; }
+  .piso-bar { flex:1; border-radius:8px; padding:8px 12px; font-size:13px; }
+  .piso-bar.fuerte { background:rgba(77,187,122,.15); border:1px solid rgba(77,187,122,.3); color:#4dbb7a; }
+  .piso-bar.medio  { background:rgba(245,158,11,.12); border:1px solid rgba(245,158,11,.25); color:var(--accent); }
+  .piso-bar.debil  { background:rgba(248,113,113,.12); border:1px solid rgba(248,113,113,.25); color:#f87171; }
+  .piso-bar.muerto { background:rgba(80,80,80,.2); border:1px solid var(--border); color:var(--muted); }
+
+  /* VELOCIDAD VISUAL */
+  .vel-list { display:flex; flex-direction:column; gap:10px; margin-top:8px; }
+  .vel-row { display:flex; align-items:center; gap:12px; }
+  .vel-label { width:140px; font-size:12px; color:var(--muted); flex-shrink:0; text-align:right; line-height:1.4; }
+  .vel-wrap { flex:1; }
+  .vel-bar { height:26px; border-radius:6px; display:flex; align-items:center; padding-left:10px; font-size:12px; font-weight:700; color:#000; }
+  .vel-note { font-size:11px; color:var(--muted); margin-top:3px; }
+
+  /* CHECKS */
+  .checks { display:flex; flex-direction:column; gap:10px; }
+  .check { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:15px 16px; display:flex; gap:13px; align-items:flex-start; transition:border-color .2s; }
+  .check:hover { border-color:rgba(245,158,11,.35); }
+  .check-ico { font-size:22px; flex-shrink:0; }
+  .check-title { font-weight:700; color:var(--text); font-size:14px; margin-bottom:3px; }
+  .check-desc { font-size:13px; color:var(--muted); line-height:1.55; }
+  .check-desc strong { color:var(--text); }
+  .check-desc em { color:#7a9ab0; font-style:italic; font-size:12px; }
+
+  .pgrid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; }
+  @media(max-width:480px){ .pgrid { grid-template-columns:1fr; } }
+  .pcard { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px; }
+  .pcard.rec { border-color:rgba(245,158,11,.4); background:rgba(245,158,11,.04); }
+  .pcard.alt { border-color:rgba(248,113,113,.3); background:rgba(248,113,113,.03); }
+  .ptag { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:5px; }
+  .pcard.rec .ptag { color:var(--accent); }
+  .pcard.alt .ptag { color:#f87171; }
+  .pmarca { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--text); margin-bottom:5px; }
+  .pdesc { font-size:12px; color:var(--muted); line-height:1.6; }
+  .pdesc strong { color:var(--text); }
+
+  @media(max-width:480px){ .card-name{font-size:20px;} .tabla th,.tabla td{padding:8px;} }
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="site-label">SinVerso · Tecnología</div>
+  <h1>WiFi y Routers</h1>
+  <p class="subtitle">Por qué el WiFi no llega al cuarto. <strong>Y cómo solucionarlo de una vez.</strong></p>
+  <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;">
+    💲 Precios en USD orientativos · Varían según el tipo de cambio y el mercado local
+  </div>
+</header>
+
+
+<div class="error-caro"><strong>📡 El error más caro</strong>Cambiar el router cuando el problema es el modem del proveedor de internet. Antes de gastar USD 100 en un router nuevo, verificá si el problema es el router o la conexión del ISP. Un router bueno no mejora una conexión lenta del proveedor.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('basicos',this)">📡 Lo básico</div>
+  <div class="tab" onclick="goTab('velocidad',this)">⚡ Velocidad</div>
+  <div class="tab" onclick="goTab('wifi',this)">📶 WiFi 5 vs 6 vs 7</div>
+  <div class="tab" onclick="goTab('problemas',this)">🔧 Problemas comunes</div>
+  <div class="tab" onclick="goTab('soluciones',this)">🛠️ Soluciones</div>
+  <div class="tab" onclick="goTab('seguridad',this)">🔐 Seguridad</div>
+  <div class="tab" onclick="goTab('checklist',this)">🛒 Antes de comprar</div>
+</div>
+
+<main>
+
+<!-- ══ LO BÁSICO ══ -->
+<div class="section active" id="basicos">
+  <div class="sec-title">Lo básico que nadie explica</div>
+  <div class="sec-sub">Antes de hablar de routers y repetidores, hay que entender cómo funciona todo. <em>En 5 minutos vas a entender más que la mayoría.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f59e0b">
+      <div class="card-head"><div class="card-name">Internet vs WiFi: no es lo mismo</div><span class="badge b-mid">El error más común</span></div>
+      <div class="card-body">
+        <strong>Internet</strong> → La conexión que viene de afuera. El cable de la empresa (Fibertel, Telecentro, Personal, etc.) que entra a tu casa. Es lo que pagás por mes.
+        <br><br>
+        <strong>WiFi</strong> → La forma en que distribuís esa conexión dentro de tu casa sin cables. El router toma el internet que viene de afuera y lo transmite como señal inalámbrica.
+        <br><br>
+        Si el WiFi anda mal pero conectado por cable anda bien → el problema es el router o la señal inalámbrica.<br>
+        Si por cable también anda mal → el problema es la conexión de internet que te da la empresa.
+        <br><em>— "Llamar al técnico de Fibertel cuando el problema es tu router viejo es tiempo y paciencia perdida."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">El modem y el router: ¿son lo mismo?</div><span class="badge b-mid">Casi siempre sí</span></div>
+      <div class="card-body">
+        <strong>Modem</strong> → El aparato que traduce la señal que viene del cable de la calle a una señal que tu red puede usar.<br><br>
+        <strong>Router</strong> → El aparato que distribuye esa conexión a múltiples dispositivos, con y sin cables.<br><br>
+        <strong>Modem-router (combo)</strong> → El aparatito que te da la empresa de internet generalmente es los dos en uno. Es el que tiene las antenas y los puerticos de red atrás.
+        <br><em>— "El aparato que te trajo el técnico de la empresa es casi siempre un combo modem-router. No siempre el mejor del mercado."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Las dos bandas: 2.4GHz y 5GHz</div><span class="badge b-ok">El más importante</span></div>
+      <div class="card-body">
+        Los routers modernos transmiten en dos frecuencias distintas, como dos radios en el mismo aparato:
+        <br><br>
+        <strong>2.4 GHz</strong> → Llega más lejos y atraviesa mejor las paredes. Más lento. Más congestionado porque todos los dispositivos viejos la usan: microondas, baby monitors, vecinos.<br><br>
+        <strong>5 GHz</strong> → Más rápido pero alcanza menos distancia y le cuesta más atravesar paredes. Menos congestionado. Para dispositivos cerca del router.
+        <br><br>
+        <span class="tt" data-tip="Banda dual = el router transmite en 2.4GHz y 5GHz al mismo tiempo. Los dispositivos eligen automáticamente la mejor según la distancia. Banda tri = agrega una segunda banda de 5GHz o 6GHz para más capacidad total.">Banda dual vs tri explicado.</span>
+        <br><em>— "Si estás al lado del router, conectate al 5GHz. Si estás lejos, el 2.4GHz te va a dar mejor señal aunque más lenta."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Cerca del router <span>→ 5GHz</span></div>
+        <div class="chip">Lejos o con paredes <span>→ 2.4GHz</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">Cable vs WiFi: la diferencia real</div><span class="badge b-high">Para gaming y streaming</span></div>
+      <div class="card-body">
+        El cable de red (Ethernet) siempre va a ser mejor que el WiFi para:
+        <br><br>
+        <strong>Velocidad</strong> → Sin interferencias, sin pérdidas de señal.<br>
+        <strong>Latencia</strong> → El ping por cable puede ser 1–2ms. Por WiFi 10–30ms. Para gaming online la diferencia es enorme.<br>
+        <strong>Estabilidad</strong> → El cable no se cae ni fluctúa. El WiFi sí.<br>
+        <br>
+        Si podés pasar un cable de red al TV, consola o PC → hacelo. No hay debate.
+        <br><em>— "El jugador que se queja del lag y está conectado por WiFi no tiene argumentos."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 El diagnóstico rápido:</strong> Antes de cambiar el router, reinicialo. Literalmente desenchufalo 30 segundos y volvé a enchufarlo. El 40% de los problemas de red se resuelven así. Es el "apagalo y prendelo" de las redes. Funciona más de lo que debería.
+  </div>
+</div>
+
+<!-- ══ VELOCIDAD ══ -->
+<div class="section" id="velocidad">
+  <div class="sec-title">Velocidad de internet</div>
+  <div class="sec-sub">Los Mbps que pagás no siempre son los que usás. <em>Y no siempre necesitás más velocidad de la que tenés.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f59e0b">
+      <div class="card-head"><div class="card-name">¿Qué son los Mbps?</div><span class="badge b-mid">La unidad</span></div>
+      <div class="card-body">
+        <strong>Mbps = megabits por segundo</strong>. Es la velocidad a la que viajan los datos. Importante: es <strong>bits</strong>, no <strong>bytes</strong>. Para convertir a velocidad de descarga real, dividí por 8.
+        <br><br>
+        100 Mbps de internet → velocidad de descarga real de ~12 MB/s.<br>
+        300 Mbps → ~37 MB/s de descarga real.
+        <br><br>
+        <span class="tt" data-tip="Velocidad de bajada (download) = qué tan rápido recibís datos. Netflix, YouTube, descargas. Velocidad de subida (upload) = qué tan rápido enviás datos. Videollamadas, subir fotos, streaming en vivo. La bajada casi siempre es mucho mayor que la subida en los planes hogareños.">Bajada vs subida explicado.</span>
+        <br><em>— "Tener 1000 Mbps no hace que YouTube cargue más rápido si el servidor de YouTube está saturado. La velocidad es solo tu parte del camino."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">¿Cuántos Mbps necesitás?</div><span class="badge b-ok">La guía real</span></div>
+      <div class="card-body">
+        Lo que consume cada uso:
+      </div>
+      <div class="vel-list">
+        <div class="vel-row">
+          <div class="vel-label">WhatsApp y redes</div>
+          <div class="vel-wrap">
+            <div class="vel-bar" style="width:10%;background:#4dbb7a">1–5 Mbps</div>
+            <div class="vel-note">Cualquier plan alcanza</div>
+          </div>
+        </div>
+        <div class="vel-row">
+          <div class="vel-label">Netflix HD</div>
+          <div class="vel-wrap">
+            <div class="vel-bar" style="width:20%;background:#00b4d8">5 Mbps</div>
+            <div class="vel-note">Por persona viendo</div>
+          </div>
+        </div>
+        <div class="vel-row">
+          <div class="vel-label">Netflix 4K</div>
+          <div class="vel-wrap">
+            <div class="vel-bar" style="width:35%;background:#6b46c1">15–25 Mbps</div>
+            <div class="vel-note">Por pantalla en 4K</div>
+          </div>
+        </div>
+        <div class="vel-row">
+          <div class="vel-label">Gaming online</div>
+          <div class="vel-wrap">
+            <div class="vel-bar" style="width:15%;background:#f59e0b">3–10 Mbps</div>
+            <div class="vel-note">Poca velocidad, mucha estabilidad</div>
+          </div>
+        </div>
+        <div class="vel-row">
+          <div class="vel-label">Videollamada HD</div>
+          <div class="vel-wrap">
+            <div class="vel-bar" style="width:20%;background:#ec4899">5–10 Mbps</div>
+            <div class="vel-note">Sube y baja por persona</div>
+          </div>
+        </div>
+        <div class="vel-row">
+          <div class="vel-label">Descarga de juegos</div>
+          <div class="vel-wrap">
+            <div class="vel-bar" style="width:80%;background:#ef4444">Todo lo que tengas</div>
+            <div class="vel-note">Un juego de 100GB tarda 2hs con 100 Mbps</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body" style="margin-top:12px"><em>— "Para una familia de 4 personas usando todo al mismo tiempo, con 100 Mbps estables van bien. Más es comodidad, no necesidad."</em></div>
+    </div>
+
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Latencia: más importante que la velocidad</div><span class="badge b-warn">Para gaming</span></div>
+      <div class="card-body">
+        La <span class="tt" data-tip="Latencia (ping) = el tiempo que tarda un dato en ir desde tu dispositivo hasta el servidor y volver. Se mide en milisegundos (ms). En gaming, 20ms es excelente, 50ms es aceptable, 100ms+ ya se siente el lag. La velocidad de internet no baja el ping: lo que importa es la distancia al servidor y la estabilidad de la conexión.">latencia o ping</span> es el tiempo de respuesta de la conexión. Para gaming importa MÁS que la velocidad.
+        <br><br>
+        <strong>1–20ms</strong> → Excelente. Fibra óptica por cable.<br>
+        <strong>20–50ms</strong> → Bueno. WiFi 5GHz cercano.<br>
+        <strong>50–100ms</strong> → Aceptable. WiFi 2.4GHz o lejos del router.<br>
+        <strong>100ms+</strong> → Problemático. Lag notorio en juegos online.<br>
+        <br>
+        <strong>Jitter</strong> → La variación del ping. Peor que el ping alto constante es el ping que sube y baja. Genera micro-cortes y desincronización.
+        <br><em>— "Podés jugar bien con 80ms estables. Pero con 30ms que sube a 200ms cada 10 segundos, es injugable."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 Medí tu velocidad real:</strong> Entrá a <strong>fast.com</strong> o <strong>speedtest.net</strong> desde un dispositivo conectado por cable al router. Eso te da la velocidad real que llega a tu casa. Si es muy diferente a lo que pagás, llamá a la empresa. Si es parecida pero el WiFi anda lento, el problema es la distribución interna.
+  </div>
+</div>
+
+<!-- ══ WIFI 5 VS 6 VS 7 ══ -->
+<div class="section" id="wifi">
+  <div class="sec-title">WiFi 5 vs WiFi 6 vs WiFi 7</div>
+  <div class="sec-sub">Los estándares que definen qué tan bueno es tu router. <em>Y por qué el número importa pero no es todo.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f59e0b">
+      <div class="card-head"><div class="card-name">Cómo se llaman en realidad</div><span class="badge b-mid">La nomenclatura</span></div>
+      <div class="card-body">
+        Los estándares WiFi tienen nombres técnicos con letras (802.11ac, 802.11ax) que nadie entiende. Por eso en 2018 empezaron a llamarlos con números:
+        <br><br>
+        <strong>WiFi 4</strong> → 802.11n (2009). El que tenía el router de hace 10 años.<br>
+        <strong>WiFi 5</strong> → 802.11ac (2013). El estándar actual en la mayoría de los hogares.<br>
+        <strong>WiFi 6</strong> → 802.11ax (2019). El nuevo estándar. Más rápido y más eficiente con muchos dispositivos.<br>
+        <strong>WiFi 6E</strong> → WiFi 6 con banda de 6GHz adicional. Menos interferencias, más velocidad.<br>
+        <strong>WiFi 7</strong> → 802.11be (2024). Lo más nuevo. Para los que quieren lo máximo.
+        <br><em>— "El router que te dio la empresa de cable probablemente es WiFi 5. Funciona, pero tiene años."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">WiFi 5: el estándar actual</div><span class="badge b-ok">Suficiente para la mayoría</span></div>
+      <div class="card-body">
+        Velocidad teórica de hasta 3.5 Gbps (en la práctica, 300–900 Mbps). Banda dual (2.4 y 5 GHz). Suficiente para streaming 4K, gaming y trabajo desde casa sin problemas.
+        <br><br>
+        <strong>Cuándo se queda corto:</strong> cuando tenés muchos dispositivos conectados al mismo tiempo (15+) o cuando necesitás cobertura en una casa grande.
+        <br><em>— "Para la casa promedio con 5–10 dispositivos, WiFi 5 alcanza perfectamente."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Velocidad práctica <span>300–600 Mbps</span></div>
+        <div class="chip">Para <span>hogares normales</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">WiFi 6: el upgrade que vale</div><span class="badge b-high">Recomendado hoy</span></div>
+      <div class="card-body">
+        La mejora real del WiFi 6 no es solo la velocidad, es la eficiencia con <strong>muchos dispositivos conectados al mismo tiempo</strong>.
+        <br><br>
+        WiFi 5 tiene problemas cuando hay 10+ dispositivos activos: se pisan entre sí. WiFi 6 usa <span class="tt" data-tip="OFDMA = Orthogonal Frequency Division Multiple Access. Permite que el router atienda a varios dispositivos simultáneamente en lugar de uno a la vez. Es como pasar de una caja única en el supermercado a tener varias cajas abiertas al mismo tiempo.">OFDMA</span> para atender a todos a la vez sin que se pisen.
+        <br><br>
+        También mejora la batería de los dispositivos conectados gracias al <span class="tt" data-tip="TWT = Target Wake Time. El router y el dispositivo acuerdan cuándo el dispositivo va a 'despertar' para enviar/recibir datos. Entre esos momentos, la radio del dispositivo se apaga. Extiende la batería de celulares, tablets y IoT conectados por WiFi.">TWT (Target Wake Time)</span>.
+        <br><em>— "Casa con muchos dispositivos IoT, varios celulares, TV, consola y notebook: WiFi 6 se nota."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Velocidad práctica <span>hasta 1.2 Gbps</span></div>
+        <div class="chip">Muchos dispositivos <span>sin degradarse</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">WiFi 7: el futuro hoy</div><span class="badge b-top">Para el que quiere lo máximo</span></div>
+      <div class="card-body">
+        Velocidades teóricas de hasta 46 Gbps. Latencia ultra baja. Banda de 6GHz. Multi-Link Operation (el dispositivo usa varias bandas al mismo tiempo).
+        <br><br>
+        <strong>¿Vale la pena hoy?</strong> Salvo que tengas una conexión de fibra óptica de 1 Gbps o más y muchos dispositivos WiFi 7, probablemente no. Los dispositivos compatibles todavía son pocos y caros.
+        <br><em>— "El WiFi 7 es como el 8K de los routers: impresionante en papel, difícil de aprovechar hoy."</em>
+      </div>
+    </div>
+  </div>
+
+  <table class="tabla" style="margin-top:20px">
+    <thead><tr><th>Estándar</th><th>Velocidad práctica</th><th>Para quién</th></tr></thead>
+    <tbody>
+      <tr><td>WiFi 5</td><td>300–600 Mbps</td><td>Hogar normal, pocos dispositivos</td></tr>
+      <tr class="hl"><td>WiFi 6</td><td>hasta 1.2 Gbps</td><td>⭐ El que comprás hoy</td></tr>
+      <tr><td>WiFi 6E</td><td>hasta 2.4 Gbps</td><td>Casa grande, muchos dispositivos</td></tr>
+      <tr><td>WiFi 7</td><td>hasta 5+ Gbps</td><td>Early adopters con fibra giga</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══ PROBLEMAS COMUNES ══ -->
+<div class="section" id="problemas">
+  <div class="sec-title">Problemas comunes</div>
+  <div class="sec-sub">Los que todos tienen y nadie sabe resolver. <em>Hasta ahora.</em></div>
+
+  <div class="casa">
+    <div class="casa-title">El mapa del WiFi en casa 🏠</div>
+    <div class="piso">
+      <div class="piso-row">
+        <div class="piso-ico">🛋️</div>
+        <div class="piso-bar fuerte">Living (donde está el router) → Señal excelente ✓</div>
+      </div>
+      <div class="piso-row">
+        <div class="piso-ico">🍳</div>
+        <div class="piso-bar fuerte">Cocina contigua → Señal muy buena ✓</div>
+      </div>
+      <div class="piso-row">
+        <div class="piso-ico">🛏️</div>
+        <div class="piso-bar medio">Primer cuarto (una pared) → Señal aceptable ~</div>
+      </div>
+      <div class="piso-row">
+        <div class="piso-ico">🛁</div>
+        <div class="piso-bar debil">Baño del fondo (dos paredes + azulejos) → Señal débil ✗</div>
+      </div>
+      <div class="piso-row">
+        <div class="piso-ico">🏠</div>
+        <div class="piso-bar muerto">Segundo piso / garaje → Sin señal ✗</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">El WiFi no llega al cuarto</div><span class="badge b-warn">El clásico</span></div>
+      <div class="card-body">
+        Las paredes atenúan la señal WiFi. Pero no todas igual:
+        <br><br>
+        <strong>Poco impacto:</strong> madera, durlock, yeso.<br>
+        <strong>Impacto medio:</strong> ladrillo, hormigón delgado.<br>
+        <strong>Impacto alto:</strong> hormigón grueso, metal, azulejos, ventanas blindadas.<br>
+        <br>
+        Una casa con paredes de hormigón grueso puede tener señal pésima a 5 metros del router.
+        <br><em>— "Los azulejos del baño son el peor enemigo del WiFi. El señal muere ahí."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Internet lento de noche o fin de semana</div><span class="badge b-warn">Congestión</span></div>
+      <div class="card-body">
+        Si el internet anda bien de día y lento a la noche o el fin de semana, el problema es la <strong>congestión de la red de la empresa</strong>, no tu router.
+        <br><br>
+        Las empresas de cable comparten el ancho de banda entre los vecinos del mismo nodo. Cuando todos están en casa mirando Netflix a la noche, la velocidad baja para todos.
+        <br><em>— "No es tu culpa, es el vecino de arriba mirando series en 4K."</em>
+        <br><br>
+        Solución: reclamar a la empresa o considerar fibra óptica dedicada (FTTH) que tiene menos congestión.
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">El WiFi se cae solo</div><span class="badge b-warn">Desconexiones</span></div>
+      <div class="card-body">
+        Si el WiFi se desconecta y reconecta solo sin razón aparente:
+        <br><br>
+        <strong>Router sobrecalentado</strong> → Tocá el router. Si está caliente, es el problema. Necesita ventilación o está fallando.<br>
+        <strong>Interferencias</strong> → Microondas, baby monitor, teléfono inalámbrico en 2.4GHz pueden interferir.<br>
+        <strong>Canal saturado</strong> → Si todos los vecinos usan el mismo canal WiFi, se pisan. Cambiá el canal en la configuración del router.<br>
+        <strong>Router viejo</strong> → Un router de más de 5 años puede fallar por desgaste.
+        <br><em>— "Un router que dura 3 años en Argentina con los cortes de luz que hay, es un sobreviviente."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Un dispositivo específico anda lento</div><span class="badge b-warn">No es el router</span></div>
+      <div class="card-body">
+        Si todos los dispositivos andan bien pero uno solo anda lento, el problema casi siempre es ese dispositivo:
+        <br><br>
+        • La antena WiFi del dispositivo puede estar fallando.<br>
+        • El driver de red puede estar desactualizado.<br>
+        • Puede tener aplicaciones consumiendo internet en segundo plano.<br>
+        • El adaptador WiFi del dispositivo puede ser de menor calidad.
+        <br><em>— "Antes de culpar al router, probá el dispositivo con datos del celular. Si funciona bien, el problema no es internet."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SOLUCIONES ══ -->
+<div class="section" id="soluciones">
+  <div class="sec-title">Soluciones reales</div>
+  <div class="sec-sub">Cómo mejorar la cobertura en casa sin gastar de más. <em>De la más barata a la más completa.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Gratis: reubicá el router</div><span class="badge b-ok">Antes de gastar un peso</span></div>
+      <div class="card-body">
+        El router irradia señal en todas direcciones. Si está en un rincón, la mitad de la señal va a la pared. Las reglas:
+        <br><br>
+        • <strong>Centro geográfico</strong> de la casa, no en un rincón.<br>
+        • <strong>Alto</strong>, no en el piso ni detrás de un mueble.<br>
+        • <strong>Sin obstáculos metálicos</strong> cerca (heladera, microondas).<br>
+        • <strong>Antenas verticales</strong> para cobertura horizontal (el caso más común).<br>
+        • <strong>Lejos del microondas</strong>: el microondas emite en 2.4GHz igual que el WiFi.
+        <br><em>— "Mover el router 3 metros puede ser la diferencia entre señal en el cuarto o no."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#f59e0b">
+      <div class="card-head"><div class="card-name">Repetidor / Extensor de señal</div><span class="badge b-mid">La solución más popular</span></div>
+      <div class="card-body">
+        Un repetidor toma la señal WiFi existente y la reemite más lejos. La solución más barata y fácil.
+        <br><br>
+        <strong>Ventaja:</strong> barato (USD 15–40), fácil de configurar, enchufás y listo.<br>
+        <strong>Desventaja:</strong> al repetir la señal, la <span class="tt" data-tip="El repetidor recibe la señal del router y la retransmite. Pero para recibir Y retransmitir al mismo tiempo necesita usar el mismo canal. Resultado: la velocidad disponible se divide aproximadamente a la mitad en cada repetición. Un internet de 100 Mbps puede llegar a 40-50 Mbps después del repetidor.">velocidad se reduce casi a la mitad</span>. No es ideal para gaming o streaming 4K desde el extensor.
+        <br><em>— "Para WhatsApp y redes sociales en el cuarto del fondo, alcanza. Para Netflix 4K, puede quedarse corto."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Precio <span>USD 15–40</span></div>
+        <div class="chip">Setup <span>5 minutos</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">PowerLine / PLC</div><span class="badge b-high">El truco de los cables eléctricos</span></div>
+      <div class="card-body">
+        Los adaptadores <span class="tt" data-tip="PowerLine o PLC = usa el cableado eléctrico de tu casa para transmitir datos de red. Conectás un adaptador al enchufe cerca del router (con cable de red) y otro adaptador en el cuarto lejano. Los datos viajan por los cables de luz. Velocidades de 200–1000 Mbps teóricos, 100–400 Mbps reales.">PLC</span> transmiten internet por los cables eléctricos de la casa.
+        <br><br>
+        <strong>Cómo funciona:</strong> un adaptador enchufado cerca del router + cable de red. Otro adaptador en el cuarto lejano. Los datos viajan por los cables de luz de la pared.
+        <br><br>
+        <strong>Ventaja:</strong> mucho más estable que el WiFi extendido, buena velocidad.<br>
+        <strong>Desventaja:</strong> funciona mejor si los dos enchufes están en el mismo circuito eléctrico. Con regletas o filtros de línea puede no funcionar bien.
+        <br><em>— "La solución perfecta para el que no puede pasar un cable de red por las paredes."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Precio <span>USD 30–80 el par</span></div>
+        <div class="chip">Estabilidad <span>mucho mejor que repetidor</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">Sistema Mesh</div><span class="badge b-top">La solución premium</span></div>
+      <div class="card-body">
+        Un sistema mesh son varios nodos que trabajan juntos como una sola red WiFi. No son repetidores: cada nodo es un router completo que se comunica con los demás.
+        <br><br>
+        <strong>Ventaja:</strong> cobertura uniforme en toda la casa, el dispositivo se conecta automáticamente al nodo más cercano sin que lo notes, velocidad completa en cada punto.<br>
+        <strong>Desventaja:</strong> precio alto. Un sistema de 2–3 nodos cuesta USD 150–400.
+        <br><br>
+        Marcas: <strong>Google Nest WiFi, TP-Link Deco, Eero (Amazon), Asus ZenWiFi</strong>.
+        <br><em>— "Casa grande de dos pisos con señal en todos lados: el mesh es la única solución que realmente funciona."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Precio <span>USD 150–400</span></div>
+        <div class="chip">Para <span>casas grandes o de 2 pisos</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Cable de red: la solución definitiva</div><span class="badge b-top">No falla</span></div>
+      <div class="card-body">
+        Pasar un cable de red (Ethernet Cat6) desde el router hasta el dispositivo. Velocidad completa, sin interferencias, sin fluctuaciones, latencia mínima.
+        <br><br>
+        <strong>Para TV, consola y PC de escritorio</strong>: vale la pena el esfuerzo de pasar el cable.<br>
+        <strong>Cat5e</strong> → Hasta 1 Gbps. Suficiente para la mayoría.<br>
+        <strong>Cat6</strong> → Hasta 10 Gbps. El estándar recomendado para instalaciones nuevas.<br>
+        <strong>Cat6A / Cat8</strong> → Para instalaciones profesionales o futuro muy largo plazo.
+        <br><em>— "El cable de red es la solución que nunca falla, nunca se cae y no necesita configuración."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Precio cable Cat6 <span>USD 0.5–0.8/metro</span></div>
+        <div class="chip">Instalación <span>eléctrico o uno mismo</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip tip-green">
+    <strong>💡 La jerarquía de soluciones:</strong> Primero <strong>reubicá el router gratis</strong>. Si no alcanza, probá un <strong>repetidor barato</strong>. Si necesitás más velocidad en el punto lejano, usá <strong>PLC</strong>. Si querés la solución perfecta para una casa grande, <strong>mesh</strong>. Y para gaming o TV, siempre que puedas, <strong>cable de red</strong>.
+  </div>
+</div>
+
+<!-- ══ SEGURIDAD ══ -->
+<div class="section" id="seguridad">
+  <div class="sec-title">Seguridad WiFi</div>
+  <div class="sec-sub">Tu red WiFi abierta o mal protegida es un problema mayor de lo que pensás. <em>Y configurarlo bien toma 10 minutos.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f59e0b">
+      <div class="card-head"><div class="card-name">El tipo de seguridad importa</div><span class="badge b-mid">WPA2 mínimo</span></div>
+      <div class="card-body">
+        Los protocolos de seguridad WiFi evolucionaron con los años:
+        <br><br>
+        <strong>WEP</strong> → Obsoleto. Se hackea en minutos. Si tu router usa esto, actualizalo ya.<br>
+        <strong>WPA</strong> → Mejor que WEP pero ya tiene vulnerabilidades conocidas.<br>
+        <strong>WPA2</strong> → El estándar actual. Seguro para uso hogareño.<br>
+        <strong>WPA3</strong> → El más nuevo. Mejor protección, especialmente en redes públicas. Los routers modernos lo incluyen.
+        <br><em>— "Si tu contraseña de WiFi es el nombre de la calle más el número de la casa, cambiala. Ahora."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Contraseña fuerte</div><span class="badge b-ok">Lo más básico</span></div>
+      <div class="card-body">
+        Una buena contraseña de WiFi:
+        <br><br>
+        ✓ Mínimo 12 caracteres.<br>
+        ✓ Mezcla de letras, números y símbolos.<br>
+        ✓ No es el nombre de tu mascota, tu dirección ni tu fecha de nacimiento.<br>
+        ✗ No es "12345678" (la más usada del mundo, en serio).<br>
+        ✗ No es la que venía de fábrica en el router.
+        <br><em>— "La contraseña de fábrica del router suele estar en una etiqueta pegada abajo. Cualquiera que entre a tu casa puede verla. Cambiala."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">Red de invitados</div><span class="badge b-high">Para los que vienen a casa</span></div>
+      <div class="card-body">
+        La mayoría de los routers modernos permiten crear una <strong>red de invitados</strong> separada de tu red principal.
+        <br><br>
+        <strong>Por qué usarla:</strong> los dispositivos de la red de invitados no pueden acceder a los dispositivos de tu red principal (tu computadora, tu NAS, tu impresora). Si alguien conectado tiene un virus, no puede infectar tus dispositivos.
+        <br><br>
+        También útil para los dispositivos <span class="tt" data-tip="IoT = Internet of Things. Dispositivos conectados a internet del hogar: smart TV, cámaras de seguridad, timbre inteligente, lamparitas WiFi, etc. Muchos tienen seguridad deficiente. Ponerlos en una red separada evita que un dispositivo comprometido acceda al resto de tu red.">IoT</span> (smart TV, cámaras, lamparitas).
+        <br><em>— "El vecino que te pide el WiFi: le das la red de invitados y todos contentos."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Cambiar las credenciales del router</div><span class="badge b-warn">Pocos lo hacen</span></div>
+      <div class="card-body">
+        El panel de administración del router (donde configurás todo) tiene usuario y contraseña. Los de fábrica son siempre los mismos: <strong>admin/admin</strong> o <strong>admin/1234</strong>.
+        <br><br>
+        Si alguien está en tu red WiFi puede acceder al panel de administración con esas credenciales y cambiar tu configuración, interceptar tu tráfico o redireccionar tus consultas DNS.
+        <br><em>— "El 90% de los routers hogareños tiene las credenciales de fábrica sin cambiar. El tuyo probablemente también."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip tip-warn">
+    <strong>⚠️ WiFi público: tené cuidado.</strong> Las redes WiFi públicas (cafés, hoteles, aeropuertos) pueden ser interceptadas. Nunca hagas operaciones bancarias ni ingreses contraseñas importantes en WiFi público sin una <strong>VPN</strong>. Y si ves dos redes con el mismo nombre en un lugar público, una puede ser falsa creada para robar datos.
+  </div>
+</div>
+
+<!-- ══ CHECKLIST ══ -->
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de Comprar un Router</div>
+  <div class="sec-sub">Lo que tenés que saber antes de ir a comprarlo. <em>El router que te da la empresa no siempre es el mejor, pero cambiarlo tiene sus condiciones.</em></div>
+
+  <div class="checks">
+    <div class="check">
+      <div class="check-ico">📋</div>
+      <div><div class="check-title">¿Podés reemplazar el router de la empresa?</div>
+      <div class="check-desc">Depende del tipo de conexión. Con <strong>fibra óptica</strong>, el modem óptico de la empresa es necesario, pero podés poner tu router conectado a él. Con <strong>cable coaxial</strong>, podés reemplazar el modem-router combo si sabés configurarlo. <em>— Llamá a la empresa y preguntá antes de comprar nada.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">📐</div>
+      <div><div class="check-title">Medí el área que necesitás cubrir</div>
+      <div class="check-desc">Los routers tienen rangos de cobertura indicativos. Un router de gama media cubre bien unos 80–100m². Para más área o con paredes gruesas, necesitás sistema mesh o extensores. <strong>Sé realista con el tamaño de tu casa.</strong></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">📱</div>
+      <div><div class="check-title">Contá los dispositivos que conectás</div>
+      <div class="check-desc">Contá celulares, notebooks, TVs, consolas, tablets, dispositivos IoT. Si son más de 15, un router WiFi 6 maneja mejor la carga. <strong>Un router WiFi 5 básico con 20 dispositivos conectados se va a saturar.</strong></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">⚡</div>
+      <div><div class="check-title">La velocidad del router tiene que superar la del plan</div>
+      <div class="check-desc">Si tenés 300 Mbps de internet, el router tiene que poder manejar esa velocidad. Un router viejo con WiFi 4 puede ser el cuello de botella que te limita aunque tengas un plan rápido. <strong>El router lento puede hacer lenta toda la red.</strong></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🔄</div>
+      <div><div class="check-title">Actualizaciones de firmware</div>
+      <div class="check-desc">Un router sin actualizaciones de seguridad es una puerta abierta. Elegí marcas que mantienen sus routers actualizados. <strong>TP-Link, Asus y Netgear tienen buen historial de updates.</strong> <em>— Los routers genéricos suelen abandonarse al año de salir.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🔌</div>
+      <div><div class="check-title">Puertos Ethernet en el router</div>
+      <div class="check-desc">Verificá que tenga suficientes puertos de red para los dispositivos que querés conectar por cable (TV, consola, PC). <strong>Lo mínimo: 4 puertos LAN.</strong> Los routers mesh suelen tener solo 1–2 puertos por nodo.</div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:28px">
+    <div class="sec-title" style="font-size:24px;margin-bottom:6px">Marcas confiables</div>
+    <div class="pgrid">
+      <div class="pcard rec">
+        <div class="ptag">Marcas recomendadas</div>
+        <div class="pmarca">TP-Link · Asus · Netgear · Ubiquiti</div>
+        <div class="pdesc"><strong>Lo que ofrecen:</strong><br>• Firmware actualizado regularmente<br>• App de gestión buena<br>• Garantía real<br>• Soporte técnico disponible<br>• Relación precio/rendimiento probada<br>• Comunidad activa de usuarios</div>
+      </div>
+      <div class="pcard alt">
+        <div class="ptag">Evitá</div>
+        <div class="pmarca">Genéricos sin nombre</div>
+        <div class="pdesc"><strong>Los riesgos:</strong><br>• Sin actualizaciones de seguridad<br>• Firmware con vulnerabilidades conocidas<br>• Velocidades reales muy por debajo<br>• Soporte inexistente<br>• Pueden venir con malware de fábrica<br>• Se rompen rápido con cortes de luz</div>
+      </div>
+    </div>
+
+    <div class="tip" style="margin-top:16px">
+      <strong>💡 Para la mayoría de los hogares:</strong> Un <strong>TP-Link Archer AX55 o AX73 (WiFi 6)</strong> cuesta entre USD 80 y USD 150 y cubre perfectamente una casa estándar con 10–20 dispositivos. Es el punto dulce de precio/rendimiento. Para casas grandes, el <strong>TP-Link Deco XE75 mesh</strong> no tiene rivales en esa franja de precio.
+    </div>
+
+    <div class="cards" style="margin-top:20px">
+      <div class="card" style="--ca:#f87171">
+        <div class="card-head"><div class="card-name">Señales de alarma</div><span class="badge b-warn">Al comprar o configurar</span></div>
+        <div class="card-body">
+          🚩 <strong>Router que se calienta mucho</strong> → Ventilación insuficiente o hardware defectuoso.<br>
+          🚩 <strong>Sin opción WPA2 o WPA3</strong> → Seguridad obsoleta, no lo uses.<br>
+          🚩 <strong>Velocidades prometidas imposibles</strong> → "3200 Mbps" en un router de USD 20 es marketing puro.<br>
+          🚩 <strong>Sin actualizaciones en 2+ años</strong> → Marca que abandonó el producto.<br>
+          🚩 <strong>App que pide permisos raros</strong> → Acceso a contactos, cámara, etc. en una app de router es sospechoso.<br>
+          🚩 <strong>Contraseña de admin no se puede cambiar</strong> → Grave problema de seguridad.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<div id="ttBubble"></div>
+
+<script>
+  function goTab(id, el) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  const bubble = document.getElementById('ttBubble');
+  let timer;
+  document.querySelectorAll('.tt').forEach(el => {
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      bubble.textContent = this.dataset.tip;
+      bubble.classList.add('on');
+      const r = this.getBoundingClientRect();
+      let top = r.bottom + 10, left = r.left;
+      if (left + 280 > window.innerWidth) left = window.innerWidth - 285;
+      if (top + 140 > window.innerHeight) top = r.top - 145;
+      bubble.style.top = top + 'px';
+      bubble.style.left = left + 'px';
+      clearTimeout(timer);
+      timer = setTimeout(() => bubble.classList.remove('on'), 5000);
+    });
+  });
+  document.addEventListener('click', () => bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Wifi Routers: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="smart-home.html" class="rel-link">🏡 Smart Home</a><a href="ups-estabilizadores.html" class="rel-link">⚡ UPS</a><a href="cables-conectores.html" class="rel-link">🔋 Cables</a></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Agarrate, se viene...</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--soft:#aaaacc;--accent:#f0abfc;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+
+  /* HEADER ESPECIAL */
+  header{background:linear-gradient(135deg,#080810,#0d0020 40%,#100010 60%,#080810);border-bottom:1px solid var(--border);padding:48px 20px 40px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(240,171,252,.15) 0%,rgba(129,140,248,.08) 50%,transparent 70%);pointer-events:none;animation:pulse 4s ease-in-out infinite;}
+  header::after{content:'';position:absolute;bottom:-60px;left:50%;transform:translateX(-50%);width:400px;height:200px;background:radial-gradient(ellipse,rgba(34,211,238,.08),transparent 70%);pointer-events:none;}
+  @keyframes pulse{0%,100%{opacity:.6;}50%{opacity:1;}}
+  .site-label{font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);text-transform:uppercase;opacity:.7;margin-bottom:8px;}
+  .ultima-badge{display:inline-block;background:linear-gradient(135deg,rgba(240,171,252,.2),rgba(129,140,248,.2));border:1px solid rgba(240,171,252,.4);border-radius:20px;padding:5px 16px;font-size:11px;font-weight:700;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,7vw,72px);letter-spacing:2px;line-height:1.05;background:linear-gradient(135deg,#fff 20%,#f0abfc 50%,#818cf8 80%,#22d3ee 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:12px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+
+  main{padding:28px 16px 80px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .card:hover{border-color:rgba(240,171,252,.35);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ya  {background:rgba(77,187,122,.15);color:#4dbb7a;border:1px solid rgba(77,187,122,.3);}
+  .b-2025{background:rgba(240,171,252,.12);color:var(--accent);border:1px solid rgba(240,171,252,.3);}
+  .b-2026{background:rgba(129,140,248,.12);color:#818cf8;border:1px solid rgba(129,140,248,.3);}
+  .b-2027{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .b-2030{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-wow {background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tt{border-bottom:1px dashed var(--accent);color:var(--accent);cursor:pointer;font-weight:600;display:inline;}
+  #ttBubble{display:none;position:fixed;background:#0d0020;border:1px solid var(--accent);border-radius:14px;padding:13px 16px;font-size:14px;color:var(--text);line-height:1.6;max-width:270px;z-index:9999;box-shadow:0 8px 40px rgba(0,0,0,.8);pointer-events:none;}
+  #ttBubble.on{display:block;}
+  #ttBubble::before{content:'💡 ';}
+  .tip{background:rgba(240,171,252,.06);border:1px solid rgba(240,171,252,.2);border-radius:14px;padding:16px 18px;margin-top:20px;font-size:14px;line-height:1.65;color:#e8c8f8;}
+  .tip strong{color:var(--accent);}
+  .tip-blue{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);color:#a0d8ea;}
+  .tip-blue strong{color:#00d4ff;}
+  .tip-green{background:rgba(77,187,122,.06);border:1px solid rgba(77,187,122,.2);color:#a0d8b4;}
+  .tip-green strong{color:#4dbb7a;}
+  .tip-gold{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);color:#f0e080;}
+  .tip-gold strong{color:#ffd700;}
+
+  /* TIMELINE PRINCIPAL */
+  .timeline{display:flex;flex-direction:column;gap:0;}
+  .tl-item{display:flex;gap:16px;position:relative;}
+  .tl-item:not(:last-child)::after{content:'';position:absolute;left:19px;top:42px;bottom:0;width:2px;background:linear-gradient(180deg,var(--tc),transparent);}
+  .tl-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;margin-top:2px;position:relative;z-index:1;border:2px solid var(--tc);}
+  .tl-body{flex:1;padding-bottom:28px;}
+  .tl-label{font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;margin-bottom:3px;color:var(--tc);}
+  .tl-name{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text);line-height:1;margin-bottom:5px;}
+  .tl-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+  .tl-desc strong{color:var(--text);}
+  .tl-desc em{color:#7a8ab0;font-size:12px;}
+
+  /* NIVEL CARDS (hype meter) */
+  .hype{display:flex;align-items:center;gap:8px;margin-top:8px;}
+  .hype-label{font-size:11px;color:var(--muted);font-weight:600;min-width:60px;}
+  .hype-bar{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+  .hype-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--hc1),var(--hc2));}
+
+  /* NOTICIAS GRID */
+  .noticia{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:12px;display:flex;gap:14px;transition:border-color .2s,transform .2s;}
+  .noticia:hover{border-color:rgba(240,171,252,.3);transform:translateY(-2px);}
+  .noticia-ico{font-size:32px;flex-shrink:0;}
+  .noticia-empresa{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:3px;}
+  .noticia-titulo{font-weight:700;color:var(--text);font-size:14px;line-height:1.3;margin-bottom:5px;}
+  .noticia-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .noticia-desc em{color:#7a8ab0;font-size:12px;}
+
+  @media(max-width:480px){.card-name{font-size:20px;}.tl-name{font-size:18px;}}
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="site-label">SinVerso · Tecnología</div>
+  <div class="ultima-badge">⚡ Última sección · Edición especial</div>
+  <h1>Agarrate,<br>se viene,<br>se viene...</h1>
+  <p class="subtitle">Las novedades que están pasando ahora. <strong>Y las que te van a explotar la cabeza en los próximos años.</strong></p>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="goTab('ahora',this)">⚡ Ahora mismo</div>
+  <div class="tab" onclick="goTab('ia',this)">🤖 IA en todo</div>
+  <div class="tab" onclick="goTab('robots',this)">🦾 Robots</div>
+  <div class="tab" onclick="goTab('conectividad',this)">🛰️ Conectividad</div>
+  <div class="tab" onclick="goTab('energia',this)">⚡ Energía</div>
+  <div class="tab" onclick="goTab('timeline',this)">🔮 El timeline</div>
+</div>
+
+<main>
+
+<!-- AHORA MISMO -->
+<div class="section active" id="ahora">
+  <div class="sec-title">Lo que está pasando ahora</div>
+  <div class="sec-sub">Novedades de los últimos meses que cambiaron o están cambiando el mercado. <em>Algunas ya llegaron a Argentina, otras están en camino.</em></div>
+
+  <div class="noticia">
+    <div class="noticia-ico">🤖</div>
+    <div>
+      <div class="noticia-empresa">IA · 2024–2025</div>
+      <div class="noticia-titulo">La IA entró a todos los dispositivos y no se va más</div>
+      <div class="noticia-desc">Los modelos de IA como GPT-4o, Gemini y Claude están integrados en celulares, notebooks, buscadores y hasta en las heladeras Samsung. <strong>Ya no es una app aparte: está en todo.</strong> El Pixel 9 de Google, los iPhone 16 con Apple Intelligence y las Copilot+ PCs de Microsoft vienen con IA de fábrica que entiende tu pantalla, tu voz y tu historial. <em>— El año que viene todos tus dispositivos nuevos van a tener IA integrada, no opcional.</em></div>
+    </div>
+  </div>
+
+  <div class="noticia">
+    <div class="noticia-ico">📱</div>
+    <div>
+      <div class="noticia-empresa">Samsung / Google / Motorola · 2023–2025</div>
+      <div class="noticia-titulo">Los celulares plegables dejaron de ser raros</div>
+      <div class="noticia-desc">El Samsung Galaxy Z Fold 6, el Z Flip 6 y el Google Pixel 9 Pro Fold son los mejores plegables hasta ahora. La tecnología maduró: las bisagras duran más, las pantallas ya no se arrugan tanto, y el software los aprovecha bien. <strong>Todavía son caros (USD 900–1800) pero el factor de rareza desapareció.</strong> <em>— En 2026 va a haber plegables en la gama media.</em></div>
+    </div>
+  </div>
+
+  <div class="noticia">
+    <div class="noticia-ico">🛰️</div>
+    <div>
+      <div class="noticia-empresa">Apple / Qualcomm / Starlink · 2024–2025</div>
+      <div class="noticia-titulo">Internet satelital directo al celular sin antena extra</div>
+      <div class="noticia-desc">El iPhone 14+ tiene conexión satelital de emergencia (SOS). Starlink lanzó Direct to Cell: mensajes de texto por satélite en celulares comunes sin chips especiales. <strong>En zonas sin señal, el celular ya tiene alternativa.</strong> Argentina tiene cobertura Starlink activa. <em>— La conectividad satelital va a ser estándar en todos los celulares premium en 2 años.</em></div>
+    </div>
+  </div>
+
+  <div class="noticia">
+    <div class="noticia-ico">🖥️</div>
+    <div>
+      <div class="noticia-empresa">Microsoft / Qualcomm / Apple · 2024–2025</div>
+      <div class="noticia-titulo">Las Copilot+ PCs y el ARM tomaron las notebooks</div>
+      <div class="noticia-desc">Las notebooks con chips ARM (Snapdragon X Elite, Apple M4) consumen mucho menos energía que Intel y AMD pero son igual de potentes para trabajo. <strong>Baterías de 20+ horas reales se volvieron la norma en gama alta.</strong> Microsoft integró Copilot (IA) directamente en Windows 11. <em>— Si comprás notebook hoy, buscá ARM o Apple Silicon.</em></div>
+    </div>
+  </div>
+
+  <div class="noticia">
+    <div class="noticia-ico">🎮</div>
+    <div>
+      <div class="noticia-empresa">Nvidia / AMD / Intel · 2024–2025</div>
+      <div class="noticia-titulo">IA en las placas de video cambió el gaming para siempre</div>
+      <div class="noticia-desc">DLSS 4 de Nvidia y FSR 4 de AMD usan IA para generar frames intermedios, multiplicando el framerate real. <strong>Un juego que corre a 60fps reales se puede mostrar a 240fps generados por IA.</strong> La diferencia visual es mínima y la mejora de fluidez es enorme. Las RTX 5000 ya salieron al mercado. <em>— Las placas de video son ahora procesadores de IA que también sirven para jugar.</em></div>
+    </div>
+  </div>
+
+  <div class="noticia">
+    <div class="noticia-ico">🔋</div>
+    <div>
+      <div class="noticia-empresa">CATL / BYD / Samsung SDI · 2024–2025</div>
+      <div class="noticia-titulo">Las baterías de estado sólido están llegando</div>
+      <div class="noticia-desc">Toyota, Nissan y Samsung anunciaron producción de <span class="tt" data-tip="Batería de estado sólido = reemplaza el electrolito líquido (que puede inflamarse) por uno sólido. Más seguras, más densidad energética (más capacidad en menos espacio), carga más rápida y más ciclos de vida. El gran avance en baterías que se viene desde hace 10 años y que finalmente está llegando a producción.">baterías de estado sólido</span> para 2025–2027. Más seguras, más densidad energética, cargan más rápido. <strong>Van a cambiar los celulares, las notebooks y los autos eléctricos.</strong> <em>— El celulaer del futuro va a tener el doble de batería en la mitad del espacio.</em></div>
+    </div>
+  </div>
+
+  <div class="noticia">
+    <div class="noticia-ico">📺</div>
+    <div>
+      <div class="noticia-empresa">LG / Samsung / TCL · 2025</div>
+      <div class="noticia-titulo">OLED transparente y TV que desaparece</div>
+      <div class="noticia-desc">LG lanzó TVs OLED transparentes que cuando están apagados son una placa de vidrio. Samsung tiene el MicroLED modular: construís el tamaño de pantalla que querés con módulos. <strong>El TV está dejando de ser un rectángulo negro colgado en la pared.</strong> <em>— Caros hoy (USD 5.000+), mainstream en 5 años.</em></div>
+    </div>
+  </div>
+
+  <div class="noticia">
+    <div class="noticia-ico">🧠</div>
+    <div>
+      <div class="noticia-empresa">Neuralink / Synchron · 2024–2025</div>
+      <div class="noticia-titulo">Los primeros humanos con chips en el cerebro ya existen</div>
+      <div class="noticia-desc">Neuralink implantó su chip N1 en tres pacientes humanos en 2024. Los pacientes con parálisis pueden controlar cursores y dispositivos con el pensamiento. <strong>No es ciencia ficción: ya pasó.</strong> Todavía es medicina, no consumo masivo, pero la línea se corrió para siempre. <em>— La interfaz cerebro-computadora existe. Aún no para el mercado general.</em></div>
+    </div>
+  </div>
+
+  <div class="tip tip-gold">
+    <strong>⚡ El resumen de 2024–2025:</strong> La IA se metió en absolutamente todo. Las baterías están mejorando más rápido que nunca. La conectividad satelital llegó a los celulares comunes. Los robots humanoides salieron del laboratorio. Y alguien controla una computadora con el pensamiento. Todo en el mismo año.
+  </div>
+</div>
+
+<!-- IA EN TODO -->
+<div class="section" id="ia">
+  <div class="sec-title">La IA en todo</div>
+  <div class="sec-sub">No es hype. Está pasando. <em>Y en 2 años vas a extrañar cuando los dispositivos no tenían IA integrada tanto como hoy extrañás cuando no tenían WiFi.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f0abfc">
+      <div class="card-head"><div class="card-name">Los asistentes de IA que entienden de verdad</div><span class="badge b-ya">Ya existe</span></div>
+      <div class="card-body">
+        La diferencia entre el Siri de 2015 y los asistentes de IA de 2025 es la misma que entre un Nokia 3310 y un iPhone. Los modelos actuales (GPT-4o, Gemini 2, Claude 3.5+) entienden contexto, razonan, recuerdan conversaciones y pueden hacer tareas complejas.
+        <br><br>
+        <strong>Lo que ya podés hacer hoy:</strong> hablarle al celu en lenguaje natural y que entienda intención compleja, pedir que analice una foto y te diga qué hay en ella, dictar un correo con contexto y que lo redacte solo, preguntarle sobre lo que estás viendo con la cámara en tiempo real (Gemini Live).
+        <br><em>— "La diferencia entre Siri y Gemini Live hoy es la misma que entre un mapa de papel y Google Maps."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Apple Intelligence <span>iPhone 15 Pro+</span></div>
+        <div class="chip">Gemini Live <span>Android</span></div>
+        <div class="chip">Copilot+ <span>Windows 11 ARM</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">Generación de imagen y video con IA</div><span class="badge b-ya">Ya existe y asusta</span></div>
+      <div class="card-body">
+        Midjourney, DALL-E 3, Stable Diffusion y Adobe Firefly generan imágenes fotorrealistas desde texto en segundos. Sora (OpenAI) y Veo 2 (Google) generan video de alta calidad desde texto.
+        <br><br>
+        <strong>El impacto real:</strong> diseñadores usan IA para prototipos en minutos. Publicistas generan variaciones de campañas instantáneamente. Y cualquier persona puede crear contenido visual que antes requería años de formación.
+        <br><br>
+        <strong>El lado oscuro:</strong> los deepfakes se volvieron indistinguibles. Detectar si una foto o video es real o generado es cada vez más difícil.
+        <br><em>— "La misma tecnología que le da superpoderes creativos a diseñadores es la que genera desinformación visual. La navaja de doble filo más grande de la historia reciente."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#22d3ee">
+      <div class="card-head"><div class="card-name">IA en medicina: el cambio silencioso más importante</div><span class="badge b-2025">En proceso</span></div>
+      <div class="card-body">
+        <strong>Google DeepMind AlphaFold</strong> resolvió la estructura de casi todas las proteínas conocidas: el problema biológico más difícil de los últimos 50 años, resuelto en 2 años por IA. Cambió para siempre el desarrollo de medicamentos.
+        <br><br>
+        <strong>En radiología:</strong> modelos de IA detectan cáncer de mama en mamografías con mayor precisión que radiólogos humanos en estudios clínicos.<br>
+        <strong>En diagnóstico:</strong> apps que analizan síntomas con precisión diagnóstica de especialista están en aprobación regulatoria en varios países.
+        <br><em>— "La IA no va a reemplazar a tu médico. Tu médico que usa IA va a reemplazar al que no la usa."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Agentes de IA: el próximo salto</div><span class="badge b-2025">Llegando</span></div>
+      <div class="card-body">
+        La IA actual responde preguntas. Los <strong>agentes de IA</strong> hacen tareas autónomas: navegan la web, usan apps, envían correos, hacen reservas y completan flujos de trabajo sin que tengas que estar presente.
+        <br><br>
+        <strong>OpenAI Operator, Anthropic Computer Use, Google Mariner</strong> son los primeros. Todavía son torpes e imprecisos pero en 2–3 años van a poder: hacer las compras del súper en el delivery, gestionar tu agenda completa, manejar la correspondencia rutinaria.
+        <br><em>— "El agente de IA es el asistente personal que antes solo tenían los CEOs. En 3 años lo va a tener cualquiera con un celu."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ROBOTS -->
+<div class="section" id="robots">
+  <div class="sec-title">Los robots están llegando</div>
+  <div class="sec-sub">No los robots de ciencia ficción de los años 80. <em>Los reales. Los que caminan, agarran cosas y aprenden solos.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f0abfc">
+      <div class="card-head"><div class="card-name">Robots humanoides: salieron del laboratorio</div><span class="badge b-2025">Pasando ahora</span></div>
+      <div class="card-body">
+        En 2024–2025 varios robots humanoides salieron de los labs y están en pruebas reales en fábricas:
+        <br><br>
+        <strong>Figure 02 (Figure AI)</strong> → Trabaja en fábricas de BMW. Agarra piezas, las mueve, aprende tareas nuevas en horas.<br>
+        <strong>Tesla Optimus Gen 2</strong> → Hace tareas de manufactura en las propias fábricas de Tesla. Elon dijo que para 2026 va a haber miles.<br>
+        <strong>Boston Dynamics Atlas (eléctrico)</strong> → El más ágil. Da volteretas, levanta objetos complejos, sube escaleras.<br>
+        <strong>1X NEO</strong> → Diseñado para el hogar. Lavar platos, doblar ropa, tareas domésticas.
+        <br><em>— "El robot que dobla la ropa llegó. No a tu casa todavía. Pero llegó."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Precio estimado hogareño <span>USD 20.000–50.000 (hoy)</span></div>
+        <div class="chip">Objetivo <span>menos de USD 10.000 en 2027</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Los brazos robóticos en el hogar</div><span class="badge b-2026">Muy pronto</span></div>
+      <div class="card-body">
+        Antes del robot completo, los brazos robóticos de mesa están llegando al consumidor. No son humanoides: son un brazo que hace tareas específicas en la cocina o el escritorio.
+        <br><br>
+        <strong>Aescape</strong> → Robot de masajes que te da un masaje de espalda profesional. Ya en spas en EE.UU.<br>
+        <strong>Moley Robotics</strong> → Dos brazos robóticos en la cocina que cocinan recetas completas. Todavía USD 150.000 (sí, leyeron bien).<br>
+        <strong>Startups de 2025</strong> → Docenas de empresas trabajando en brazos de bajo costo para tareas de cocina específicas.
+        <br><em>— "El que dice 'nunca voy a querer un robot en mi casa' es el mismo que en 2005 decía 'nunca voy a necesitar internet en el celu'."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">Drones de delivery: probado, funciona</div><span class="badge b-ya">Existe en varios países</span></div>
+      <div class="card-body">
+        Wing (Google), Amazon Prime Air y Zipline hacen entregas reales con drones en EE.UU., Australia y varios países de África. El drone llega, baja el paquete con un cable y se va.
+        <br><br>
+        En Argentina la regulación de la ANAC todavía no lo permite comercialmente pero el modelo de negocio ya está probado. En zonas rurales y medicinales (remedios, sangre) ya funciona en varios países.
+        <br><em>— "Que el delivery llegue volando en 15 minutos no es el futuro. Es el presente en Sydney y Dallas."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip tip-blue">
+    <strong>🦾 La pregunta real sobre los robots:</strong> No es si van a poder hacer las tareas. Ya pueden muchas. La pregunta es cuándo el precio baja lo suficiente para el mercado masivo. La curva de costos de los humanoides está siguiendo la misma trayectoria que los celulares en 2007: caros al principio, masivos en 5 años.
+  </div>
+</div>
+
+<!-- CONECTIVIDAD -->
+<div class="section" id="conectividad">
+  <div class="sec-title">Conectividad: sin puntos ciegos</div>
+  <div class="sec-sub">El sueño de estar conectado en cualquier lugar del planeta se está haciendo realidad. <em>Con satélites, con 6G y con tecnologías que todavía no tienen nombre.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#22d3ee">
+      <div class="card-head"><div class="card-name">Starlink y la revolución satelital</div><span class="badge b-ya">Ya está en Argentina</span></div>
+      <div class="card-body">
+        SpaceX tiene más de 6.000 satélites Starlink en órbita. En Argentina ya está disponible con velocidades de 100–250 Mbps en zonas rurales donde antes no había internet de ningún tipo.
+        <br><br>
+        <strong>Starlink Direct to Cell:</strong> los satélites hablan directamente con celulares comunes (sin antena). Ya disponible para SMS en EE.UU. con T-Mobile. Llamadas y datos en 2025–2026.
+        <br><br>
+        <strong>El impacto en Argentina:</strong> zonas rurales, campo, Patagonia, lugares donde la conectividad era imposible ahora tienen acceso. Está cambiando la educación y la medicina rural.
+        <br><em>— "El gaucho en la Patagonia con Starlink tiene mejor internet que muchos barrios de Rosario. El mundo se niveló para arriba."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Starlink residencial AR <span>USD 50–80/mes</span></div>
+        <div class="chip">Direct to Cell <span>2025–2026</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">WiFi 7: el que viene después del 6</div><span class="badge b-ya">Ya existe en routers premium</span></div>
+      <div class="card-body">
+        WiFi 7 (802.11be) ya está en los routers más nuevos y en los celulares de gama alta de 2024. Hasta 46 Gbps teóricos, latencia ultrabaja, mejor manejo de muchos dispositivos simultáneos.
+        <br><br>
+        <strong>La diferencia práctica:</strong> en hogares con 30+ dispositivos conectados (smart home completo), el WiFi 7 elimina los problemas de congestión. Para el usuario normal con 5–10 dispositivos, el WiFi 6 todavía es más que suficiente.
+        <br><em>— "WiFi 7 es para el que tiene la casa llena de dispositivos IoT y la señal empieza a tener microlatencias. Para el resto, WiFi 6 sobra."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">6G: el que viene después del 5G</div><span class="badge b-2030">2030+</span></div>
+      <div class="card-body">
+        El 5G todavía no llegó a todas las ciudades de Argentina y ya se habla del 6G. Samsung, Nokia y Ericsson tienen laboratorios activos. La fecha de lanzamiento comercial apunta a 2030–2032.
+        <br><br>
+        <strong>Lo que promete el 6G:</strong> velocidades de 1 Tbps (teórico), latencia de menos de 1 milisegundo, conectividad que permite hologramas en tiempo real y comunicación entre máquinas a escala masiva.
+        <br><em>— "Antes de preocuparte por el 6G, fijate si en tu barrio ya hay 5G. En Argentina el 5G está en pocas ciudades y zonas."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ENERGÍA -->
+<div class="section" id="energia">
+  <div class="sec-title">Energía: la base de todo</div>
+  <div class="sec-sub">Sin energía no hay tecnología. <em>Y la forma en que generamos y almacenamos energía está cambiando más rápido que en cualquier momento de la historia.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Fusión nuclear: el anuncio que cambió todo</div><span class="badge b-wow">Hito histórico</span></div>
+      <div class="card-body">
+        En diciembre de 2022, el National Ignition Facility en EE.UU. logró por primera vez en la historia que una reacción de fusión nuclear produzca <strong>más energía de la que consumió para iniciarse</strong>. Ignición neta. El Santo Grial energético.
+        <br><br>
+        <strong>Lo que significa:</strong> la fusión nuclear (la misma energía del sol) como fuente de energía limpia e ilimitada dejó de ser ciencia ficción y pasó a ser ingeniería. Falta mucho para la planta comercial, pero el principio está demostrado.
+        <br><br>
+        <strong>Empresas como Commonwealth Fusion y Helion</strong> tienen plantas piloto planificadas para 2030–2035.
+        <br><em>— "Energía limpia e ilimitada del mismo proceso que alimenta las estrellas. Si funciona a escala, cambia todo. Todo."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Solar + batería doméstica: la independencia energética</div><span class="badge b-ya">Ya disponible</span></div>
+      <div class="card-body">
+        El panel solar doméstico más la batería de almacenamiento (Powerwall de Tesla, o los sistemas chinos de CATL) permiten a una casa ser energéticamente autónoma o casi.
+        <br><br>
+        <strong>En Argentina con los cortes de luz:</strong> un sistema solar + batería es la respuesta más inteligente al largo plazo. La inversión inicial es alta (USD 5.000–15.000) pero los costos bajaron un 80% en 10 años.
+        <br><br>
+        Los paneles solares de perovskita, que están madurando en laboratorio, prometen eficiencias del 40%+ vs el 22% actual de los de silicio. Cuando lleguen al mercado, el cálculo cambia radicalmente.
+        <br><em>— "En un país con cortes de luz crónicos, el panel solar + batería es el UPS definitivo."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#f0abfc">
+      <div class="card-head"><div class="card-name">Carga inalámbrica a distancia</div><span class="badge b-2026">Llegando</span></div>
+      <div class="card-body">
+        Energous, Ossia y GuRu Wireless están desarrollando tecnología para cargar dispositivos a distancia real: no apoyar el celu en una base, sino que el celu se cargue en cualquier punto de la habitación mientras lo usás.
+        <br><br>
+        La FCC ya aprobó algunos sistemas en EE.UU. para potencias bajas. Las primeras aplicaciones son para dispositivos IoT (sensores, dispositivos médicos) que nunca necesitarían cambio de batería.
+        <br><em>— "Entrar a una habitación y que el celu empiece a cargarse solo. El concepto existe. La implementación masiva, 3–5 años."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+<div class="section" id="timeline">
+  <div class="sec-title">El timeline de lo que viene</div>
+  <div class="sec-sub">De lo más cercano a lo más lejano. <em>Con fechas honestas y el nivel de hype calibrado.</em></div>
+
+  <div class="timeline">
+
+    <div class="tl-item" style="--tc:#4dbb7a">
+      <div class="tl-dot" style="background:rgba(77,187,122,.2);font-size:18px;">✅</div>
+      <div class="tl-body">
+        <div class="tl-label">2024–2025 · Ya pasó</div>
+        <div class="tl-name">IA en todos los dispositivos</div>
+        <div class="tl-desc">GPT-4o, Gemini 2, Claude 3.5 en celulares, notebooks y apps. Robots humanoides en fábricas reales. Ignición nuclear demostrada. Starlink Direct to Cell. Plegables maduros. <em>— Cambios más grandes en 1 año que en los 5 anteriores.</em></div>
+        <div class="hype"><div class="hype-label">Realidad</div><div class="hype-bar"><div class="hype-fill" style="width:95%;--hc1:#4dbb7a;--hc2:#22d3ee;"></div></div></div>
+      </div>
+    </div>
+
+    <div class="tl-item" style="--tc:#f0abfc">
+      <div class="tl-dot" style="background:rgba(240,171,252,.2);font-size:18px;">🔜</div>
+      <div class="tl-body">
+        <div class="tl-label">2025–2026 · Muy pronto</div>
+        <div class="tl-name">Lentes AR ligeros · Agentes de IA autónomos · Baterías de estado sólido</div>
+        <div class="tl-desc">Los primeros lentes AR del tamaño de anteojos normales (Meta Orion, Samsung). Agentes de IA que completan tareas completas solos. Primeros celulares con batería de estado sólido. Starlink en llamadas de voz. Robots humanoides en hogares piloto. <em>— La mayoría de estas cosas ya tienen fecha de presentación pública.</em></div>
+        <div class="hype"><div class="hype-label">Probabilidad</div><div class="hype-bar"><div class="hype-fill" style="width:80%;--hc1:#f0abfc;--hc2:#818cf8;"></div></div></div>
+      </div>
+    </div>
+
+    <div class="tl-item" style="--tc:#818cf8">
+      <div class="tl-dot" style="background:rgba(129,140,248,.2);font-size:18px;">🔮</div>
+      <div class="tl-body">
+        <div class="tl-label">2027–2029 · Futuro cercano</div>
+        <div class="tl-name">Robot doméstico accesible · Traducción instantánea en lentes · Autos voladores eVTOL</div>
+        <div class="tl-desc">Robots humanoides por debajo de USD 10.000. Lentes AR que traducen conversaciones en tiempo real. eVTOL (autos voladores eléctricos tipo taxi aéreo) en operación comercial en ciudades grandes — Joby Aviation, Archer y EHang ya tienen aprobaciones regulatorias. IA que predice enfermedades antes de síntomas. <em>— Alta probabilidad para la mayoría. Los autos voladores son los más inciertos.</em></div>
+        <div class="hype"><div class="hype-label">Probabilidad</div><div class="hype-bar"><div class="hype-fill" style="width:65%;--hc1:#818cf8;--hc2:#22d3ee;"></div></div></div>
+      </div>
+    </div>
+
+    <div class="tl-item" style="--tc:#22d3ee">
+      <div class="tl-dot" style="background:rgba(34,211,238,.2);font-size:18px;">⭐</div>
+      <div class="tl-body">
+        <div class="tl-label">2030–2035 · Futuro</div>
+        <div class="tl-name">Fusión nuclear comercial · 6G · Interfaces cerebrales consumer · Lentes que reemplazan el celu</div>
+        <div class="tl-desc">Primera planta piloto de fusión nuclear conectada a la red. 6G en primeras ciudades. Neuralink y similares para usuarios con capacidades normales (no solo terapéutico). Lentes AR que hacen todo lo que hace el celu sin sacarlo del bolsillo. IA indistinguible de conversación humana en texto y voz. <em>— Más incierto en timing pero muy probable que ocurra en esta ventana.</em></div>
+        <div class="hype"><div class="hype-label">Probabilidad</div><div class="hype-bar"><div class="hype-fill" style="width:50%;--hc1:#22d3ee;--hc2:#ffd700;"></div></div></div>
+      </div>
+    </div>
+
+    <div class="tl-item" style="--tc:#666">
+      <div class="tl-dot" style="background:rgba(100,100,100,.2);font-size:18px;">🌌</div>
+      <div class="tl-body">
+        <div class="tl-label">2035+ · Futuro lejano</div>
+        <div class="tl-name">IA general · Lentes de contacto digitales · Computación cuántica masiva · Base lunar</div>
+        <div class="tl-desc">AGI (inteligencia artificial general) si los modelos actuales escalan como se espera. Lentes de contacto con pantalla integrada (Mojo Vision ya tiene prototipos). Computadoras cuánticas resolviendo problemas imposibles para las clásicas. Base lunar permanente con humanos (Artemis). <em>— Muy posible. El timing es lo incierto. Podría ser antes.</em></div>
+        <div class="hype"><div class="hype-label">Probabilidad</div><div class="hype-bar"><div class="hype-fill" style="width:35%;--hc1:#666;--hc2:#555;"></div></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="tip" style="margin-top:8px">
+    <strong>💡 El patrón que se repite:</strong> Cada tecnología tarda el doble de lo que promete en llegar y cambia el doble de lo que se esperaba cuando llega. Internet tardó 20 años en volverse masivo. Los celulares también. La IA lleva 70 años de investigación. <strong>Cuando una tecnología llega, no la subestimes porque tardó mucho.</strong>
+  </div>
+
+  <div class="cards" style="margin-top:20px">
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Lo que NO va a pasar (por ahora)</div><span class="badge b-wow">Hype sin base</span></div>
+      <div class="card-body">
+        Por cada tecnología real hay 10 promesas infundadas. Las que menos van a cumplirse pronto:
+        <br><br>
+        <strong>El metaverso como lo prometió Meta en 2021</strong> → Los mundos virtuales sociales masivos no despegaron. La gente no quiere vivir en Second Life con mejor gráfica.<br>
+        <strong>NFTs como inversión o tecnología masiva</strong> → El mercado colapsó un 95%+ desde el pico. No volvió ni va a volver en esa forma.<br>
+        <strong>Crypto como moneda de uso cotidiano masivo</strong> → Es un activo especulativo. La adopción como moneda de pago sigue siendo marginal después de 15 años.<br>
+        <strong>Autos totalmente autónomos en todas las calles</strong> → Tesla Full Self-Driving existe pero requiere conductor atento. El nivel 5 real en condiciones climáticas variables es más difícil de lo esperado.
+        <br><em>— "El hype de 2021 (metaverso, NFTs, crypto) envejeció muy mal. La IA de 2023 al contrario: cumplió y superó lo prometido."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">La conclusión sin verso</div><span class="badge b-ya">Para cerrar</span></div>
+      <div class="card-body">
+        Estamos viviendo el período de cambio tecnológico más acelerado de la historia humana. Más rápido que la revolución industrial. Más rápido que la llegada de internet.
+        <br><br>
+        <strong>Lo que podés hacer:</strong> seguir de cerca sin paralizarte. Adoptar las tecnologías que te resuelven problemas reales. Ignorar el hype de las que solo suenan cool. Y agarrarte, porque esto recién arranca.
+        <br><br>
+        <strong>La única certeza:</strong> el mundo de 2030 va a ser más distinto del de 2025 de lo que el de 2025 es del de 2015. Y eso ya es mucho decir.
+        <br><em>— "La mejor tecnología que podés tener es la curiosidad de entender qué está pasando. Por eso existimos."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+<div id="ttBubble"></div>
+<script>
+  function goTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+  const bubble=document.getElementById('ttBubble');let timer;
+  document.querySelectorAll('.tt').forEach(el=>{el.addEventListener('click',function(e){e.stopPropagation();bubble.textContent=this.dataset.tip;bubble.classList.add('on');const r=this.getBoundingClientRect();let top=r.bottom+10,left=r.left;if(left+280>window.innerWidth)left=window.innerWidth-285;if(top+140>window.innerHeight)top=r.top-145;bubble.style.top=top+'px';bubble.style.left=left+'px';clearTimeout(timer);timer=setTimeout(()=>bubble.classList.remove('on'),5000);});});
+  document.addEventListener('click',()=>bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Agarrate Se Viene: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="lentes-inteligentes.html" class="rel-link">🥽 Lentes Inteligentes</a><a href="smart-home.html" class="rel-link">🏡 Smart Home</a></div>
+</div>
+</body>
+</html>

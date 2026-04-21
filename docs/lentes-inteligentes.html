@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Lentes Inteligentes</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--soft:#aaaacc;--accent:#f0abfc;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  header{background:linear-gradient(135deg,#080810,#130020 50%,#080810);border-bottom:1px solid var(--border);padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:260px;background:radial-gradient(ellipse,rgba(240,171,252,.12),transparent 70%);pointer-events:none;}
+  .site-label{font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);text-transform:uppercase;opacity:.7;margin-bottom:10px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,8vw,80px);letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 30%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:10px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .price-note{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+  main{padding:28px 16px 80px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .card:hover{border-color:rgba(240,171,252,.4);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(77,187,122,.15);color:#4dbb7a;border:1px solid rgba(77,187,122,.3);}
+  .b-mid{background:rgba(240,171,252,.12);color:var(--accent);border:1px solid rgba(240,171,252,.3);}
+  .b-high{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-no{background:rgba(120,120,120,.15);color:#888;border:1px solid rgba(120,120,120,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .b-future{background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tt{border-bottom:1px dashed var(--accent);color:var(--accent);cursor:pointer;font-weight:600;display:inline;}
+  #ttBubble{display:none;position:fixed;background:#130020;border:1px solid var(--accent);border-radius:14px;padding:13px 16px;font-size:14px;color:var(--text);line-height:1.6;max-width:270px;z-index:9999;box-shadow:0 8px 40px rgba(0,0,0,.7);pointer-events:none;}
+  #ttBubble.on{display:block;}
+  #ttBubble::before{content:'💡 ';}
+  .tip{background:rgba(240,171,252,.06);border:1px solid rgba(240,171,252,.2);border-radius:14px;padding:16px 18px;margin-top:20px;font-size:14px;line-height:1.65;color:#e8c8f8;}
+  .tip strong{color:var(--accent);}
+  .tip-blue{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);color:#a0d8ea;}
+  .tip-blue strong{color:#00d4ff;}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-future{background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.2);color:#c0c8f8;}
+  .tip-future strong{color:#818cf8;}
+
+  /* TIMELINE FUTURO */
+  .timeline{display:flex;flex-direction:column;gap:0;}
+  .tl-item{display:flex;gap:16px;position:relative;}
+  .tl-item:not(:last-child)::after{content:'';position:absolute;left:19px;top:40px;bottom:0;width:2px;background:var(--border);}
+  .tl-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;margin-top:2px;position:relative;z-index:1;}
+  .tl-dot.ahora{background:rgba(77,187,122,.2);border:2px solid #4dbb7a;}
+  .tl-dot.pronto{background:rgba(240,171,252,.2);border:2px solid var(--accent);}
+  .tl-dot.futuro{background:rgba(99,102,241,.2);border:2px solid #818cf8;}
+  .tl-dot.lejano{background:rgba(80,80,80,.2);border:2px solid #555;}
+  .tl-body{flex:1;padding-bottom:24px;}
+  .tl-year{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;margin-bottom:2px;}
+  .tl-year.ahora{color:#4dbb7a;}
+  .tl-year.pronto{color:var(--accent);}
+  .tl-year.futuro{color:#818cf8;}
+  .tl-year.lejano{color:#666;}
+  .tl-name{font-weight:700;color:var(--text);font-size:15px;margin-bottom:3px;}
+  .tl-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .tl-desc em{color:#8899bb;}
+
+  /* COMPARATIVA DE PRODUCTOS */
+  .prod-grid{display:flex;flex-direction:column;gap:14px;}
+  .prod-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .prod-card:hover{transform:translateY(-2px);}
+  .prod-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:18px 18px 0 0;background:var(--pc);}
+  .prod-header{display:flex;align-items:center;gap:14px;margin-bottom:10px;}
+  .prod-logo{font-size:36px;}
+  .prod-nombre{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--text);line-height:1;}
+  .prod-marca{font-size:12px;color:var(--muted);margin-top:2px;}
+  .prod-slogan{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:10px;}
+  .prod-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .prod-body strong{color:var(--text);}
+  .prod-specs{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .prod-spec{background:rgba(255,255,255,.06);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--soft);}
+  .prod-spec span{font-weight:700;color:var(--text);}
+
+  .perfiles{display:flex;flex-direction:column;gap:10px;}
+  .perfil{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .perfil:hover{border-color:rgba(240,171,252,.3);}
+  .perfil-ico{font-size:24px;flex-shrink:0;}
+  .perfil-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .perfil-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .perfil-rec{font-size:12px;font-weight:700;color:var(--accent);margin-top:5px;}
+
+  @media(max-width:480px){.card-name{font-size:20px;}.prod-nombre{font-size:20px;}}
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="site-label">SinVerso · Tecnología</div>
+  <h1>Lentes Inteligentes</h1>
+  <p class="subtitle">La pantalla que desaparece. <strong>O al menos eso prometen.</strong></p>
+  <div class="price-note">💲 Precios en USD orientativos · Varían según tipo de cambio y mercado local</div>
+</header>
+
+
+<div class="error-caro"><strong>🥽 El error más caro</strong>Confundir VR (realidad virtual, te aísla del mundo) con AR (realidad aumentada, superpone info sobre el mundo real). Son tecnologías distintas para usos distintos. Comprar un Quest 3 esperando que funcione como lentes AR transparentes es una decepción garantizada.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('quees',this)">👓 ¿Qué son?</div>
+  <div class="tab" onclick="goTab('hoy',this)">📦 Lo que existe hoy</div>
+  <div class="tab" onclick="goTab('ar_vr',this)">🥽 AR vs VR vs MR</div>
+  <div class="tab" onclick="goTab('futuro',this)">🔮 El futuro</div>
+  <div class="tab" onclick="goTab('perfil',this)">🧑 ¿Para quién es?</div>
+</div>
+
+<main>
+
+<!-- QUÉ SON -->
+<div class="section active" id="quees">
+  <div class="sec-title">¿Qué son los lentes inteligentes?</div>
+  <div class="sec-sub">La tecnología que intenta poner una computadora en tu cara sin que parezca ridícula. <em>Con resultados muy variables hasta ahora.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f0abfc">
+      <div class="card-head"><div class="card-name">La idea detrás</div><span class="badge b-mid">El concepto</span></div>
+      <div class="card-body">
+        Los lentes inteligentes buscan llevar información digital al campo visual sin que tengas que mirar el celu. Imaginar que mientras caminás ves la dirección superpuesta sobre la calle real, o que mientras hablás con alguien su nombre aparece flotando.
+        <br><br>
+        La promesa lleva décadas: desde el <strong>Google Glass de 2013</strong> que prometió cambiar todo y terminó siendo un costoso fracaso social, hasta el <strong>Apple Vision Pro de 2024</strong> que es impresionante tecnológicamente pero cuesta USD 3.500 y pesa como un ladrillo.
+        <br><br>
+        La realidad de 2025: hay productos interesantes pero ninguno es todavía el "iPhone de los lentes". Ese momento está llegando, pero todavía no llegó.
+        <br><em>— "Los lentes inteligentes son el 'el año que viene va a ser el año de Linux' del hardware consumer."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">Los tres niveles de "inteligencia"</div><span class="badge b-high">Para entender las diferencias</span></div>
+      <div class="card-body">
+        No todos los lentes inteligentes hacen lo mismo. Hay tres niveles muy distintos:
+        <br><br>
+        <strong>Nivel 1 — Lentes con audio y cámara</strong> → Parecen anteojos normales. Sin pantalla. Solo parlantes, micrófono y cámara. Para música, llamadas y fotos discretas. Ejemplo: Ray-Ban Meta.<br><br>
+        <strong>Nivel 2 — Lentes con HUD básico</strong> → Tienen una pequeña pantalla o punto de luz que proyecta información mínima. Ejemplo: los lentes de ciclismo con datos de velocidad.<br><br>
+        <strong>Nivel 3 — AR completa</strong> → Superponen imágenes, texto y objetos digitales sobre el mundo real. El más ambicioso. Ejemplo: Apple Vision Pro (aunque es más casco que lentes), Microsoft HoloLens.
+        <br><em>— "La mayoría de lo que se vende hoy como 'lentes inteligentes' es Nivel 1. El Nivel 3 real todavía está madurando."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">El problema de fondo</div><span class="badge b-top">Por qué no despegaron</span></div>
+      <div class="card-body">
+        Hacer lentes inteligentes tiene desafíos físicos enormes:
+        <br><br>
+        <strong>Batería:</strong> un lente liviano no tiene espacio para batería grande. Las actuales duran 4–6 horas.<br>
+        <strong>Calor:</strong> un procesador potente genera calor. En tu cara es muy molesto.<br>
+        <strong>Óptica:</strong> proyectar una imagen nítida directamente en el ojo requiere óptica muy precisa y costosa.<br>
+        <strong>Factor social:</strong> usar algo raro en la cara genera incomodidad social. El Google Glass fracasó en parte porque la gente no sabía si los estabas filmando.<br>
+        <strong>Peso:</strong> un lente liviano pesa 30g. Agregar tecnología lo lleva a 60–100g. Se nota.
+        <br><em>— "Todos los problemas se pueden resolver, pero no todos a la vez en el mismo producto todavía."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LO QUE EXISTE HOY -->
+<div class="section" id="hoy">
+  <div class="sec-title">Lo que existe hoy</div>
+  <div class="sec-sub">Los productos reales que podés comprar ahora mismo. <em>Con sus virtudes y sus limitaciones honestas.</em></div>
+
+  <div class="prod-grid">
+
+    <!-- RAY-BAN META -->
+    <div class="prod-card" style="--pc:#f0abfc">
+      <div class="prod-header">
+        <div class="prod-logo">🕶️</div>
+        <div>
+          <div class="prod-nombre">Ray-Ban Meta Smart Glasses</div>
+          <div class="prod-marca">Meta (Facebook) + Ray-Ban · 2023–2024</div>
+        </div>
+      </div>
+      <div class="prod-slogan">"El más cercano a unos anteojos normales que podés usar en la calle sin que te miren raro."</div>
+      <div class="prod-body">
+        La colaboración entre Meta y Ray-Ban es el producto de lentes inteligentes más exitoso del mercado actual. Parecen anteojos comunes de Ray-Ban (Wayfarer, Headliner, Skyler) pero tienen:
+        <br><br>
+        <strong>Parlantes abiertos</strong> → Suenan hacia tus oídos sin taparlos. Escuchás música y el ambiente al mismo tiempo.<br>
+        <strong>Micrófono</strong> → Llamadas, dictado de voz, comandos a Meta AI.<br>
+        <strong>Cámara frontal 12MP</strong> → Fotos y video con un toque en el marco. También livestreaming a Instagram/Facebook directamente.<br>
+        <strong>Meta AI integrada</strong> → "Hola Meta, ¿qué flor es esa?" y la cámara analiza lo que estás viendo y te responde por el parlante.
+        <br><br>
+        <strong>Lo que NO tienen:</strong> ninguna pantalla ni proyección visual. Es básicamente un auricular inalámbrico con cámara en forma de anteojos.
+        <br><em>— "Perfectos para el que escucha música caminando y quiere tener las manos libres para fotos discretas. No son ciencia ficción pero hacen lo que prometen."</em>
+      </div>
+      <div class="prod-specs">
+        <div class="prod-spec">Precio <span>USD 299–399</span></div>
+        <div class="prod-spec">Batería <span>~4hs audio continuo</span></div>
+        <div class="prod-spec">Cámara <span>12MP video 1080p</span></div>
+        <div class="prod-spec">Audio <span>parlantes abiertos</span></div>
+        <div class="prod-spec">IA <span>Meta AI integrada</span></div>
+      </div>
+    </div>
+
+    <!-- APPLE VISION PRO -->
+    <div class="prod-card" style="--pc:#555">
+      <div class="prod-header">
+        <div class="prod-logo">🥽</div>
+        <div>
+          <div class="prod-nombre">Apple Vision Pro</div>
+          <div class="prod-marca">Apple · 2024</div>
+        </div>
+      </div>
+      <div class="prod-slogan">"La demostración más impresionante de lo que puede ser el futuro. Que nadie usa en la calle."</div>
+      <div class="prod-body">
+        Apple Vision Pro no son "lentes" en el sentido clásico: es un visor que se apoya en la cara. Pero representa el estado del arte de la computación espacial.
+        <br><br>
+        <strong>Pantallas micro-OLED</strong> de altísima resolución por ojo. <strong>Seguimiento ocular, facial y de manos</strong> para control sin tocar nada. Las apps flotan en el espacio delante de vos. Podés ver películas en una pantalla virtual de 100 pulgadas.<br><br>
+        <strong>Lo que tiene de increíble:</strong> la tecnología es genuinamente impresionante. El seguimiento ocular es preciso al milímetro.<br>
+        <strong>Lo que tiene de frustrante:</strong> pesa 600g (cansás el cuello), la batería dura 2 horas, cuesta USD 3.500, pocas apps aprovechen el hardware y la gente te mira raro en público.
+        <br><br>
+        <span class="tt" data-tip="El Vision Pro usa visionOS, el sistema operativo espacial de Apple. Las apps de iPhone y iPad funcionan en él como ventanas flotantes. Hay apps específicas como Apple Immersive Video (videos en 360° filmados por Apple) y algunos juegos. El ecosistema está creciendo lentamente.">El ecosistema de apps todavía es limitado.</span>
+        <br><em>— "Es el primer Mac de 1984. Revolucionario, caro, incómodo y adelantado a su tiempo. En 10 años vamos a entender su importancia."</em>
+      </div>
+      <div class="prod-specs">
+        <div class="prod-spec">Precio <span>USD 3.499</span></div>
+        <div class="prod-spec">Batería <span>~2 horas</span></div>
+        <div class="prod-spec">Peso <span>600g + cable de batería</span></div>
+        <div class="prod-spec">Pantalla <span>micro-OLED 4K por ojo</span></div>
+        <div class="prod-spec">Chip <span>Apple M2 + R1</span></div>
+      </div>
+    </div>
+
+    <!-- META QUEST 3 -->
+    <div class="prod-card" style="--pc:#0ea5e9">
+      <div class="prod-header">
+        <div class="prod-logo">🎮</div>
+        <div>
+          <div class="prod-nombre">Meta Quest 3</div>
+          <div class="prod-marca">Meta · 2023</div>
+        </div>
+      </div>
+      <div class="prod-slogan">"El mejor headset de realidad mixta por el precio. Y el más accesible."</div>
+      <div class="prod-body">
+        El Meta Quest 3 es el headset de VR/MR más popular del mercado consumer. Realidad virtual completa (juegos, experiencias inmersivas) y realidad mixta (apps virtuales superpuestas sobre el mundo real a través de las cámaras).
+        <br><br>
+        <strong>A diferencia del Vision Pro:</strong> pesa 515g, cuesta USD 500, tiene un catálogo enorme de juegos y apps, y es standalone (no necesita PC).
+        <br><br>
+        <strong>Para gaming VR:</strong> el mejor de su categoría. Beat Saber, Asgard's Wrath, Resident Evil 4 VR son experiencias que no existen en ningún otro lado.<br>
+        <strong>Para trabajo y productividad:</strong> funciona pero el Vision Pro lo supera significativamente.
+        <br><em>— "Para gaming VR y entretenimiento inmersivo, el Quest 3 es la opción. Para computación espacial, el Vision Pro. Para la calle, los Ray-Ban Meta."</em>
+      </div>
+      <div class="prod-specs">
+        <div class="prod-spec">Precio <span>USD 499</span></div>
+        <div class="prod-spec">Batería <span>2–3 horas</span></div>
+        <div class="prod-spec">Chip <span>Snapdragon XR2 Gen 2</span></div>
+        <div class="prod-spec">Pantalla <span>2064×2208 por ojo</span></div>
+        <div class="prod-spec">Realidad mixta <span>color passthrough</span></div>
+      </div>
+    </div>
+
+    <!-- MICROSOFT HOLOLENS -->
+    <div class="prod-card" style="--pc:#0078d4">
+      <div class="prod-header">
+        <div class="prod-logo">🔵</div>
+        <div>
+          <div class="prod-nombre">Microsoft HoloLens 2</div>
+          <div class="prod-marca">Microsoft · Uso profesional</div>
+        </div>
+      </div>
+      <div class="prod-slogan">"El AR profesional que funciona de verdad. En fábricas y hospitales, no en el living."</div>
+      <div class="prod-body">
+        El HoloLens 2 es el producto de AR más maduro del mercado pero apunta exclusivamente al uso empresarial e industrial. No se vende en las tiendas comunes.
+        <br><br>
+        <strong>Casos de uso reales:</strong> técnicos de mantenimiento que ven instrucciones superpuestas sobre la máquina que están reparando, cirujanos que ven datos del paciente sin apartar los ojos, arquitectos que caminan por un edificio antes de que exista.
+        <br><em>— "Es el único headset AR que funciona en el mundo real para trabajo. Pero cuesta USD 3.500 y necesita desarrollo de software específico para cada uso."</em>
+      </div>
+      <div class="prod-specs">
+        <div class="prod-spec">Precio <span>USD 3.500 (empresas)</span></div>
+        <div class="prod-spec">Uso <span>industrial/médico</span></div>
+        <div class="prod-spec">Campo visual <span>52°</span></div>
+      </div>
+    </div>
+
+    <!-- LENTES DEPORTIVOS CON HUD -->
+    <div class="prod-card" style="--pc:#4dbb7a">
+      <div class="prod-header">
+        <div class="prod-logo">🚴</div>
+        <div>
+          <div class="prod-nombre">Lentes con HUD deportivo</div>
+          <div class="prod-marca">Garmin Varia, Engo 2, Cosmo Connected</div>
+        </div>
+      </div>
+      <div class="prod-slogan">"Los más funcionales porque hacen una sola cosa muy bien."</div>
+      <div class="prod-body">
+        Lentes de ciclismo, running o ski que muestran datos básicos en una pequeña pantalla semitransparente en un rincón del campo visual: velocidad, frecuencia cardíaca, mapa, tiempo.
+        <br><br>
+        <strong>Engo 2:</strong> montura de lentes deportivos compatible con lentes de gradación donde el HUD muestra datos del GPS. Ideal para ciclistas y corredores que no quieren mirar el reloj.<br>
+        <strong>Garmin Varia RCT715:</strong> más integrado con el ecosistema Garmin.
+        <br><br>
+        Son los lentes inteligentes más útiles del mercado actual porque hacen algo específico perfectamente en vez de intentar hacerlo todo.
+        <br><em>— "El ciclista que ve su velocidad y el mapa sin bajar la vista es el uso más práctico de AR que existe hoy."</em>
+      </div>
+      <div class="prod-specs">
+        <div class="prod-spec">Engo 2 <span>USD 299–399</span></div>
+        <div class="prod-spec">Batería <span>6–8hs</span></div>
+        <div class="prod-spec">Uso <span>deporte outdoor</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="tip">
+    <strong>💡 El mapa de 2025:</strong> Si querés algo útil hoy → <strong>Ray-Ban Meta</strong> (audio + cámara + IA, parece normal). Para gaming VR → <strong>Meta Quest 3</strong>. Para lo más avanzado con plata → <strong>Apple Vision Pro</strong>. Para deporte → lentes con HUD. Todo lo demás está en desarrollo o es nicho profesional.
+  </div>
+</div>
+
+<!-- AR vs VR vs MR -->
+<div class="section" id="ar_vr">
+  <div class="sec-title">AR vs VR vs MR</div>
+  <div class="sec-sub">Tres siglas que suenan parecido y significan cosas muy distintas. <em>Acá el desglose sin humo.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">VR — Realidad Virtual</div><span class="badge b-ok">Te aísla del mundo</span></div>
+      <div class="card-body">
+        La pantalla tapa completamente tu visión del mundo real. Estás completamente dentro del mundo virtual. Lo que ves, lo que oís, todo es generado por computadora.
+        <br><br>
+        <strong>Para qué es increíble:</strong> gaming inmersivo, simuladores de entrenamiento, recorridos virtuales de propiedades inmobiliarias, experiencias cinematográficas 360°, terapias de fobias.<br>
+        <strong>Limitación:</strong> no podés hacer nada del mundo real mientras la usás. No ves el teclado, no ves si alguien entra al cuarto.
+        <br><em>— "Beat Saber en VR convierte a cualquier persona en DJ ninja de sables de luz. No hay descripción que lo haga justicia."</em>
+      </div>
+      <div class="chips"><div class="chip">Ejemplo <span>Meta Quest 3, PS VR2</span></div></div>
+    </div>
+
+    <div class="card" style="--ca:#f0abfc">
+      <div class="card-head"><div class="card-name">AR — Realidad Aumentada</div><span class="badge b-mid">Agrega al mundo real</span></div>
+      <div class="card-body">
+        Ves el mundo real pero con información digital superpuesta encima. No tapás la visión: la enriquecés.
+        <br><br>
+        <strong>Ejemplos que ya usás sin saberlo:</strong> los filtros de Snapchat e Instagram que ponen elementos en tu cara son AR básica. Las apps que te muestran cómo quedaría un mueble en tu living antes de comprarlo (IKEA Place). Los efectos del fútbol americano en televisión que muestran la línea de primera jugada en el campo.<br>
+        <strong>El sueño:</strong> lentes que te muestren subtítulos de conversaciones en otros idiomas en tiempo real, el nombre de las personas cuando las ves, instrucciones flotantes para reparar algo.
+        <br><em>— "Google Maps AR que muestra las flechas superpuestas sobre la calle real en el celular es el AR más útil que usa la gente común hoy."</em>
+      </div>
+      <div class="chips"><div class="chip">Ejemplo <span>HoloLens, Vision Pro, filtros IG</span></div></div>
+    </div>
+
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">MR — Realidad Mixta</div><span class="badge b-future">La combinación</span></div>
+      <div class="card-body">
+        La mezcla de VR y AR. Ves el mundo real a través de cámaras (passthrough) y sobre él se superponen objetos virtuales que interactúan con el entorno real.
+        <br><br>
+        Por ejemplo: una pelota virtual que rebota en tu mesa real. Una app de videoconferencia cuya ventana está "pegada" a tu pared. Jugar un juego de mesa virtual sobre tu mesa física.
+        <br><br>
+        <strong>Es lo que hace el Vision Pro y el Quest 3</strong> cuando usás el modo passthrough. La diferencia con AR "pura" es que en MR el mundo real se ve a través de cámaras (digital), no directamente a través del vidrio (óptico).
+        <br><em>— "MR es el futuro real. AR óptica es el sueño final."</em>
+      </div>
+      <div class="chips"><div class="chip">Ejemplo <span>Quest 3, Vision Pro en passthrough</span></div></div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">XR — Extended Reality</div><span class="badge b-top">El paraguas</span></div>
+      <div class="card-body">
+        XR es el término paraguas que engloba VR, AR y MR. Cuando una empresa dice que hace "tecnología XR", significa que trabaja en alguna combinación de estas tres.
+        <br><br>
+        También aparece <strong>Spatial Computing</strong> (computación espacial), el término que usa Apple para no decir VR/AR y diferenciarse del mercado de gaming. Mismo concepto, marketing diferente.
+        <br><em>— "El nombre cambia, la tecnología es la misma. No te dejes confundir por las siglas."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EL FUTURO -->
+<div class="section" id="futuro">
+  <div class="sec-title">El futuro: lo que viene</div>
+  <div class="sec-sub">Lo que está en desarrollo, lo que se espera y lo que es pura ciencia ficción por ahora. <em>Con fechas honestas.</em></div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot ahora">✅</div>
+      <div class="tl-body">
+        <div class="tl-year ahora">2024–2025 · AHORA</div>
+        <div class="tl-name">Lentes con cámara e IA (Ray-Ban Meta)</div>
+        <div class="tl-desc">Audio abierto + cámara + asistente de IA que ve lo que vos ves. El primer producto masivo que la gente usa en la calle sin vergüenza. La IA puede leer texto, identificar objetos, traducir en tiempo real. <em>— Ya existe y funciona.</em></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot ahora">✅</div>
+      <div class="tl-body">
+        <div class="tl-year ahora">2024–2025 · AHORA</div>
+        <div class="tl-name">Computación espacial premium (Vision Pro)</div>
+        <div class="tl-desc">AR/MR de alta calidad pero en formato visor voluminoso. Impresionante pero incómodo para uso diario. El primer paso, no el destino. <em>— Existe pero es nicho por precio y forma.</em></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot pronto">🔜</div>
+      <div class="tl-body">
+        <div class="tl-year pronto">2025–2027 · MUY PRONTO</div>
+        <div class="tl-name">Lentes AR ligeros con pantalla pequeña</div>
+        <div class="tl-desc">Meta, Google, Samsung y startups como <strong>Brilliant Labs</strong> están desarrollando lentes que parecen anteojos normales pero tienen una pequeña pantalla semitransparente que muestra información básica: notificaciones, navegación, subtítulos. El factor de forma ya casi llegó. La duración de batería y el precio todavía no. <em>— En desarrollo activo. Algunos ya tienen prototipos públicos.</em></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot pronto">🔜</div>
+      <div class="tl-body">
+        <div class="tl-year pronto">2026–2028 · PRONTO</div>
+        <div class="tl-name">Apple Vision Pro 2 / más liviano</div>
+        <div class="tl-desc">Apple está trabajando en versiones más livianas y económicas del Vision Pro. El objetivo es llegar a un factor de forma más cercano a lentes normales y un precio que lo haga accesible. <span class="tt" data-tip="Se especula que Apple tiene en desarrollo tanto un Vision Pro 2 mejorado como una versión 'Air' más económica y liviana. Los analistas apuntan a 2026-2027 para el modelo más accesible, posiblemente en el rango de USD 1.500-2.000.">Los rumores apuntan a 2026–2027.</span></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot futuro">🔮</div>
+      <div class="tl-body">
+        <div class="tl-year futuro">2028–2032 · FUTURO CERCANO</div>
+        <div class="tl-name">Lentes AR del tamaño de anteojos normales</div>
+        <div class="tl-desc">El Santo Grial: lentes que pesan menos de 50g, tienen toda la AR del Vision Pro, duran todo el día y cuestan menos de USD 1.000. Meta lo llama "Orion" y mostró un prototipo en 2024. Google y Samsung también tienen proyectos activos. <em>— El momento en que esto llegue al mercado va a ser tan grande como el iPhone en 2007.</em></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot futuro">🔮</div>
+      <div class="tl-body">
+        <div class="tl-year futuro">2030+ · FUTURO</div>
+        <div class="tl-name">Traducción en tiempo real, reconocimiento facial masivo, AR social</div>
+        <div class="tl-desc">Ver subtítulos de cualquier idioma superpuestos en tiempo real sobre quien habla. Ver el nombre y datos básicos de conocidos cuando los ves en la calle. Interfaces flotantes reemplazando pantallas físicas. Reuniones de trabajo donde los participantes remotos están "presentes" como hologramas. <em>— Técnicamente posible. El desafío es la privacidad y la regulación.</em></div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot lejano">⭐</div>
+      <div class="tl-body">
+        <div class="tl-year lejano">2035+ · FUTURO LEJANO</div>
+        <div class="tl-name">Lentes de contacto inteligentes / interfaces neurales</div>
+        <div class="tl-desc">Mojo Vision ya desarrolló prototipos de lentes de contacto con pantalla integrada. Neuralink y similares trabajan en interfaces cerebrales directas. La línea entre el mundo físico y digital desaparece completamente. <em>— Ciencia ficción que se está volviendo ciencia. Décadas hasta el mercado masivo.</em></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip tip-future" style="margin-top:20px">
+    <strong>🔮 La empresa a seguir:</strong> <strong>Meta</strong> es la que más invirtió en este espacio (más de USD 40 billones en Reality Labs desde 2019). Su prototipo <strong>Orion</strong> mostrado en 2024 es lo más cercano a los lentes AR del futuro que existe hoy. No está en venta pero muestra que el camino técnico está resuelto. El resto es miniaturización, batería y precio.
+  </div>
+
+  <div class="cards" style="margin-top:20px">
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">El elefante en la habitación: la privacidad</div><span class="badge b-warn">El debate real</span></div>
+      <div class="card-body">
+        Los lentes con cámara generan un debate serio: ¿tenés derecho a filmarte o espiarte sin que lo sepas?
+        <br><br>
+        <strong>Google Glass fracasó en parte</strong> porque la gente no sabía si los estabas filmando. Los bares, restaurants y gimnasios los prohibieron. Se llamó "glassholes" a los usuarios.
+        <br><br>
+        <strong>Los Ray-Ban Meta</strong> tienen una luz que se enciende cuando la cámara está activa. Pero es pequeña y fácil de ignorar.
+        <br><br>
+        Con el AR avanzado que viene, donde los lentes reconocen caras y muestran datos de personas, el debate de privacidad va a ser central. Algunas ciudades ya hablan de regular el uso en espacios públicos.
+        <br><em>— "La tecnología va a llegar antes que la regulación. Como siempre."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PARA QUIÉN ES -->
+<div class="section" id="perfil">
+  <div class="sec-title">¿Para quién es hoy?</div>
+  <div class="sec-sub">Siendo muy honestos sobre el estado actual del mercado. <em>No todo es para todo el mundo todavía.</em></div>
+
+  <div class="perfiles">
+    <div class="perfil"><div class="perfil-ico">🎵</div><div>
+      <div class="perfil-title">El que quiere música + manos libres + discreción</div>
+      <div class="perfil-desc">Caminar, andar en bici, hacer mandados con audio sin taparse los oídos.</div>
+      <div class="perfil-rec">→ Ray-Ban Meta (USD 299–399). La opción más práctica y discreta hoy. Sin vergüenza social.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🎮</div><div>
+      <div class="perfil-title">El gamer que quiere VR</div>
+      <div class="perfil-desc">Juegos inmersivos, experiencias de realidad virtual, Beat Saber, Half-Life Alyx.</div>
+      <div class="perfil-rec">→ Meta Quest 3 (USD 499). El mejor headset VR consumer hoy, standalone, catálogo enorme.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🚴</div><div>
+      <div class="perfil-title">Ciclista o corredor que quiere datos sin mirar el reloj</div>
+      <div class="perfil-desc">Velocidad, frecuencia cardíaca, navegación superpuesta mientras entrenás.</div>
+      <div class="perfil-rec">→ Engo 2 (USD 299) o lentes Garmin. Los más funcionales porque hacen una cosa y la hacen bien.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">💼</div><div>
+      <div class="perfil-title">Profesional que quiere explorar la computación espacial</div>
+      <div class="perfil-desc">Trabajo con apps, videoconferencias, visualización de datos, early adopter.</div>
+      <div class="perfil-rec">→ Apple Vision Pro (USD 3.499) si tenés el presupuesto y ecosistema Apple. Una experiencia genuinamente diferente a todo lo anterior.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">⏳</div><div>
+      <div class="perfil-title">El que quiere lo mejor pero no quiere gastar todavía</div>
+      <div class="perfil-desc">Sabés que la tecnología está madurando y no querés comprar lo que ya va a quedar obsoleto en 2 años.</div>
+      <div class="perfil-rec">→ Esperá. Los Ray-Ban Meta de segunda o tercera generación (2025–2026) van a tener pantalla pequeña integrada. El salto va a ser enorme respecto a los actuales.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🏥</div><div>
+      <div class="perfil-title">Uso profesional: medicina, industria, arquitectura</div>
+      <div class="perfil-desc">Instrucciones superpuestas, datos en tiempo real, visualización de planos 3D.</div>
+      <div class="perfil-rec">→ Microsoft HoloLens 2 o soluciones industriales de Vuzix/RealWear. Requieren desarrollo de software específico para el caso de uso.</div>
+    </div></div>
+  </div>
+
+  <div class="tip tip-blue" style="margin-top:20px">
+    <strong>💡 El consejo más honesto de esta guía:</strong> Si no tenés un uso muy específico y claro en mente, <strong>esperá 2 años</strong>. El mercado de lentes inteligentes está en el punto de inflexión más importante de su historia. Lo que va a existir en 2027 va a hacer que lo de hoy parezca un borrador. Es una de las pocas tecnologías donde la paciencia tiene una recompensa muy concreta.
+  </div>
+</div>
+
+</main>
+<div id="ttBubble"></div>
+<script>
+  function goTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+  const bubble=document.getElementById('ttBubble');let timer;
+  document.querySelectorAll('.tt').forEach(el=>{el.addEventListener('click',function(e){e.stopPropagation();bubble.textContent=this.dataset.tip;bubble.classList.add('on');const r=this.getBoundingClientRect();let top=r.bottom+10,left=r.left;if(left+280>window.innerWidth)left=window.innerWidth-285;if(top+140>window.innerHeight)top=r.top-145;bubble.style.top=top+'px';bubble.style.left=left+'px';clearTimeout(timer);timer=setTimeout(()=>bubble.classList.remove('on'),5000);});});
+  document.addEventListener('click',()=>bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Lentes Inteligentes: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="agarrate-se-viene.html" class="rel-link">⚡ Se Viene</a><a href="celulares.html" class="rel-link">📱 Celulares</a></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Proyectores</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--soft:#aaaacc;--accent:#c084fc;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  header{background:linear-gradient(135deg,#080810,#0d0018 50%,#080810);border-bottom:1px solid var(--border);padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:260px;background:radial-gradient(ellipse,rgba(200,200,200,.10),transparent 70%);pointer-events:none;}
+  .site-label{font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);text-transform:uppercase;opacity:.7;margin-bottom:10px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,7vw,76px);letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 30%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:10px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .price-note{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+  main{padding:28px 16px 80px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .card:hover{border-color:rgba(200,200,200,.3);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(77,187,122,.15);color:#4dbb7a;border:1px solid rgba(77,187,122,.3);}
+  .b-mid{background:rgba(200,200,200,.1);color:var(--accent);border:1px solid rgba(200,200,200,.25);}
+  .b-high{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-no{background:rgba(120,120,120,.15);color:#888;border:1px solid rgba(120,120,120,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tt{border-bottom:1px dashed var(--accent);color:var(--accent);cursor:pointer;font-weight:600;display:inline;}
+  #ttBubble{display:none;position:fixed;background:#080810;border:1px solid var(--accent);border-radius:14px;padding:13px 16px;font-size:14px;color:var(--text);line-height:1.6;max-width:270px;z-index:9999;box-shadow:0 8px 40px rgba(0,0,0,.7);pointer-events:none;}
+  #ttBubble.on{display:block;}
+  #ttBubble::before{content:'💡 ';}
+  .tip{background:rgba(200,200,200,.06);border:1px solid rgba(200,200,200,.15);border-radius:14px;padding:16px 18px;margin-top:20px;font-size:14px;line-height:1.65;color:#c8c8e0;}
+  .tip strong{color:var(--accent);}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-green{background:rgba(77,187,122,.06);border:1px solid rgba(77,187,122,.2);color:#a0d8b4;}
+  .tip-green strong{color:#4dbb7a;}
+  .tabla{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+  .tabla th{background:var(--surface);color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);}
+  .tabla td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;line-height:1.5;}
+  .tabla tr:hover td{background:rgba(255,255,255,.02);}
+  .tabla td:first-child{color:var(--text);font-weight:700;}
+  .tabla .hl td{background:rgba(200,200,200,.04);}
+  .tabla .hl td:first-child{color:var(--accent);}
+  .ok::before{content:'✓ ';color:#4dbb7a;}
+  .mal::before{content:'✗ ';color:#f87171;}
+  .meh::before{content:'~ ';color:#ffd700;}
+  .perfiles{display:flex;flex-direction:column;gap:10px;}
+  .perfil{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .perfil:hover{border-color:rgba(200,200,200,.3);}
+  .perfil-ico{font-size:24px;flex-shrink:0;}
+  .perfil-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .perfil-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .perfil-rec{font-size:12px;font-weight:700;color:var(--accent);margin-top:5px;}
+  .checks{display:flex;flex-direction:column;gap:10px;}
+  .check{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .check:hover{border-color:rgba(200,200,200,.3);}
+  .check-ico{font-size:22px;flex-shrink:0;}
+  .check-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .check-desc{font-size:13px;color:var(--muted);line-height:1.55;}
+  .check-desc strong{color:var(--text);}
+  .check-desc em{color:#7a9ab0;font-style:italic;font-size:12px;}
+  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;}
+  @media(max-width:480px){.pgrid{grid-template-columns:1fr;}}
+  .pcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;}
+  .pcard.rec{border-color:rgba(200,200,200,.3);background:rgba(200,200,200,.03);}
+  .pcard.alt{border-color:rgba(248,113,113,.3);background:rgba(248,113,113,.03);}
+  .ptag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;}
+  .pcard.rec .ptag{color:var(--accent);}
+  .pcard.alt .ptag{color:#f87171;}
+  .pmarca{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--text);margin-bottom:5px;}
+  .pdesc{font-size:12px;color:var(--muted);line-height:1.6;}
+  .pdesc strong{color:var(--text);}
+  @media(max-width:480px){.card-name{font-size:20px;}.tabla th,.tabla td{padding:8px;}}
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="site-label">SinVerso · Tecnología</div>
+  <h1>Proyectores</h1>
+  <p class="subtitle">La pantalla más grande de tu casa. <strong>Sin comprar un TV de 100 pulgadas.</strong></p>
+  <div class="price-note">💲 Precios en USD orientativos · Varían según tipo de cambio y mercado local</div>
+</header>
+
+<div class="error-caro"><strong>🎬 El error más caro</strong>Comprar por lúmenes sin considerar la oscuridad del cuarto. Un proyector de 3.000 lúmenes en un cuarto con luz del día es invisible. La oscuridad del ambiente es más importante que los lúmenes. Sin poder oscurecer el cuarto, el proyector es inútil de día.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('tipos',this)">🎬 Tipos</div>
+  <div class="tab" onclick="goTab('specs',this)">⚙️ Los specs</div>
+  <div class="tab" onclick="goTab('perfil',this)">🧑 ¿Cuál es para vos?</div>
+  <div class="tab" onclick="goTab('checklist',this)">🛒 Antes de comprar</div>
+</div>
+<main>
+<div class="section active" id="tipos">
+  <div class="sec-title">Tipos de proyectores</div>
+  <div class="sec-sub">Desde el portátil que cabe en la mochila hasta el de cine en casa. <em>El tamaño de imagen que ningún TV da a ese precio.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#c084fc">
+      <div class="card-head"><div class="card-name">Mini proyector portátil</div><span class="badge b-mid">El más popular hoy</span></div>
+      <div class="card-body">
+        Del tamaño de una lata de refresco. Batería interna, Android integrado, Bluetooth, WiFi. Para proyectar en cualquier pared blanca, en el camping, en el cuarto o llevarlo de viaje.
+        <br><br>
+        <strong>La limitación real:</strong> el brillo. Con menos de 500 lúmenes ANSI, <strong>solo funcionan bien con poca luz o en oscuridad total</strong>. Son perfectos para la noche, no tanto para el día.
+        <br><em>— "Los que dicen '9000 lúmenes' en la caja son lumens LED o lux, no ANSI lumens. Una diferencia de 10x en la práctica."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 80–200</span></div><div class="chip">Brillo real <span>200–500 ANSI lm</span></div></div>
+    </div>
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">Proyector de hogar</div><span class="badge b-high">Cine en casa</span></div>
+      <div class="card-body">
+        El proyector fijo para el living o sala de cine. Mayor brillo (1.500–3.000+ ANSI lúmenes), mejor resolución (Full HD o 4K), mejor calidad de imagen.
+        <br><br>
+        Necesita una <strong>pantalla o pared blanca lisa</strong>, posiblemente oscurecer la habitación con cortinas blackout. La distancia al techo o pared define el tamaño de imagen.
+        <br><em>— "Una imagen de 120 pulgadas en el living con un proyector de USD 500 vs un TV de 120 pulgadas que cuesta USD 5.000. La elección es clara."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 300–800</span></div><div class="chip">Imagen <span>hasta 150 pulgadas</span></div></div>
+    </div>
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Proyector ultra corta distancia (UST)</div><span class="badge b-top">El innovador</span></div>
+      <div class="card-body">
+        Se pone a 20–30cm de la pared y proyecta una imagen enorme. Sin que nadie pase por el rayo de luz. Sin tener que montar nada en el techo.
+        <br><br>
+        <strong>Son caros</strong> (USD 1.500–5.000) pero son la tecnología más práctica para el hogar: se ubica en un mueble debajo de la "pantalla". Samsung, LG y Hisense tienen modelos de TV-proyector (la pantalla viene incluida).
+        <br><em>— "El LG HU85LA es el proyector más impresionante para uso hogareño. Y el precio es igualmente impresionante."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 1.500–5.000</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="specs">
+  <div class="sec-title">Los specs que importan</div>
+  <div class="sec-sub">Donde más se miente en todo el mercado tech. <em>El número de lúmenes es el peor mentido de la historia.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#c084fc">
+      <div class="card-head"><div class="card-name">Lúmenes: ANSI vs los otros</div><span class="badge b-warn">El gran engaño</span></div>
+      <div class="card-body">
+        <strong>ANSI lúmenes</strong> → El estándar real de medición. Lo que importa.<br>
+        <strong>Lúmenes LED / lux / lúmenes del fabricante</strong> → Números inflados hasta 10x. Un proyector de "9000 lúmenes" del fabricante puede tener 300–500 ANSI lúmenes reales.<br>
+        <br>
+        <strong>Cuántos ANSI lúmenes necesitás:</strong><br>
+        300–500 ANSI → Solo con oscuridad total.<br>
+        500–1000 ANSI → Luz ambiente baja.<br>
+        1500–2500 ANSI → Se puede usar con algo de luz.<br>
+        3000+ ANSI → Luz ambiente normal.
+        <br><em>— "Si la caja no dice 'ANSI lúmenes', los números no sirven para nada."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">Resolución</div><span class="badge b-mid">Lo que se ve</span></div>
+      <div class="card-body">
+        <strong>480p / 720p</strong> → Solo en mini proyectores básicos. Se nota pixelado en imágenes grandes.<br>
+        <strong>1080p Full HD</strong> → El estándar mínimo para cine en casa. Bien nítido.<br>
+        <strong>4K</strong> → Para los que quieren lo mejor. Proyectores caros pero imagen increíble en pantallas grandes.<br>
+        <br>
+        <strong>Ojo con el "4K nativo"</strong>: muchos proyectores "4K" en realidad proyectan 1080p y hacen pixel shift para simular 4K. El resultado es bueno pero no es 4K real.
+        <br><em>— "Un 1080p en una pantalla de 100 pulgadas se ve fantástico. No necesitás 4K salvo que te senés muy cerca."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Contraste y ratio de proyección</div><span class="badge b-ok">Los técnicos</span></div>
+      <div class="card-body">
+        <strong>Contraste:</strong> cuánta diferencia hay entre el blanco más brillante y el negro más oscuro. Un proyector siempre va a tener menos contraste que un TV, especialmente en los negros (el negro proyectado es el color de la pared con poca luz, no un negro real).
+        <br><br>
+        <strong>Ratio de proyección:</strong> cuánto espacio necesitás entre el proyector y la pared para cada tamaño de imagen. Un ratio de 1.5:1 significa que necesitás 1.5 metros de distancia para cada metro de imagen.
+        <br><em>— "Para una imagen de 100 pulgadas (2.5 metros de ancho) con ratio 1.5:1, el proyector tiene que estar a 3.75 metros de la pared."</em>
+      </div>
+    </div>
+  </div>
+  <div class="tip" style="margin-top:20px">
+    <strong>💡 La pantalla importa tanto como el proyector:</strong> Proyectar en una pared pintada de blanco funciona. Pero una pantalla de proyección (USD 50–200) mejora notablemente el contraste y el brillo porque está diseñada para reflejar la luz de manera uniforme. Si usás el proyector seguido, vale la pena la pantalla.
+  </div>
+</div>
+
+<div class="section" id="perfil">
+  <div class="sec-title">¿Cuál es para vos?</div>
+  <div class="sec-sub">Según dónde lo usás y cuánto luz hay.</div>
+  <div class="perfiles">
+    <div class="perfil"><div class="perfil-ico">🌙</div><div>
+      <div class="perfil-title">Para ver películas de noche</div>
+      <div class="perfil-desc">Oscurecés la habitación y querés una pantalla grande para series y películas.</div>
+      <div class="perfil-rec">→ Proyector de hogar 1080p con 1500+ ANSI lúmenes (USD 300–500). BenQ, Epson o Optoma son marcas confiables.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🎒</div><div>
+      <div class="perfil-title">Portátil para llevar a todos lados</div>
+      <div class="perfil-desc">Camping, viaje, cuarto de amigos, proyectar en cualquier pared.</div>
+      <div class="perfil-rec">→ Mini proyector Android con batería como XGIMI Halo+ o Nebula Capsule (USD 200–350). Compact, buena imagen para su tamaño.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">☀️</div><div>
+      <div class="perfil-title">Con luz ambiente, sala no oscura</div>
+      <div class="perfil-desc">Querés usarlo de día o con luz prendida.</div>
+      <div class="perfil-rec">→ Mínimo 2500 ANSI lúmenes. Optoma o BenQ de gama media-alta (USD 600–1000). Sin eso, la imagen se lava.</div>
+    </div></div>
+  </div>
+</div>
+
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de Comprar</div>
+  <div class="sec-sub">Las preguntas que evitan la decepción.</div>
+  <div class="checks">
+    <div class="check"><div class="check-ico">💡</div><div>
+      <div class="check-title">¿Dice ANSI lúmenes?</div>
+      <div class="check-desc">Si no especifica ANSI, los lúmenes son marketing. <strong>Buscá reviews con pruebas de ANSI lúmenes reales.</strong> <em>— Un "10000 lúmenes" sin ANSI puede ser 300 ANSI en la práctica.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">📐</div><div>
+      <div class="check-title">Medí la distancia disponible</div>
+      <div class="check-desc">Con el ratio de proyección del modelo, calculá el tamaño de imagen que podés lograr en tu espacio. <strong>Si no tenés suficiente distancia, la imagen queda chica.</strong></div>
+    </div></div>
+    <div class="check"><div class="check-ico">🌑</div><div>
+      <div class="check-title">¿Podés oscurecer la habitación?</div>
+      <div class="check-desc">Si no tenés cortinas blackout o blackout de algún tipo, necesitás proyector de alto brillo (2000+ ANSI). <strong>Un proyector de 400 ANSI con luz de día es una pantalla gris.</strong></div>
+    </div></div>
+    <div class="check"><div class="check-ico">🔊</div><div>
+      <div class="check-title">¿Tiene buen audio propio o necesitás externo?</div>
+      <div class="check-desc">Los mini proyectores tienen parlantes pequeños que suenan mal. <strong>Presupuestá una soundbar o parlantes Bluetooth</strong> si el audio importa. <em>— Un proyector con gran imagen y sonido horrible arruina la experiencia.</em></div>
+    </div></div>
+  </div>
+</div>
+</main>
+<div id="ttBubble"></div>
+<script>
+  function goTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+  const bubble=document.getElementById('ttBubble');let timer;
+  document.querySelectorAll('.tt').forEach(el=>{el.addEventListener('click',function(e){e.stopPropagation();bubble.textContent=this.dataset.tip;bubble.classList.add('on');const r=this.getBoundingClientRect();let top=r.bottom+10,left=r.left;if(left+280>window.innerWidth)left=window.innerWidth-285;if(top+140>window.innerHeight)top=r.top-145;bubble.style.top=top+'px';bubble.style.left=left+'px';clearTimeout(timer);timer=setTimeout(()=>bubble.classList.remove('on'),5000);});});
+  document.addEventListener('click',()=>bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Proyectores: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="tv-tecnologias.html" class="rel-link">📺 Televisores</a><a href="sonido.html" class="rel-link">🔊 Sonido</a><a href="cables-conectores.html" class="rel-link">🔋 Cables</a></div>
+</div>
+</body>
+</html>

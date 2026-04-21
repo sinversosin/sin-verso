@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Climatización</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--soft:#aaaacc;--accent:#22d3ee;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  header{background:linear-gradient(135deg,#080810,#001418 50%,#080810);border-bottom:1px solid var(--border);padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:260px;background:radial-gradient(ellipse,rgba(200,200,200,.10),transparent 70%);pointer-events:none;}
+  .site-label{font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);text-transform:uppercase;opacity:.7;margin-bottom:6px;}
+  .hogar-badge{display:inline-block;background:rgba(200,200,200,.1);border:1px solid rgba(200,200,200,.2);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:700;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,7vw,76px);letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 30%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:10px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .price-note{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+  main{padding:28px 16px 80px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .card:hover{border-color:rgba(200,200,200,.3);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(77,187,122,.15);color:#4dbb7a;border:1px solid rgba(77,187,122,.3);}
+  .b-mid{background:rgba(200,200,200,.1);color:var(--accent);border:1px solid rgba(200,200,200,.25);}
+  .b-high{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-no{background:rgba(120,120,120,.15);color:#888;border:1px solid rgba(120,120,120,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tt{border-bottom:1px dashed var(--accent);color:var(--accent);cursor:pointer;font-weight:600;display:inline;}
+  #ttBubble{display:none;position:fixed;background:#080810;border:1px solid var(--accent);border-radius:14px;padding:13px 16px;font-size:14px;color:var(--text);line-height:1.6;max-width:270px;z-index:9999;box-shadow:0 8px 40px rgba(0,0,0,.7);pointer-events:none;}
+  #ttBubble.on{display:block;}
+  #ttBubble::before{content:'💡 ';}
+  .tip{background:rgba(200,200,200,.05);border:1px solid rgba(200,200,200,.15);border-radius:14px;padding:16px 18px;margin-top:20px;font-size:14px;line-height:1.65;color:#c8c8d8;}
+  .tip strong{color:var(--accent);}
+  .tip-green{background:rgba(77,187,122,.06);border:1px solid rgba(77,187,122,.2);color:#a0d8b4;}
+  .tip-green strong{color:#4dbb7a;}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-gold{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);color:#f0e080;}
+  .tip-gold strong{color:#ffd700;}
+  .tabla{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+  .tabla th{background:var(--surface);color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);}
+  .tabla td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;line-height:1.5;}
+  .tabla tr:hover td{background:rgba(255,255,255,.02);}
+  .tabla td:first-child{color:var(--text);font-weight:700;}
+  .tabla .hl td{background:rgba(200,200,200,.04);}
+  .tabla .hl td:first-child{color:var(--accent);}
+  .ok::before{content:'✓ ';color:#4dbb7a;}
+  .mal::before{content:'✗ ';color:#f87171;}
+  .meh::before{content:'~ ';color:#ffd700;}
+  .perfiles{display:flex;flex-direction:column;gap:10px;}
+  .perfil{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .perfil:hover{border-color:rgba(200,200,200,.25);}
+  .perfil-ico{font-size:24px;flex-shrink:0;}
+  .perfil-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .perfil-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .perfil-rec{font-size:12px;font-weight:700;color:var(--accent);margin-top:5px;}
+  .checks{display:flex;flex-direction:column;gap:10px;}
+  .check{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;}
+  .check-ico{font-size:22px;flex-shrink:0;}
+  .check-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .check-desc{font-size:13px;color:var(--muted);line-height:1.55;}
+  .check-desc strong{color:var(--text);}
+  .check-desc em{color:#7a9ab0;font-style:italic;font-size:12px;}
+  .tech-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);border-radius:8px;padding:3px 10px;font-size:11px;font-weight:700;color:#c084fc;margin-top:8px;}
+  .tech-tag::before{content:'⚡';}
+  .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;}
+  @media(max-width:480px){.pgrid{grid-template-columns:1fr;}.card-name{font-size:20px;}.tabla th,.tabla td{padding:8px;}}
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="site-label">SinVerso · Hogar</div>
+  <div class="hogar-badge">🏠 Sección Hogar</div>
+  <h1>Climatización</h1>
+  <p class="subtitle">El que controla la temperatura, <strong>controla la calidad de vida.</strong></p>
+  <div class="price-note">💲 Precios en USD orientativos · Varían según tipo de cambio y mercado local</div>
+</header>
+
+<div class="error-caro"><strong>❄️ El error más caro</strong>Comprar un aire acondicionado on/off (sin inverter) para ahorrar en el precio inicial. La diferencia de precio entre inverter y on/off se recupera en la primera o segunda temporada de uso por el menor consumo eléctrico. El on/off barato es el más caro a largo plazo.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('ac',this)">❄️ Aire acondicionado</div>
+  <div class="tab" onclick="goTab('ventiladores',this)">🌀 Ventiladores</div>
+  <div class="tab" onclick="goTab('perfil',this)">🧑 ¿Cuál es para vos?</div>
+  <div class="tab" onclick="goTab('checklist',this)">🛒 Antes de comprar</div>
+</div>
+<main>
+<div class="section active" id="ac">
+  <div class="sec-title">Aire Acondicionado</div>
+  <div class="sec-sub">El electrodoméstico que más impacta en la factura de luz. <em>Y el que más diferencia hace en los veranos argentinos.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#22d3ee">
+      <div class="card-head"><div class="card-name">Inverter vs On/Off</div><span class="badge b-mid">La diferencia más importante</span></div>
+      <div class="card-body">
+        <strong>On/Off (convencional)</strong> → El compresor arranca al máximo y se corta cuando llega a la temperatura. Como encender y apagar un auto. Consume mucho en los arranques, hace variaciones de temperatura, más ruidoso.<br><br>
+        <strong>Inverter</strong> → El compresor varía su velocidad continuamente para mantener la temperatura exacta. Como acelerar suave en la ruta. Consume 30–50% menos energía. Más silencioso. Llega a la temperatura más rápido. Dura más el compresor.<br><br>
+        En 2–3 años de uso, el ahorro energético del inverter compensa completamente el mayor precio inicial.
+        <br><em>— "En Argentina con la tarifa eléctrica actual, un inverter se paga solo en 2 veranos de uso intensivo."</em>
+      </div>
+      <div class="chips"><div class="chip">On/Off <span>USD 350–600</span></div><div class="chip">Inverter <span>USD 500–1000+</span></div></div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">BTU y m²: la calculadora básica</div><span class="badge b-ok">Cuánto necesitás</span></div>
+      <div class="card-body">
+        Los <span class="tt" data-tip="BTU = British Thermal Unit. La unidad que mide la potencia de refrigeración/calefacción de un aire. Más BTU = más potente = puede enfriar un espacio más grande o más rápido. La regla básica es 600 BTU por m², pero varía según el piso, la orientación solar, el aislamiento y la cantidad de ventanas.">BTU</span> miden la potencia. La regla general:
+        <br><br>
+        <strong>9.000 BTU</strong> → Hasta 18–20 m². Dormitorio estándar.<br>
+        <strong>12.000 BTU</strong> → 20–30 m². Living chico o dormitorio grande.<br>
+        <strong>18.000 BTU</strong> → 30–40 m². Living o comedor mediano.<br>
+        <strong>24.000 BTU</strong> → 40–55 m². Espacios abiertos grandes.<br><br>
+        <strong>Factores que aumentan los BTU necesarios:</strong> piso alto con mucho sol, techo alto, muchas ventanas sin cortinas, zona muy calurosa, espacio con muchas personas.
+        <br><em>— "Poner un 9000 BTU en un living de 35m2 es trabajar al 120% todo el tiempo. El compresor colapsa antes de tiempo y la factura de luz explota."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Frío/calor vs solo frío</div><span class="badge b-top">En Argentina: siempre frío/calor</span></div>
+      <div class="card-body">
+        Los aires frío/calor también calientan en invierno actuando como bomba de calor. Son 3–4 veces más eficientes que una estufa eléctrica convencional para calentar el mismo espacio.
+        <br><br>
+        <strong>La lógica económica:</strong> una estufa eléctrica de 2.000W consume 2.000W. Un aire inverter frío/calor de 12.000 BTU con 1.200W de consumo genera el equivalente de 3.500–4.000W de calor. La diferencia de eficiencia es brutal.
+        <div class="tech-tag">WiFi integrado: control por app, programación horaria, modo ausencia</div>
+        <br><em>— "Usar el aire acondicionado para calefaccionar en invierno cuesta menos que la estufa eléctrica. Contra-intuitivo pero matemáticamente correcto."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#c084fc">
+      <div class="card-head"><div class="card-name">Split vs portátil</div><span class="badge b-high">La instalación importa</span></div>
+      <div class="card-body">
+        <strong>Split (fijo)</strong> → Una unidad interior y una exterior. La más eficiente y silenciosa. Requiere instalación con perforación de pared y obra por gasista/electricista matriculado.<br><br>
+        <strong>Portátil</strong> → No requiere instalación. Solo un tubo por la ventana para el calor. Conveniente pero menos eficiente (el motor está adentro y genera calor en el mismo espacio que enfría), más ruidoso y ocupa espacio.<br><br>
+        <strong>Cassette / Ductos</strong> → Para instalaciones en el techo o conductos centralizados. Empresas, casas grandes.
+        <br><em>— "El portátil es para el que alquila y no puede instalar un split. Si podés poner un split, ponelo siempre."</em>
+      </div>
+    </div>
+  </div>
+
+  <table class="tabla" style="margin-top:20px">
+    <thead><tr><th>Espacio</th><th>BTU recomendados</th><th>Consumo aprox inverter</th></tr></thead>
+    <tbody>
+      <tr><td>Dormitorio 15m²</td><td>9.000 BTU</td><td>800–900W</td></tr>
+      <tr class="hl"><td>Dormitorio 20m² / living chico</td><td>12.000 BTU</td><td>1.000–1.200W</td></tr>
+      <tr><td>Living 30m²</td><td>18.000 BTU</td><td>1.500–1.800W</td></tr>
+      <tr><td>Living-comedor 45m²</td><td>24.000 BTU</td><td>2.000–2.400W</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section" id="ventiladores">
+  <div class="sec-title">Ventiladores y climatizadores</div>
+  <div class="sec-sub">Cuando el aire no alcanza o el presupuesto no llega. <em>Y cómo sacarles el máximo provecho.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#22d3ee">
+      <div class="card-head"><div class="card-name">Ventilador de techo</div><span class="badge b-ok">El más eficiente para circular aire</span></div>
+      <div class="card-body">
+        Un ventilador de techo bien dimensionado para la habitación mueve mucho más aire que uno de pie con mucho menos consumo (30–75W vs 50–120W del de pie). El movimiento de aire genera la sensación de 3–4°C menos sin bajar la temperatura real.
+        <br><br>
+        <strong>Función de invierno:</strong> girar en sentido inverso a baja velocidad empuja el aire caliente acumulado en el techo hacia abajo. Muy útil con estufas.
+        <div class="tech-tag">Modelos smart con control por voz y app WiFi</div>
+        <br><em>— "Un ventilador de techo bien instalado reduce el uso del aire acondicionado en un 40%. Complemento, no reemplazo."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 60–200</span></div></div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Climatizador evaporativo</div><span class="badge b-mid">Para zonas secas</span></div>
+      <div class="card-body">
+        Funciona evaporando agua para enfriar el aire. Consume 150–200W (vs 1.000–2.000W del aire). Mucho más económico. <strong>Pero solo funciona en climas secos (humedad menor al 50%)</strong>.
+        <br><br>
+        En Buenos Aires con 70–80% de humedad: no sirve. En Mendoza, Córdoba capital, San Juan, zonas áridas: funciona muy bien.
+        <br><em>— "Un climatizador evaporativo en la Costa Atlántica en verano es una heladera con ventilador. No enfría nada con esa humedad."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Ventilador torre vs pedestal</div><span class="badge b-top">El debate eterno</span></div>
+      <div class="card-body">
+        <strong>Pedestal (con base)</strong> → Más potente, más caudal de aire, altura regulable. El clásico. Más ruidoso.<br><br>
+        <strong>Torre</strong> → Más estético, ocupa menos espacio en el piso, generalmente más silencioso. Menos caudal de aire por la misma potencia. Los modelos Dyson (sin aspas) son los más silenciosos pero cuestan USD 400+.<br><br>
+        <strong>Para dormir:</strong> torre o el Dyson si el ruido te molesta. Para enfriar un espacio: pedestal.
+        <br><em>— "El Dyson AM07 es el Rolls-Royce de los ventiladores. ¿Vale 10 veces más que uno común? Para el que le molesta el ruido al dormir, hay quienes dicen que sí."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="perfil">
+  <div class="sec-title">¿Cuál es para vos?</div>
+  <div class="sec-sub">Según el espacio, el clima y el presupuesto.</div>
+  <div class="perfiles">
+    <div class="perfil"><div class="perfil-ico">🏙️</div><div>
+      <div class="perfil-title">Departamento en Buenos Aires</div>
+      <div class="perfil-desc">Verano húmedo, invierno fresco, factura de luz que preocupa.</div>
+      <div class="perfil-rec">→ Split inverter frío/calor. Un 9.000 BTU por dormitorio y un 18.000 para el living. Samsung, LG, Carrier o Midea son las marcas más vendidas. El inverter se paga solo en 2 temporadas.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🌵</div><div>
+      <div class="perfil-title">Zona seca (Cuyo, Córdoba interior)</div>
+      <div class="perfil-desc">Calor seco, humedad baja, presupuesto limitado.</div>
+      <div class="perfil-rec">→ Climatizador evaporativo para el día + ventilador de techo para la noche. Combinación muy económica que funciona perfectamente en climas secos.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🏠</div><div>
+      <div class="perfil-title">Casa con varios ambientes</div>
+      <div class="perfil-desc">Querés refrigerar toda la casa de forma eficiente.</div>
+      <div class="perfil-rec">→ Sistema multi-split: una unidad exterior conectada a múltiples interiores. Más eficiente y estético que un split por habitación con compresor propio.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🏢</div><div>
+      <div class="perfil-title">Alquiler sin poder instalar</div>
+      <div class="perfil-desc">No podés perforar paredes ni instalar nada fijo.</div>
+      <div class="perfil-rec">→ Aire portátil (menos eficiente pero sin instalación) o ventilador de torre + climatizador evaporativo si el clima lo permite.</div>
+    </div></div>
+  </div>
+</div>
+
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de Comprar</div>
+  <div class="sec-sub">Lo que hay que considerar antes del primer calor.</div>
+  <div class="checks">
+    <div class="check"><div class="check-ico">⚡</div><div>
+      <div class="check-title">Instalación eléctrica: circuito dedicado</div>
+      <div class="check-desc">El aire acondicionado requiere un circuito eléctrico dedicado de 20A mínimo. <strong>No enchufes el aire en el mismo circuito de las luces o el lavarropas.</strong> <em>— Un split de 18.000 BTU arrancando sobre un circuito compartido puede fundir el disyuntor y dañar el compresor.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">🔧</div><div>
+      <div class="check-title">Instalación por técnico matriculado</div>
+      <div class="check-desc">El gas refrigerante requiere manipulación por técnico habilitado. <strong>Una instalación incorrecta del circuito de gas puede inutilizar el equipo en meses.</strong></div>
+    </div></div>
+    <div class="check"><div class="check-ico">🧹</div><div>
+      <div class="check-title">Mantenimiento anual</div>
+      <div class="check-desc">Los filtros se limpian cada 2–4 semanas con uso intensivo. El gas se controla anualmente. <strong>Un aire sin mantenimiento pierde 20–30% de eficiencia y puede dañar el compresor.</strong></div>
+    </div></div>
+  </div>
+  <div class="tip tip-gold" style="margin-top:20px">
+    <strong>💡 Marcas en Argentina:</strong> <strong>Samsung, LG, Carrier, Midea, BGH</strong> son las más vendidas y con mejor red de service. Mitsubishi Electric y Daikin son premium con excelente eficiencia pero más caras. Evitá marcas sin service local certificado: el gas del aire no lo puede recargar cualquiera.
+  </div>
+</div>
+</main>
+<div id="ttBubble"></div>
+<script>
+  function goTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+  const bubble=document.getElementById('ttBubble');let timer;
+  document.querySelectorAll('.tt').forEach(el=>{el.addEventListener('click',function(e){e.stopPropagation();bubble.textContent=this.dataset.tip;bubble.classList.add('on');const r=this.getBoundingClientRect();let top=r.bottom+10,left=r.left;if(left+280>window.innerWidth)left=window.innerWidth-285;if(top+140>window.innerHeight)top=r.top-145;bubble.style.top=top+'px';bubble.style.left=left+'px';clearTimeout(timer);timer=setTimeout(()=>bubble.classList.remove('on'),5000);});});
+  document.addEventListener('click',()=>bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Climatizacion: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="calefaccion.html" class="rel-link">🔥 Calefacción</a><a href="grandes-electrodomesticos.html" class="rel-link">🧊 Electrodomésticos</a><a href="energia-renovable.html" class="rel-link">☀️ Energía Renovable</a></div>
+</div>
+</body>
+</html>

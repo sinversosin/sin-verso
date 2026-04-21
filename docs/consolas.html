@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Consolas</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080810; --surface: #10101c; --card: #13131f;
+    --border: #20203a; --text: #eeeef5; --muted: #9494b8; --soft: #8888aa;
+    --accent: #22c55e; --ps: #003087; --xbox: #107c10; --switch: #e4000f;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; font-size:16px; overflow-x:hidden; }
+
+  header { background:linear-gradient(135deg,#080810,#051208 50%,#080810); border-bottom:1px solid var(--border); padding:44px 20px 36px; text-align:center; position:relative; overflow:hidden; }
+  header::before { content:''; position:absolute; top:-80px; left:50%; transform:translateX(-50%); width:500px; height:260px; background:radial-gradient(ellipse,rgba(34,197,94,.12),transparent 70%); pointer-events:none; }
+  .site-label { font-size:11px; font-weight:700; letter-spacing:5px; color:var(--accent); text-transform:uppercase; opacity:.7; margin-bottom:10px; }
+  header h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(46px,9vw,88px); letter-spacing:2px; line-height:1; background:linear-gradient(135deg,#fff 30%,var(--accent) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .subtitle { margin-top:10px; color:var(--muted); font-size:15px; font-style:italic; }
+  .subtitle strong { color:var(--accent); font-style:normal; }
+
+  .tabs { display:flex; gap:8px; overflow-x:auto; padding:20px 16px 0; flex-wrap:nowrap; scrollbar-width:none; }
+  .tabs::-webkit-scrollbar { display:none; }
+  .tab { background:var(--surface); border:1px solid var(--border); border-radius:30px; padding:10px 18px; font-size:13px; font-weight:500; color:var(--muted); cursor:pointer; transition:all .2s; white-space:nowrap; flex-shrink:0; }
+  .tab:hover { border-color:var(--accent); color:var(--accent); }
+  .tab.active { background:var(--accent); border-color:var(--accent); color:#000; font-weight:700; }
+
+  main { padding:28px 16px 80px; max-width:640px; margin:0 auto; }
+  .section { display:none; }
+  .section.active { display:block; }
+  .sec-title { font-family:'Bebas Neue',sans-serif; font-size:34px; letter-spacing:1px; color:var(--accent); margin-bottom:4px; }
+  .sec-sub { color:var(--muted); font-size:15px; margin-bottom:24px; line-height:1.6; }
+  .sec-sub em { color:var(--text); font-style:italic; }
+
+  .cards { display:flex; flex-direction:column; gap:14px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:18px; padding:20px 20px 20px 24px; position:relative; overflow:hidden; transition:border-color .2s,transform .2s; }
+  .card:hover { border-color:rgba(34,197,94,.35); transform:translateY(-2px); }
+  .card::before { content:''; position:absolute; top:0; left:0; width:5px; height:100%; background:var(--ca,var(--accent)); border-radius:18px 0 0 18px; }
+  .card-head { display:flex; align-items:center; gap:12px; margin-bottom:8px; flex-wrap:wrap; }
+  .card-name { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:1px; color:var(--text); line-height:1; }
+  .badge { font-size:10px; font-weight:700; letter-spacing:1.5px; padding:3px 10px; border-radius:20px; text-transform:uppercase; }
+  .b-ok   { background:rgba(77,187,122,.15);  color:#4dbb7a;      border:1px solid rgba(77,187,122,.3); }
+  .b-mid  { background:rgba(34,197,94,.12);   color:var(--accent); border:1px solid rgba(34,197,94,.3); }
+  .b-ps   { background:rgba(0,48,135,.3);     color:#6699ff;       border:1px solid rgba(0,48,135,.5); }
+  .b-xbox { background:rgba(16,124,16,.3);    color:#4ddd4d;       border:1px solid rgba(16,124,16,.5); }
+  .b-sw   { background:rgba(228,0,15,.2);     color:#ff6666;       border:1px solid rgba(228,0,15,.4); }
+  .b-top  { background:rgba(255,215,0,.12);   color:#ffd700;       border:1px solid rgba(255,215,0,.3); }
+  .b-no   { background:rgba(120,120,120,.15); color:#888;          border:1px solid rgba(120,120,120,.3); }
+  .b-warn { background:rgba(248,113,113,.15); color:#f87171;       border:1px solid rgba(248,113,113,.3); }
+  .card-body { font-size:14px; color:var(--muted); line-height:1.7; }
+  .card-body strong { color:var(--text); font-weight:600; }
+  .card-body em { color:#8899bb; font-size:13px; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .chip { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:4px 10px; font-size:12px; color:var(--muted); }
+  .chip span { color:var(--text); font-weight:600; }
+
+  .tt { border-bottom:1px dashed var(--accent); color:var(--accent); cursor:pointer; font-weight:600; display:inline; }
+  #ttBubble { display:none; position:fixed; background:#051208; border:1px solid var(--accent); border-radius:14px; padding:13px 16px; font-size:14px; color:var(--text); line-height:1.6; max-width:270px; z-index:9999; box-shadow:0 8px 40px rgba(0,0,0,.7); pointer-events:none; }
+  #ttBubble.on { display:block; }
+  #ttBubble::before { content:'💡 '; }
+
+  .tip { background:rgba(34,197,94,.06); border:1px solid rgba(34,197,94,.2); border-radius:14px; padding:16px 18px; margin-top:20px; font-size:14px; line-height:1.65; color:#9ae8b4; }
+  .tip strong { color:var(--accent); }
+  .tip-blue { background:rgba(0,212,255,.06); border:1px solid rgba(0,212,255,.2); color:#a0d8ea; }
+  .tip-blue strong { color:#00d4ff; }
+  .tip-warn { background:rgba(248,113,113,.06); border:1px solid rgba(248,113,113,.2); color:#f8b4b4; }
+  .tip-warn strong { color:#f87171; }
+
+  .tabla { width:100%; border-collapse:collapse; font-size:13px; margin-top:8px; }
+  .tabla th { background:var(--surface); color:var(--accent); font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:1px; padding:10px 12px; text-align:left; border-bottom:2px solid var(--border); }
+  .tabla td { padding:10px 12px; border-bottom:1px solid var(--border); color:var(--muted); vertical-align:top; line-height:1.5; }
+  .tabla tr:hover td { background:rgba(255,255,255,.02); }
+  .tabla td:first-child { color:var(--text); font-weight:700; }
+  .ok::before  { content:'✓ '; color:#4dbb7a; }
+  .mal::before { content:'✗ '; color:#f87171; }
+  .meh::before { content:'~ '; color:#ffd700; }
+
+  /* CONSOLA CARDS GRANDES */
+  .consola-card {
+    border-radius:20px; padding:22px; margin-bottom:14px;
+    border:1px solid var(--border); position:relative; overflow:hidden;
+    transition:transform .2s, border-color .2s;
+  }
+  .consola-card:hover { transform:translateY(-2px); }
+  .consola-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; border-radius:20px 20px 0 0; }
+  .consola-card.ps5 { background:linear-gradient(135deg,rgba(0,48,135,.15),rgba(0,0,0,0)); border-color:rgba(0,48,135,.4); }
+  .consola-card.ps5::before { background:linear-gradient(90deg,#003087,#0070d1); }
+  .consola-card.xbox { background:linear-gradient(135deg,rgba(16,124,16,.15),rgba(0,0,0,0)); border-color:rgba(16,124,16,.4); }
+  .consola-card.xbox::before { background:linear-gradient(90deg,#107c10,#52b043); }
+  .consola-card.switch { background:linear-gradient(135deg,rgba(228,0,15,.12),rgba(0,0,0,0)); border-color:rgba(228,0,15,.35); }
+  .consola-card.switch::before { background:linear-gradient(90deg,#e4000f,#ff4444); }
+  .consola-header { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+  .consola-logo { font-size:42px; }
+  .consola-nombre { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:1px; line-height:1; }
+  .consola-card.ps5 .consola-nombre { color:#6699ff; }
+  .consola-card.xbox .consola-nombre { color:#4ddd4d; }
+  .consola-card.switch .consola-nombre { color:#ff6666; }
+  .consola-slogan { font-size:13px; color:var(--muted); font-style:italic; margin-top:2px; }
+  .consola-body { font-size:14px; color:var(--muted); line-height:1.7; }
+  .consola-body strong { color:var(--text); }
+  .consola-body em { font-size:13px; color:#8899bb; }
+  .consola-specs { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .c-spec { background:rgba(255,255,255,.06); border-radius:8px; padding:4px 10px; font-size:12px; color:var(--soft); }
+  .c-spec span { font-weight:700; color:var(--text); }
+
+  /* PERFIL DE JUGADOR */
+  .perfil-grid { display:flex; flex-direction:column; gap:10px; }
+  .perfil { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px; display:flex; gap:14px; align-items:flex-start; transition:border-color .2s; }
+  .perfil:hover { border-color:rgba(34,197,94,.3); }
+  .perfil-ico { font-size:28px; flex-shrink:0; }
+  .perfil-title { font-weight:700; color:var(--text); font-size:15px; margin-bottom:3px; }
+  .perfil-desc { font-size:13px; color:var(--muted); line-height:1.55; }
+  .perfil-rec { font-size:12px; font-weight:700; margin-top:6px; }
+
+  /* CHECKS */
+  .checks { display:flex; flex-direction:column; gap:10px; }
+  .check { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:15px 16px; display:flex; gap:13px; align-items:flex-start; transition:border-color .2s; }
+  .check:hover { border-color:rgba(34,197,94,.3); }
+  .check-ico { font-size:22px; flex-shrink:0; }
+  .check-title { font-weight:700; color:var(--text); font-size:14px; margin-bottom:3px; }
+  .check-desc { font-size:13px; color:var(--muted); line-height:1.55; }
+  .check-desc strong { color:var(--text); }
+  .check-desc em { color:#7a9ab0; font-style:italic; font-size:12px; }
+
+  /* RETRO */
+  .retro-card { background:linear-gradient(135deg,rgba(255,215,0,.06),rgba(0,0,0,0)); border:1px solid rgba(255,215,0,.25); border-radius:18px; padding:20px 20px 20px 24px; position:relative; overflow:hidden; margin-bottom:14px; transition:border-color .2s,transform .2s; }
+  .retro-card:hover { border-color:rgba(255,215,0,.5); transform:translateY(-2px); }
+  .retro-card::before { content:''; position:absolute; top:0; left:0; width:5px; height:100%; background:var(--cr,#ffd700); border-radius:18px 0 0 18px; }
+  .retro-header { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .retro-ico { font-size:36px; }
+  .retro-nombre { font-family:'Bebas Neue',sans-serif; font-size:26px; color:#ffd700; line-height:1; }
+  .retro-año { font-size:11px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-top:2px; }
+  .retro-body { font-size:14px; color:var(--muted); line-height:1.7; }
+  .retro-body strong { color:var(--text); }
+  .retro-body em { font-size:13px; color:#8899bb; }
+
+  .arcade-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px; }
+  @media(max-width:480px){ .arcade-grid { grid-template-columns:1fr; } }
+  .arcade-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px; transition:border-color .2s; }
+  .arcade-card:hover { border-color:rgba(255,215,0,.35); }
+  .arcade-ico { font-size:30px; margin-bottom:8px; }
+  .arcade-title { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--text); margin-bottom:4px; }
+  .arcade-desc { font-size:12px; color:var(--muted); line-height:1.5; }
+  .arcade-desc strong { color:var(--text); }
+  .arcade-precio { font-size:11px; color:#ffd700; font-weight:700; margin-top:6px; }
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="site-label">SinVerso · Tecnología</div>
+  <h1>Consolas</h1>
+  <p class="subtitle">PlayStation, Xbox o Switch. <strong>La guerra que en realidad no tiene un ganador.</strong></p>
+  <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;">
+    💲 Precios en USD orientativos · Varían según el tipo de cambio y el mercado local
+  </div>
+</header>
+
+
+<div class="error-caro"><strong>🎮 El error más caro</strong>Comprar la consola sin considerar qué juegos querés jugar. La PS5 y la Xbox tienen catálogos distintos. Comprar una consola y después darte cuenta que los juegos que querés son exclusivos de la otra es el error más frustrante y más evitable.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('panorama',this)">🎮 Panorama</div>
+  <div class="tab" onclick="goTab('ps5',this)">🔵 PlayStation 5</div>
+  <div class="tab" onclick="goTab('xbox',this)">🟢 Xbox Series</div>
+  <div class="tab" onclick="goTab('switch',this)">🔴 Nintendo Switch</div>
+  <div class="tab" onclick="goTab('servicios',this)">📦 Servicios online</div>
+  <div class="tab" onclick="goTab('perfil',this)">🧑 ¿Cuál es para vos?</div>
+  <div class="tab" onclick="goTab('retro',this)">👾 Retro & Arcade</div>
+  <div class="tab" onclick="goTab('checklist',this)">🛒 Antes de comprar</div>
+</div>
+
+<main>
+
+<!-- ══ PANORAMA ══ -->
+<div class="section active" id="panorama">
+  <div class="sec-title">El panorama actual</div>
+  <div class="sec-sub">Tres jugadores, tres propuestas distintas. <em>No hay una consola que sea la mejor para todos. Hay una que es la mejor para vos.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#6699ff">
+      <div class="card-head"><div class="card-name">La guerra de consolas</div><span class="badge b-mid">Un poco de contexto</span></div>
+      <div class="card-body">
+        Desde los años 80 existe la "guerra de consolas": Nintendo vs Sega, PlayStation vs N64, Xbox vs PS2. Hoy son tres jugadores con propuestas muy distintas:
+        <br><br>
+        <strong>Sony (PlayStation 5)</strong> → El rey de las exclusivas. Los juegos que no podés jugar en otro lado.<br>
+        <strong>Microsoft (Xbox Series X/S)</strong> → La apuesta por el Game Pass. Cientos de juegos por suscripción mensual.<br>
+        <strong>Nintendo (Switch 2)</strong> → El que juega en otra cancha. Portabilidad, familias y juegos únicos.
+        <br><em>— "La pregunta no es cuál es mejor. La pregunta es qué querés jugar."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">¿Consola o PC gamer?</div><span class="badge b-top">La pregunta previa</span></div>
+      <div class="card-body">
+        Antes de elegir consola, la pregunta honesta es si una PC gaming no es mejor opción:
+        <br><br>
+        <strong>Consola gana en:</strong> precio de entrada, simplicidad (enchufás y jugás), juegos exclusivos, sofá + TV, gaming social.
+        <br><br>
+        <strong>PC gana en:</strong> rendimiento a largo plazo, mods, juegos más baratos (Steam sales), actualizable, sirve para trabajo también.
+        <br><em>— "Una PS5 cuesta USD 600. Una PC que la iguala en rendimiento cuesta el doble. Pero en 4 años la PC se puede actualizar y la consola no."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Generación actual</div><span class="badge b-ok">Dónde estamos</span></div>
+      <div class="card-body">
+        Estamos en la <strong>9na generación</strong> de consolas:
+        <br><br>
+        <strong>PS5</strong> (2020) y <strong>PS5 Pro</strong> (2024) → Sony<br>
+        <strong>Xbox Series X</strong> y <strong>Series S</strong> (2020) → Microsoft<br>
+        <strong>Nintendo Switch 2</strong> (2025) → Nintendo<br>
+        <br>
+        La <span class="tt" data-tip="La generación anterior incluye PS4 y Xbox One (2013-2020). Los juegos de esa generación todavía se venden y algunos títulos son cross-gen. Si tenés una PS4 o Xbox One, los juegos físicos NO funcionan en las nuevas consolas a menos que sean compatibles hacia atrás.">generación anterior (PS4/Xbox One)</span> todavía tiene soporte pero va perdiendo juegos nuevos.
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 La realidad argentina:</strong> El precio de las consolas en Argentina varía muchísimo según el tipo de cambio. Siempre conviene comparar precio oficial vs importado vs comprar el juego digital en otra región. El <strong>Game Pass de Xbox</strong> en pesos argentinos es una de las mejores relaciones precio/valor del mercado gamer local.
+  </div>
+</div>
+
+<!-- ══ PS5 ══ -->
+<div class="section" id="ps5">
+  <div class="sec-title">PlayStation 5</div>
+  <div class="sec-sub">El rey de las exclusivas. <em>Si querés jugar God of War, Spider-Man, The Last of Us o Gran Turismo, esta es tu consola.</em></div>
+
+  <div class="consola-card ps5">
+    <div class="consola-header">
+      <div class="consola-logo">🔵</div>
+      <div>
+        <div class="consola-nombre">PlayStation 5</div>
+        <div class="consola-slogan">"Las mejores exclusivas del mercado. Y el precio lo confirma."</div>
+      </div>
+    </div>
+    <div class="consola-body">
+      La PS5 es la consola más vendida de esta generación. Su gran diferencial son los <strong>juegos exclusivos</strong> que Sony desarrolla internamente: experiencias cinematográficas que no existen en ninguna otra plataforma.
+      <br><br>
+      Técnicamente es una bestia: <strong>SSD ultrarrápido</strong> que elimina casi por completo los tiempos de carga, <strong>ray tracing</strong>, 4K a 60fps en la mayoría de los juegos importantes y el <strong>DualSense</strong>, el control más innovador del mercado con feedback háptico y gatillos adaptativos.
+    </div>
+    <div class="consola-specs">
+      <div class="c-spec">CPU <span>AMD Zen 2 · 8 núcleos</span></div>
+      <div class="c-spec">GPU <span>10.28 TFLOPS</span></div>
+      <div class="c-spec">RAM <span>16GB GDDR6</span></div>
+      <div class="c-spec">SSD <span>825GB · 5.5GB/s</span></div>
+      <div class="c-spec">4K <span>hasta 120fps</span></div>
+      <div class="c-spec">Ray Tracing <span>✓</span></div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#6699ff">
+      <div class="card-head"><div class="card-name">PS5 vs PS5 Slim vs PS5 Pro</div><span class="badge b-ps">Las versiones</span></div>
+      <div class="card-body">
+        <strong>PS5 original (2020)</strong> → La primera versión. Más grande, con lector de disco.<br><br>
+        <strong>PS5 Slim (2023)</strong> → Más chica y liviana. El lector de disco es opcional (se compra aparte). La que vas a encontrar nueva hoy.<br><br>
+        <strong>PS5 Pro (2024)</strong> → La versión mejorada. GPU 45% más potente, mejor ray tracing, upscaling con IA (PSSR). Para el que quiere lo máximo. <span class="tt" data-tip="La PS5 Pro no viene con lector de disco incluido. Si querés jugar físico necesitás comprar el lector por separado, lo que suma al precio final. Consideralo antes de elegir entre digital y físico.">No incluye lector de disco.</span>
+        <br><em>— "Para el 90% de la gente, la PS5 Slim es más que suficiente. La Pro es para el que quiere el máximo absoluto."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">PS5 Slim <span>la que comprás hoy</span></div>
+        <div class="chip">PS5 Pro <span>para el fanático</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#6699ff">
+      <div class="card-head"><div class="card-name">El DualSense</div><span class="badge b-top">El control más innovador</span></div>
+      <div class="card-body">
+        El control de PS5 es genuinamente diferente a todo lo anterior. Tiene:
+        <br><br>
+        <strong>Feedback háptico</strong> → En vez de vibrar todo igual, sentís texturas específicas. La lluvia, los pasos en la nieve, el motor del auto. Diferente a cualquier cosa anterior.
+        <br><strong>Gatillos adaptativos</strong> → Los gatillos tienen resistencia variable. Tensar un arco, acelerar en barro, disparar con distintas armas. Se sienten distintos en cada situación.
+        <br><em>— "Jugás Astro's Playroom (que viene gratis) y entendés de qué sirven. Es una demo del control disfrazada de juego."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#6699ff">
+      <div class="card-head"><div class="card-name">Las exclusivas que justifican la compra</div><span class="badge b-ps">Solo en PlayStation</span></div>
+      <div class="card-body">
+        <strong>God of War Ragnarök</strong> → Narrativa y acción al más alto nivel.<br>
+        <strong>Spider-Man 2</strong> → El mejor juego de superhéroes hecho.<br>
+        <strong>The Last of Us Part I y II</strong> → Las experiencias más cinematográficas del gaming.<br>
+        <strong>Gran Turismo 7</strong> → El simulador de autos más realista de consola.<br>
+        <strong>Demon's Souls / Returnal / Ratchet & Clank</strong> → Exclusivas que muestran el hardware.
+        <br><em>— "Muchas exclusivas de PS5 llegan eventualmente a PC. Pero llegan 2–3 años después."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Lo que no tiene la PS5</div><span class="badge b-warn">Ser honesto importa</span></div>
+      <div class="card-body">
+        <strong>Sin Game Pass equivalente masivo</strong> → El PS Plus Extra tiene juegos pero no es lo mismo que el Game Pass de Xbox en valor.<br>
+        <strong>Sin retrocompatibilidad con PS1/PS2/PS3</strong> → Solo juega PS4 y PS5. No podés poner el disco de tu juego viejo.<br>
+        <strong>Precio de juegos alto</strong> → Los juegos nuevos de PS5 salen a USD 15–20 en Argentina.<br>
+        <strong>Almacenamiento limitado</strong> → 825GB se llena rápido con juegos modernos de 50–100GB cada uno.
+        <br><em>— "Expandir el almacenamiento de PS5 con un SSD NVMe M.2 es casi obligatorio después de los primeros meses."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ XBOX ══ -->
+<div class="section" id="xbox">
+  <div class="sec-title">Xbox Series X / S</div>
+  <div class="sec-sub">La apuesta por el servicio. <em>Menos exclusivas que PS5, pero el Game Pass es el mejor negocio del gaming por suscripción.</em></div>
+
+  <div class="consola-card xbox">
+    <div class="consola-header">
+      <div class="consola-logo">🟢</div>
+      <div>
+        <div class="consola-nombre">Xbox Series X / S</div>
+        <div class="consola-slogan">"Cientos de juegos por suscripción. El Netflix del gaming."</div>
+      </div>
+    </div>
+    <div class="consola-body">
+      Microsoft apostó a una estrategia diferente a Sony: en vez de invertir en exclusivas que justifiquen comprar la consola, invirtió en el <strong>Game Pass</strong>: un servicio de suscripción que da acceso a cientos de juegos por un precio mensual.
+      <br><br>
+      La <strong>Series X</strong> es la más potente (ligeramente por encima de PS5), y la <strong>Series S</strong> es la consola nueva más barata del mercado, solo digital y con resolución máxima de 1440p.
+    </div>
+    <div class="consola-specs">
+      <div class="c-spec">CPU <span>AMD Zen 2 · 8 núcleos</span></div>
+      <div class="c-spec">GPU <span>12 TFLOPS (Series X)</span></div>
+      <div class="c-spec">RAM <span>16GB GDDR6</span></div>
+      <div class="c-spec">SSD <span>1TB · 2.4GB/s</span></div>
+      <div class="c-spec">4K <span>hasta 120fps</span></div>
+      <div class="c-spec">Ray Tracing <span>✓</span></div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#4ddd4d">
+      <div class="card-head"><div class="card-name">Series X vs Series S</div><span class="badge b-xbox">Las dos opciones</span></div>
+      <div class="card-body">
+        <strong>Xbox Series X</strong> → La premium. 4K, 1TB de almacenamiento, lector de disco, máximo rendimiento. Para el que quiere lo mejor de Xbox.<br><br>
+        <strong>Xbox Series S</strong> → La económica. Solo digital, 512GB, resolución máxima 1440p (upscala a 4K). La consola nueva más barata del mercado. <span class="tt" data-tip="La Series S tiene la misma CPU que la Series X pero una GPU más chica. Por eso no llega nativamente a 4K. Para un TV de 1080p o 1440p es perfecta. En un TV 4K va a upscalear y se ve bien, aunque no al nivel de la Series X.">Ideal para TV de hasta 1440p.</span>
+        <br><em>— "Si tenés un TV de 1080p o 1440p y querés entrar al mundo Xbox, la Series S es la opción más inteligente."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Series S <span>la más accesible del mercado</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4ddd4d">
+      <div class="card-head"><div class="card-name">Game Pass: el gran diferencial</div><span class="badge b-top">El mejor negocio del gaming</span></div>
+      <div class="card-body">
+        El <strong>Xbox Game Pass Ultimate</strong> incluye:
+        <br><br>
+        • Más de <strong>400 juegos</strong> disponibles para jugar cuando quieras.<br>
+        • Todos los juegos de Microsoft/Bethesda el <strong>día de lanzamiento</strong>.<br>
+        • EA Play incluido (los juegos de EA Sports, FIFA, etc.).<br>
+        • Cloud gaming: jugás en el celular, tablet o PC sin descargar nada.<br>
+        • Xbox Live Gold para jugar online.
+        <br><br>
+        En Argentina, el precio en pesos es una de las mejores relaciones precio/valor de todo el entretenimiento digital.
+        <br><em>— "Un solo juego nuevo cuesta lo mismo que 3 meses de Game Pass con 400 juegos. Las matemáticas no mienten."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#4ddd4d">
+      <div class="card-head"><div class="card-name">Retrocompatibilidad: Xbox gana</div><span class="badge b-xbox">El mejor historial</span></div>
+      <div class="card-body">
+        Xbox tiene la mejor retrocompatibilidad del mercado. Podés jugar juegos de:
+        <br><br>
+        <strong>Xbox One</strong> → Todos funcionan en Series X/S.<br>
+        <strong>Xbox 360</strong> → La mayoría funcionan y se ven mejor.<br>
+        <strong>Xbox original (2001)</strong> → Muchos clásicos funcionan perfectamente.
+        <br><br>
+        Si tenés juegos físicos o digitales de generaciones anteriores, los conservás.
+        <br><em>— "Es el único fabricante que trata los juegos viejos como si valieran algo. Porque valen."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Lo que le falta a Xbox</div><span class="badge b-warn">La honestidad</span></div>
+      <div class="card-body">
+        <strong>Exclusivas débiles</strong> → Microsoft cerró estudios y muchos juegos que eran exclusivos llegaron a PS5 o PC. La ventaja exclusiva se diluyó.<br>
+        <strong>Halo y Forza ya no son suficiente</strong> → Los grandes títulos de Xbox llegaron a PC y perdieron parte del atractivo exclusivo.<br>
+        <strong>La Series S tiene poco almacenamiento</strong> → 512GB con juegos modernos de 50–100GB es un problema. La expansión oficial de almacenamiento es cara.
+        <br><em>— "Xbox es la mejor opción si jugás mucho y querés variedad. No es la mejor si querés las experiencias más exclusivas."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SWITCH ══ -->
+<div class="section" id="switch">
+  <div class="sec-title">Nintendo Switch 2</div>
+  <div class="sec-sub">La que juega en otra cancha. <em>No compite con PS5 ni Xbox en potencia. Compite en diversión, y ahí gana.</em></div>
+
+  <div class="consola-card switch">
+    <div class="consola-header">
+      <div class="consola-logo">🔴</div>
+      <div>
+        <div class="consola-nombre">Nintendo Switch 2</div>
+        <div class="consola-slogan">"La única consola que podés llevar al baño, al avión y a la cama."</div>
+      </div>
+    </div>
+    <div class="consola-body">
+      La Nintendo Switch 2 (2025) es la evolución de la Switch original, una de las consolas más vendidas de la historia. Su propuesta es única: <strong>consola de TV y portátil al mismo tiempo</strong>. La sacás de la base y la llevás a todos lados.
+      <br><br>
+      No compite en resolución ni en ray tracing con PS5 o Xbox. Compite en <strong>experiencias únicas</strong>, en los juegos de Nintendo que no existen en ningún otro lado, y en la <strong>versatilidad</strong> de poder jugar en cualquier lugar.
+    </div>
+    <div class="consola-specs">
+      <div class="c-spec">Modo TV <span>hasta 4K</span></div>
+      <div class="c-spec">Modo portátil <span>1080p</span></div>
+      <div class="c-spec">Batería <span>2–6hs según juego</span></div>
+      <div class="c-spec">Joy-Con 2 <span>magnéticos</span></div>
+      <div class="c-spec">Mouse mode <span>nuevo</span></div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#ff6666">
+      <div class="card-head"><div class="card-name">Switch 2 vs Switch original</div><span class="badge b-sw">Las diferencias</span></div>
+      <div class="card-body">
+        La Switch 2 llegó en 2025 con mejoras significativas sobre la original:
+        <br><br>
+        <strong>Pantalla más grande</strong> → 7.9" vs 6.2" de la original.<br>
+        <strong>4K en modo TV</strong> → La original llegaba a 1080p en TV.<br>
+        <strong>Joy-Con magnéticos</strong> → Se enganchan magnéticamente, no con rieles (el punto débil de la original).<br>
+        <strong>Mouse mode</strong> → Los Joy-Con funcionan como mouse en la mesa. Nuevo tipo de gameplay.<br>
+        <strong>Compatible con juegos Switch originales</strong> → La biblioteca entera disponible.
+        <br><em>— "Si tenés una Switch original y la usás seguido, la 2 es un upgrade que se nota. Si la usás poco, esperá."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ff6666">
+      <div class="card-head"><div class="card-name">Las exclusivas Nintendo</div><span class="badge b-top">No existen en otro lado</span></div>
+      <div class="card-body">
+        Nintendo hace juegos que no se parecen a nada del mercado:
+        <br><br>
+        <strong>The Legend of Zelda: Breath of the Wild / Tears of the Kingdom</strong> → Considerados entre los mejores juegos de la historia.<br>
+        <strong>Mario Kart</strong> → El juego de karts más vendido del mundo. Ideal para jugar en familia.<br>
+        <strong>Super Mario Odyssey / Wonder</strong> → Plataformas puras, divertidas para todas las edades.<br>
+        <strong>Animal Crossing</strong> → El juego de la pandemia. 40 millones de copias vendidas.<br>
+        <strong>Pokémon</strong> → Solo en Nintendo, siempre.
+        <br><em>— "Zelda: Tears of the Kingdom es probablemente el juego más impresionante de esta generación en cualquier plataforma."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ff6666">
+      <div class="card-head"><div class="card-name">Para quién es la Switch</div><span class="badge b-sw">El perfil</span></div>
+      <div class="card-body">
+        <strong>Familias con chicos</strong> → Los juegos de Nintendo son para todas las edades. Mario Kart multiplayer local es el plan perfecto para una tarde de lluvia.<br>
+        <strong>El que viaja mucho</strong> → En el avión, en el tren, en la sala de espera. La portabilidad es única.<br>
+        <strong>El que ya tiene PS5 o Xbox</strong> → La Switch no reemplaza, complementa. Juegos que no están en ningún otro lado.<br>
+        <strong>El casual gamer</strong> → No necesitás ser gamer hardcore para disfrutar Nintendo.
+        <br><em>— "La Switch y la PS5 conviven perfectamente. Son propuestas tan distintas que no se pisan."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Lo que le falta a Switch</div><span class="badge b-warn">Ser honesto</span></div>
+      <div class="card-body">
+        <strong>Gráficos muy por debajo de PS5/Xbox</strong> → Comparar visualmente es injusto pero existe la diferencia.<br>
+        <strong>Online mediocre</strong> → El servicio online de Nintendo es básico comparado con PSN o Xbox Live.<br>
+        <strong>Sin juegos de terceros importantes</strong> → Los grandes lanzamientos de EA, Activision o Ubisoft rara vez llegan a Switch, o llegan tarde.<br>
+        <strong>Batería limitada</strong> → 2–6 horas según el juego. Los juegos pesados la agotan rápido.
+        <br><em>— "Nintendo es la fiesta divertida. PS5 y Xbox son el cine de alta gama. Elegís según el humor."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SERVICIOS ONLINE ══ -->
+<div class="section" id="servicios">
+  <div class="sec-title">Servicios Online</div>
+  <div class="sec-sub">Para jugar online o acceder a catálogos de juegos hay que pagar. <em>Te explicamos qué incluye cada servicio y si vale la pena.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#6699ff">
+      <div class="card-head"><div class="card-name">PlayStation Plus</div><span class="badge b-ps">Sony</span></div>
+      <div class="card-body">
+        Tres niveles:
+        <br><br>
+        <strong>Essential (~USD ~3/mes)</strong> → Jugar online + 2–3 juegos gratis por mes. El mínimo para jugar multijugador.<br>
+        <strong>Extra (~USD ~5/mes)</strong> → Todo lo anterior + catálogo de hasta 400 juegos de PS4/PS5 para descargar y jugar.<br>
+        <strong>Premium (~USD ~6/mes)</strong> → Todo lo anterior + clásicos de PS1/PS2/PSP + streaming de juegos.
+        <br><br>
+        Los juegos del catálogo se van rotando. Si dejás de pagar, los perdés.
+        <br><em>— "El Extra vale la pena si jugás variado. El Essential es el mínimo para no perderse el online."</em>
+      </div>
+      <div class="chips"><div class="chip">Mejor tier <span>Extra</span></div></div>
+    </div>
+
+    <div class="card" style="--ca:#4ddd4d">
+      <div class="card-head"><div class="card-name">Xbox Game Pass Ultimate</div><span class="badge b-xbox">Microsoft</span></div>
+      <div class="card-body">
+        El servicio más completo del mercado:
+        <br><br>
+        <strong>Game Pass Ultimate (~USD ~4/mes)</strong> → Online + 400+ juegos + EA Play + Cloud Gaming + juegos de Microsoft el día de lanzamiento.
+        <br><br>
+        La diferencia clave con PS Plus: <strong>los juegos de Microsoft/Bethesda entran el día uno</strong>. Halo, Forza, Starfield, Indiana Jones, todo desde el día de lanzamiento sin pagar extra.
+        <br><em>— "En Argentina el Game Pass en pesos es casi ridículamente barato comparado con su valor real. Aprovechalo."</em>
+      </div>
+      <div class="chips"><div class="chip">El mejor <span>valor del mercado</span></div></div>
+    </div>
+
+    <div class="card" style="--ca:#ff6666">
+      <div class="card-head"><div class="card-name">Nintendo Switch Online</div><span class="badge b-sw">Nintendo</span></div>
+      <div class="card-body">
+        El más básico de los tres:
+        <br><br>
+        <strong>Individual (~USD ~2/mes)</strong> → Online + catálogo de NES/SNES/N64/GameBoy clásicos.<br>
+        <strong>Expansion Pack (~USD ~3/mes)</strong> → Todo lo anterior + juegos de Nintendo 64 con mejoras + DLCs de algunos juegos populares (Animal Crossing, Mario Kart).
+        <br><br>
+        Muchos juegos de Nintendo Switch son mejores en local (en el mismo sillón) que online.
+        <br><em>— "El online de Nintendo es el más básico de los tres. Pero Mario Kart en el sillón con amigos no necesita internet."</em>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Juegos digitales vs físicos</div><span class="badge b-top">El debate eterno</span></div>
+      <div class="card-body">
+        <strong>Digital</strong> → Sin disco, sin espacio físico, siempre disponible en la consola. Pero: <span class="tt" data-tip="Los juegos digitales están ligados a tu cuenta, no a la consola. Si tu cuenta es suspendida o la tienda cierra, perdés los juegos. Los físicos los tenés siempre, podés venderlos o prestarlos.">no los podés vender ni prestar</span>, y si la tienda cierra, perdés el acceso.<br><br>
+        <strong>Físico</strong> → Podés venderlo, prestarlo, coleccionarlo. Pero ocupan espacio y podés perderlo o rayarlo.
+        <br><br>
+        En Argentina, los juegos físicos de PS5 importados suelen ser más baratos que los digitales en la tienda oficial.
+        <br><em>— "Si comprás muchos juegos y después los vendés, el físico te financia el siguiente."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 Truco argentino:</strong> Las tiendas digitales de PlayStation y Xbox permiten cambiar la región de la cuenta. Comprar juegos digitales en la tienda turca, brasileña o colombiana puede ahorrar entre un 30% y 60% del precio argentino. No es ilegal, pero requiere pagar con tarjeta internacional o criptos.
+  </div>
+</div>
+
+<!-- ══ PERFIL ══ -->
+<div class="section" id="perfil">
+  <div class="sec-title">¿Cuál es para vos?</div>
+  <div class="sec-sub">Sin vueltas. <em>Según tu perfil, hay una consola que encaja mejor.</em></div>
+
+  <div class="perfil-grid">
+    <div class="perfil">
+      <div class="perfil-ico">🎬</div>
+      <div>
+        <div class="perfil-title">El que quiere las mejores historias</div>
+        <div class="perfil-desc">Disfrutás los juegos como si fueran películas. Te importa la narrativa, los personajes y la experiencia cinematográfica.</div>
+        <div class="perfil-rec" style="color:#6699ff">→ PlayStation 5. Las exclusivas de Sony son insuperables en esto.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">💰</div>
+      <div>
+        <div class="perfil-title">El que quiere mucho por poco</div>
+        <div class="perfil-desc">Jugás variado, querés opciones, no querés gastar USD 15 por juego nuevo.</div>
+        <div class="perfil-rec" style="color:#4ddd4d">→ Xbox Series S + Game Pass. La mejor relación precio/cantidad de contenido.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">👨‍👩‍👧‍👦</div>
+      <div>
+        <div class="perfil-title">Familia con chicos</div>
+        <div class="perfil-desc">Querés algo para jugar todos juntos, que sea apto para todas las edades y que los chicos puedan usar solos.</div>
+        <div class="perfil-rec" style="color:#ff6666">→ Nintendo Switch 2. Sin dudas. Mario Kart, Animal Crossing, Mario Party.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">🏆</div>
+      <div>
+        <div class="perfil-title">El competitivo online</div>
+        <div class="perfil-desc">Jugás shooters, battle royale o deportes online. Querés la mejor experiencia online posible.</div>
+        <div class="perfil-rec" style="color:#6699ff">→ PS5 o Xbox Series X. Fortnite, Call of Duty, FIFA corren igual en los dos. Elegí según los amigos que ya tienen.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">✈️</div>
+      <div>
+        <div class="perfil-title">El que viaja o juega en el bondi</div>
+        <div class="perfil-desc">Querés jugar en el tren, en el avión, en la cama, en cualquier lado.</div>
+        <div class="perfil-rec" style="color:#ff6666">→ Nintendo Switch 2. Es la única opción real para gaming portátil de calidad.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">🎮</div>
+      <div>
+        <div class="perfil-title">El gamer serio que quiere todo</div>
+        <div class="perfil-desc">Jugás mucho, querés todas las exclusivas y el mejor rendimiento posible.</div>
+        <div class="perfil-rec" style="color:#ffd700">→ PS5 + Switch 2. Las dos se complementan perfectamente. Xbox te lo da el Game Pass en PC si tenés notebook.</div>
+      </div>
+    </div>
+    <div class="perfil">
+      <div class="perfil-ico">🧓</div>
+      <div>
+        <div class="perfil-title">El que empieza de cero</div>
+        <div class="perfil-desc">Nunca tuviste consola o volvés después de años. No sabés bien qué querés.</div>
+        <div class="perfil-rec" style="color:#4ddd4d">→ Xbox Series S + Game Pass. Entrada económica con catálogo enorme para explorar sin comprometerte con un tipo de juego.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 El consejo más honesto:</strong> Preguntale a tus amigos qué tienen. El 40% de la decisión debería basarse en eso. Jugar online con conocidos es infinitamente mejor que jugar con desconocidos, y no tiene sentido tener PS5 si todos tus amigos tienen Xbox.
+  </div>
+</div>
+
+<!-- ══ RETRO & ARCADE ══ -->
+<div class="section" id="retro">
+  <div class="sec-title">Retro & Arcade</div>
+  <div class="sec-sub">Para el que quiere volver a los clásicos. <em>O para el que nunca los vivió y quiere saber de qué tanto hablamos.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">¿Por qué lo retro volvió?</div><span class="badge b-top">La nostalgia tiene precio</span></div>
+      <div class="card-body">
+        Los juegos de los 80s y 90s generaron una generación entera de jugadores que hoy son adultos con plata y nostalgia. Nintendo, Sega y Sony lo vieron y empezaron a relanzar consolas clásicas en formato mini.
+        <br><br>
+        Pero más allá de la nostalgia, los juegos retro tienen algo que muchos modernos perdieron: <strong>simpleza, dificultad honesta y diversión inmediata</strong>. Sin tutoriales de 20 minutos, sin microtransacciones, sin actualizaciones de 50GB.
+        <br><em>— "Prendés el Super Mario Bros y en 10 segundos ya estás jugando. Eso ya no existe."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="font-size:24px;margin-top:28px;margin-bottom:16px">Consolas retro oficiales</div>
+
+  <div class="retro-card" style="--cr:#e4000f">
+    <div class="retro-header">
+      <div class="retro-ico">🍄</div>
+      <div>
+        <div class="retro-nombre">Nintendo Classic Mini</div>
+        <div class="retro-año">NES Mini (2016) · SNES Mini (2017)</div>
+      </div>
+    </div>
+    <div class="retro-body">
+      Nintendo fue la primera en relanzar sus consolas clásicas en formato mini. La <strong>NES Mini</strong> trae 30 juegos preinstalados (Super Mario Bros, Donkey Kong, Mega Man, Pac-Man). La <strong>SNES Mini</strong> trae 21 juegos incluyendo Super Mario World, Zelda: A Link to the Past y el mítico Star Fox 2 que nunca salió originalmente.
+      <br><br>
+      Se conectan al TV por HDMI, se ven en alta definición con filtros de pantalla CRT opcionales y los controles son réplicas exactas de los originales.
+      <br><em>— "Nintendo descontinuó ambas pero se consiguen en Mercado Libre. Cuidado con las réplicas chinas."</em>
+    </div>
+    <div class="chips">
+      <div class="chip">Juegos <span>preinstalados, no se agregan más</span></div>
+      <div class="chip">Precio aprox <span>USD 60–120</span></div>
+    </div>
+  </div>
+
+  <div class="retro-card" style="--cr:#00aaff">
+    <div class="retro-header">
+      <div class="retro-ico">🦔</div>
+      <div>
+        <div class="retro-nombre">Sega Genesis / Mega Drive Mini</div>
+        <div class="retro-año">Mini (2019) · Mini 2 (2022)</div>
+      </div>
+    </div>
+    <div class="retro-body">
+      Sega también se sumó a la movida retro con la <strong>Mega Drive Mini</strong> (42 juegos) y la <strong>Mega Drive Mini 2</strong> (50 juegos incluyendo títulos del Mega CD). Sonic the Hedgehog, Streets of Rage, Castlevania, Contra.
+      <br><br>
+      La Mini 2 incluye juegos de Sega CD que antes eran muy difíciles de conseguir físicamente.
+      <br><em>— "Para el que creció con Sonic en vez de Mario. Los dos tienen razón."</em>
+    </div>
+    <div class="chips">
+      <div class="chip">Juegos <span>42–50 preinstalados</span></div>
+      <div class="chip">HDMI <span>✓</span></div>
+    </div>
+  </div>
+
+  <div class="retro-card" style="--cr:#6699ff">
+    <div class="retro-header">
+      <div class="retro-ico">🎮</div>
+      <div>
+        <div class="retro-nombre">PlayStation Classic</div>
+        <div class="retro-año">Sony · 2018</div>
+      </div>
+    </div>
+    <div class="retro-body">
+      Sony lanzó la PlayStation Classic con 20 juegos (Final Fantasy VII, Resident Evil, Metal Gear Solid, Tekken 3, GTA). Fue la menos exitosa de las tres: el emulador tenía problemas, algunos juegos corrían en versión PAL (más lenta) y los controles no tenían joysticks analógicos.
+      <br><br>
+      Hoy se consigue muy barata y la comunidad la modificó para agregar cientos de juegos.
+      <br><em>— "Sony erró el tiro con la Classic pero es hackeable fácil si te gusta el DIY."</em>
+    </div>
+    <div class="chips">
+      <div class="chip">20 juegos <span>preinstalados</span></div>
+      <div class="chip">Hackeable <span>fácilmente</span></div>
+    </div>
+  </div>
+
+  <div class="retro-card" style="--cr:#ff8c42">
+    <div class="retro-header">
+      <div class="retro-ico">🕹️</div>
+      <div>
+        <div class="retro-nombre">Tolueno</div>
+        <div class="retro-año">La leyenda argentina del retro</div>
+      </div>
+    </div>
+    <div class="retro-body">
+      La <strong>Tolueno</strong> es otra cosa. No la metas en la misma bolsa que los clones genéricos del kiosco. Es una consola retro con Linux embebido que corre <strong>la mayoría de los emuladores clásicos</strong>: MAME, NES, SNES, Mega Drive, Game Boy, PlayStation 1, N64 y más.
+      <br><br>
+      <strong>Lo que la hace especial:</strong><br>
+      • Emulador MAME completo → los fichines clásicos del arcade de verdad: Street Fighter, Metal Slug, KOF, Mortal Kombat, todo.<br>
+      • Interfaz amigable, fácil de usar sin saber nada de tecnología.<br>
+      • Se conecta al TV por HDMI.<br>
+      • Controles decentes incluidos.<br>
+      • Comunidad activa en Argentina que le agrega juegos y mejoras constantemente.<br>
+      • Podés cargarle más juegos desde una USB o microSD.
+      <br><br>
+      <strong>¿En qué se diferencia de un clone genérico?</strong> En todo. Los genéricos tienen 10 juegos repetidos 999 veces. La Tolueno tiene emuladores reales con miles de ROMs de calidad.
+      <br><em>— "Para el que quiere todos los clásicos del arcade en casa sin armar nada, la Tolueno es la respuesta. Pedimos disculpas por el malentendido."</em>
+    </div>
+    <div class="chips">
+      <div class="chip">MAME <span>✓ completo</span></div>
+      <div class="chip">Emuladores <span>NES · SNES · PS1 · N64 y más</span></div>
+      <div class="chip">Comunidad <span>activa en AR</span></div>
+      <div class="chip">Precio <span>USD 40–USD 80 aprox</span></div>
+    </div>
+  </div>
+
+  <div class="retro-card" style="--cr:#888">
+    <div class="retro-header">
+      <div class="retro-ico">📦</div>
+      <div>
+        <div class="retro-nombre">Clones genéricos</div>
+        <div class="retro-año">Los del kiosco y los "999 en 1"</div>
+      </div>
+    </div>
+    <div class="retro-body">
+      Estos SÍ son los que no valen la pena. Las consolas con forma de control con pantallita incorporada, o las que se conectan al TV. Marcas como <strong>Sup Game Box, Family Game, Game Stick Lite</strong> y docenas de clones sin nombre.
+      <br><br>
+      Los "999 juegos" son 10 juegos repetidos 100 veces con nombres distintos. El hardware es de bajísima calidad. Los controles duran 3 meses.
+      <br><em>— "No esperes Contra ni Double Dragon. Esperá 10 versiones distintas del mismo juego de avioncito."</em>
+    </div>
+    <div class="chips">
+      <div class="chip">Precio <span>USD 5–USD 15</span></div>
+      <div class="chip">Para <span>nenes chicos o regalo de compromiso</span></div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="font-size:24px;margin-top:28px;margin-bottom:16px">Arcade: la experiencia completa</div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">¿Qué es un arcade?</div><span class="badge b-top">Para entender</span></div>
+      <div class="card-body">
+        El arcade es el gabinete de madera con pantalla, joystick y botones que estaba en los locales de videojuegos de los 80 y 90. Street Fighter, Mortal Kombat, Metal Slug, los juegos de la felicidad de toda una generación.
+        <br><br>
+        Hoy podés tener esa experiencia en casa de tres formas: <strong>gabinete completo, bartop o botonera</strong>. Cada uno tiene su precio y su espacio requerido.
+        <br><em>— "El sonido de las fichas cayendo en el cajón y el olor a ese lugar... eso no lo reproduce ningún emulador."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="arcade-grid" style="margin-top:16px">
+    <div class="arcade-card">
+      <div class="arcade-ico">🕹️</div>
+      <div class="arcade-title">Gabinete completo</div>
+      <div class="arcade-desc">El arcade de pie, tamaño real. Pantalla integrada, estructura de madera o fibra, joystick y botones de calidad. Experiencia auténtica 100%. Ocupa mucho espacio (1.5m x 0.6m aprox). Puede ser fabricado a medida o comprado armado. Viene con un sistema tipo Raspberry Pi o PC con <strong>miles de juegos preinstalados</strong>.</div>
+      <div class="arcade-precio">USD 300 – USD 800 según calidad</div>
+    </div>
+    <div class="arcade-card">
+      <div class="arcade-ico">🎮</div>
+      <div class="arcade-title">Bartop</div>
+      <div class="arcade-desc">Versión reducida del gabinete completo. Va sobre una mesa o barra. Tiene pantalla propia, joystick y botones pero sin las patas. La opción más popular para el hogar: da toda la experiencia sin ocupar el espacio de un gabinete de pie. <strong>Para 1 o 2 jugadores simultáneos.</strong></div>
+      <div class="arcade-precio">USD 150 – USD 350</div>
+    </div>
+    <div class="arcade-card">
+      <div class="arcade-ico">🕹️</div>
+      <div class="arcade-title">Botonera / Fight Stick</div>
+      <div class="arcade-desc">Solo el panel de controles: joystick y botones en una caja plana. Se conecta a la TV, PC o consola. <strong>La opción más accesible.</strong> Ideal para juegos de pelea (Street Fighter, Mortal Kombat, KOF). Sin pantalla propia, necesitás conectarla a algo.</div>
+      <div class="arcade-precio">USD 30 – USD 150</div>
+    </div>
+    <div class="arcade-card">
+      <div class="arcade-ico">🖥️</div>
+      <div class="arcade-title">Arcade Stick para consola</div>
+      <div class="arcade-desc">Fight stick oficial compatible con PS5, Xbox o PC. Marcas como Hori, Qanba o Mad Catz. Botones y joystick de calidad arcade pero en formato portátil. El estándar para los torneos de juegos de pelea. <strong>La experiencia arcade sin el gabinete.</strong></div>
+      <div class="arcade-precio">USD 80 – USD 250</div>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-top:20px">
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">El corazón del arcade: el emulador</div><span class="badge b-top">La magia detrás</span></div>
+      <div class="card-body">
+        Los gabinetes y bartops modernos funcionan con un sistema de <span class="tt" data-tip="Emulador = programa que imita el hardware de una consola vieja. MAME emula más de 10.000 juegos de arcade original. RetroArch emula prácticamente todo: NES, SNES, Mega Drive, PlayStation, N64, Arcade. La Raspberry Pi 4 puede correr casi todos estos emuladores sin problema.">emulación</span>. Las opciones más comunes:
+        <br><br>
+        <strong>Raspberry Pi 4 con RetroPie</strong> → La opción más popular. Mini computadora del tamaño de una caja de fósforos. Con RetroPie instalado emula desde Atari hasta PlayStation 1 y N64. Precio de la Raspberry: USD 60–USD 80.<br><br>
+        <strong>MAME</strong> → El emulador de arcade clásico. Corre en cualquier PC vieja. Tiene más de 10.000 juegos de máquinas arcade originales.<br><br>
+        <strong>Batocera / EmuELEC</strong> → Sistemas operativos dedicados a emulación. Fácil de configurar, interfaz bonita, compatible con Raspberry Pi y mini PCs.
+        <br><em>— "Una Raspberry Pi 4 con RetroPie en un bartop casero es el proyecto de fin de semana más satisfactorio del mundo gamer."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Raspberry Pi 4 <span>la base ideal</span></div>
+        <div class="chip">RetroPie <span>gratis</span></div>
+        <div class="chip">MAME <span>10.000+ juegos</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#ff8c42">
+      <div class="card-head"><div class="card-name">Opciones listas para usar</div><span class="badge b-mid">Sin armar nada</span></div>
+      <div class="card-body">
+        Si no querés armar nada y preferís enchufar y jugar:
+        <br><br>
+        <strong>Evercade</strong> → Consola retro con cartuchos físicos de colección. Juegos de Atari, Namco, Data East. Legal, con licencias reales. Existe en versión portátil y de escritorio.<br><br>
+        <strong>Analogue Pocket</strong> → La joya del retro. Corre cartuchos originales de Game Boy, Game Boy Color, GBA, Game Gear y más. La pantalla es increíble. Precio alto pero la calidad es insuperable.<br><br>
+        <strong>MiSTer FPGA</strong> → Para el purista. Recrea el hardware original por FPGA (no emulación, es el hardware real recreado). La experiencia más fiel posible. Requiere armar y configurar.
+        <br><em>— "El Analogue Pocket es para el que quiere lo mejor sin cuentos. El MiSTer es para el que entiende qué es FPGA."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip" style="--ca:#ffd700">
+    <strong>💡 Para empezar en el mundo retro:</strong> Lo más accesible es una <strong>botonera básica de USD 30 + MAME gratis en la PC</strong>. Si querés algo más completo, un <strong>bartop con Raspberry Pi 4</strong> es el proyecto ideal: lo podés comprar armado o construirlo vos. Y si solo querés la nostalgia sin complicaciones, la <strong>NES Mini o SNES Mini</strong> enchufan y funcionan sin saber nada de tecnología.
+  </div>
+</div>
+
+<!-- ══ CHECKLIST ══ -->
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de Comprar</div>
+  <div class="sec-sub">Lo que tenés que pensar antes de pagar. <em>Una consola es una decisión de ecosistema, no solo de hardware.</em></div>
+
+  <div class="checks">
+    <div class="check">
+      <div class="check-ico">👥</div>
+      <div><div class="check-title">¿Qué tienen tus amigos?</div>
+      <div class="check-desc">Para jugar online con tus amigos tienen que tener la misma consola (o PC con crossplay). <strong>Preguntá antes de comprar.</strong> <em>— De nada sirve la mejor consola del mundo si jugás solo contra desconocidos.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🎮</div>
+      <div><div class="check-title">¿Qué juegos querés jugar?</div>
+      <div class="check-desc">Buscá los juegos que te interesan y verificá en qué plataforma están. <strong>Si los juegos que querés son exclusivos de PS5, la decisión está tomada.</strong> <em>— El hardware es el medio. Los juegos son el fin.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">📺</div>
+      <div><div class="check-title">¿Tu TV tiene HDMI 2.1?</div>
+      <div class="check-desc">Para aprovechar los 4K a 120fps de PS5 y Xbox Series X necesitás un TV con HDMI 2.1. Sin eso, estás limitado a 4K 60fps o 1080p 120fps. <strong>Verificá tu TV antes de decidir entre Series X y Series S.</strong></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">💾</div>
+      <div><div class="check-title">Almacenamiento: vas a necesitar más</div>
+      <div class="check-desc">PS5 tiene 825GB usables (el sistema ocupa el resto). Xbox Series S tiene 512GB. Los juegos modernos pesan 50–100GB. <strong>Presupuestá el almacenamiento adicional desde el principio.</strong> <em>— En PS5, un SSD NVMe M.2 de 2TB cuesta bastante pero es casi obligatorio.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🌐</div>
+      <div><div class="check-title">¿Tu internet aguanta?</div>
+      <div class="check-desc">Los juegos modernos pesan 50–100GB de descarga. Y se actualizan constantemente. <strong>Con menos de 20 Mbps vas a esperar horas para jugar.</strong> El gaming online necesita estabilidad más que velocidad. <em>— Por cable es siempre mejor que por WiFi para gaming.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🔌</div>
+      <div><div class="check-title">Digital o con lector de disco</div>
+      <div class="check-desc">La PS5 Slim digital y la Xbox Series S no tienen lector de disco. <strong>Si comprás juegos físicos o prestás juegos con amigos, necesitás la versión con lector.</strong> <em>— Una vez digital, no hay vuelta atrás.</em></div></div>
+    </div>
+    <div class="check">
+      <div class="check-ico">🛡️</div>
+      <div><div class="check-title">Garantía y distribución oficial</div>
+      <div class="check-desc">Las consolas importadas pueden no tener garantía oficial en Argentina. <strong>Verificá que el vendedor tenga distribución oficial</strong> de Sony, Microsoft o Nintendo. <em>— Una consola sin garantía oficial que se rompe es un problema caro de resolver.</em></div></div>
+    </div>
+  </div>
+
+  <div class="tip tip-warn" style="margin-top:20px">
+    <strong>⚠️ El chip: legal vs ilegal</strong><br>
+    En Argentina existe el mercado de consolas "chipeadas" (modificadas para jugar juegos piratas). <strong>Tiene riesgos reales:</strong> la consola pierde la garantía, puede ser baneada permanentemente de los servidores online, no recibe actualizaciones oficiales y con el chip puede quedar inutilizable. El juego "gratis" puede salir muy caro.
+  </div>
+
+  <div class="cards" style="margin-top:20px">
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Señales de alarma al comprar</div><span class="badge b-warn">Evitá</span></div>
+      <div class="card-body">
+        🚩 <strong>Consola "desbloqueada" o "chipeada"</strong> → Pierde garantía, riesgo de ban online.<br>
+        🚩 <strong>Sin caja original o accesorios</strong> → Puede ser robada o reacondicionada sin declarar.<br>
+        🚩 <strong>Precio muy por debajo del mercado</strong> → Algo no cierra. Investigá antes de pagar.<br>
+        🚩 <strong>Sin factura o garantía escrita</strong> → Si se rompe, problema tuyo.<br>
+        🚩 <strong>"Tiene pocos juegos pero te consigo más"</strong> → Te están vendiendo una chipeada de manera encubierta.
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<div id="ttBubble"></div>
+
+<script>
+  function goTab(id, el) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    el.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  const bubble = document.getElementById('ttBubble');
+  let timer;
+  document.querySelectorAll('.tt').forEach(el => {
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      bubble.textContent = this.dataset.tip;
+      bubble.classList.add('on');
+      const r = this.getBoundingClientRect();
+      let top = r.bottom + 10, left = r.left;
+      if (left + 280 > window.innerWidth) left = window.innerWidth - 285;
+      if (top + 140 > window.innerHeight) top = r.top - 145;
+      bubble.style.top = top + 'px';
+      bubble.style.left = left + 'px';
+      clearTimeout(timer);
+      timer = setTimeout(() => bubble.classList.remove('on'), 5000);
+    });
+  });
+  document.addEventListener('click', () => bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Consolas: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="tv-tecnologias.html" class="rel-link">📺 Televisores</a><a href="sonido.html" class="rel-link">🔊 Sonido</a><a href="streaming-sticks.html" class="rel-link">🔌 Streaming Sticks</a></div>
+</div>
+</body>
+</html>

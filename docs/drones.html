@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Drones</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--soft:#aaaacc;--accent:#e879f9;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  header{background:linear-gradient(135deg,#080810,#180020 50%,#080810);border-bottom:1px solid var(--border);padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:260px;background:radial-gradient(ellipse,rgba(232,121,249,.12),transparent 70%);pointer-events:none;}
+  .site-label{font-size:11px;font-weight:700;letter-spacing:5px;color:var(--accent);text-transform:uppercase;opacity:.7;margin-bottom:10px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(46px,9vw,88px);letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 30%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:10px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .price-note{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:8px 16px;margin-top:14px;font-size:12px;color:#8888aa;display:inline-block;}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+  main{padding:28px 16px 80px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .card:hover{border-color:rgba(232,121,249,.4);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(77,187,122,.15);color:#4dbb7a;border:1px solid rgba(77,187,122,.3);}
+  .b-mid{background:rgba(232,121,249,.12);color:var(--accent);border:1px solid rgba(232,121,249,.3);}
+  .b-high{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-no{background:rgba(120,120,120,.15);color:#888;border:1px solid rgba(120,120,120,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tt{border-bottom:1px dashed var(--accent);color:var(--accent);cursor:pointer;font-weight:600;display:inline;}
+  #ttBubble{display:none;position:fixed;background:#180020;border:1px solid var(--accent);border-radius:14px;padding:13px 16px;font-size:14px;color:var(--text);line-height:1.6;max-width:270px;z-index:9999;box-shadow:0 8px 40px rgba(0,0,0,.7);pointer-events:none;}
+  #ttBubble.on{display:block;}
+  #ttBubble::before{content:'💡 ';}
+  .tip{background:rgba(232,121,249,.06);border:1px solid rgba(232,121,249,.2);border-radius:14px;padding:16px 18px;margin-top:20px;font-size:14px;line-height:1.65;color:#f0b0f8;}
+  .tip strong{color:var(--accent);}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-green{background:rgba(77,187,122,.06);border:1px solid rgba(77,187,122,.2);color:#a0d8b4;}
+  .tip-green strong{color:#4dbb7a;}
+  .tabla{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+  .tabla th{background:var(--surface);color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);}
+  .tabla td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;line-height:1.5;}
+  .tabla tr:hover td{background:rgba(255,255,255,.02);}
+  .tabla td:first-child{color:var(--text);font-weight:700;}
+  .tabla .hl td{background:rgba(232,121,249,.05);}
+  .tabla .hl td:first-child{color:var(--accent);}
+  .ok::before{content:'✓ ';color:#4dbb7a;}
+  .mal::before{content:'✗ ';color:#f87171;}
+  .meh::before{content:'~ ';color:#ffd700;}
+  .perfiles{display:flex;flex-direction:column;gap:10px;}
+  .perfil{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .perfil:hover{border-color:rgba(232,121,249,.3);}
+  .perfil-ico{font-size:24px;flex-shrink:0;}
+  .perfil-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .perfil-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .perfil-rec{font-size:12px;font-weight:700;color:var(--accent);margin-top:5px;}
+  .checks{display:flex;flex-direction:column;gap:10px;}
+  .check{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px 16px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .check:hover{border-color:rgba(232,121,249,.3);}
+  .check-ico{font-size:22px;flex-shrink:0;}
+  .check-title{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .check-desc{font-size:13px;color:var(--muted);line-height:1.55;}
+  .check-desc strong{color:var(--text);}
+  .check-desc em{color:#7a9ab0;font-style:italic;font-size:12px;}
+  @media(max-width:480px){.card-name{font-size:20px;}.tabla th,.tabla td{padding:8px;}}
+
+/* WHATSAPP BUTTON */
+.wa-share{position:fixed;bottom:22px;right:18px;z-index:888;display:flex;align-items:center;gap:8px;background:#25D366;border-radius:30px;padding:11px 18px 11px 14px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;}
+.wa-share:hover{transform:translateY(-2px);box-shadow:0 6px 28px rgba(37,211,102,.5);}
+.wa-share-ico{font-size:20px;line-height:1;}
+.wa-share-text{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:#000;letter-spacing:.3px;}
+/* GUÍAS RELACIONADAS */
+.relacionadas{margin:32px 0 0;background:#13131f;border:1px solid #20203a;border-radius:18px;padding:20px;}
+.rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#9494b8;letter-spacing:1px;margin-bottom:12px;}
+.rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.rel-link{background:#10101c;border:1px solid #20203a;border-radius:12px;padding:8px 14px;text-decoration:none;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#eeeef5;transition:all .2s;}
+.rel-link:hover{border-color:currentColor;transform:translateY(-1px);}
+
+
+/* ERROR MÁS CARO */
+.error-caro{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.3);border-radius:16px;padding:16px 18px 16px 52px;margin:0 16px;position:relative;font-size:14px;color:#f8c4c4;line-height:1.6;}
+.error-caro::before{content:'⚠️';position:absolute;left:16px;top:16px;font-size:20px;}
+.error-caro strong{color:#f87171;display:block;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;margin-bottom:4px;}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="site-label">SinVerso · Tecnología</div>
+  <h1>Drones</h1>
+  <p class="subtitle">Ver el mundo desde arriba. <strong>Con burocracia incluida.</strong></p>
+  <div class="price-note">💲 Precios en USD orientativos · Varían según tipo de cambio y mercado local</div>
+</header>
+
+
+<div class="error-caro"><strong>🚁 El error más caro</strong>Comprar un drone que requiere registro en la ANAC sin conocer los trámites y restricciones. Volar en zonas urbanas, cerca de aeropuertos o por encima de 120 metros sin autorización puede resultar en multas de hasta USD 10.000. La regulación existe y se aplica.</div>
+<div class="tabs">
+  <div class="tab active" onclick="goTab('tipos',this)">🚁 Tipos</div>
+  <div class="tab" onclick="goTab('specs',this)">⚙️ Los specs</div>
+  <div class="tab" onclick="goTab('marcas',this)">🏆 Marcas</div>
+  <div class="tab" onclick="goTab('legal',this)">⚖️ Legal en Argentina</div>
+  <div class="tab" onclick="goTab('perfil',this)">🧑 ¿Cuál es para vos?</div>
+  <div class="tab" onclick="goTab('checklist',this)">🛒 Antes de comprar</div>
+</div>
+
+<main>
+
+<!-- TIPOS -->
+<div class="section active" id="tipos">
+  <div class="sec-title">Tipos de drones</div>
+  <div class="sec-sub">No todos los drones son para lo mismo. <em>Del juguete de USD 30 que dura 5 minutos al profesional que graba películas.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#e879f9">
+      <div class="card-head"><div class="card-name">Drones de juguete</div><span class="badge b-no">Para empezar y entender</span></div>
+      <div class="card-body">
+        Los pequeñitos para usar en casa o en el parque. Vuelo de 5–10 minutos, sin GPS, sin estabilización seria. Se mueven con cualquier viento.
+        <br><br>
+        <strong>Para qué sirven:</strong> aprender a manejar los controles, regalo para chicos, entretenimiento casual.<br>
+        <strong>Para qué no sirven:</strong> fotos o videos útiles, viento de más de 10km/h, nada serio.
+        <br><em>— "Si nunca manejaste un drone, empezar con uno de USD 30 para romper sin culpa es la mejor decisión."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 20–60</span></div><div class="chip">Vuelo <span>5–10 min</span></div></div>
+    </div>
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">Drones con cámara — gama media</div><span class="badge b-mid">El punto de entrada serio</span></div>
+      <div class="card-body">
+        GPS integrado, estabilización de imagen, cámara de 2K o 4K, vuelo de 20–30 minutos. Los que compra la mayoría de la gente para fotos y videos.
+        <br><br>
+        <strong>GPS:</strong> el drone mantiene su posición solo aunque sueltes los controles. Si pierde señal, vuelve solo al punto de despegue.<br>
+        <strong>Estabilización (gimbal):</strong> el sistema de 3 ejes que mantiene la cámara estable aunque el drone se mueva. Fundamental para video suave.
+        <br><em>— "Sin GPS ni gimbal, el video se ve como grabado desde un ventilador."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 300–600</span></div><div class="chip">Vuelo <span>20–30 min</span></div></div>
+    </div>
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Drones profesionales</div><span class="badge b-top">Para trabajo serio</span></div>
+      <div class="card-body">
+        Cámara 4K/6K con sensor grande, gimbal de alta calidad, 40–50 minutos de vuelo, resistencia al viento, transmisión de video de largo alcance.
+        <br><br>
+        <strong>Para quién:</strong> fotógrafos y videógrafos profesionales, producción audiovisual, inspección de infraestructura, agricultura.
+        <br><strong>DJI Air 3, DJI Mavic 3, DJI Inspire</strong> son la referencia.
+        <br><em>— "El drone que ves en los documentales de Netflix probablemente es un DJI Inspire o superior."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 800–5000+</span></div></div>
+    </div>
+    <div class="card" style="--ca:#22d3ee">
+      <div class="card-head"><div class="card-name">FPV (First Person View)</div><span class="badge b-high">Para los pilotos</span></div>
+      <div class="card-body">
+        Volás con lentes o pantalla que te muestran lo que ve el drone en tiempo real. La experiencia más inmersiva. Muy diferentes a los drones de cámara convencionales.
+        <br><br>
+        <strong>Racing drones:</strong> competencia de velocidad. Van a 150km/h+. Se arman y reparan como hobby.<br>
+        <strong>FPV freestyle/cinematográfico:</strong> maniobras imposibles para video impactante. Lo que ves en los videos virales de YouTube.
+        <br><br>
+        Requieren mucho más práctica que un drone convencional. Se rompen seguido al principio.
+        <br><em>— "Un FPV bien manejado hace tomas que ningún drone de cámara convencional puede hacer. La curva de aprendizaje es brutal."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 200–1000+</span></div><div class="chip">Dificultad <span>alta</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SPECS -->
+<div class="section" id="specs">
+  <div class="sec-title">Los specs que importan</div>
+  <div class="sec-sub">Lo que define si el drone hace lo que querés. <em>Y por qué la cámara no es el único número que mirás.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#e879f9">
+      <div class="card-head"><div class="card-name">Tiempo de vuelo</div><span class="badge b-mid">El más importante</span></div>
+      <div class="card-body">
+        El tiempo que dura la batería en vuelo. Para drones de cámara:
+        <br><br>
+        <strong>Menos de 15 min</strong> → Gama baja. Apenas llegás a algún lado y ya tenés que volver.<br>
+        <strong>20–28 min</strong> → Gama media. Suficiente para una sesión de fotos.<br>
+        <strong>35–46 min</strong> → Gama alta. Para trabajo profesional.<br>
+        <br>
+        <strong>El tiempo real vs declarado:</strong> el fabricante mide en condiciones ideales sin viento. Con viento moderado, cámara activa y a velocidad normal, esperá un 15–20% menos.
+        <br><br>
+        La solución: <strong>comprar baterías extra</strong>. Casi todos los drones serios permiten cambiar la batería en el campo.
+        <br><em>— "Una sesión fotográfica seria necesita mínimo 2 baterías. Con una sola llegás, sacás 3 fotos y tenés que volver."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">La cámara: más que megapíxeles</div><span class="badge b-high">Lo que importa</span></div>
+      <div class="card-body">
+        Como en los celulares, los megapíxeles no lo dicen todo. Lo que realmente importa:
+        <br><br>
+        <strong>Tamaño del sensor</strong> → Un sensor más grande capta más luz. Mejor en condiciones difíciles.<br>
+        <strong>Apertura del lente (f/)</strong> → Más abierto = más luz. Mejor para amanecer/atardecer y cielos nublados.<br>
+        <strong>Estabilización (gimbal)</strong> → 3 ejes es el estándar serio. 2 ejes o electrónica sola es menos estable.<br>
+        <strong>Grabación RAW y Log</strong> → Para edición profesional de color en postproducción.<br>
+        <strong>Zoom óptico</strong> → El DJI Air 3 tiene zoom óptico 3x. Muy útil para no tener que acercarse a todo.
+        <br><em>— "Una cámara de drone de 12MP con buen sensor le gana en imagen a una de 48MP con sensor pequeño."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Alcance y transmisión de video</div><span class="badge b-ok">Hasta dónde llega</span></div>
+      <div class="card-body">
+        El alcance de control y la calidad de la transmisión de video en tiempo real al control:
+        <br><br>
+        <strong>WiFi básico</strong> → Hasta 100–200 metros. Los drones económicos. Se corta seguido.<br>
+        <strong>OcuSync / O3 (DJI)</strong> → Hasta 10–20km de alcance (legal a 500m en Argentina). Video en HD en tiempo real sin latencia. El estándar en drones serios.
+        <br><br>
+        El alcance regulado en Argentina es <strong>500 metros vistos</strong>, no el máximo técnico del drone.
+        <br><em>— "El alcance de 10km del DJI no es para usarlo a 10km. Es para tener señal estable dentro de los 500m permitidos."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Resistencia al viento</div><span class="badge b-top">El que pocos miran</span></div>
+      <div class="card-body">
+        Los drones se clasifican por niveles de viento que pueden resistir:
+        <br><br>
+        <strong>Nivel 4 (hasta 36km/h)</strong> → La mayoría de los drones de gama media. Viento suave.<br>
+        <strong>Nivel 5 (hasta 47km/h)</strong> → DJI Mavic 3 y similares. Viento moderado-fuerte.<br>
+        <strong>Nivel 6 (hasta 54km/h)</strong> → Drones profesionales. Para condiciones difíciles.<br>
+        <br>
+        El viento costero, de montaña o el de las ciudades con edificios puede superar los 40km/h fácilmente.
+        <br><em>— "Volar en la costa o en días de tormenta inminente sin drone de nivel 5+ es perder el drone."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Sensores de obstáculos</div><span class="badge b-warn">Para no estrellarlo</span></div>
+      <div class="card-body">
+        Los sensores de obstáculos detectan árboles, edificios, cables y frenan antes de chocar:
+        <br><br>
+        <strong>Frontal</strong> → El básico. Solo detecta adelante.<br>
+        <strong>Frontal + trasero</strong> → Mejor. Para volar hacia atrás.<br>
+        <strong>Omnidireccional (6 direcciones)</strong> → El más completo. DJI Air 3, Mavic 3. El drone para cuando el usuario está aprendiendo o en entornos complejos.
+        <br><br>
+        Sin sensores, un descuido o una ráfaga de viento puede terminar el drone en un árbol.
+        <br><em>— "Los sensores de obstáculos no son para el experto. Son para todos. Los expertos también tienen accidentes."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MARCAS -->
+<div class="section" id="marcas">
+  <div class="sec-title">Las marcas</div>
+  <div class="sec-sub">El mercado de drones civiles tiene un dominador claro. <em>Y algunos rivales que intentan competir con suerte variable.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#e879f9">
+      <div class="card-head"><div class="card-name">DJI</div><span class="badge b-top">El rey indiscutido</span></div>
+      <div class="card-body">
+        DJI tiene aproximadamente el 70% del mercado mundial de drones civiles. Sus productos combinan tecnología de vuelo de primer nivel, cámaras excelentes y software muy pulido (DJI Fly app).
+        <br><br>
+        <strong>Mini 4 Pro</strong> → El más popular. Menos de 250g (sin registro en muchos países), 4K, 34 min de vuelo. El punto de entrada serio.<br>
+        <strong>Air 3</strong> → El equilibrio perfecto. Cámara dual (gran angular + tele), 46 min de vuelo, sensores omnidireccionales.<br>
+        <strong>Mavic 3 Pro</strong> → Triple cámara (28mm, 70mm, 166mm), el mejor para fotografía aérea profesional.<br>
+        <strong>Avata 2</strong> → FPV con estabilización. Lo mejor de los dos mundos.
+        <br><em>— "Comprar otro drone para ahorrar versus DJI es casi siempre una falsa economía."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">Mini 4 Pro <span>USD 760</span></div>
+        <div class="chip">Air 3 <span>USD 1.100</span></div>
+        <div class="chip">Mavic 3 Pro <span>USD 2.200</span></div>
+      </div>
+    </div>
+    <div class="card" style="--ca:#a855f7">
+      <div class="card-head"><div class="card-name">Autel Robotics</div><span class="badge b-high">El rival más serio</span></div>
+      <div class="card-body">
+        La alternativa americana a DJI. El <strong>Autel EVO Lite+</strong> y el <strong>EVO Nano+</strong> compiten bien con los Mavic y Mini de DJI. Buena calidad de cámara, sensores decentes.
+        <br><br>
+        Ventaja sobre DJI: no tiene las restricciones geográficas integradas de DJI (que en algunas zonas bloquea el despegue automáticamente). Más flexible para el usuario avanzado.
+        <br><em>— "Para el que quiere algo distinto a DJI con buena calidad, Autel es la opción más seria."</em>
+      </div>
+      <div class="chips"><div class="chip">EVO Nano+ <span>USD 500–600</span></div></div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Hubsan / Holy Stone / Potensic</div><span class="badge b-ok">Gama de entrada</span></div>
+      <div class="card-body">
+        Marcas chinas que ofrecen drones de gama baja y media a precios muy accesibles. Calidad variable. Buenas opciones para aprender y para el usuario casual que no quiere invertir en DJI.
+        <br><br>
+        <strong>Para qué sirven:</strong> aprender a volar, fotos recreativas sin pretensiones profesionales, regalo.
+        <br><strong>Para qué no:</strong> trabajo profesional, condiciones de viento, autonomía larga.
+        <br><em>— "Un Holy Stone de USD 150 es perfecto para aprender a volar sin el miedo de romper un DJI de USD 800."</em>
+      </div>
+      <div class="chips"><div class="chip">Precio <span>USD 80–250</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- LEGAL EN ARGENTINA -->
+<div class="section" id="legal">
+  <div class="sec-title">Legal en Argentina</div>
+  <div class="sec-sub">Volar un drone no es ir al parque y largar. <em>Hay regulaciones serias y multas reales.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">La ANAC regula los drones en Argentina</div><span class="badge b-warn">Obligatorio conocer</span></div>
+      <div class="card-body">
+        La <span class="tt" data-tip="ANAC = Administración Nacional de Aviación Civil. El organismo argentino que regula todo lo que vuela, incluyendo los drones civiles. Su reglamento para drones se llama RPAS (Remotely Piloted Aircraft Systems).">ANAC</span> regula los drones en Argentina con la resolución RPAS. Lo básico:
+        <br><br>
+        <strong>Registro obligatorio:</strong> Todo drone de más de 250g debe registrarse en ANAC. Trámite online, relativamente simple.<br>
+        <strong>Altitud máxima:</strong> 120 metros sobre el nivel del suelo en zonas permitidas.<br>
+        <strong>Distancia de aeropuertos:</strong> 8km mínimo de aeropuertos sin autorización.<br>
+        <strong>Zonas urbanas:</strong> requieren autorización especial para volar sobre concentraciones de personas.<br>
+        <strong>Visibilidad:</strong> el drone siempre debe estar a la vista del piloto (VLOS).<br>
+        <strong>Distancia de personas:</strong> mínimo 30 metros de personas no participantes.
+        <br><em>— "Volar sobre una plaza llena de gente sin autorización puede terminar en multa importante. Y si hay un accidente, en responsabilidad civil."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#ffd700">
+      <div class="card-head"><div class="card-name">Zonas de vuelo</div><span class="badge b-top">Dónde sí y dónde no</span></div>
+      <div class="card-body">
+        <strong>✓ Permitido generalmente:</strong> campo abierto sin gente, playas poco concurridas, zonas rurales, parques grandes sin concentración de personas.
+        <br><br>
+        <strong>✗ Prohibido sin autorización:</strong> sobre aglomeraciones, eventos, aeropuertos y zonas de aproximación, espacios aéreos controlados, infraestructura crítica (represas, centrales), Parques Nacionales (requieren permiso específico).
+        <br><br>
+        <strong>La app DJI Fly</strong> tiene integrado un mapa de zonas restringidas que bloquea el despegue automáticamente en muchas zonas prohibidas. Útil como primera referencia, pero no reemplaza consultar ANAC.
+        <br><em>— "Usar la app de DJI para verificar si podés volar es el primer paso, no el último."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4dbb7a">
+      <div class="card-head"><div class="card-name">Seguro de responsabilidad civil</div><span class="badge b-ok">Muy recomendable</span></div>
+      <div class="card-body">
+        Un drone que cae puede dañar un auto, una persona o una propiedad. Sin seguro, esa responsabilidad es 100% tuya.
+        <br><br>
+        Para uso profesional o en zonas urbanas, el seguro de RC para drones es muy recomendable. En Argentina existen pólizas específicas para RPAS desde precios accesibles.
+        <br><em>— "Un drone de USD 800 que cae sobre el parabrisas de un auto de USD 20.000... el seguro se paga solo."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#e879f9">
+      <div class="card-head"><div class="card-name">Los drones DJI Mini: la ventaja del peso</div><span class="badge b-mid">Menos de 250g</span></div>
+      <div class="card-body">
+        Los drones de menos de 250g tienen regulaciones más simples en muchos países. En Argentina el registro en ANAC aplica a partir de los 250g, pero la regulación de vuelo aplica a todos.
+        <br><br>
+        El DJI Mini 4 Pro pesa 249g exactamente. Diseñado para estar justo debajo del umbral de registro en muchos países. En Argentina igual hay que respetar las zonas de vuelo y altitudes.
+        <br><em>— "249g no te hace invisible ante la ANAC en Argentina. Sí te ahorra el registro en otros países."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PERFIL -->
+<div class="section" id="perfil">
+  <div class="sec-title">¿Cuál es para vos?</div>
+  <div class="sec-sub">Según para qué lo usás y cuánto querés invertir.</div>
+  <div class="perfiles">
+    <div class="perfil"><div class="perfil-ico">📸</div><div>
+      <div class="perfil-title">Fotos y videos para redes sociales</div>
+      <div class="perfil-desc">Paisajes, viajes, playa, eventos propios. Calidad buena sin pretensiones profesionales.</div>
+      <div class="perfil-rec">→ DJI Mini 4 Pro (USD 760). Liviano, cámara 4K excelente, fácil de volar. El más recomendado para el usuario entusiasta.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🎬</div><div>
+      <div class="perfil-title">Producción audiovisual profesional</div>
+      <div class="perfil-desc">Videos para clientes, publicidad, inmobiliaria, turismo.</div>
+      <div class="perfil-rec">→ DJI Air 3 (USD 1.100) o Mavic 3 Pro (USD 2.200). Calidad profesional, sensores omnidireccionales, múltiples cámaras.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🎮</div><div>
+      <div class="perfil-title">Hobby / racing / FPV freestyle</div>
+      <div class="perfil-desc">El drone como deporte y actividad técnica.</div>
+      <div class="perfil-rec">→ DJI Avata 2 para FPV accesible. Para racing puro, armarte tu propio quad con partes sueltas (Geprc, iFlight, Betaflight). La comunidad online es excelente para aprender.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🌱</div><div>
+      <div class="perfil-title">Primer drone — aprender a volar</div>
+      <div class="perfil-desc">Nunca volaste un drone y querés empezar sin arriesgar mucho.</div>
+      <div class="perfil-rec">→ Holy Stone HS720 o similar (USD 150–200) para aprender los controles. Después subís a DJI cuando ya no rompés todo.</div>
+    </div></div>
+    <div class="perfil"><div class="perfil-ico">🏗️</div><div>
+      <div class="perfil-title">Inspección técnica (edificios, campos, infraestructura)</div>
+      <div class="perfil-desc">Relevamientos, inspecciones, agricultura de precisión.</div>
+      <div class="perfil-rec">→ DJI Matrice o Phantom 4 RTK para trabajo profesional de inspección. Requiere habilitación profesional en ANAC.</div>
+    </div></div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de Comprar</div>
+  <div class="sec-sub">Lo que hay que pensar antes de gastar. <em>Un drone guardado en el cajón porque no podés volar donde vivís es muy frustrante.</em></div>
+  <div class="checks">
+    <div class="check"><div class="check-ico">📍</div><div>
+      <div class="check-title">Verificá si podés volar donde vivís</div>
+      <div class="check-desc">Antes de comprar, abrí la app DJI Fly o consultá el mapa de ANAC y verificá qué zonas de vuelo hay cerca de tu casa. <strong>Si vivís a menos de 8km de un aeropuerto, las opciones son limitadas.</strong> <em>— Muchas ciudades tienen aeródromos que no sabías que existían.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">📋</div><div>
+      <div class="check-title">Registrá el drone en ANAC</div>
+      <div class="check-desc">Si el drone pesa más de 250g, el registro en ANAC es obligatorio. <strong>El trámite es online y relativamente simple</strong>. Volando sin registro podés tener problemas si hay una inspección o un incidente. <em>— El registro no te cuesta nada y te cubre legalmente.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">🔋</div><div>
+      <div class="check-title">Comprá baterías extra</div>
+      <div class="check-desc">Una batería dura 25–35 minutos. <strong>Para una sesión fotográfica útil necesitás mínimo 2 baterías.</strong> Incluí el costo de las baterías extra en el presupuesto total. <em>— Las baterías de DJI cuestan USD 80–150 cada una.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">📱</div><div>
+      <div class="check-title">Verificá compatibilidad del control con tu celu</div>
+      <div class="check-desc">Los controles modernos de DJI tienen pantalla integrada, pero los básicos necesitan el celu. <strong>Verificá que tu modelo de celu sea compatible con el control</strong> antes de comprar. <em>— Algunos celulares muy nuevos o con USB-C no son compatibles con controles viejos.</em></div>
+    </div></div>
+    <div class="check"><div class="check-ico">🌬️</div><div>
+      <div class="check-title">Aprendé el pronóstico del viento</div>
+      <div class="check-desc">El viento es el peor enemigo del drone. <strong>Windguru, Windy o Meteostat</strong> te dan el viento por altura. Nunca vueles si el viento supera el nivel de resistencia de tu drone. <em>— Un drone luchando contra el viento consume batería el doble de rápido y puede no poder volver.</em></div>
+    </div></div>
+  </div>
+  <div class="tip tip-warn" style="margin-top:20px">
+    <strong>⚠️ Señales de alarma al comprar:</strong><br>
+    🚩 "30km de alcance" en drone de USD 100 → imposible con WiFi básico.<br>
+    🚩 Sin GPS → el drone no mantiene posición, volar en exteriores es peligroso.<br>
+    🚩 Sin gimbal → el video va a ser inusable con cualquier movimiento.<br>
+    🚩 Sin repuestos de hélices → las hélices se rompen siempre. Si no hay repuestos, el drone queda inutilizable.<br>
+    🚩 Peso declarado que no coincide con el real → problema para el registro ANAC.
+  </div>
+  <div class="tip tip-green" style="margin-top:16px">
+    <strong>💡 El combo ideal para empezar en serio:</strong> DJI Mini 4 Pro (USD 760) + 2 baterías extra (USD 160) + bolso de transporte (USD 30) + ND filters para fotos (USD 40). Total USD 990. Todo lo que necesitás para fotos y videos aéreos de calidad profesional con la regulación más simple posible.
+  </div>
+</div>
+
+</main>
+<div id="ttBubble"></div>
+<script>
+  function goTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+  const bubble=document.getElementById('ttBubble');let timer;
+  document.querySelectorAll('.tt').forEach(el=>{el.addEventListener('click',function(e){e.stopPropagation();bubble.textContent=this.dataset.tip;bubble.classList.add('on');const r=this.getBoundingClientRect();let top=r.bottom+10,left=r.left;if(left+280>window.innerWidth)left=window.innerWidth-285;if(top+140>window.innerHeight)top=r.top-145;bubble.style.top=top+'px';bubble.style.left=left+'px';clearTimeout(timer);timer=setTimeout(()=>bubble.classList.remove('on'),5000);});});
+  document.addEventListener('click',()=>bubble.classList.remove('on'));
+</script>
+
+<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Drones: " class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+<div class="relacionadas">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid"><a href="monopatines.html" class="rel-link">🛴 Monopatines</a><a href="camaras.html" class="rel-link">📷 Cámaras</a></div>
+</div>
+</body>
+</html>
