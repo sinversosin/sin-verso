@@ -4,268 +4,189 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>SIN VERSO — El manual de socorro adulto</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;}
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-  html{scroll-behavior:smooth;}
-  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+:root{
+--bg:#080810;
+--surface:#10101c;
+--card:#13131f;
+--border:#20203a;
+--text:#eeeef5;
+--muted:#9494b8;
+}
 
-  header{padding:60px 20px 50px;text-align:center;position:relative;overflow:hidden;background:linear-gradient(180deg,#0c0c1a,#080810);}
-  header::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(129,140,248,.10) 0%,rgba(240,171,252,.06) 40%,transparent 70%);pointer-events:none;}
-  .logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,14vw,120px);letter-spacing:4px;line-height:1;background:linear-gradient(135deg,#fff 30%,#c084fc 70%,#818cf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-  .tagline{margin-top:10px;color:var(--muted);font-size:16px;font-style:italic;}
-  .tagline strong{color:#c084fc;font-style:normal;}
+*{margin:0;padding:0;box-sizing:border-box;}
 
-  .search-bar{margin:28px auto 0;max-width:480px;position:relative;}
-  .search-bar input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:14px 50px 14px 20px;font-size:15px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
-  .search-bar input:focus{border-color:#818cf8;}
-  .search-bar input::placeholder{color:var(--muted);}
+body{
+background:var(--bg);
+color:var(--text);
+font-family:'DM Sans',sans-serif;
+overflow-x:hidden;
+}
 
-  .stats{display:flex;justify-content:center;gap:32px;margin:24px 20px 0;flex-wrap:wrap;}
-  .stat{text-align:center;}
-  .stat-num{font-family:'Bebas Neue',sans-serif;font-size:32px;color:#818cf8;line-height:1;}
-  .stat-label{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+/* HEADER */
+header{
+padding:60px 20px 50px;
+text-align:center;
+background:linear-gradient(180deg,#0c0c1a,#080810);
+}
 
-  main{padding:16px 16px 80px;max-width:680px;margin:0 auto;}
+.logo{
+font-family:'Bebas Neue',sans-serif;
+font-size:clamp(56px,14vw,120px);
+letter-spacing:4px;
+background:linear-gradient(135deg,#fff,#c084fc,#818cf8);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
 
-  .bloque{margin-bottom:36px;}
-  .bloque-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:0 4px;}
-  .bloque-ico{font-size:26px;}
-  .bloque-titulo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;color:var(--text);}
-  .bloque-sub{font-size:12px;color:var(--muted);margin-top:1px;}
+.tagline{
+margin-top:10px;
+color:var(--muted);
+font-size:16px;
+}
 
-  .guias-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
-  @media(max-width:400px){.guias-grid{grid-template-columns:1fr;}}
+/* MAIN */
+main{
+padding:16px 16px 100px;
+max-width:680px;
+margin:auto;
+}
 
-  .guia-card{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:14px;text-decoration:none;display:flex;align-items:flex-start;gap:11px;transition:all .2s;position:relative;overflow:hidden;}
-  .guia-card:hover{border-color:var(--gc);transform:translateY(-2px);background:rgba(255,255,255,.03);}
-  .guia-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--gc);border-radius:15px 0 0 15px;}
-  .guia-ico{font-size:24px;flex-shrink:0;margin-top:1px;}
-  .guia-nombre{font-weight:700;color:var(--text);font-size:13px;line-height:1.2;margin-bottom:3px;}
-  .guia-desc{font-size:11px;color:var(--muted);line-height:1.4;}
+/* TARJETAS */
+.guia-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:15px;
+padding:14px;
+text-decoration:none;
+display:flex;
+gap:10px;
+margin-bottom:10px;
+color:var(--text);
+}
 
-  .guia-card.full{grid-column:1/-1;}
-  .guia-card.special{background:linear-gradient(135deg,rgba(240,171,252,.07),rgba(129,140,248,.04));border-color:rgba(240,171,252,.22);}
-  .guia-card.special:hover{border-color:rgba(240,171,252,.5);}
-  .guia-card.solar{background:linear-gradient(135deg,rgba(74,222,128,.07),rgba(34,211,238,.03));border-color:rgba(74,222,128,.22);}
-  .guia-card.solar:hover{border-color:rgba(74,222,128,.5);}
-  .guia-card.calc{background:linear-gradient(135deg,rgba(129,140,248,.07),rgba(0,212,255,.03));border-color:rgba(129,140,248,.25);}
-  .guia-card.calc:hover{border-color:rgba(129,140,248,.6);}
+.guia-card:hover{
+border-color:#818cf8;
+}
 
-  .sep{height:1px;background:var(--border);margin:4px 0 24px;}
+/* BOTTOM BAR */
+.bottom-bar{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:65px;
+background:#0c0c18;
+border-top:1px solid var(--border);
+display:flex;
+justify-content:space-around;
+align-items:center;
+z-index:999;
+}
 
-  footer{text-align:center;padding:28px 20px;border-top:1px solid var(--border);color:var(--muted);font-size:13px;}
-  footer strong{color:#c084fc;}
+.bottom-btn{
+display:flex;
+flex-direction:column;
+align-items:center;
+font-size:11px;
+text-decoration:none;
+color:var(--muted);
+}
 
-  .guia-card.hidden{display:none;}
-  #no-results{text-align:center;color:var(--muted);padding:40px 20px;display:none;}
-  #no-results.visible{display:block;}
+.bottom-btn span{
+font-size:22px;
+margin-bottom:2px;
+}
 
-  /* WA FLOTANTE */
-  .wa-float{position:fixed;bottom:22px;right:18px;z-index:888;background:#25D366;border-radius:50%;width:52px;height:52px;display:flex;align-items:center;justify-content:center;font-size:24px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s;}
-  .wa-float:hover{transform:scale(1.1);}
+.bottom-btn.active{
+color:#818cf8;
+}
+
+/* BOTON CENTRAL */
+.bottom-btn.main{
+background:#25D366;
+color:#fff;
+width:55px;
+height:55px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:24px;
+margin-top:-20px;
+box-shadow:0 4px 20px rgba(0,0,0,.4);
+}
+
+/* FOOTER */
+footer{
+text-align:center;
+padding:30px 20px;
+color:var(--muted);
+font-size:13px;
+}
 </style>
 </head>
+
 <body>
-<a href="index.html" style="position: fixed; top: 15px; left: 15px; background: #111; color: #fff; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-family: Arial; z-index: 1000;">
-🏠 Inicio
-</a>
+
 <header>
-  <div class="logo">SIN VERSO</div>
-  <p class="tagline">El manual de socorro adulto que nadie te dio. <strong>Sin humo. Sin jerga. Sin verso.</strong></p>
-  <div class="search-bar">
-    <input type="text" id="buscador" placeholder="🔍  Buscá una guía..." oninput="buscar(this.value)">
-  </div>
-  <div class="stats">
-    <div class="stat"><div class="stat-num">44</div><div class="stat-label">Guías</div></div>
-    <div class="stat"><div class="stat-num">7</div><div class="stat-label">Secciones</div></div>
-    <div class="stat"><div class="stat-num">0</div><div class="stat-label">Verso</div></div>
-  </div>
+<div class="logo">SIN VERSO</div>
+<p class="tagline">El manual de socorro adulto que nadie te dio</p>
 </header>
 
 <main>
 
-<!-- HERRAMIENTAS RÁPIDAS -->
-<div class="bloque" id="b-tools">
-  <div class="bloque-header">
-    <div class="bloque-ico">🧮</div>
-    <div>
-      <div class="bloque-titulo">Herramientas</div>
-      <div class="bloque-sub">Calculadoras y guías de compra inteligente</div>
-    </div>
-  </div>
-  <div class="guias-grid">
-    <a href="calculadoras.html" class="guia-card calc full" style="--gc:#818cf8" data-s="calculadora BTU aire solar paneles UPS consumo electricidad">
-      <div class="guia-ico">🧮</div><div>
-        <div class="guia-nombre">Calculadoras interactivas</div>
-        <div class="guia-desc">BTU del aire acondicionado · Paneles solares · UPS · Consumo eléctrico del hogar</div>
-      </div>
-    </a>
-    <a href="plata-inteligente.html" class="guia-card" style="--gc:#4ade80" data-s="plata cuotas garantía mercado libre negociar precio trampa">
-      <div class="guia-ico">💰</div><div><div class="guia-nombre">Plata Inteligente</div><div class="guia-desc">Cuotas vs contado, garantías y cómo no caer en MercadoLibre</div></div>
-    </a>
-    <a href="auto-basico.html" class="guia-card" style="--gc:#fb923c" data-s="auto neumáticos aceite batería luces tablero VTV inspección">
-      <div class="guia-ico">🚗</div><div><div class="guia-nombre">Auto Básico</div><div class="guia-desc">Neumáticos, fluidos, batería, luces de tablero y VTV</div></div>
-    </a>
-  </div>
+<a href="#" class="guia-card">
+<div>🧮</div>
+<div>
+<strong>Calculadoras</strong><br>
+BTU · Solar · Consumo
 </div>
+</a>
 
-<div class="sep"></div>
-
-<!-- TECNOLOGÍA -->
-<div class="bloque" id="b-tech">
-  <div class="bloque-header">
-    <div class="bloque-ico">🖥️</div>
-    <div>
-      <div class="bloque-titulo">Tecnología</div>
-      <div class="bloque-sub">23 guías · Todo lo que conecta, carga o tiene pantalla</div>
-    </div>
-  </div>
-  <div class="guias-grid">
-    <a href="tv-tecnologias.html" class="guia-card" style="--gc:#00d4ff" data-s="televisores tv 4k oled qled"><div class="guia-ico">📺</div><div><div class="guia-nombre">Televisores</div><div class="guia-desc">4K, OLED, QLED y cómo elegir sin el verso del vendedor</div></div></a>
-    <a href="sonido.html" class="guia-card" style="--gc:#a855f7" data-s="sonido auriculares parlantes home theater soundbar"><div class="guia-ico">🔊</div><div><div class="guia-nombre">Sonido</div><div class="guia-desc">Auriculares, parlantes, soundbars y home theater</div></div></a>
-    <a href="celulares.html" class="guia-card" style="--gc:#ff6b35" data-s="celulares smartphone android ios cámara batería"><div class="guia-ico">📱</div><div><div class="guia-nombre">Celulares</div><div class="guia-desc">Procesadores, cámaras, gamas y Android vs iOS</div></div></a>
-    <a href="notebooks.html" class="guia-card" style="--gc:#00d4aa" data-s="notebooks laptops pc RAM SSD procesador ARM"><div class="guia-ico">💻</div><div><div class="guia-nombre">Notebooks y PCs</div><div class="guia-desc">Specs, tipos y cómo elegir según para qué la usás</div></div></a>
-    <a href="tablets.html" class="guia-card" style="--gc:#818cf8" data-s="tablets ipad samsung amazon fire android xiaomi"><div class="guia-ico">🪄</div><div><div class="guia-nombre">Tablets</div><div class="guia-desc">iPad, Samsung, Amazon Fire y Xiaomi</div></div></a>
-    <a href="consolas.html" class="guia-card" style="--gc:#22c55e" data-s="consolas ps5 xbox switch gaming retro"><div class="guia-ico">🎮</div><div><div class="guia-nombre">Consolas</div><div class="guia-desc">PS5, Xbox, Switch y servicios online comparados</div></div></a>
-    <a href="wifi-routers.html" class="guia-card" style="--gc:#f59e0b" data-s="wifi router internet velocidad señal mesh"><div class="guia-ico">📡</div><div><div class="guia-nombre">WiFi y Routers</div><div class="guia-desc">Velocidad real, WiFi 6/7, problemas y soluciones</div></div></a>
-    <a href="streaming-sticks.html" class="guia-card" style="--gc:#e11d48" data-s="streaming chromecast fire tv roku apple tv"><div class="guia-ico">🔌</div><div><div class="guia-nombre">Streaming Sticks</div><div class="guia-desc">Chromecast, Fire TV, Roku y Apple TV</div></div></a>
-    <a href="relojes.html" class="guia-card" style="--gc:#06b6d4" data-s="relojes smartwatch apple watch samsung garmin salud"><div class="guia-ico">⌚</div><div><div class="guia-nombre">Relojes Inteligentes</div><div class="guia-desc">Sensores de salud, marcas y cuál es para cada perfil</div></div></a>
-    <a href="cables-conectores.html" class="guia-card" style="--gc:#f472b6" data-s="cables conectores usb hdmi cargadores GaN fuentes"><div class="guia-ico">🔋</div><div><div class="guia-nombre">Cables y Cargadores</div><div class="guia-desc">USB-C, HDMI, GaN, fuentes y carga inalámbrica</div></div></a>
-    <a href="impresoras.html" class="guia-card" style="--gc:#fb923c" data-s="impresoras tinta laser cartucho ecotank epson hp"><div class="guia-ico">🖨️</div><div><div class="guia-nombre">Impresoras</div><div class="guia-desc">Tinta vs láser y la trampa del cartucho</div></div></a>
-    <a href="camaras.html" class="guia-card" style="--gc:#f87171" data-s="cámaras seguridad IP interior exterior grabación"><div class="guia-ico">📷</div><div><div class="guia-nombre">Cámaras de Seguridad</div><div class="guia-desc">IP, interior/exterior y almacenamiento</div></div></a>
-    <a href="cerraduras.html" class="guia-card" style="--gc:#60a5fa" data-s="cerraduras inteligentes huella PIN bluetooth app"><div class="guia-ico">🔐</div><div><div class="guia-nombre">Cerraduras Inteligentes</div><div class="guia-desc">Huella, PIN, app y Bluetooth</div></div></a>
-    <a href="proyectores.html" class="guia-card" style="--gc:#c084fc" data-s="proyectores lúmenes ANSI resolución home cinema"><div class="guia-ico">🎬</div><div><div class="guia-nombre">Proyectores</div><div class="guia-desc">Lúmenes reales vs los del fabricante</div></div></a>
-    <a href="ups-estabilizadores.html" class="guia-card" style="--gc:#facc15" data-s="UPS estabilizador batería corte luz protección"><div class="guia-ico">⚡</div><div><div class="guia-nombre">UPS y Estabilizadores</div><div class="guia-desc">Protegé tus dispositivos. Crítico en Argentina</div></div></a>
-    <a href="discos-pendrives.html" class="guia-card" style="--gc:#38bdf8" data-s="discos pendrives SSD HDD almacenamiento USB"><div class="guia-ico">💾</div><div><div class="guia-nombre">Discos y Pendrives</div><div class="guia-desc">HDD vs SSD y la trampa del pendrive USB 2.0</div></div></a>
-    <a href="smart-home.html" class="guia-card" style="--gc:#a78bfa" data-s="smart home hogar inteligente alexa google lamparitas"><div class="guia-ico">🏡</div><div><div class="guia-nombre">Smart Home</div><div class="guia-desc">Lamparitas, enchufes, sensores y ecosistemas</div></div></a>
-    <a href="aspiradoras.html" class="guia-card" style="--gc:#34d399" data-s="aspiradoras robot roomba roborock dreame lidar"><div class="guia-ico">🤖</div><div><div class="guia-nombre">Aspiradoras Inteligentes</div><div class="guia-desc">Robots aspiradores: LiDAR, marcas y autonomía</div></div></a>
-    <a href="monopatines.html" class="guia-card" style="--gc:#22d3ee" data-s="monopatines eléctricos scooter autonomía motor"><div class="guia-ico">🛴</div><div><div class="guia-nombre">Monopatines Eléctricos</div><div class="guia-desc">Autonomía real, motor, frenos y lo legal</div></div></a>
-    <a href="drones.html" class="guia-card" style="--gc:#e879f9" data-s="drones DJI FPV cámara ANAC vuelo regulación"><div class="guia-ico">🚁</div><div><div class="guia-nombre">Drones</div><div class="guia-desc">DJI, FPV, specs reales y regulación ANAC</div></div></a>
-    <a href="lentes-inteligentes.html" class="guia-card" style="--gc:#f0abfc" data-s="lentes AR VR MR rayban meta apple vision quest"><div class="guia-ico">🥽</div><div><div class="guia-nombre">Lentes Inteligentes</div><div class="guia-desc">Ray-Ban Meta, Vision Pro, Quest 3 y la AR</div></div></a>
-    <a href="mascotas.html" class="guia-card" style="--gc:#fb923c" data-s="mascotas GPS perro gato arenero dispensador"><div class="guia-ico">🐾</div><div><div class="guia-nombre">Mascotas 2.0</div><div class="guia-desc">GPS, cámaras, arenero y gadgets que valen</div></div></a>
-    <a href="agarrate-se-viene.html" class="guia-card full special" style="--gc:#f0abfc" data-s="futuro tecnología IA robots conectividad novedades 2025">
-      <div class="guia-ico">⚡</div><div>
-        <div class="guia-nombre">Agarrate, se viene, se viene...</div>
-        <div class="guia-desc">Novedades 2024–2025 y el timeline de lo que viene: IA en todo, robots humanoides, satélites en el celu y más</div>
-      </div>
-    </a>
-  </div>
+<a href="#" class="guia-card">
+<div>💻</div>
+<div>
+<strong>Notebooks</strong><br>
+Cómo elegir sin verso
 </div>
+</a>
 
-<div class="sep"></div>
-
-<!-- HOGAR -->
-<div class="bloque" id="b-hogar">
-  <div class="bloque-header">
-    <div class="bloque-ico">🏠</div>
-    <div>
-      <div class="bloque-titulo">Hogar</div>
-      <div class="bloque-sub">12 guías · Todo lo que necesita una casa bien equipada</div>
-    </div>
-  </div>
-  <div class="guias-grid">
-    <a href="grandes-electrodomesticos.html" class="guia-card" style="--gc:#38bdf8" data-s="heladera lavarropas lavavajillas cocina no frost inverter"><div class="guia-ico">🧊</div><div><div class="guia-nombre">Grandes Electrodomésticos</div><div class="guia-desc">Heladeras, lavarropas, lavavajillas y cocinas</div></div></a>
-    <a href="climatizacion.html" class="guia-card" style="--gc:#22d3ee" data-s="aire acondicionado split inverter BTU ventilador"><div class="guia-ico">❄️</div><div><div class="guia-nombre">Climatización</div><div class="guia-desc">Aire acondicionado inverter, BTU por m² y ventiladores</div></div></a>
-    <a href="calefaccion.html" class="guia-card" style="--gc:#f97316" data-s="calefacción estufa radiador infrarrojo gas losa"><div class="guia-ico">🔥</div><div><div class="guia-nombre">Calefacción</div><div class="guia-desc">Gas, eléctrica, losa radiante e infrarrojos</div></div></a>
-    <a href="pequenos-electrodomesticos.html" class="guia-card" style="--gc:#f59e0b" data-s="air fryer freidora licuadora pava cafetera instant pot"><div class="guia-ico">🍳</div><div><div class="guia-nombre">Pequeños Electrodomésticos</div><div class="guia-desc">Clásicos + Air Fryer, Instant Pot y novedades</div></div></a>
-    <a href="colchones-sommiers.html" class="guia-card" style="--gc:#a78bfa" data-s="colchones sommiers memory foam latex resortes sueño"><div class="guia-ico">🛏️</div><div><div class="guia-nombre">Colchones y Sommiers</div><div class="guia-desc">Memory foam, látex, híbrido y sommiers inteligentes</div></div></a>
-    <a href="living-sillones.html" class="guia-card" style="--gc:#f472b6" data-s="sillones sofas masajeador living reclinable tapizado"><div class="guia-ico">🛋️</div><div><div class="guia-nombre">Living y Sillones</div><div class="guia-desc">Sofás, sillones masajeadores y cero gravedad</div></div></a>
-    <a href="iluminacion-hogar.html" class="guia-card" style="--gc:#fbbf24" data-s="iluminación LED lúmenes temperatura color Kelvin CRI"><div class="guia-ico">💡</div><div><div class="guia-nombre">Iluminación</div><div class="guia-desc">LED, temperatura de color, CRI e iluminación smart</div></div></a>
-    <a href="luces-emergencia.html" class="guia-card" style="--gc:#facc15" data-s="luces emergencia corte luz batería powerstation generador"><div class="guia-ico">🔦</div><div><div class="guia-nombre">Luces de Emergencia</div><div class="guia-desc">Tipos, autonomía y el kit mínimo para cada casa</div></div></a>
-    <a href="herramientas-hogar.html" class="guia-card" style="--gc:#34d399" data-s="herramientas taladro inflador arrancador auto OBD kit"><div class="guia-ico">🔧</div><div><div class="guia-nombre">Herramientas del Hogar</div><div class="guia-desc">Kit esencial, inflador a batería y arrancador de auto</div></div></a>
-    <a href="herramientas-bateria.html" class="guia-card" style="--gc:#22d3ee" data-s="herramientas batería jardín cortadora pasto motosierra bordeadora makita dewalt"><div class="guia-ico">🌿</div><div><div class="guia-nombre">Herramientas a Batería</div><div class="guia-desc">Cortadoras, motosierras, bordeadoras. Sin nafta, sin cable</div></div></a>
-    <a href="energia-renovable.html" class="guia-card full solar" style="--gc:#4ade80" data-s="energía solar paneles fotovoltaicos batería inversor net metering">
-      <div class="guia-ico">☀️</div><div>
-        <div class="guia-nombre">⚡ Energía Renovable — Apartado Especial</div>
-        <div class="guia-desc">Paneles solares, sistemas grid-tie / off-grid / híbrido, baterías LiFePO4 e inyección a la red. Independencia energética en Argentina.</div>
-      </div>
-    </a>
-  </div>
+<a href="#" class="guia-card">
+<div>📱</div>
+<div>
+<strong>Celulares</strong><br>
+Qué conviene hoy
 </div>
-
-<div class="sep"></div>
-
-<!-- RETRO -->
-<div class="bloque" id="b-retro">
-  <div class="bloque-header">
-    <div class="bloque-ico">📼</div>
-    <div>
-      <div class="bloque-titulo">Retro</div>
-      <div class="bloque-sub">Los 80, 90 y 2000 · Lo que murió, lo que volvió y lo que nunca se fue</div>
-    </div>
-  </div>
-  <div class="guias-grid">
-    <a href="retro.html" class="guia-card full" style="--gc:#fb923c;background:linear-gradient(135deg,rgba(251,146,60,.07),rgba(250,204,21,.04));border-color:rgba(251,146,60,.25);" data-s="retro 80 90 2000 walkman casete vinilo tocadiscos vhs nintendo game boy ipod dvd">
-      <div class="guia-ico">🕹️</div><div>
-        <div class="guia-nombre">Los 80, 90 y 2000 — Guía Retro</div>
-        <div class="guia-desc">Walkman, casetes, tocadiscos, VHS, Game Boy, CD, iPod, DVD. Qué murió, qué volvió, qué se consigue hoy y los inmortales que nunca se fueron</div>
-      </div>
-    </a>
-  </div>
-</div>
-
-
-<div class="sep"></div>
-
-<!-- SALUD -->
-<div class="bloque" id="b-salud">
-  <div class="bloque-header">
-    <div class="bloque-ico">❤️</div>
-    <div>
-      <div class="bloque-titulo">Salud</div>
-      <div class="bloque-sub">3 guías · Tecnología, mitos y lo que hacían los ancestros</div>
-    </div>
-  </div>
-  <div class="guias-grid">
-    <a href="salud-tecnologia.html" class="guia-card" style="--gc:#34d399" data-s="salud tensiómetro oxímetro termómetro báscula wearable glucosa ECG">
-      <div class="guia-ico">🩺</div><div>
-        <div class="guia-nombre">Salud y Tecnología</div>
-        <div class="guia-desc">Tensiómetros, oxímetros, básculas inteligentes y wearables de salud</div>
-      </div>
-    </a>
-    <a href="mitos-salud.html" class="guia-card" style="--gc:#a78bfa" data-s="mitos salud empacho ojeada resfrío vitamina C antibióticos fiebre">
-      <div class="guia-ico">🧿</div><div>
-        <div class="guia-nombre">Mitos y Verdades</div>
-        <div class="guia-desc">Empacho, ojeada, vitamina C, antibióticos y lo que la ciencia dice</div>
-      </div>
-    </a>
-    <a href="remedios-caseros.html" class="guia-card full" style="--gc:#86efac;background:linear-gradient(135deg,rgba(134,239,172,.07),rgba(74,222,128,.04));border-color:rgba(134,239,172,.22);" data-s="remedios caseros plantas medicinales manzanilla boldo jengibre miel aloe valeriana ancestros">
-      <div class="guia-ico">🌿</div><div>
-        <div class="guia-nombre">Remedios Caseros y Plantas Medicinales</div>
-        <div class="guia-desc">Manzanilla, boldo, jengibre, miel, aloe vera y todo lo que hacían nuestros ancestros. Con honestidad sobre qué funciona y por qué.</div>
-      </div>
-    </a>
-  </div>
-</div>
-
-<div id="no-results">😕 No encontramos una guía para eso... todavía.</div>
+</a>
 
 </main>
 
 <footer>
-  <p><strong>SIN VERSO</strong> — El manual de socorro adulto que nadie te dio.</p>
-  <p style="margin-top:6px">Precios en USD orientativos · Sin publicidad · Sin verso</p>
+SIN VERSO — sin humo
 </footer>
 
-<a href="https://wa.me/?text=Mirá SIN VERSO — el manual de compras que necesitaba: sinverso.com" class="wa-float" target="_blank">💬</a>
+<!-- BARRA INFERIOR -->
+<div class="bottom-bar">
 
-<script>
-function buscar(q){
-  q=q.toLowerCase().trim();
-  let total=0;
-  document.querySelectorAll('.guia-card').forEach(card=>{
-    const txt=((card.querySelector('.guia-nombre')?.textContent||'')+' '+(card.querySelector('.guia-desc')?.textContent||'')+' '+(card.dataset.s||'')).toLowerCase();
-    const match=!q||txt.includes(q);
-    card.classList.toggle('hidden',!match);
-    if(match)total++;
-  });
-  document.querySelectorAll('.bloque').forEach(b=>{
-    b.style.display=b.querySelectorAll('.guia-card:not(.hidden)').length?'':'none';
-  });
-  document.getElementById('no-results').classList.toggle('visible',total===0&&q.length>0);
-}
-</script>
+<a href="index.html" class="bottom-btn active">
+<span>🏠</span>
+HOME
+</a>
+
+<a href="https://wa.me/?text=Mirá SIN VERSO — el manual de compras que necesitaba: sinverso.com" target="_blank" class="bottom-btn main">
+💬
+</a>
+
+<a href="#" class="bottom-btn">
+<span>⋯</span>
+MÁS
+</a>
+
+</div>
+
 </body>
 </html>
