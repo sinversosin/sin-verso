@@ -506,10 +506,19 @@
   document.addEventListener('click',()=>bubble.classList.remove('on'));
 </script>
 
-<a href="https://wa.me/?text=Mirá%20esta%20guía%20de%20SIN%20VERSO%20sobre%20Agarrate%20Se%20Viene:%20https://sinversosin.github.io/sin-verso/index.html" class="wa-share" target="_blank" rel="noopener">
+<a id="waBtn" href="#" class="wa-share" target="_blank" rel="noopener">
   <span class="wa-share-ico">💬</span>
   <span class="wa-share-text">Compartir por WhatsApp</span>
 </a>
+
+<script>
+  const btn = document.getElementById("waBtn");
+  const urlActual = window.location.href;
+
+  const texto = "Mirá SIN VERSO — el manual de compras que necesitaba: " + urlActual;
+
+  btn.href = "https://wa.me/?text=" + encodeURIComponent(texto);
+</script>
 <div class="relacionadas">
   <div class="rel-title">📚 También te puede interesar</div>
   <div class="rel-grid"><a href="lentes-inteligentes.html" class="rel-link">🥽 Lentes Inteligentes</a><a href="smart-home.html" class="rel-link">🏡 Smart Home</a></div>
