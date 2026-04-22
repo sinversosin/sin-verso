@@ -249,7 +249,19 @@
   <p style="margin-top:6px">Precios en USD orientativos · Sin publicidad · Sin verso</p>
 </footer>
 
-<a href="https://wa.me/?text=Mirá SIN VERSO — el manual de compras que necesitaba: sinverso.com" class="wa-float" target="_blank">💬</a>
+<a id="waBtn" href="#" class="wa-share" target="_blank" rel="noopener">
+  <span class="wa-share-ico">💬</span>
+  <span class="wa-share-text">Compartir por WhatsApp</span>
+</a>
+
+<script>
+  const btn = document.getElementById("waBtn");
+  const urlActual = window.location.href;
+
+  const texto = "Mirá SIN VERSO — el manual de compras que necesitaba: " + urlActual;
+
+  btn.href = "https://wa.me/?text=" + encodeURIComponent(texto);
+</script>
 
 <script>
 function buscar(q){
