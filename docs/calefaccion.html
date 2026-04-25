@@ -109,9 +109,6 @@
 </style>
 </head>
 <body>
-<a href="index.html" style="position: fixed; top: 15px; left: 15px; background: #111; color: #fff; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-family: Arial; z-index: 1000;">
-🏠 Inicio
-</a>
 <header>
   <div class="site-label">SinVerso · Hogar</div>
   <div class="hogar-badge">🏠 Sección Hogar</div>
@@ -121,6 +118,8 @@
 </header>
 
 <div class="error-caro"><strong>🔥 El error más caro</strong>Usar un calefactor eléctrico de resistencia como fuente principal de calefacción invernal. Consume 2.000W para generar 2.000W de calor. El aire acondicionado inverter frío/calor consume 1.200W para generar el equivalente a 3.500W de calor. El calefactor eléctrico es 3 veces menos eficiente.</div>
+
+<div style="text-align:center;padding:12px 0 0"><a href="index.html" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;color:#9494b8;text-decoration:none;">← Volver al inicio</a></div>
 <div class="tabs">
   <div class="tab active" onclick="goTab('tipos',this)">🔥 Tipos</div>
   <div class="tab" onclick="goTab('gas',this)">🔵 A gas</div>
@@ -268,7 +267,7 @@
   document.addEventListener('click',()=>bubble.classList.remove('on'));
 </script>
 
-<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Calefaccion: " class="wa-share" target="_blank" rel="noopener">
+<a id="waShareBtn" href="#" class="wa-share">
   <span class="wa-share-ico">💬</span>
   <span class="wa-share-text">Compartir por WhatsApp</span>
 </a>
@@ -276,5 +275,17 @@
   <div class="rel-title">📚 También te puede interesar</div>
   <div class="rel-grid"><a href="climatizacion.html" class="rel-link">❄️ Climatización</a><a href="luces-emergencia.html" class="rel-link">🔦 Emergencia</a><a href="energia-renovable.html" class="rel-link">☀️ Energía Renovable</a></div>
 </div>
+
+<script>
+(function(){
+  var btn = document.getElementById('waShareBtn');
+  if(btn){btn.addEventListener('click',function(e){
+    e.preventDefault();
+    var url = encodeURIComponent(window.location.href);
+    var msg = encodeURIComponent('Mirá esta guía de SIN VERSO: ');
+    window.open('https://wa.me/?text='+msg+url,'_blank');
+  });}
+})();
+</script>
 </body>
 </html>

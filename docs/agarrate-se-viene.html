@@ -110,9 +110,7 @@
 </style>
 </head>
 <body>
-<a href="index.html" style="position: fixed; top: 15px; left: 15px; background: #111; color: #fff; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-family: Arial; z-index: 1000;">
-🏠 Inicio
-</a>
+
 <header>
   <div class="site-label">SinVerso · Tecnología</div>
   <div class="ultima-badge">⚡ Última sección · Edición especial</div>
@@ -120,6 +118,8 @@
   <p class="subtitle">Las novedades que están pasando ahora. <strong>Y las que te van a explotar la cabeza en los próximos años.</strong></p>
 </header>
 
+
+<div style="text-align:center;padding:12px 0 0"><a href="index.html" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;color:#9494b8;text-decoration:none;">← Volver al inicio</a></div>
 <div class="tabs">
   <div class="tab active" onclick="goTab('ahora',this)">⚡ Ahora mismo</div>
   <div class="tab" onclick="goTab('ia',this)">🤖 IA en todo</div>
@@ -506,22 +506,25 @@
   document.addEventListener('click',()=>bubble.classList.remove('on'));
 </script>
 
-<a id="waBtn" href="#" class="wa-share" target="_blank" rel="noopener">
+<a id="waShareBtn" href="#" class="wa-share">
   <span class="wa-share-ico">💬</span>
   <span class="wa-share-text">Compartir por WhatsApp</span>
 </a>
-
-<script>
-  const btn = document.getElementById("waBtn");
-  const urlActual = window.location.href;
-
-  const texto = "Mirá SIN VERSO — el manual de compras que necesitaba: " + urlActual;
-
-  btn.href = "https://wa.me/?text=" + encodeURIComponent(texto);
-</script>
 <div class="relacionadas">
   <div class="rel-title">📚 También te puede interesar</div>
   <div class="rel-grid"><a href="lentes-inteligentes.html" class="rel-link">🥽 Lentes Inteligentes</a><a href="smart-home.html" class="rel-link">🏡 Smart Home</a></div>
 </div>
+
+<script>
+(function(){
+  var btn = document.getElementById('waShareBtn');
+  if(btn){btn.addEventListener('click',function(e){
+    e.preventDefault();
+    var url = encodeURIComponent(window.location.href);
+    var msg = encodeURIComponent('Mirá esta guía de SIN VERSO: ');
+    window.open('https://wa.me/?text='+msg+url,'_blank');
+  });}
+})();
+</script>
 </body>
 </html>

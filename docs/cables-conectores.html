@@ -138,9 +138,7 @@
 </style>
 </head>
 <body>
-<a href="index.html" style="position: fixed; top: 15px; left: 15px; background: #111; color: #fff; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-family: Arial; z-index: 1000;">
-🏠 Inicio
-</a>
+
 <header>
   <div class="site-label">SinVerso · Tecnología</div>
   <div class="bonus-tag">🎸 Bonus Track</div>
@@ -153,6 +151,8 @@
 
 
 <div class="error-caro"><strong>🔋 El error más caro</strong>Pagar USD 40 por un cable HDMI "de alta gama" que hace exactamente lo mismo que uno de USD 5. La señal HDMI es digital: o pasa o no pasa. No hay "calidad de imagen superior" en cables más caros salvo que el barato sea defectuoso.</div>
+
+<div style="text-align:center;padding:12px 0 0"><a href="index.html" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;color:#9494b8;text-decoration:none;">← Volver al inicio</a></div>
 <div class="tabs">
   <div class="tab active" onclick="goTab('conectores',this)">🔌 Conectores</div>
   <div class="tab" onclick="goTab('hdmi',this)">📺 HDMI y video</div>
@@ -674,22 +674,25 @@
   document.addEventListener('click', () => bubble.classList.remove('on'));
 </script>
 
-<a id="waBtn" href="#" class="wa-share" target="_blank" rel="noopener">
+<a id="waShareBtn" href="#" class="wa-share">
   <span class="wa-share-ico">💬</span>
   <span class="wa-share-text">Compartir por WhatsApp</span>
 </a>
-
-<script>
-  const btn = document.getElementById("waBtn");
-  const urlActual = window.location.href;
-
-  const texto = "Mirá SIN VERSO — el manual de compras que necesitaba: " + urlActual;
-
-  btn.href = "https://wa.me/?text=" + encodeURIComponent(texto);
-</script>
 <div class="relacionadas">
   <div class="rel-title">📚 También te puede interesar</div>
   <div class="rel-grid"><a href="ups-estabilizadores.html" class="rel-link">⚡ UPS</a><a href="wifi-routers.html" class="rel-link">📡 WiFi y Routers</a><a href="notebooks.html" class="rel-link">💻 Notebooks</a></div>
 </div>
+
+<script>
+(function(){
+  var btn = document.getElementById('waShareBtn');
+  if(btn){btn.addEventListener('click',function(e){
+    e.preventDefault();
+    var url = encodeURIComponent(window.location.href);
+    var msg = encodeURIComponent('Mirá esta guía de SIN VERSO: ');
+    window.open('https://wa.me/?text='+msg+url,'_blank');
+  });}
+})();
+</script>
 </body>
 </html>

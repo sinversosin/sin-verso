@@ -126,9 +126,6 @@
 </style>
 </head>
 <body>
-<a href="index.html" style="position: fixed; top: 15px; left: 15px; background: #111; color: #fff; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-family: Arial; z-index: 1000;">
-🏠 Inicio
-</a>
 
 <header>
   <div class="site-label">SinVerso · Tecnología</div>
@@ -139,6 +136,8 @@
 
 
 <div class="error-caro"><strong>🥽 El error más caro</strong>Confundir VR (realidad virtual, te aísla del mundo) con AR (realidad aumentada, superpone info sobre el mundo real). Son tecnologías distintas para usos distintos. Comprar un Quest 3 esperando que funcione como lentes AR transparentes es una decepción garantizada.</div>
+
+<div style="text-align:center;padding:12px 0 0"><a href="index.html" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;color:#9494b8;text-decoration:none;">← Volver al inicio</a></div>
 <div class="tabs">
   <div class="tab active" onclick="goTab('quees',this)">👓 ¿Qué son?</div>
   <div class="tab" onclick="goTab('hoy',this)">📦 Lo que existe hoy</div>
@@ -537,7 +536,7 @@
   document.addEventListener('click',()=>bubble.classList.remove('on'));
 </script>
 
-<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Lentes Inteligentes: " class="wa-share" target="_blank" rel="noopener">
+<a id="waShareBtn" href="#" class="wa-share">
   <span class="wa-share-ico">💬</span>
   <span class="wa-share-text">Compartir por WhatsApp</span>
 </a>
@@ -545,5 +544,17 @@
   <div class="rel-title">📚 También te puede interesar</div>
   <div class="rel-grid"><a href="agarrate-se-viene.html" class="rel-link">⚡ Se Viene</a><a href="celulares.html" class="rel-link">📱 Celulares</a></div>
 </div>
+
+<script>
+(function(){
+  var btn = document.getElementById('waShareBtn');
+  if(btn){btn.addEventListener('click',function(e){
+    e.preventDefault();
+    var url = encodeURIComponent(window.location.href);
+    var msg = encodeURIComponent('Mirá esta guía de SIN VERSO: ');
+    window.open('https://wa.me/?text='+msg+url,'_blank');
+  });}
+})();
+</script>
 </body>
 </html>

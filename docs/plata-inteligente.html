@@ -92,9 +92,6 @@
 </style>
 </head>
 <body>
-<a href="index.html" style="position: fixed; top: 15px; left: 15px; background: #111; color: #fff; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-family: Arial; z-index: 1000;">
-🏠 Inicio
-</a>
 <header>
   <div class="site-label">SinVerso · Economía del Hogar</div>
   <h1>Plata Inteligente</h1>
@@ -102,6 +99,8 @@
 </header>
 
 <div class="error-caro"><strong>💰 El error más caro</strong>Firmar cuotas con interés sin leer el CFT (Costo Financiero Total). La cuota que parece razonable puede ocultar un CFT del 200% anual. La ley obliga a mostrarlo, pero está en letra chica. El CFT es el número real. Todo lo demás es marketing.</div>
+
+<div style="text-align:center;padding:12px 0 0"><a href="index.html" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;color:#9494b8;text-decoration:none;">← Volver al inicio</a></div>
 <div class="tabs">
   <div class="tab active" onclick="goTab('cuotas',this)">💳 Cuotas vs contado</div>
   <div class="tab" onclick="goTab('garantia',this)">📋 Garantías</div>
@@ -366,7 +365,7 @@
 
 </main>
 
-<a href="https://wa.me/?text=Mirá esta guía de SIN VERSO sobre Plata Inteligente — cuotas, garantías y cómo comprar sin caer:" class="wa-share" target="_blank">
+<a id="waShareBtn" href="#" class="wa-share">
   <span class="wa-share-ico">💬</span>
   <span class="wa-share-text">Compartir por WhatsApp</span>
 </a>
@@ -387,6 +386,18 @@
   const bubble=document.getElementById('ttBubble');let timer;
   document.querySelectorAll('.tt').forEach(el=>{el.addEventListener('click',function(e){e.stopPropagation();bubble.textContent=this.dataset.tip;bubble.classList.add('on');const r=this.getBoundingClientRect();let top=r.bottom+10,left=r.left;if(left+280>window.innerWidth)left=window.innerWidth-285;if(top+140>window.innerHeight)top=r.top-145;bubble.style.top=top+'px';bubble.style.left=left+'px';clearTimeout(timer);timer=setTimeout(()=>bubble.classList.remove('on'),5000);});});
   document.addEventListener('click',()=>bubble.classList.remove('on'));
+</script>
+
+<script>
+(function(){
+  var btn = document.getElementById('waShareBtn');
+  if(btn){btn.addEventListener('click',function(e){
+    e.preventDefault();
+    var url = encodeURIComponent(window.location.href);
+    var msg = encodeURIComponent('Mirá esta guía de SIN VERSO: ');
+    window.open('https://wa.me/?text='+msg+url,'_blank');
+  });}
+})();
 </script>
 </body>
 </html>

@@ -90,14 +90,13 @@
 </style>
 </head>
 <body>
- <a href="index.html" style="position: fixed; top: 15px; left: 15px; background: #111; color: #fff; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-family: Arial; z-index: 1000;">
-🏠 Inicio
-</a>
 <header>
   <div class="site-label">SinVerso · Herramientas</div>
   <h1>Calculadoras</h1>
   <p class="subtitle">Ingresás los datos, te decimos qué comprar. <strong>Sin adivinar.</strong></p>
 </header>
+
+<div style="text-align:center;padding:12px 0 0"><a href="index.html" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;color:#9494b8;text-decoration:none;">← Volver al inicio</a></div>
 <div class="tabs">
   <div class="tab active" onclick="goTab('consumo',this)">⚡ Consumo del hogar</div>
   <div class="tab" onclick="goTab('btu',this)">❄️ Aire acondicionado</div>
@@ -266,7 +265,7 @@
 
 </main>
 
-<a href="https://wa.me/?text=Mirá estas calculadoras de SIN VERSO — BTU, solar, UPS y consumo del hogar:" class="wa-share" target="_blank">
+<a id="waShareBtn" href="#" class="wa-share">
   <span class="wa-share-ico">💬</span>
   <span class="wa-share-text">Compartir por WhatsApp</span>
 </a>
@@ -463,6 +462,18 @@ function calcUPS(){
 }
 
 buildUPSItems();
+</script>
+
+<script>
+(function(){
+  var btn = document.getElementById('waShareBtn');
+  if(btn){btn.addEventListener('click',function(e){
+    e.preventDefault();
+    var url = encodeURIComponent(window.location.href);
+    var msg = encodeURIComponent('Mirá esta guía de SIN VERSO: ');
+    window.open('https://wa.me/?text='+msg+url,'_blank');
+  });}
+})();
 </script>
 </body>
 </html>

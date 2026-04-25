@@ -68,9 +68,7 @@
 </style>
 </head>
 <body>
-<a href="index.html" style="position: fixed; top: 15px; left: 15px; background: #111; color: #fff; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-family: Arial; z-index: 1000;">
-🏠 Inicio
-</a>
+
 <header>
   <div class="logo">SIN VERSO</div>
   <p class="tagline">El manual de socorro adulto que nadie te dio. <strong>Sin humo. Sin jerga. Sin verso.</strong></p>
@@ -78,13 +76,35 @@
     <input type="text" id="buscador" placeholder="🔍  Buscá una guía..." oninput="buscar(this.value)">
   </div>
   <div class="stats">
-    <div class="stat"><div class="stat-num">44</div><div class="stat-label">Guías</div></div>
-    <div class="stat"><div class="stat-num">7</div><div class="stat-label">Secciones</div></div>
+    <div class="stat"><div class="stat-num">45</div><div class="stat-label">Guías</div></div>
+    <div class="stat"><div class="stat-num">8</div><div class="stat-label">Secciones</div></div>
     <div class="stat"><div class="stat-num">0</div><div class="stat-label">Verso</div></div>
   </div>
 </header>
 
 <main>
+
+
+<!-- IA DESTACADA -->
+<div class="bloque" id="b-ia">
+  <div class="bloque-header">
+    <div class="bloque-ico">🤖</div>
+    <div>
+      <div class="bloque-titulo">Inteligencia Artificial</div>
+      <div class="bloque-sub">Historia · Herramientas · Prompts · El futuro del trabajo</div>
+    </div>
+  </div>
+  <div class="guias-grid">
+    <a href="inteligencia-artificial.html" class="guia-card full" style="--gc:#818cf8;background:linear-gradient(135deg,rgba(129,140,248,.09),rgba(192,132,252,.05));border-color:rgba(129,140,248,.3);" data-s="inteligencia artificial IA ChatGPT Claude Gemini Midjourney imagen video trabajo futuro prompts">
+      <div class="guia-ico">🤖</div><div>
+        <div class="guia-nombre">Guía completa de Inteligencia Artificial</div>
+        <div class="guia-desc">De dónde viene · IAs de texto (ChatGPT, Claude, Gemini, DeepSeek) · Imágenes (Midjourney, DALL-E) · Video (Sora, Kling) · Cómo hablarle bien · La IA y el futuro del trabajo</div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<div class="sep"></div>
 
 <!-- HERRAMIENTAS RÁPIDAS -->
 <div class="bloque" id="b-tools">
@@ -249,19 +269,7 @@
   <p style="margin-top:6px">Precios en USD orientativos · Sin publicidad · Sin verso</p>
 </footer>
 
-<a id="waBtn" href="#" class="wa-share" target="_blank" rel="noopener">
-  <span class="wa-share-ico">💬</span>
-  <span class="wa-share-text">Compartir por WhatsApp</span>
-</a>
-
-<script>
-  const btn = document.getElementById("waBtn");
-  const urlActual = window.location.href;
-
-  const texto = "Mirá SIN VERSO — el manual de compras que necesitaba: " + urlActual;
-
-  btn.href = "https://wa.me/?text=" + encodeURIComponent(texto);
-</script>
+<a href="https://wa.me/?text=Mirá SIN VERSO — el manual de compras que necesitaba: sinverso.com" class="wa-float" target="_blank">💬</a>
 
 <script>
 function buscar(q){
