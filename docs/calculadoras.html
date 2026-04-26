@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>SIN VERSO — Calculadoras</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<style>
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"><title>SIN VERSO — Calculadoras</title><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"><style>
   :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--accent:#818cf8;}
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html{scroll-behavior:smooth;}
@@ -87,27 +80,13 @@
   .rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
   .rel-link{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:8px 14px;text-decoration:none;font-size:13px;font-weight:600;color:var(--text);transition:all .2s;}
   .rel-link:hover{border-color:var(--accent);transform:translateY(-1px);}
-</style>
-</head>
-<body>
-<header>
-  <div class="site-label">SinVerso · Herramientas</div>
-  <h1>Calculadoras</h1>
-  <p class="subtitle">Ingresás los datos, te decimos qué comprar. <strong>Sin adivinar.</strong></p>
-</header>
 
-<div style="text-align:center;padding:12px 0 0"><a href="index.html" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;color:#9494b8;text-decoration:none;">← Volver al inicio</a></div>
-<div class="tabs">
-  <div class="tab active" onclick="goTab('consumo',this)">⚡ Consumo del hogar</div>
-  <div class="tab" onclick="goTab('btu',this)">❄️ Aire acondicionado</div>
-  <div class="tab" onclick="goTab('solar',this)">☀️ Paneles solares</div>
-  <div class="tab" onclick="goTab('ups',this)">🔋 UPS</div>
-</div>
-
-<main>
+:root{--glass:rgba(255,255,255,.08);--shadow:0 18px 60px rgba(0,0,0,.35)}body.light{--bg:#f4f6ff;--surface:rgba(255,255,255,.76);--card:rgba(255,255,255,.88);--border:rgba(20,20,40,.12);--text:#111327;--muted:#5e637d;--accent:#4f46e5}.phone{position:relative;z-index:1;max-width:760px;margin:0 auto;min-height:100vh;padding:14px 14px 96px}.status{display:flex;justify-content:space-between;padding:6px 8px 10px;font-size:13px;font-weight:700}.topbar{display:flex;gap:10px;margin:4px 0 14px}.home-btn,.round-btn,.back-folder{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);background:var(--glass);backdrop-filter:blur(16px);color:var(--text);text-decoration:none;border-radius:18px;box-shadow:var(--shadow);padding:10px 14px;font-size:13px;font-weight:800;cursor:pointer}.round-btn{width:42px;height:42px;padding:0}.hero{border:1px solid var(--border);background:linear-gradient(135deg,rgba(129,140,248,.18),rgba(34,211,238,.07)),var(--glass);backdrop-filter:blur(18px);border-radius:34px;padding:30px 22px 22px;box-shadow:var(--shadow);margin-bottom:20px}.folder-title{font-family:'Bebas Neue';font-size:28px;margin:20px 4px 4px}.folder-sub{font-size:12px;color:var(--muted);margin:0 4px 10px}.apps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px 12px;padding:14px 2px 10px}@media(max-width:540px){.apps-grid{grid-template-columns:repeat(3,1fr)}}.app-icon{border:0;background:transparent;color:var(--text);display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;font-family:'DM Sans'}.app-bubble{width:68px;height:68px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:31px;background:linear-gradient(145deg,var(--c1),var(--c2));box-shadow:0 14px 35px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.25)}.app-label{font-size:12px;font-weight:800;text-align:center;line-height:1.15}.widget-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0 8px}@media(max-width:620px){.widget-row{grid-template-columns:1fr}}.widget{border:1px solid var(--border);border-radius:24px;background:var(--glass);backdrop-filter:blur(16px);padding:16px;box-shadow:var(--shadow)}.widget h3{font-family:'Bebas Neue';font-size:22px;color:var(--accent);margin-bottom:5px}.widget p{font-size:13px;color:var(--muted);line-height:1.45}#folderView.hidden{display:none}.tabs,header+.tabs,body>header,body>.tabs,body>div[style]{display:none!important}.section{display:none}.section.active{display:block}.calc-card{box-shadow:var(--shadow);backdrop-filter:blur(18px)}.mini-actions{display:flex;flex-wrap:wrap;gap:8px;margin:-4px 0 12px}.mini-actions button{border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:999px;padding:8px 11px;font-size:12px;font-weight:800;cursor:pointer}.fun-results{display:grid;gap:10px}.fun-pill{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;font-size:14px;color:var(--text);line-height:1.45}.fun-pill strong{color:var(--accent)}.float-btns{position:fixed;right:14px;bottom:18px;z-index:20;display:flex;flex-direction:column;gap:9px;align-items:flex-end}.home-float{display:flex;background:var(--glass);border:1px solid var(--border);backdrop-filter:blur(16px);padding:10px 14px;color:var(--text);border-radius:30px;text-decoration:none;font-weight:900;box-shadow:var(--shadow)}.wa-share{position:static}.relacionadas{max-width:680px;margin:20px auto 0;background:var(--glass);backdrop-filter:blur(16px);box-shadow:var(--shadow)}
+</style></head><body><div class="phone"><div class="status"><span id="clock">--:--</span><span>SIN VERSO · ⚙️ 📶 🔋</span></div><div class="topbar"><a class="home-btn" href="index.html">← Inicio</a><button class="round-btn" onclick="toggleTheme()" title="Modo claro / oscuro">◐</button></div><section class="hero"><div class="site-label">SinVerso · Herramientas</div><h1>Calculadoras</h1><p class="subtitle">Ingresás los datos, <strong>nosotros calculamos por vos.</strong><br>Sin adivinar. Sin chamuyo. Sin verso.</p></section><main><div id="folderView"><div class="folder-title">Carpeta de calculadoras</div><div class="folder-sub">Tocá un ícono y entrá a chusmear.</div><div class="apps-grid"><button class="app-icon" onclick="openApp('consumo')"><span class="app-bubble" style="--c1:#f59e0b;--c2:#ef4444">⚡</span><span class="app-label">Consumo<br>hogar</span></button><button class="app-icon" onclick="openApp('btu')"><span class="app-bubble" style="--c1:#22d3ee;--c2:#2563eb">❄️</span><span class="app-label">Aire<br>BTU</span></button><button class="app-icon" onclick="openApp('solar')"><span class="app-bubble" style="--c1:#facc15;--c2:#22c55e">☀️</span><span class="app-label">Paneles<br>solares</span></button><button class="app-icon" onclick="openApp('ups')"><span class="app-bubble" style="--c1:#a78bfa;--c2:#4f46e5">🔋</span><span class="app-label">UPS</span></button><button class="app-icon" onclick="openApp('conversores')"><span class="app-bubble" style="--c1:#34d399;--c2:#0ea5e9">🔁</span><span class="app-label">Conversores</span></button><button class="app-icon" onclick="openApp('comparaciones')"><span class="app-bubble" style="--c1:#fb7185;--c2:#f97316">🤪</span><span class="app-label">Comparaciones<br>graciosas</span></button></div><div class="widget-row"><div class="widget"><h3>💵 Cotizaciones editables</h3><p>El conversor trae presets, pero la cotización la cargás vos para que no quede vieja.</p></div><div class="widget"><h3>⭐ Próximo paso</h3><p>Después se puede sumar historial, favoritos y resultados para compartir.</p></div></div></div>
 
 <!-- ══ CONSUMO DEL HOGAR ══ -->
-<div class="section active" id="consumo">
+<div class="section" id="consumo">
+  <button class="back-folder" onclick="showFolder()">← Volver a la carpeta</button>
   <div class="sec-title">⚡ Calculadora de consumo del hogar</div>
   <div class="sec-sub">Seleccioná los dispositivos que usás, poné cuántas horas por día y calculá tu consumo mensual estimado.</div>
 
@@ -138,6 +117,7 @@
 
 <!-- ══ BTU ══ -->
 <div class="section" id="btu">
+  <button class="back-folder" onclick="showFolder()">← Volver a la carpeta</button>
   <div class="sec-title">❄️ ¿Qué BTU necesito?</div>
   <div class="sec-sub">Ingresá los datos del espacio y te decimos qué split comprar. Sin calcular nada a mano.</div>
 
@@ -187,6 +167,7 @@
 
 <!-- ══ SOLAR ══ -->
 <div class="section" id="solar">
+  <button class="back-folder" onclick="showFolder()">← Volver a la carpeta</button>
   <div class="sec-title">☀️ ¿Cuántos paneles solares necesito?</div>
   <div class="sec-sub">Ingresá tu consumo de la factura y te decimos cuántos paneles y qué sistema armarte.</div>
 
@@ -230,6 +211,7 @@
 
 <!-- ══ UPS ══ -->
 <div class="section" id="ups">
+  <button class="back-folder" onclick="showFolder()">← Volver a la carpeta</button>
   <div class="sec-title">🔋 ¿Qué UPS necesito?</div>
   <div class="sec-sub">Sumá los dispositivos que querés proteger y te decimos el UPS correcto.</div>
 
@@ -263,25 +245,10 @@
   </div>
 </div>
 
-</main>
 
-<a id="waShareBtn" href="#" class="wa-share">
-  <span class="wa-share-ico">💬</span>
-  <span class="wa-share-text">Compartir por WhatsApp</span>
-</a>
+<div class="section" id="conversores"><button class="back-folder" onclick="showFolder()">← Volver a la carpeta</button><div class="sec-title">🔁 Conversores rápidos</div><div class="sec-sub">Dólares, pesos, medidas y unidades. Valores editables para que no dependas de una cotización vieja.</div><div class="calc-card"><div class="calc-title">💵 Dólar ↔ Peso argentino</div><div class="row2"><div class="field"><label>Monto</label><input type="number" id="fxMonto" value="100" min="0" step="0.01" oninput="calcFX()"></div><div class="field"><label>Cotización ARS por USD</label><input type="number" id="fxRate" value="1000" min="1" step="0.01" oninput="calcFX()"></div></div><div class="field"><label>Convertir</label><select id="fxTipo" onchange="calcFX()"><option value="usdars">USD → ARS</option><option value="arsusd">ARS → USD</option></select></div><div class="mini-actions"><button onclick="setFxPreset(1000,'Oficial editable')">Oficial editable</button><button onclick="setFxPreset(1200,'Blue editable')">Blue editable</button><button onclick="setFxPreset(1300,'Tarjeta editable')">Tarjeta editable</button></div><div class="resultado visible compact"><div class="res-numero" id="fxResultado">—</div><div class="res-unidad" id="fxNota">Cargá la cotización real del día.</div></div><p class="nota"><strong>Sin verso:</strong> no dejo una cotización fija como si fuera verdad eterna. La tasa la editás vos con el valor del día.</p></div><div class="calc-card"><div class="calc-title">📏 Unidades de medida</div><div class="row2"><div class="field"><label>Cantidad</label><input type="number" id="unitMonto" value="1" step="0.01" oninput="calcUnits()"></div><div class="field"><label>Conversión</label><select id="unitTipo" onchange="calcUnits()"><option value="m_cm">Metros → centímetros</option><option value="cm_m">Centímetros → metros</option><option value="m_pulg">Metros → pulgadas</option><option value="pulg_cm">Pulgadas → centímetros</option><option value="pie_m">Pies → metros</option><option value="kg_lb">Kilos → libras</option><option value="lb_kg">Libras → kilos</option><option value="l_gal">Litros → galones US</option><option value="gal_l">Galones US → litros</option><option value="kwh_wh">kWh → Wh</option><option value="w_kw">Watts → kW</option></select></div></div><div class="resultado visible compact"><div class="res-numero" id="unitResultado">—</div><div class="res-unidad">Conversión rápida</div></div></div></div>
+<div class="section" id="comparaciones"><button class="back-folder" onclick="showFolder()">← Volver a la carpeta</button><div class="sec-title">🤪 Comparaciones absurdamente útiles</div><div class="sec-sub">Para explicar consumos y precios de una forma que cualquiera entienda. Medio en joda, pero sirve.</div><div class="calc-card"><div class="calc-title">🍕 Plata a pizzas / nafta / cafés</div><div class="field"><label>Monto en pesos</label><input type="number" id="cmpMonto" value="100000" min="0" step="100" oninput="calcComparaciones()"></div><div class="row2"><div class="field"><label>Precio pizza</label><input type="number" id="cmpPizza" value="9000" min="1" step="100" oninput="calcComparaciones()"></div><div class="field"><label>Precio litro de nafta</label><input type="number" id="cmpNafta" value="1200" min="1" step="10" oninput="calcComparaciones()"></div></div><div class="field"><label>Precio café</label><input type="number" id="cmpCafe" value="2500" min="1" step="100" oninput="calcComparaciones()"></div><div class="fun-results" id="cmpResultados"></div></div><div class="calc-card"><div class="calc-title">⚡ Consumo a cosas de la casa</div><div class="field"><label>Consumo mensual en kWh</label><input type="number" id="cmpKwh" value="350" min="0" step="1" oninput="calcComparaciones()"></div><div class="fun-results" id="cmpEnergia"></div></div></div></main><div class="relacionadas" style="padding:20px"><div class="rel-title">📚 Guías relacionadas</div><div class="rel-grid"><a href="climatizacion.html" class="rel-link">❄️ Climatización</a><a href="energia-renovable.html" class="rel-link">☀️ Energía Renovable</a><a href="ups-estabilizadores.html" class="rel-link">⚡ UPS</a><a href="grandes-electrodomesticos.html" class="rel-link">🧊 Electrodomésticos</a></div></div></div><div class="float-btns"><a href="index.html" class="home-float">⌂ Inicio</a><a id="waShareBtn" href="#" class="wa-share"><span class="wa-share-ico">💬</span><span class="wa-share-text">WhatsApp</span></a></div><script>
 
-<div class="relacionadas" style="max-width:640px;margin:0 auto;padding:0 16px 40px;">
-  <div class="rel-title">📚 Guías relacionadas</div>
-  <div class="rel-grid">
-    <a href="climatizacion.html" class="rel-link">❄️ Climatización</a>
-    <a href="energia-renovable.html" class="rel-link">☀️ Energía Renovable</a>
-    <a href="ups-estabilizadores.html" class="rel-link">⚡ UPS</a>
-    <a href="grandes-electrodomesticos.html" class="rel-link">🧊 Electrodomésticos</a>
-  </div>
-</div>
-
-<script>
-function goTab(id,el){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');el.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
 
 // ─── CONSUMO DEL HOGAR ───
 const DISPOSITIVOS = [
@@ -475,5 +442,12 @@ buildUPSItems();
   });}
 })();
 </script>
-</body>
-</html>
+<script>
+function updateClock(){const now=new Date();document.getElementById('clock').textContent=now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'});}setInterval(updateClock,1000);updateClock();
+function toggleTheme(){document.body.classList.toggle('light');localStorage.setItem('sinverso-theme',document.body.classList.contains('light')?'light':'dark');}if(localStorage.getItem('sinverso-theme')==='light')document.body.classList.add('light');
+function openApp(id){document.getElementById('folderView').classList.add('hidden');document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');scrollTo({top:0,behavior:'smooth'});}function showFolder(){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById('folderView').classList.remove('hidden');scrollTo({top:0,behavior:'smooth'});}function goTab(id,el){openApp(id);}
+function moneyARS(n){return '$ '+Number(n||0).toLocaleString('es-AR',{maximumFractionDigits:0});}function calcFX(){const monto=parseFloat(document.getElementById('fxMonto')?.value)||0,rate=parseFloat(document.getElementById('fxRate')?.value)||1,tipo=document.getElementById('fxTipo')?.value||'usdars',out=tipo==='usdars'?monto*rate:monto/rate;document.getElementById('fxResultado').textContent=tipo==='usdars'?moneyARS(out):'USD '+out.toLocaleString('es-AR',{maximumFractionDigits:2});document.getElementById('fxNota').textContent=tipo==='usdars'?'Dólares a pesos argentinos':'Pesos argentinos a dólares';}function setFxPreset(rate,nombre){document.getElementById('fxRate').value=rate;calcFX();document.getElementById('fxNota').textContent=nombre+' · actualizalo con el valor real';}
+function calcUnits(){const v=parseFloat(document.getElementById('unitMonto')?.value)||0,t=document.getElementById('unitTipo')?.value||'m_cm',map={m_cm:[v*100,'cm'],cm_m:[v/100,'m'],m_pulg:[v*39.3701,'pulgadas'],pulg_cm:[v*2.54,'cm'],pie_m:[v*0.3048,'m'],kg_lb:[v*2.20462,'lb'],lb_kg:[v/2.20462,'kg'],l_gal:[v*0.264172,'gal US'],gal_l:[v/0.264172,'litros'],kwh_wh:[v*1000,'Wh'],w_kw:[v/1000,'kW']};const r=map[t];document.getElementById('unitResultado').textContent=r[0].toLocaleString('es-AR',{maximumFractionDigits:3})+' '+r[1];}
+function calcComparaciones(){const monto=parseFloat(document.getElementById('cmpMonto')?.value)||0,pizza=parseFloat(document.getElementById('cmpPizza')?.value)||1,nafta=parseFloat(document.getElementById('cmpNafta')?.value)||1,cafe=parseFloat(document.getElementById('cmpCafe')?.value)||1,kwh=parseFloat(document.getElementById('cmpKwh')?.value)||0;let cmp=document.getElementById('cmpResultados');if(cmp)cmp.innerHTML='<div class="fun-pill">🍕 Eso son <strong>'+Math.floor(monto/pizza).toLocaleString('es-AR')+'</strong> pizzas grandes. Científicamente: bastante felicidad.</div><div class="fun-pill">⛽ Equivale a <strong>'+(monto/nafta).toLocaleString('es-AR',{maximumFractionDigits:1})+'</strong> litros de nafta.</div><div class="fun-pill">☕ O sea <strong>'+Math.floor(monto/cafe).toLocaleString('es-AR')+'</strong> cafés. Dependiendo el lunes, puede no alcanzar.</div>';let ene=document.getElementById('cmpEnergia');if(ene)ene.innerHTML='<div class="fun-pill">🧊 <strong>'+Math.round(kwh/108)+'</strong> heladeras modernas funcionando un mes, aprox.</div><div class="fun-pill">💡 <strong>'+Math.round(kwh*1000/10)+'</strong> horas de una lamparita LED de 10W.</div><div class="fun-pill">❄️ Como usar un aire de 1200W unas <strong>'+Math.round(kwh/1.2)+'</strong> horas.</div>';}setTimeout(()=>{calcFX();calcUnits();calcComparaciones();},0);
+(function(){var btn=document.getElementById('waShareBtn');if(btn){btn.addEventListener('click',function(e){e.preventDefault();var publicUrl='https://sinverso.com/calculadoras.html';var current=window.location.href;var url=current.startsWith('http')&&!current.startsWith('file:')?current:publicUrl;window.open('https://wa.me/?text='+encodeURIComponent('Mirá las calculadoras de SIN VERSO: '+url),'_blank');});}})();
+</script></body></html>
