@@ -6,104 +6,212 @@
 <title>SIN VERSO — Inteligencia Artificial</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--accent:#818cf8;}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
-header{background:linear-gradient(135deg,#080810,#0a0818 40%,#100818 70%,#080810);border-bottom:1px solid var(--border);padding:50px 20px 42px;text-align:center;position:relative;overflow:hidden;}
-header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:700px;height:350px;background:radial-gradient(ellipse,rgba(129,140,248,.14) 0%,rgba(168,85,247,.08) 40%,transparent 100%);pointer-events:none;animation:pulse 5s ease-in-out infinite;}
-@keyframes pulse{0%,100%{opacity:.7;}50%{opacity:1;}}
-.home-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;color:var(--muted);text-decoration:none;margin-bottom:14px;transition:all .2s;}
-.home-btn:hover{background:rgba(255,255,255,.12);color:var(--text);}
-.ia-badge{display:inline-block;background:linear-gradient(135deg,rgba(129,140,248,.2),rgba(168,85,247,.15));border:1px solid rgba(129,140,248,.4);border-radius:20px;padding:5px 18px;font-size:12px;font-weight:700;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;}
-header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,9vw,90px);letter-spacing:3px;line-height:1;background:linear-gradient(135deg,#fff 20%,#818cf8 50%,#c084fc 75%,#00d4ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.subtitle{margin-top:12px;color:var(--muted);font-size:15px;font-style:italic;}
-.subtitle strong{color:var(--accent);font-style:normal;}
-.tabs{display:flex;gap:7px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
-.tabs::-webkit-scrollbar{display:none;}
-.tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:8px 14px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
-.tab:hover{border-color:var(--accent);color:var(--accent);}
-.tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
-main{padding:28px 16px 100px;max-width:680px;margin:0 auto;}
-.section{display:none;}.section.active{display:block;}
-.sec-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
-.sec-sub{color:var(--muted);font-size:14px;margin-bottom:24px;line-height:1.6;}
-.sec-sub em{color:var(--text);}
-.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
-@media(max-width:440px){.tools-grid{grid-template-columns:1fr;}}
-.tool{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;text-decoration:none;display:flex;flex-direction:column;gap:8px;transition:all .2s;position:relative;overflow:hidden;}
-.tool:hover{border-color:rgba(129,140,248,.5);transform:translateY(-2px);}
-.tool::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--tc,var(--accent));border-radius:16px 16px 0 0;}
-.tool.full{grid-column:1/-1;flex-direction:row;gap:14px;}
-.tool.full .ti{font-size:34px;flex-shrink:0;margin-top:4px;}
-.tool.full .tr{flex:1;}
-.ti{font-size:26px;flex-shrink:0;}
-.tn{font-family:'Bebas Neue',sans-serif;font-size:19px;color:var(--text);line-height:1;}
-.tm{font-size:11px;color:var(--muted);margin-top:1px;}
-.td{font-size:12px;color:var(--muted);line-height:1.5;margin-top:4px;}
-.td strong{color:var(--text);}
-.tt{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
-.tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;text-transform:uppercase;}
-.tg{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3);}
-.tf{background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.3);}
-.tp{background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.3);}
-.ti2{background:rgba(129,140,248,.12);color:var(--accent);border:1px solid rgba(129,140,248,.25);}
-.cat-h{display:flex;align-items:center;gap:10px;margin:24px 0 12px;}
-.cat-ico{font-size:20px;}
-.cat-t{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:1px;}
-.cat-sep{flex:1;height:1px;background:var(--border);}
-.ic{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 20px;margin-bottom:14px;position:relative;overflow:hidden;}
-.ic::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--ca,var(--accent));}
-.ic h3{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--text);margin-bottom:5px;}
-.ic p{font-size:14px;color:var(--muted);line-height:1.7;}
-.ic p strong{color:var(--text);}
-.ic p em{color:#9090bb;font-size:13px;}
-.tip{border-radius:14px;padding:14px 16px;margin-top:14px;font-size:13px;line-height:1.65;}
-.tp-p{background:rgba(129,140,248,.07);border:1px solid rgba(129,140,248,.25);color:#c8d0f8;}
-.tp-p strong{color:var(--accent);}
-.tp-g{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);color:#a0e8b4;}
-.tp-g strong{color:#4ade80;}
-.tp-y{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);color:#f0e080;}
-.tp-y strong{color:#ffd700;}
-.tp-r{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
-.tp-r strong{color:#f87171;}
-.tl{display:flex;flex-direction:column;}
-.tli{display:flex;gap:12px;position:relative;}
-.tli:not(:last-child)::after{content:'';position:absolute;left:16px;top:36px;bottom:0;width:2px;background:linear-gradient(180deg,var(--tc),transparent);}
-.tld{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px;z-index:1;border:2px solid var(--tc);background:var(--card);}
-.tlb{flex:1;padding-bottom:22px;}
-.tly{font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--tc);margin-bottom:2px;}
-.tln{font-family:'Bebas Neue',sans-serif;font-size:19px;color:var(--text);margin-bottom:3px;}
-.tlt{font-size:12px;color:var(--muted);line-height:1.6;}
-.tlt strong{color:var(--text);}
-.pc{background:var(--card);border:1px solid rgba(129,140,248,.25);border-radius:14px;padding:14px;margin-bottom:10px;}
-.pt{font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--accent);margin-bottom:7px;}
-.pm{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;padding:9px 11px;font-size:12px;color:#f8b4b4;margin-bottom:5px;}
-.pb{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);border-radius:8px;padding:9px 11px;font-size:12px;color:#a0e8b4;}
-.pm::before{content:'✗  ';font-weight:800;color:#f87171;}
-.pb::before{content:'✓  ';font-weight:800;color:#4ade80;}
-.pn{font-size:11px;color:var(--muted);margin-top:5px;font-style:italic;}
-.tr-c{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:13px;margin-bottom:9px;display:flex;gap:11px;align-items:flex-start;}
-.tr-i{font-size:26px;flex-shrink:0;}
-.tr-t{font-weight:700;color:var(--text);font-size:14px;margin-bottom:2px;}
-.tr-d{font-size:12px;color:var(--muted);line-height:1.5;}
-.tr-d strong{color:var(--text);}
-.trtg{display:inline-block;margin-top:4px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;}
-.r{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
-.e{background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.3);}
-.s{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3);}
-.n{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
-.float-btns{position:fixed;bottom:20px;right:14px;z-index:888;display:flex;flex-direction:column;gap:8px;align-items:flex-end;}
-.wa-b{display:flex;align-items:center;gap:7px;background:#25D366;border-radius:30px;padding:9px 14px 9px 11px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s;}
-.wa-b:hover{transform:translateY(-2px);}
-.wa-b span{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:#000;}
-.hm-b{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:30px;padding:8px 13px;text-decoration:none;backdrop-filter:blur(10px);transition:all .2s;}
-.hm-b:hover{background:rgba(255,255,255,.18);transform:translateY(-2px);}
-.hm-b span{font-size:12px;font-weight:600;color:var(--text);}
-@media(max-width:480px){.tn{font-size:16px;}.tln{font-size:16px;}}
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--soft:#aaaacc;--accent:#818cf8;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+
+  header{background:linear-gradient(135deg,#080810,#0a0818 40%,#100818 70%,#080810);border-bottom:1px solid var(--border);padding:50px 20px 42px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:700px;height:350px;background:radial-gradient(ellipse,rgba(129,140,248,.14) 0%,rgba(168,85,247,.08) 40%,transparent 100%);pointer-events:none;animation:pulse 5s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:.7;}50%{opacity:1;}}
+  .home-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;color:var(--muted);text-decoration:none;margin-bottom:14px;transition:all .2s;}
+  .home-btn:hover{background:rgba(255,255,255,.12);color:var(--text);}
+  .ia-badge{display:inline-block;background:linear-gradient(135deg,rgba(129,140,248,.2),rgba(168,85,247,.15));border:1px solid rgba(129,140,248,.4);border-radius:20px;padding:5px 18px;font-size:12px;font-weight:700;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,9vw,90px);letter-spacing:3px;line-height:1;background:linear-gradient(135deg,#fff 20%,#818cf8 50%,#c084fc 75%,#00d4ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:12px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+
+  .tabs{display:flex;gap:7px;overflow-x:auto;padding:20px 16px 0;flex-wrap:nowrap;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:9px 15px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+  .tab:hover{border-color:var(--accent);color:var(--accent);}
+  .tab.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
+
+  main{padding:28px 16px 100px;max-width:640px;margin:0 auto;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+
+  /* CARDS GENERALES */
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;}
+  .card:hover{border-color:rgba(129,140,248,.4);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3);}
+  .b-mid{background:rgba(129,140,248,.12);color:var(--accent);border:1px solid rgba(129,140,248,.3);}
+  .b-high{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .b-free{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tt{border-bottom:1px dashed var(--accent);color:var(--accent);cursor:pointer;font-weight:600;display:inline;}
+  #ttBubble{display:none;position:fixed;background:#0a0818;border:1px solid var(--accent);border-radius:14px;padding:13px 16px;font-size:14px;color:var(--text);line-height:1.6;max-width:270px;z-index:9999;box-shadow:0 8px 40px rgba(0,0,0,.8);pointer-events:none;}
+  #ttBubble.on{display:block;}
+  #ttBubble::before{content:'💡 ';}
+
+  /* TOOL CARDS — el estilo original */
+  .tool-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;text-decoration:none;display:block;}
+  .tool-card:hover{border-color:rgba(129,140,248,.4);transform:translateY(-2px);}
+  .tool-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:18px 18px 0 0;background:var(--tc,var(--accent));}
+  .tool-header{display:flex;align-items:center;gap:14px;margin-bottom:8px;}
+  .tool-ico{font-size:38px;flex-shrink:0;}
+  .tool-nombre{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--text);line-height:1;}
+  .tool-maker{font-size:11px;color:var(--muted);margin-top:2px;}
+  .tool-slogan{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:10px;}
+  .tool-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .tool-body strong{color:var(--text);}
+  .tool-body em{color:#9090bb;font-size:13px;}
+  .tool-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .tag-gratis{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3);border-radius:10px;padding:2px 9px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+  .tag-freemium{background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.3);border-radius:10px;padding:2px 9px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+  .tag-pago{background:rgba(248,113,113,.12);color:#f87171;border:1px solid rgba(248,113,113,.3);border-radius:10px;padding:2px 9px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+  .tag-info{background:rgba(129,140,248,.1);color:var(--accent);border:1px solid rgba(129,140,248,.25);border-radius:10px;padding:2px 9px;font-size:10px;font-weight:700;}
+  .tool-ideal{background:rgba(129,140,248,.06);border:1px solid rgba(129,140,248,.2);border-radius:10px;padding:10px 13px;margin-top:10px;font-size:13px;color:var(--soft);}
+  .tool-ideal strong{color:var(--accent);}
+
+  /* CAT SEPARATOR */
+  .cat-header{display:flex;align-items:center;gap:10px;margin:24px 0 14px;}
+  .cat-ico{font-size:20px;}
+  .cat-titulo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:1px;}
+  .cat-sep{flex:1;height:1px;background:var(--border);}
+
+  /* TIPS */
+  .tip{background:rgba(129,140,248,.06);border:1px solid rgba(129,140,248,.2);border-radius:14px;padding:16px 18px;margin-top:20px;font-size:14px;line-height:1.65;color:#c8d0f8;}
+  .tip strong{color:var(--accent);}
+  .tip-green{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);color:#a0e8b4;}
+  .tip-green strong{color:#4ade80;}
+  .tip-gold{background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.2);color:#f0e080;}
+  .tip-gold strong{color:#ffd700;}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-purple{background:rgba(192,132,252,.06);border:1px solid rgba(192,132,252,.2);color:#e0c8f8;}
+  .tip-purple strong{color:#c084fc;}
+
+  /* TIMELINE */
+  .timeline{display:flex;flex-direction:column;}
+  .tl-item{display:flex;gap:16px;position:relative;}
+  .tl-item:not(:last-child)::after{content:'';position:absolute;left:19px;top:42px;bottom:0;width:2px;background:linear-gradient(180deg,var(--tc),transparent);}
+  .tl-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:2px;position:relative;z-index:1;border:2px solid var(--tc);background:var(--card);}
+  .tl-body{flex:1;padding-bottom:26px;}
+  .tl-year{font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--tc);margin-bottom:3px;}
+  .tl-name{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--text);line-height:1;margin-bottom:5px;}
+  .tl-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+  .tl-desc strong{color:var(--text);}
+
+  /* PROMPTS */
+  .prompt-card{background:var(--card);border:1px solid rgba(129,140,248,.25);border-radius:16px;padding:18px;margin-bottom:12px;}
+  .prompt-titulo{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--accent);margin-bottom:8px;}
+  .prompt-malo{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:8px;padding:10px 12px;font-size:13px;color:#f8b4b4;margin-bottom:6px;}
+  .prompt-bueno{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);border-radius:8px;padding:10px 12px;font-size:13px;color:#a0e8b4;}
+  .prompt-malo::before{content:'✗  ';font-weight:800;color:#f87171;}
+  .prompt-bueno::before{content:'✓  ';font-weight:800;color:#4ade80;}
+  .prompt-nota{font-size:12px;color:var(--muted);margin-top:6px;font-style:italic;}
+
+  /* TRABAJO FUTURO */
+  .trabajo-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px;margin-bottom:10px;display:flex;gap:13px;align-items:flex-start;transition:border-color .2s;}
+  .trabajo-card:hover{border-color:rgba(129,140,248,.3);}
+  .trabajo-ico{font-size:28px;flex-shrink:0;}
+  .trabajo-titulo{font-weight:700;color:var(--text);font-size:14px;margin-bottom:3px;}
+  .trabajo-desc{font-size:13px;color:var(--muted);line-height:1.5;}
+  .trabajo-desc strong{color:var(--text);}
+  .t-riesgo{display:inline-block;margin-top:5px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .t-evoluciona{display:inline-block;margin-top:5px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.3);}
+  .t-seguro{display:inline-block;margin-top:5px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3);}
+  .t-nuevo{display:inline-block;margin-top:5px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+
+  /* TABLA */
+  .tabla{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px;}
+  .tabla th{background:var(--surface);color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);}
+  .tabla td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top;line-height:1.5;}
+  .tabla tr:hover td{background:rgba(255,255,255,.02);}
+  .tabla td:first-child{color:var(--text);font-weight:700;}
+  .tabla .hl td{background:rgba(129,140,248,.05);}
+  .tabla .hl td:first-child{color:var(--accent);}
+  .ok::before{content:'✓ ';color:#4dbb7a;}
+  .mal::before{content:'✗ ';color:#f87171;}
+
+  /* FLOAT BUTTONS */
+  .float-btns{position:fixed;bottom:20px;right:14px;z-index:888;display:flex;flex-direction:column;gap:8px;align-items:flex-end;}
+  .wa-btn{display:flex;align-items:center;gap:7px;background:#25D366;border-radius:30px;padding:10px 14px 10px 12px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s;}
+  .wa-btn:hover{transform:translateY(-2px);}
+  .wa-btn span{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:#000;}
+  .home-float{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:30px;padding:8px 13px;text-decoration:none;backdrop-filter:blur(10px);transition:all .2s;}
+  .home-float:hover{background:rgba(255,255,255,.18);transform:translateY(-2px);}
+  .home-float span{font-size:12px;font-weight:600;color:var(--text);}
+
+  .relacionadas{margin:32px 0 0;background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;}
+  .rel-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--muted);letter-spacing:1px;margin-bottom:12px;}
+  .rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .rel-link{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:8px 14px;text-decoration:none;font-size:13px;font-weight:600;color:var(--text);transition:all .2s;}
+  .rel-link:hover{border-color:var(--accent);transform:translateY(-1px);}
+
+  @media(max-width:480px){.card-name{font-size:20px;}.tool-nombre{font-size:22px;}.tl-name{font-size:18px;}}
+
+  /* ── SECTION BACKGROUND ── */
+  #sectionBg{
+    position:fixed;inset:0;z-index:0;
+    background-size:cover;background-position:center;
+    opacity:0;transition:opacity 1.2s ease, background-image 0.1s;
+    pointer-events:none;filter:blur(3px) saturate(0.6);
+  }
+  header,nav,.tabs,main,.float-btns,.relacionadas,#ttBubble{position:relative;z-index:1;}
+
+
+  /* ── MUSIC & MUTE CONTROLS ── */
+  .audio-controls{position:fixed;top:16px;right:14px;z-index:999;display:flex;gap:8px;align-items:center;}
+  .audio-btn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(10,10,20,.75);backdrop-filter:blur(12px);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text);transition:all .2s;-webkit-tap-highlight-color:transparent;}
+  .audio-btn:hover{border-color:var(--accent);background:rgba(129,140,248,.2);}
+  .audio-btn.active{border-color:var(--accent);background:rgba(129,140,248,.25);}
+  .audio-btn.off{opacity:.45;}
+  /* Barra de volumen mini */
+  .music-bar{display:flex;align-items:center;gap:4px;background:rgba(10,10,20,.75);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:0 10px;height:38px;transition:all .3s;}
+  .music-bar.hidden{opacity:0;pointer-events:none;transform:translateX(10px);}
+  .music-label{font-size:10px;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:600;letter-spacing:.5px;white-space:nowrap;}
+  .vol-slider{-webkit-appearance:none;appearance:none;width:60px;height:3px;border-radius:2px;background:var(--border);outline:none;cursor:pointer;}
+  .vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer;}
+  .vol-slider::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--accent);border:none;cursor:pointer;}
+  /* Equalizer animado cuando suena */
+  .eq{display:flex;gap:2px;align-items:flex-end;height:14px;}
+  .eq-bar{width:3px;border-radius:2px;background:var(--accent);animation:eq-anim 0.8s ease-in-out infinite alternate;}
+  .eq-bar:nth-child(1){height:5px;animation-delay:0s;}
+  .eq-bar:nth-child(2){height:10px;animation-delay:0.15s;}
+  .eq-bar:nth-child(3){height:7px;animation-delay:0.3s;}
+  .eq-bar:nth-child(4){height:12px;animation-delay:0.1s;}
+  .eq-bar:nth-child(5){height:4px;animation-delay:0.25s;}
+  @keyframes eq-anim{0%{transform:scaleY(0.3);}100%{transform:scaleY(1);}}
+  .eq.paused .eq-bar{animation-play-state:paused;transform:scaleY(0.3);}
+
 </style>
 </head>
 <body>
+
+<div id="sectionBg"></div>
+
+<div class="audio-controls">
+  <div class="music-bar" id="musicBar">
+    <div class="eq" id="eqViz">
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+      <div class="eq-bar"></div>
+    </div>
+    <span class="music-label" id="musicLabel">AMBIENT</span>
+    <input type="range" class="vol-slider" id="volSlider" min="0" max="100" value="30">
+  </div>
+  <button class="audio-btn" id="musicBtn" title="Música">🎵</button>
+  <button class="audio-btn active" id="sfxBtn" title="Efectos de sonido">🔊</button>
+</div>
+
 <header>
   <a href="index.html" class="home-btn">← Volver al inicio</a><br>
   <div class="ia-badge">🤖 Sección especial</div>
@@ -113,296 +221,1373 @@ main{padding:28px 16px 100px;max-width:680px;margin:0 auto;}
 
 <div class="tabs">
   <div class="tab active" onclick="goTab('historia',this)">📖 Historia</div>
-  <div class="tab" onclick="goTab('texto',this)">💬 Texto</div>
-  <div class="tab" onclick="goTab('imagenes',this)">🖼️ Imágenes</div>
-  <div class="tab" onclick="goTab('video',this)">🎬 Video</div>
-  <div class="tab" onclick="goTab('audio',this)">🔊 Audio</div>
-  <div class="tab" onclick="goTab('diseno',this)">🎨 Diseño</div>
+  <div class="tab" onclick="goTab('texto',this)">💬 IAs de texto</div>
+  <div class="tab" onclick="goTab('imagenes',this)">🎨 Imágenes</div>
+  <div class="tab" onclick="goTab('video',this)">🎬 Video y audio</div>
+  <div class="tab" onclick="goTab('diseno',this)">✏️ Diseño</div>
   <div class="tab" onclick="goTab('marketing',this)">📣 Marketing</div>
   <div class="tab" onclick="goTab('redaccion',this)">✒️ Redacción</div>
   <div class="tab" onclick="goTab('presentaciones',this)">📊 Presentaciones</div>
-  <div class="tab" onclick="goTab('rrss',this)">📱 Redes</div>
+  <div class="tab" onclick="goTab('rrss',this)">📱 Redes sociales</div>
   <div class="tab" onclick="goTab('chatbots',this)">🤝 Chatbots</div>
   <div class="tab" onclick="goTab('productividad',this)">💼 Productividad</div>
-  <div class="tab" onclick="goTab('investigacion',this)">🔬 Investigación</div>
-  <div class="tab" onclick="goTab('prompts',this)">✍️ Prompts</div>
+  <div class="tab" onclick="goTab('estudio',this)">📚 Estudio</div>
+  <div class="tab" onclick="goTab('prompts',this)">✍️ Cómo hablarle</div>
   <div class="tab" onclick="goTab('futuro',this)">🔮 El futuro</div>
 </div>
 
 <main>
 
-<!-- HISTORIA -->
+<!-- ═══ HISTORIA ═══ -->
 <div class="section active" id="historia">
-<div class="sec-title">De dónde viene la IA</div>
-<div class="sec-sub">No empezó con ChatGPT. Tiene 70 años de historia. <em>Y los últimos 3 años cambiaron todo.</em></div>
-<div class="tl">
-<div class="tli" style="--tc:#fbbf24"><div class="tld">💡</div><div class="tlb"><div class="tly">1950</div><div class="tln">Alan Turing — ¿Pueden las máquinas pensar?</div><div class="tlt">Turing propuso el Test de Turing: si una máquina es indistinguible de un humano en conversación, puede considerarse inteligente. Era 1950. Faltaban 72 años para ChatGPT.</div></div></div>
-<div class="tli" style="--tc:#fb923c"><div class="tld">🧠</div><div class="tlb"><div class="tly">1956</div><div class="tln">Nace el término "Inteligencia Artificial"</div><div class="tlt">John McCarthy acuñó el término en Dartmouth. El optimismo era enorme. Vinieron décadas de promesas incumplidas y el primer "invierno de la IA".</div></div></div>
-<div class="tli" style="--tc:#4ade80"><div class="tld">♟️</div><div class="tlb"><div class="tly">1997</div><div class="tln">Deep Blue vence a Kasparov</div><div class="tlt">La computadora de IBM venció al campeón mundial de ajedrez. Primera vez que una máquina superaba al mejor humano en un juego de estrategia compleja.</div></div></div>
-<div class="tli" style="--tc:#818cf8"><div class="tld">🖼️</div><div class="tlb"><div class="tly">2012</div><div class="tln">El deep learning despega</div><div class="tlt">AlexNet ganó el concurso ImageNet con ventaja aplastante. <strong>El deep learning demostró que funcionaba.</strong> Google, Meta y todos los gigantes empezaron a invertir masivamente.</div></div></div>
-<div class="tli" style="--tc:#c084fc"><div class="tld">🎮</div><div class="tlb"><div class="tly">2016–2017</div><div class="tln">AlphaGo y la arquitectura Transformer</div><div class="tlt">AlphaGo venció al campeón de Go. En 2017 Google publicó <strong>"Attention Is All You Need"</strong>: el paper que inventó la arquitectura Transformer, base de todos los modelos actuales.</div></div></div>
-<div class="tli" style="--tc:#f0abfc"><div class="tld">🌍</div><div class="tlb"><div class="tly">Nov 2022</div><div class="tln">ChatGPT — el Big Bang para todos</div><div class="tlt">OpenAI lanzó ChatGPT. <strong>100 millones de usuarios en 2 meses.</strong> Instagram tardó 2 años. Netflix, 10 años. El producto más rápido en la historia humana.</div></div></div>
-<div class="tli" style="--tc:#00d4ff"><div class="tld">🚀</div><div class="tlb"><div class="tly">2023–2025</div><div class="tln">La carrera de los modelos</div><div class="tlt">Google lanzó Gemini. Anthropic lanzó Claude. Meta lanzó Llama (código abierto). DeepSeek desde China. <strong>Una carrera más rápida que la espacial.</strong> Los modelos mejoran cada 6 meses más que en toda la década anterior.</div></div></div>
-</div>
-<div class="tip tp-p" style="margin-top:14px"><strong>💡 Qué es un LLM:</strong> Imaginá que leíste todo lo escrito por la humanidad y sos muy bueno prediciendo cuál es la siguiente palabra. Eso es un LLM. GPT-4 fue entrenado con ~1 billón de tokens. El resultado emergente es algo que razona, programa y escribe poesía. <em>Lo que no puede hacer: inventar datos confiables o conocer eventos después de su entrenamiento sin búsqueda web.</em></div>
+  <div class="sec-title">De dónde viene la IA</div>
+  <div class="sec-sub">No empezó con ChatGPT. Tiene 70 años de historia. <em>Y los últimos 3 años cambiaron todo.</em></div>
+
+  <div class="timeline">
+    <div class="tl-item" style="--tc:#fbbf24">
+      <div class="tl-dot">💡</div>
+      <div class="tl-body">
+        <div class="tl-year">1950</div>
+        <div class="tl-name">Alan Turing y la pregunta fundacional</div>
+        <div class="tl-desc">Turing publicó <em>"Computing Machinery and Intelligence"</em> con la pregunta: <strong>"¿Pueden las máquinas pensar?"</strong> Propuso el Test de Turing: si una máquina mantiene una conversación indistinguible de la humana, puede considerarse inteligente. Era 1950. Faltaban 72 años para ChatGPT.</div>
+      </div>
+    </div>
+    <div class="tl-item" style="--tc:#fb923c">
+      <div class="tl-dot">🧠</div>
+      <div class="tl-body">
+        <div class="tl-year">1956</div>
+        <div class="tl-name">Nace el término "Inteligencia Artificial"</div>
+        <div class="tl-desc">John McCarthy acuñó el término en la conferencia de Dartmouth. El optimismo era enorme: creían que en 20 años habría máquinas con inteligencia humana. <strong>El primer "invierno de la IA"</strong> llegó cuando se dieron cuenta de lo difícil que era. Décadas de promesas incumplidas y financiamiento recortado.</div>
+      </div>
+    </div>
+    <div class="tl-item" style="--tc:#4ade80">
+      <div class="tl-dot">♟️</div>
+      <div class="tl-body">
+        <div class="tl-year">1997</div>
+        <div class="tl-name">Deep Blue vence a Kasparov</div>
+        <div class="tl-desc">La computadora de IBM venció al campeón mundial de ajedrez Garry Kasparov. Primera vez que una máquina superaba al mejor humano en un juego de estrategia compleja. Kasparov acusó a IBM de hacer trampa. <strong>No hacía trampa. Era mejor que él.</strong></div>
+      </div>
+    </div>
+    <div class="tl-item" style="--tc:#818cf8">
+      <div class="tl-dot">🖼️</div>
+      <div class="tl-body">
+        <div class="tl-year">2012</div>
+        <div class="tl-name">Las redes neuronales profundas despegan</div>
+        <div class="tl-desc">AlexNet ganó el concurso de reconocimiento de imágenes ImageNet con una ventaja aplastante. <strong>El deep learning demostró que funcionaba.</strong> Google, Meta y todos los gigantes tecnológicos empezaron a invertir masivamente. Empieza la era moderna de la IA.</div>
+      </div>
+    </div>
+    <div class="tl-item" style="--tc:#c084fc">
+      <div class="tl-dot">🎮</div>
+      <div class="tl-body">
+        <div class="tl-year">2016–2017</div>
+        <div class="tl-name">AlphaGo y la arquitectura Transformer</div>
+        <div class="tl-desc">AlphaGo venció al campeón mundial de Go, un juego con más combinaciones posibles que átomos en el universo. Se creía que faltaban 20 años. Lo hizo 20 años antes. En 2017, Google publicó <strong>"Attention Is All You Need"</strong>: el paper que inventó la arquitectura Transformer, la base de todo lo que vino después.</div>
+      </div>
+    </div>
+    <div class="tl-item" style="--tc:#f0abfc">
+      <div class="tl-dot">🌍</div>
+      <div class="tl-body">
+        <div class="tl-year">Nov 2022</div>
+        <div class="tl-name">ChatGPT — el Big Bang de la IA para todos</div>
+        <div class="tl-desc">OpenAI lanzó ChatGPT. <strong>100 millones de usuarios en 2 meses.</strong> Instagram tardó 2 años. Netflix, 10 años. Ningún producto en la historia humana creció tan rápido. Todo el mundo empezó a hablar de IA. Algunos con miedo, algunos con entusiasmo, todos sin entender del todo qué estaba pasando.</div>
+      </div>
+    </div>
+    <div class="tl-item" style="--tc:#00d4ff">
+      <div class="tl-dot">🚀</div>
+      <div class="tl-body">
+        <div class="tl-year">2023–2025</div>
+        <div class="tl-name">La carrera de los modelos</div>
+        <div class="tl-desc">Google lanzó Gemini. Anthropic lanzó Claude. Meta lanzó Llama (código abierto). DeepSeek desde China. Mistral desde Francia. <strong>Una carrera más rápida que la espacial.</strong> Los modelos mejoran cada 6 meses más que en toda la década anterior. Y apenas empezó.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip tip-purple" style="margin-top:16px">
+    <strong>💡 Qué es un LLM en términos simples:</strong> Imaginá que leíste absolutamente todo lo escrito por la humanidad y sos muy bueno prediciendo cuál es la siguiente palabra que tiene sentido. Eso es un Large Language Model. GPT-4 fue entrenado con ~1 billón de tokens. El resultado emergente es algo que puede razonar, programar y escribir poesía.
+    <br><br>
+    <strong>Lo que no puede:</strong> saber qué pasó después de su entrenamiento sin búsqueda web, garantizar que lo que dice es verdad (alucinaciones), tener consciencia real.
+    <br><br>
+    <em>— "El LLM es el loro más inteligente que existió. Pero los loros más inteligentes a veces parecen entender. Y a veces sí entienden, en un sentido que todavía no sabemos definir."</em>
+  </div>
 </div>
 
-<!-- TEXTO -->
+<!-- ═══ IAs DE TEXTO ═══ -->
 <div class="section" id="texto">
-<div class="sec-title">IAs de texto y conversación</div>
-<div class="sec-sub">Las que escriben, razonan y programan. <em>Cada una tiene su personalidad y puntos fuertes.</em></div>
-<div class="tools-grid">
-<a href="https://chat.openai.com" target="_blank" class="tool" style="--tc:#00a67e"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🤖</div><div><div class="tn">ChatGPT</div><div class="tm">OpenAI</div></div></div><div class="td">La más popular. GPT-4o gratis. Escritura, código, análisis. <strong>El punto de entrada ideal.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 20/mes Plus</span></div></a>
-<a href="https://claude.ai" target="_blank" class="tool" style="--tc:#c084fc"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🧠</div><div><div class="tn">Claude</div><div class="tm">Anthropic</div></div></div><div class="td">La más honesta cuando no sabe. Excelente para documentos largos y análisis profundo. <strong>Favorita de escritores.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 20/mes Pro</span></div></a>
-<a href="https://gemini.google.com" target="_blank" class="tool" style="--tc:#4285f4"><div style="display:flex;gap:9px;align-items:center"><div class="ti">💎</div><div><div class="tn">Gemini</div><div class="tm">Google</div></div></div><div class="td">Acceso real a internet. Integrado con Gmail y Drive. Gemini Live: hablale mostrándole la cámara. <strong>La más conectada.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 20/mes Advanced</span></div></a>
-<a href="https://perplexity.ai" target="_blank" class="tool" style="--tc:#0070f3"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🔍</div><div><div class="tn">Perplexity</div><div class="tm">Perplexity AI</div></div></div><div class="td">Busca en internet y <strong>cita las fuentes</strong>. El buscador con cerebro. Ideal para investigación verificable.</div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 20/mes Pro</span></div></a>
-<a href="https://chat.deepseek.com" target="_blank" class="tool" style="--tc:#ff4500"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🌊</div><div><div class="tn">DeepSeek</div><div class="tm">DeepSeek (China)</div></div></div><div class="td">Hundió las acciones de Nvidia en enero 2025. Comparable a GPT-4, <strong>100% gratis y código abierto.</strong></div><div class="tt"><span class="tag tg">Gratis</span><span class="tag ti2">Open source</span></div></a>
-<a href="https://grok.x.ai" target="_blank" class="tool" style="--tc:#1d9bf0"><div style="display:flex;gap:9px;align-items:center"><div class="ti">⚡</div><div><div class="tn">Grok</div><div class="tm">xAI (Elon Musk)</div></div></div><div class="td">Integrado en X (Twitter). Acceso a lo que pasa en tiempo real. <strong>El más actualizado en noticias.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">Con suscripción X</span></div></a>
-<a href="https://copilot.microsoft.com" target="_blank" class="tool" style="--tc:#0078d4"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🪟</div><div><div class="tn">Copilot</div><div class="tm">Microsoft</div></div></div><div class="td">GPT-4 en Windows y Office. <strong>Para usuarios del ecosistema Microsoft.</strong></div><div class="tt"><span class="tag tg">Gratis en Edge</span></div></a>
-<a href="https://mistral.ai/chat" target="_blank" class="tool" style="--tc:#ff6b35"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🌪️</div><div><div class="tn">Mistral</div><div class="tm">Mistral AI (Francia)</div></div></div><div class="td">Open source europeo. Excelente para código. <strong>Sin dependencia de big tech americanas.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">Open source</span></div></a>
-</div>
-<div class="tip tp-y"><strong>💡 ¿Cuál uso para qué?</strong> Escritura profunda → <strong>Claude</strong> · Investigación con fuentes → <strong>Perplexity</strong> · Código → <strong>DeepSeek</strong> · Info reciente → <strong>Gemini</strong> · Uso general → <strong>ChatGPT</strong></div>
+  <div class="sec-title">Las IAs de texto</div>
+  <div class="sec-sub">Las que escriben, razonan, programan y responden. <em>Cada una tiene su personalidad y sus puntos fuertes.</em></div>
+
+  <a href="https://chat.openai.com" target="_blank" class="tool-card" style="--tc:#00a67e">
+    <div class="tool-header"><div class="tool-ico">🤖</div><div><div class="tool-nombre">ChatGPT</div><div class="tool-maker">OpenAI · El más conocido del mundo</div></div></div>
+    <div class="tool-slogan">"El que empezó todo. Gratis para la mayoría de los usos cotidianos."</div>
+    <div class="tool-body">
+      GPT-4o (el modelo actual gratuito) es muy capaz para la mayoría de las tareas del día a día. La versión Plus (USD 20/mes) da acceso a GPT-4o mejorado, generación de imágenes con DALL-E, análisis de archivos y navegación web.
+      <br><br>
+      <strong>Para qué brilla:</strong> conversación fluida, redacción, resúmenes, explicaciones, código, brainstorming, análisis de textos.<br>
+      <strong>Debilidades:</strong> a veces muy "amigable" y evita decir que no sabe algo. Puede inventar datos con confianza. Eso se llama alucinar.
+      <br><br>
+      <strong>GPT-o1 y o3 (razonamiento):</strong> modelos que "piensan antes de responder". Para matemáticas y lógica compleja son los más potentes disponibles hoy.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 20/mes Plus</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> uso general, primer contacto con la IA, redacción, estudio. La más familiar para empezar.</div>
+  </a>
+
+  <a href="https://claude.ai" target="_blank" class="tool-card" style="--tc:#c084fc">
+    <div class="tool-header"><div class="tool-ico">🧠</div><div><div class="tool-nombre">Claude</div><div class="tool-maker">Anthropic · La más "humana" de las IAs</div></div></div>
+    <div class="tool-slogan">"La que dice que no sabe cuando no sabe. Un rasgo que parece básico y escasea mucho."</div>
+    <div class="tool-body">
+      Construida con foco en seguridad y honestidad. Claude tiene una cualidad que la distingue: <strong>cuando no sabe algo, lo dice.</strong> Menos alucinaciones que ChatGPT. Más directa y menos complaciente.
+      <br><br>
+      <strong>Para qué brilla:</strong> análisis de documentos largos (puede leer PDFs completos), escritura de calidad, código, conversaciones profundas. La que mejor mantiene el contexto en conversaciones largas.<br>
+      <strong>Debilidades:</strong> más cautelosa en algunos temas, acceso a internet más limitado en la versión gratuita.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 20/mes Pro</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> escritura seria, análisis de documentos, código, razonamiento complejo. La favorita de escritores y programadores.</div>
+  </a>
+
+  <a href="https://gemini.google.com" target="_blank" class="tool-card" style="--tc:#4285f4">
+    <div class="tool-header"><div class="tool-ico">💎</div><div><div class="tool-nombre">Gemini</div><div class="tool-maker">Google · La que está en todas partes</div></div></div>
+    <div class="tool-slogan">"La IA de Google tiene acceso a todo lo de Google. La lógica es aplastante."</div>
+    <div class="tool-body">
+      Acceso real a internet y al ecosistema Google (Gmail, Drive, Docs, Maps). Gemini 1.5 Pro tiene el contexto más largo del mercado: puede procesar libros enteros en una sola consulta.
+      <br><br>
+      <strong>Gemini Live:</strong> conversación de voz en tiempo real. Le mostrás con la cámara lo que estás viendo y responde sobre ello. El asistente más futurista disponible hoy.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 20/mes Advanced</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> búsqueda de información reciente, usuarios de Gmail/Drive, análisis multimodal en tiempo real.</div>
+  </a>
+
+  <a href="https://perplexity.ai" target="_blank" class="tool-card" style="--tc:#0070f3">
+    <div class="tool-header"><div class="tool-ico">🔍</div><div><div class="tool-nombre">Perplexity</div><div class="tool-maker">Perplexity AI · El buscador con cerebro</div></div></div>
+    <div class="tool-slogan">"Google lee los resultados por vos y te dice qué dicen. Eso es Perplexity."</div>
+    <div class="tool-body">
+      No es exactamente un chatbot: es un motor de búsqueda con IA que <strong>cita fuentes</strong> para cada afirmación. Busca en internet en tiempo real, sintetiza la información y te dice exactamente de dónde viene cada dato.
+      <br><br>
+      El problema de las IAs que inventan fuentes se reduce enormemente cuando el sistema muestra las fuentes reales que visitó.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 20/mes Pro</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> investigación, periodismo, estudio. La más honesta sobre de dónde saca lo que dice.</div>
+  </a>
+
+  <a href="https://chat.deepseek.com" target="_blank" class="tool-card" style="--tc:#ff4500">
+    <div class="tool-header"><div class="tool-ico">🌊</div><div><div class="tool-nombre">DeepSeek</div><div class="tool-maker">DeepSeek (China) · El que sacudió el mercado</div></div></div>
+    <div class="tool-slogan">"En enero 2025 hundió las acciones de Nvidia. Un modelo chino gratuito que compite con los de miles de millones."</div>
+    <div class="tool-body">
+      DeepSeek R1 fue entrenado con <strong>una fracción del costo</strong> de GPT-4 (USD 6 millones vs miles de millones de OpenAI) y es completamente gratuito y de código abierto. El rendimiento en código y matemáticas es comparable al de los modelos de pago.
+      <br><br>
+      <strong>Controversia:</strong> tiene censura en temas sensibles para China (Tiananmen, Taiwán). Para todo lo demás, excelente.
+    </div>
+    <div class="tool-tags"><span class="tag-gratis">100% gratis</span><span class="tag-info">Código abierto</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> código, razonamiento matemático. El mejor gratuito para programación.</div>
+  </a>
+
+  <a href="https://grok.x.ai" target="_blank" class="tool-card" style="--tc:#1d9bf0">
+    <div class="tool-header"><div class="tool-ico">⚡</div><div><div class="tool-nombre">Grok</div><div class="tool-maker">xAI · La IA de Elon Musk</div></div></div>
+    <div class="tool-slogan">"Integrado en X (Twitter). El más actualizado en lo que está pasando ahora mismo."</div>
+    <div class="tool-body">
+      Grok tiene acceso en tiempo real a todo lo que se publica en X. Para noticias de último momento y tendencias es el más actualizado del mercado. Tiene menos restricciones de contenido que los otros modelos principales.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">Con suscripción X</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> noticias en tiempo real, análisis de tendencias, usuarios activos de X.</div>
+  </a>
+
+  <table class="tabla" style="margin-top:20px">
+    <thead><tr><th>IA</th><th>Mejor para</th><th>Gratis</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td>ChatGPT</td><td>Uso general, primer contacto</td><td class="ok">GPT-4o</td></tr>
+      <tr class="hl"><td>Claude</td><td>Escritura y análisis profundo</td><td class="ok">Sonnet</td></tr>
+      <tr><td>Gemini</td><td>Info actual + ecosistema Google</td><td class="ok">Flash</td></tr>
+      <tr><td>Perplexity</td><td>Investigación con fuentes</td><td class="ok">Bueno</td></tr>
+      <tr><td>DeepSeek</td><td>Código y matemáticas</td><td class="ok">Todo</td></tr>
+      <tr><td>Grok</td><td>Noticias en tiempo real</td><td class="mal">X Premium</td></tr>
+    </tbody>
+  </table>
 </div>
 
-<!-- IMÁGENES -->
+<!-- ═══ IMÁGENES ═══ -->
 <div class="section" id="imagenes">
-<div class="sec-title">Generadores de imágenes</div>
-<div class="sec-sub">De texto a imagen en segundos. <em>Las que cambiaron el diseño y el arte para siempre.</em></div>
-<div class="tools-grid">
-<a href="https://midjourney.com" target="_blank" class="tool" style="--tc:#f472b6"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🎨</div><div><div class="tn">Midjourney</div><div class="tm">Midjourney Inc</div></div></div><div class="td">El estándar de calidad artística. Arte conceptual, ilustraciones, fotografía. <strong>El mejor resultado posible.</strong></div><div class="tt"><span class="tag tp">Solo pago</span><span class="tag ti2">USD 10/mes</span></div></a>
-<a href="https://openai.com/dall-e-3" target="_blank" class="tool" style="--tc:#818cf8"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🖼️</div><div><div class="tn">DALL-E 3</div><div class="tm">OpenAI</div></div></div><div class="td">Integrado en ChatGPT. El más fácil de usar, sin curva de aprendizaje. <strong>Lenguaje natural directo.</strong></div><div class="tt"><span class="tag tf">Con ChatGPT Plus</span></div></a>
-<a href="https://leonardo.ai" target="_blank" class="tool" style="--tc:#fbbf24"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🦁</div><div><div class="tn">Leonardo AI</div><div class="tm">Leonardo AI</div></div></div><div class="td">150 imágenes/día gratis. Modelos para fotografía, anime, arquitectura. <strong>El más completo con versión gratis.</strong></div><div class="tt"><span class="tag tf">150/día gratis</span></div></a>
-<a href="https://firefly.adobe.com" target="_blank" class="tool" style="--tc:#f87171"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🔥</div><div><div class="tn">Adobe Firefly</div><div class="tm">Adobe</div></div></div><div class="td">Integrado en Photoshop. Imágenes licenciadas seguras comercialmente. <strong>Para uso profesional legal.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">Incluido en CC</span></div></a>
-<a href="https://ideogram.ai" target="_blank" class="tool" style="--tc:#4ade80"><div style="display:flex;gap:9px;align-items:center"><div class="ti">💬</div><div><div class="tn">Ideogram</div><div class="tm">Ideogram AI</div></div></div><div class="td">El mejor para <strong>texto dentro de imágenes</strong>. Logos, carteles. Los demás fallan en texto, Ideogram no.</div><div class="tt"><span class="tag tf">Freemium generoso</span></div></a>
-<a href="https://www.bing.com/images/create" target="_blank" class="tool" style="--tc:#0078d4"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🎭</div><div><div class="tn">Bing Image Creator</div><div class="tm">Microsoft / DALL-E</div></div></div><div class="td">DALL-E 3 gratis vía Bing. Sin cuenta de pago. <strong>La mejor opción 100% gratuita para empezar.</strong></div><div class="tt"><span class="tag tg">Gratis</span><span class="tag ti2">Cuenta Microsoft</span></div></a>
-<a href="https://stability.ai" target="_blank" class="tool" style="--tc:#00d4ff"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🔓</div><div><div class="tn">Stable Diffusion</div><div class="tm">Stability AI</div></div></div><div class="td">Código abierto, corre en tu PC. Sin límites ni costo recurrente. <strong>Control total, privacidad total.</strong></div><div class="tt"><span class="tag tg">100% gratis</span><span class="tag ti2">Requiere GPU</span></div></a>
-<a href="https://civitai.com" target="_blank" class="tool" style="--tc:#a78bfa"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🏛️</div><div><div class="tn">CivitAI</div><div class="tm">Comunidad SD</div></div></div><div class="td">Miles de modelos gratis de la comunidad para estilos específicos: anime, moda, arquitectura.</div><div class="tt"><span class="tag tg">Gratis</span><span class="tag ti2">Open source</span></div></a>
-</div>
-<div class="tip tp-y"><strong>💡 Ranking:</strong> Calidad máxima → <strong>Midjourney</strong> · Texto en imagen → <strong>Ideogram</strong> · Gratis → <strong>Bing Image Creator</strong> · Comercial seguro → <strong>Adobe Firefly</strong></div>
+  <div class="sec-title">Generadores de imágenes</div>
+  <div class="sec-sub">De texto a imagen en segundos. <em>Las que cambiaron el diseño, la fotografía y el arte para siempre.</em></div>
+
+  <a href="https://midjourney.com" target="_blank" class="tool-card" style="--tc:#f472b6">
+    <div class="tool-header"><div class="tool-ico">🎨</div><div><div class="tool-nombre">Midjourney</div><div class="tool-maker">Midjourney Inc · El más artístico</div></div></div>
+    <div class="tool-slogan">"El que hace imágenes que parecen salidas de una película. El estándar de calidad del mercado."</div>
+    <div class="tool-body">
+      Las imágenes de Midjourney tienen una estética reconocible: cinematográficas, detalladas, con un "ojo artístico" que los otros modelos no alcanzan del todo. La versión 6.1 alcanza un nivel fotorrealista indistinguible de una fotografía real en muchos casos.
+      <br><br>
+      <strong>Desventajas:</strong> no tiene versión gratis, funciona en Discord (al principio es confuso), necesita tiempo para aprender a escribir buenos prompts.
+    </div>
+    <div class="tool-tags"><span class="tag-pago">Solo pago</span><span class="tag-info">USD 10/mes básico</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> arte conceptual, portadas, ilustraciones, fotografía editorial. Cuando necesitás la mejor imagen posible.</div>
+  </a>
+
+  <a href="https://www.bing.com/images/create" target="_blank" class="tool-card" style="--tc:#0078d4">
+    <div class="tool-header"><div class="tool-ico">🎭</div><div><div class="tool-nombre">Bing Image Creator</div><div class="tool-maker">Microsoft / DALL-E 3 · El mejor gratis</div></div></div>
+    <div class="tool-slogan">"DALL-E 3 gratis. Sin cuenta de pago. El secreto mejor guardado para quien empieza."</div>
+    <div class="tool-body">
+      Microsoft pone DALL-E 3 (el generador de OpenAI) disponible gratis a través de Bing. La calidad es muy buena para uso general y no requiere suscripción, solo una cuenta Microsoft gratuita.
+    </div>
+    <div class="tool-tags"><span class="tag-gratis">Gratis</span><span class="tag-info">Cuenta Microsoft</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> empezar sin pagar nada. Para presentaciones, redes sociales y uso general con excelente calidad.</div>
+  </a>
+
+  <a href="https://leonardo.ai" target="_blank" class="tool-card" style="--tc:#fbbf24">
+    <div class="tool-header"><div class="tool-ico">🦁</div><div><div class="tool-nombre">Leonardo AI</div><div class="tool-maker">Leonardo AI · El más flexible</div></div></div>
+    <div class="tool-slogan">"150 imágenes por día gratis. Con modelos especializados para cada estilo."</div>
+    <div class="tool-body">
+      Tiene modelos especializados en fotografía, anime, arquitectura, videojuegos y más. Su feature de <strong>consistencia de personajes</strong> permite generar el mismo personaje en múltiples imágenes, algo muy difícil en otros modelos.
+      <br><br>
+      Leonardo Motion: genera videos cortos a partir de imágenes. El puente entre imagen estática y video.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">150 tokens/día gratis</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> gaming, entretenimiento, prototipado de productos, personajes consistentes.</div>
+  </a>
+
+  <a href="https://firefly.adobe.com" target="_blank" class="tool-card" style="--tc:#f87171">
+    <div class="tool-header"><div class="tool-ico">🔥</div><div><div class="tool-nombre">Adobe Firefly</div><div class="tool-maker">Adobe · El seguro para uso comercial</div></div></div>
+    <div class="tool-slogan">"Entrenado con imágenes licenciadas. Sin riesgo legal para empresas y profesionales."</div>
+    <div class="tool-body">
+      Integrado directamente en Photoshop e Illustrator. El relleno generativo de Photoshop (extender una imagen, eliminar objetos, cambiar fondos) usa Firefly. Para agencias y empresas que necesitan certeza legal sobre las imágenes generadas.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">Incluido en CC</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> profesionales de diseño, agencias, cualquiera que necesite certeza de uso comercial.</div>
+  </a>
+
+  <a href="https://ideogram.ai" target="_blank" class="tool-card" style="--tc:#4ade80">
+    <div class="tool-header"><div class="tool-ico">💬</div><div><div class="tool-nombre">Ideogram</div><div class="tool-maker">Ideogram AI · El especialista en texto</div></div></div>
+    <div class="tool-slogan">"El único que no arruina las palabras dentro de las imágenes. Los demás fallan vergonzosamente en eso."</div>
+    <div class="tool-body">
+      Generar texto dentro de imágenes es el talón de Aquiles de casi todos los modelos. Midjourney escribe mal, DALL-E escribe mal, Stable Diffusion escribe mal. <strong>Ideogram lo hace bien.</strong> Para logos, carteles y cualquier imagen con tipografía integrada.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium generoso</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> logos, carteles, thumbnails de YouTube, cualquier imagen que lleve texto legible.</div>
+  </a>
+
+  <div class="tip tip-gold">
+    <strong>💡 El ranking según el uso:</strong><br>
+    🥇 Calidad artística máxima → <strong>Midjourney</strong><br>
+    🥈 Gratis sin registrarse en nada raro → <strong>Bing Image Creator</strong><br>
+    🥉 Texto dentro de la imagen → <strong>Ideogram</strong><br>
+    🏅 Uso comercial sin drama legal → <strong>Adobe Firefly</strong><br>
+    🎖 Control total sin límites → <strong>Stable Diffusion local</strong>
+  </div>
 </div>
 
-<!-- VIDEO -->
+<!-- ═══ VIDEO Y AUDIO ═══ -->
 <div class="section" id="video">
-<div class="sec-title">Generación y edición de video</div>
-<div class="sec-sub">Video hiperrealista desde texto. <em>La frontera más nueva y la que más rápido avanza.</em></div>
-<div class="cat-h"><div class="cat-ico">✨</div><div class="cat-t">Generación con IA</div><div class="cat-sep"></div></div>
-<div class="tools-grid">
-<a href="https://sora.com" target="_blank" class="tool" style="--tc:#f87171"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🎬</div><div><div class="tn">Sora</div><div class="tm">OpenAI</div></div></div><div class="td">Hasta 20 seg en 1080p. Cuando lo mostró OpenAI, Hollywood sintió el suelo moverse. <strong>El más cinematográfico.</strong></div><div class="tt"><span class="tag tf">ChatGPT Plus/Pro</span></div></a>
-<a href="https://klingai.com" target="_blank" class="tool" style="--tc:#818cf8"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🌊</div><div><div class="tn">Kling AI</div><div class="tm">Kuaishou</div></div></div><div class="td">Hasta 2 minutos. Anima fotos fijas. En muchos benchmarks <strong>supera a Sora. Freemium generoso.</strong></div><div class="tt"><span class="tag tf">Freemium</span></div></a>
-<a href="https://hailuoai.video" target="_blank" class="tool" style="--tc:#4ade80"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🌀</div><div><div class="tn">Hailluo</div><div class="tm">MiniMax</div></div></div><div class="td">El más realista en movimientos humanos. 6 seg con calidad impresionante. <strong>Créditos diarios gratis.</strong></div><div class="tt"><span class="tag tf">Freemium</span></div></a>
-<a href="https://app.runwayml.com" target="_blank" class="tool" style="--tc:#fbbf24"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🚀</div><div><div class="tn">Runway</div><div class="tm">Runway AI</div></div></div><div class="td">Gen-3: texto a video + eliminar objetos + cambiar fondos. <strong>El más completo para producción profesional.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 12/mes</span></div></a>
-</div>
-<div class="cat-h"><div class="cat-ico">✂️</div><div class="cat-t">Edición y conversión</div><div class="cat-sep"></div></div>
-<div class="tools-grid">
-<a href="https://pictory.ai" target="_blank" class="tool" style="--tc:#c084fc"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🎥</div><div><div class="tn">Pictory</div><div class="tm">Pictory AI</div></div></div><div class="td">Convierte artículos en videos automáticamente. <strong>Ideal para YouTube sin grabar nada.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 19/mes</span></div></a>
-<a href="https://www.veed.io" target="_blank" class="tool" style="--tc:#00d4ff"><div style="display:flex;gap:9px;align-items:center"><div class="ti">✂️</div><div><div class="tn">Veed.io</div><div class="tm">Veed</div></div></div><div class="td">Subtítulos automáticos, traducción, eliminación de fondo. <strong>Sin instalar nada, todo online.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 18/mes</span></div></a>
-<a href="https://www.heygen.com" target="_blank" class="tool" style="--tc:#f59e0b"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🧑‍💼</div><div><div class="tn">HeyGen</div><div class="tm">HeyGen</div></div></div><div class="td">Avatares humanos que hablan tu guión. Traduce videos con sincronización labial. <strong>Viral por los doblajes.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 29/mes</span></div></a>
-<a href="https://www.capcut.com" target="_blank" class="tool" style="--tc:#f87171"><div style="display:flex;gap:9px;align-items:center"><div class="ti">📱</div><div><div class="tn">CapCut</div><div class="tm">ByteDance</div></div></div><div class="td">Subtítulos automáticos, efectos IA, fondo removido. <strong>Gratis y potente para redes sociales.</strong></div><div class="tt"><span class="tag tg">Gratis</span></div></a>
-</div>
+  <div class="sec-title">Video y Audio con IA</div>
+  <div class="sec-sub">La frontera más nueva y más impresionante. <em>Video hiperrealista desde texto. Música completa desde una descripción.</em></div>
+
+  <div class="cat-header"><div class="cat-ico">🎬</div><div class="cat-titulo">Generación de video</div><div class="cat-sep"></div></div>
+
+  <a href="https://sora.com" target="_blank" class="tool-card" style="--tc:#f87171">
+    <div class="tool-header"><div class="tool-ico">🎬</div><div><div class="tool-nombre">Sora</div><div class="tool-maker">OpenAI · El que sacudió Hollywood</div></div></div>
+    <div class="tool-slogan">"Cuando OpenAI lo mostró en febrero 2024, los directores de Hollywood dijeron que sentían que se les venía el mundo encima."</div>
+    <div class="tool-body">
+      Genera videos de hasta 20 segundos en 1080p desde una descripción de texto. Escenas cinematográficas, movimiento de cámara realista, física coherente.
+      <br><br>
+      <strong>Lo que todavía falla:</strong> física de fluidos, manos (el gran problema de todas las IAs de video) y continuidad lógica en secuencias largas.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">ChatGPT Plus/Pro</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> videos cortos cinematográficos, contenido de alta calidad para producción creativa.</div>
+  </a>
+
+  <a href="https://klingai.com" target="_blank" class="tool-card" style="--tc:#818cf8">
+    <div class="tool-header"><div class="tool-ico">🌊</div><div><div class="tool-nombre">Kling AI</div><div class="tool-maker">Kuaishou (China) · El competidor asiático</div></div></div>
+    <div class="tool-slogan">"Hasta 2 minutos de video. Anima fotos fijas. En muchos benchmarks le gana a Sora."</div>
+    <div class="tool-body">
+      Kling 1.6 tiene una función especialmente impactante: <strong>imagen a video</strong> — tomás una foto y la anima con movimiento coherente. El video de tu perro corriendo a partir de una foto quieta. El portrait de tu abuela levantando la vista.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> animación de fotos, contenido en redes, videos hasta 2 minutos.</div>
+  </a>
+
+  <a href="https://www.heygen.com" target="_blank" class="tool-card" style="--tc:#f59e0b">
+    <div class="tool-header"><div class="tool-ico">🧑‍💼</div><div><div class="tool-nombre">HeyGen</div><div class="tool-maker">HeyGen · El de los doblajes virales</div></div></div>
+    <div class="tool-slogan">"El que hace que Obama, Messi y cualquier persona hablen en otro idioma con sincronización labial perfecta. Magia y espanto a la vez."</div>
+    <div class="tool-body">
+      Crea videos con avatares humanos realistas que hablan tu guión. Traduce videos existentes con sincronización labial en otro idioma. Videos de marketing, training y presentaciones sin cámara ni edición.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 29/mes</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> videos de producto, capacitaciones, contenido multiidioma sin grabar de nuevo.</div>
+  </a>
+
+  <a href="https://app.runwayml.com" target="_blank" class="tool-card" style="--tc:#fbbf24">
+    <div class="tool-header"><div class="tool-ico">✂️</div><div><div class="tool-nombre">Runway</div><div class="tool-maker">Runway AI · La edición de video con IA</div></div></div>
+    <div class="tool-slogan">"Elimina objetos de videos, cambia fondos, genera video desde texto. La suite completa para producción."</div>
+    <div class="tool-body">
+      Gen-3 Alpha: texto a video de calidad profesional. Pero lo que lo hace único es la edición: puede eliminar un objeto de un video en movimiento, cambiar el fondo manteniendo las personas, extender videos, hacer inpainting. El software de postproducción del futuro, ya disponible.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 12/mes</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> producción de contenido profesional, publicidad, postproducción con IA.</div>
+  </a>
+
+  <div class="cat-header"><div class="cat-ico">🎵</div><div class="cat-titulo">Música y audio</div><div class="cat-sep"></div></div>
+
+  <a href="https://suno.com" target="_blank" class="tool-card" style="--tc:#f87171">
+    <div class="tool-header"><div class="tool-ico">🎸</div><div><div class="tool-nombre">Suno</div><div class="tool-maker">Suno AI · La canción completa en 30 segundos</div></div></div>
+    <div class="tool-slogan">"Escribís: 'una cumbia sentimental sobre el mate amargo de los lunes, con acordeón y coro de fondo'. Recibís: una canción de 3 minutos. Sin exagerar."</div>
+    <div class="tool-body">
+      Genera canciones completas con letra, melodía, instrumentación y voz en cualquier género musical desde texto. 5 canciones por día gratis. El resultado ya no suena como "música de IA": suena como música real, imperfecta y humana.
+      <br><br>
+      <em>— "Lo que antes costaba USD 5.000 en estudio de grabación, ahora es gratis. Los músicos tienen razones para estar preocupados y también razones para estar emocionados."</em>
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">5 canciones/día gratis</span><span class="tag-info">USD 8/mes Pro</span></div>
+  </a>
+
+  <a href="https://elevenlabs.io" target="_blank" class="tool-card" style="--tc:#4ade80">
+    <div class="tool-header"><div class="tool-ico">🗣️</div><div><div class="tool-nombre">ElevenLabs</div><div class="tool-maker">ElevenLabs · La voz más realista</div></div></div>
+    <div class="tool-slogan">"Con 1 minuto de audio de tu voz, puede leer cualquier texto con tu voz exacta. Útil y perturbador en partes iguales."</div>
+    <div class="tool-body">
+      Convierte texto a voz con una calidad ya indistinguible de la humana real. Clonación de voz para narración de videos, audiolibros, doblaje.
+      <br><br>
+      <strong>El lado oscuro:</strong> las estafas telefónicas con voz clonada ya se documentaron en varios países. Si recibís un audio de un familiar pidiendo dinero urgente, verificá por otro canal antes de actuar.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">10.000 chars gratis/mes</span><span class="tag-info">USD 5/mes Starter</span></div>
+  </a>
+
+  <a href="https://murf.ai" target="_blank" class="tool-card" style="--tc:#c084fc">
+    <div class="tool-header"><div class="tool-ico">🎤</div><div><div class="tool-nombre">Murf</div><div class="tool-maker">Murf AI · Para presentaciones y e-learning</div></div></div>
+    <div class="tool-slogan">"120 voces en 20 idiomas. Para quien necesita narración profesional sin contratar un locutor."</div>
+    <div class="tool-body">
+      Interfaz muy sencilla para convertir texto en narración de calidad. El favorito de creadores de cursos online, presentaciones y contenido educativo. No necesitás grabar tu propia voz.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 19/mes</span></div>
+  </a>
 </div>
 
-<!-- AUDIO -->
-<div class="section" id="audio">
-<div class="sec-title">Audio, voz y música con IA</div>
-<div class="sec-sub">Clonación de voz, narración automática y canciones completas desde texto.</div>
-<div class="cat-h"><div class="cat-ico">🗣️</div><div class="cat-t">Voz y narración</div><div class="cat-sep"></div></div>
-<div class="tools-grid">
-<a href="https://elevenlabs.io" target="_blank" class="tool" style="--tc:#fbbf24"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🎙️</div><div><div class="tn">ElevenLabs</div><div class="tm">ElevenLabs</div></div></div><div class="td">La voz más realista. Clonación con 1 minuto de audio. 10.000 chars gratis/mes. <strong>El estándar del mercado.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 5/mes Starter</span></div></a>
-<a href="https://murf.ai" target="_blank" class="tool" style="--tc:#c084fc"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🎤</div><div><div class="tn">Murf</div><div class="tm">Murf AI</div></div></div><div class="td">120+ voces en 20 idiomas. Perfecto para presentaciones y e-learning. <strong>Interfaz muy sencilla.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 19/mes</span></div></a>
-<a href="https://speechify.com" target="_blank" class="tool" style="--tc:#4ade80"><div style="display:flex;gap:9px;align-items:center"><div class="ti">📖</div><div><div class="tn">Speechify</div><div class="tm">Speechify</div></div></div><div class="td">Convierte PDFs y artículos en audio. <strong>Para escuchar libros mientras hacés otra cosa.</strong></div><div class="tt"><span class="tag tf">Freemium</span></div></a>
-<a href="https://audiopen.ai" target="_blank" class="tool" style="--tc:#00d4ff"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🎵</div><div><div class="tn">AudioPen</div><div class="tm">AudioPen</div></div></div><div class="td">Hablás desordenado, la IA convierte en texto organizado y bien escrito. <strong>Para notas de voz que quedan como artículos.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 8/mes</span></div></a>
-</div>
-<div class="cat-h"><div class="cat-ico">🎵</div><div class="cat-t">Música con IA</div><div class="cat-sep"></div></div>
-<div class="tools-grid">
-<a href="https://suno.com" target="_blank" class="tool" style="--tc:#f87171"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🎸</div><div><div class="tn">Suno</div><div class="tm">Suno AI</div></div></div><div class="td">Canciones completas con letra, melodía e instrumentación. 5 canciones/día gratis. <strong>Cualquier género en segundos.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 8/mes Pro</span></div></a>
-<a href="https://udio.com" target="_blank" class="tool" style="--tc:#818cf8"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🎹</div><div><div class="tn">Udio</div><div class="tm">Udio</div></div></div><div class="td">Alta calidad musical, más control sobre el estilo. <strong>El que más sorprende en géneros latinoamericanos.</strong></div><div class="tt"><span class="tag tf">Freemium</span></div></a>
-</div>
-<div class="cat-h"><div class="cat-ico">📝</div><div class="cat-t">Transcripción de reuniones</div><div class="cat-sep"></div></div>
-<div class="tools-grid">
-<a href="https://otter.ai" target="_blank" class="tool" style="--tc:#4ade80"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🦦</div><div><div class="tn">Otter.ai</div><div class="tm">Otter AI</div></div></div><div class="td">Transcripción en tiempo real de reuniones Zoom/Meet/Teams. Resumen automático. <strong>El más usado en empresas.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 10/mes</span></div></a>
-<a href="https://fathom.video" target="_blank" class="tool" style="--tc:#fbbf24"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🐋</div><div><div class="tn">Fathom</div><div class="tm">Fathom</div></div></div><div class="td">Asistente de reuniones completamente gratuito. Transcribe, resume y lista tareas. <strong>El mejor gratis del mercado.</strong></div><div class="tt"><span class="tag tg">Gratis individual</span></div></a>
-</div>
-<div class="tip tp-r"><strong>⚠️ Clonación de voz:</strong> La misma tecnología que permite narrar videos con tu voz, permite crear audios falsos. Estafas telefónicas clonando la voz de familiares ya se documentaron. Si recibís un audio pidiendo dinero urgente, verificá por otro canal antes de actuar.</div>
-</div>
-
-<!-- DISEÑO -->
+<!-- ═══ DISEÑO ═══ -->
 <div class="section" id="diseno">
-<div class="sec-title">Diseño con IA</div>
-<div class="sec-sub">Las que democratizaron el diseño gráfico. <em>Ya no hace falta saber Photoshop para hacer algo que se vea bien.</em></div>
-<div class="tools-grid">
-<a href="https://canva.com" target="_blank" class="tool full" style="--tc:#00c4cc"><div class="ti">🎨</div><div class="tr"><div class="tn">Canva Magic Studio</div><div class="tm">Canva · El diseño para todos</div><div class="td" style="margin-top:5px">El más usado del mundo para diseño no técnico. Con IA integrada: genera imágenes, expande fondos, elimina objetos, crea presentaciones desde texto. <strong>El punto de entrada ideal.</strong> La versión gratis ya es muy potente.</div><div class="tt" style="margin-top:6px"><span class="tag tf">Freemium muy generoso</span><span class="tag ti2">USD 13/mes Pro</span></div></div></a>
-<a href="https://firefly.adobe.com" target="_blank" class="tool" style="--tc:#f87171"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🔥</div><div><div class="tn">Adobe Firefly</div><div class="tm">Adobe</div></div></div><div class="td">IA en Photoshop e Illustrator. Relleno generativo, extensión. <strong>El más potente para profesionales.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">Incluido en CC</span></div></a>
-<a href="https://designs.ai" target="_blank" class="tool" style="--tc:#818cf8"><div style="display:flex;gap:9px;align-items:center"><div class="ti">✨</div><div><div class="tn">Designs.ai</div><div class="tm">Designs.ai</div></div></div><div class="td">Logos, videos, banners, mockups desde IA. <strong>Para emprendedores que necesitan todo rápido.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 19/mes</span></div></a>
-<a href="https://mokker.ai" target="_blank" class="tool" style="--tc:#4ade80"><div style="display:flex;gap:9px;align-items:center"><div class="ti">📸</div><div><div class="tn">Mokker</div><div class="tm">Mokker AI</div></div></div><div class="td">Fotos de producto con fondo IA. <strong>Fotos de catálogo sin estudio fotográfico.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 27/mes</span></div></a>
-<a href="https://www.remove.bg" target="_blank" class="tool" style="--tc:#fbbf24"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🪄</div><div><div class="tn">Remove.bg</div><div class="tm">Kaleido AI</div></div></div><div class="td">Elimina el fondo de imágenes en segundos. Gratis para imágenes pequeñas. <strong>El más rápido para esta tarea.</strong></div><div class="tt"><span class="tag tf">Freemium</span></div></a>
-<a href="https://looka.com" target="_blank" class="tool" style="--tc:#c084fc"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🏷️</div><div><div class="tn">Looka</div><div class="tm">Looka</div></div></div><div class="td">Generador de logos con IA. Elegís industria, colores y estilo. <strong>Logo profesional sin diseñador.</strong></div><div class="tt"><span class="tag tf">Gratis para explorar</span><span class="tag ti2">USD 20 logo</span></div></a>
-</div>
+  <div class="sec-title">Diseño con IA</div>
+  <div class="sec-sub">Las que democratizaron el diseño gráfico. <em>Ya no hace falta saber Photoshop para hacer algo que se vea bien.</em></div>
+
+  <a href="https://canva.com" target="_blank" class="tool-card" style="--tc:#00c4cc">
+    <div class="tool-header"><div class="tool-ico">🎨</div><div><div class="tool-nombre">Canva Magic Studio</div><div class="tool-maker">Canva · El diseño para todos</div></div></div>
+    <div class="tool-slogan">"El diseño que antes requería un profesional, ahora lo hace cualquier persona con Canva en 20 minutos."</div>
+    <div class="tool-body">
+      El más usado del mundo para diseño no técnico. Con Magic Studio integrado: genera imágenes, expande fondos, elimina objetos, crea presentaciones completas desde un texto. La versión gratis ya es muy potente para el 90% de los usos.
+      <br><br>
+      <strong>Lo que puede hacer con IA:</strong> Magic Resize (adapta un diseño a todos los formatos de redes con un click), Magic Write (genera el texto del diseño), Background Remover, y Magic Design que crea un diseño completo a partir de una foto y un texto.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium muy generoso</span><span class="tag-info">USD 13/mes Pro</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> emprendedores, marketers, cualquiera que necesite diseño sin ser diseñador.</div>
+  </a>
+
+  <a href="https://firefly.adobe.com" target="_blank" class="tool-card" style="--tc:#f87171">
+    <div class="tool-header"><div class="tool-ico">🔥</div><div><div class="tool-nombre">Adobe Firefly</div><div class="tool-maker">Adobe · El profesional</div></div></div>
+    <div class="tool-slogan">"La IA que vive dentro de Photoshop. El relleno generativo es la función que más impresiona a los que lo ven por primera vez."</div>
+    <div class="tool-body">
+      Integrada en Photoshop, Illustrator y Express. El relleno generativo te deja seleccionar cualquier parte de una imagen y pedirle que lo reemplace por algo diferente. Extender el fondo de una foto, eliminar personas, cambiar el cielo, agregar objetos.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">Incluido en CC</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> diseñadores gráficos que ya usan Adobe. El flujo de trabajo más integrado.</div>
+  </a>
+
+  <a href="https://mokker.ai" target="_blank" class="tool-card" style="--tc:#4ade80">
+    <div class="tool-header"><div class="tool-ico">📸</div><div><div class="tool-nombre">Mokker</div><div class="tool-maker">Mokker AI · Fotos de producto sin estudio</div></div></div>
+    <div class="tool-slogan">"Subís la foto de tu producto con fondo blanco. Elegís la escena. Sale una foto de catálogo profesional. Sin estudio, sin fotógrafo, sin presupuesto."</div>
+    <div class="tool-body">
+      Específicamente diseñado para fotografía de producto con IA. Coloca tu producto en ambientes realistas generados por IA. El e-commerce cambió con esto: una marca chica puede tener fotos con la calidad visual de las grandes.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 27/mes</span></div>
+  </a>
+
+  <a href="https://looka.com" target="_blank" class="tool-card" style="--tc:#c084fc">
+    <div class="tool-header"><div class="tool-ico">🏷️</div><div><div class="tool-nombre">Looka</div><div class="tool-maker">Looka · Logos sin diseñador</div></div></div>
+    <div class="tool-slogan">"Elegís la industria, los colores y el estilo que te gusta. En 2 minutos tenés 50 opciones de logo. Pagás solo si querés descargar uno."</div>
+    <div class="tool-body">
+      Generador de logos y branding completo con IA. Podés explorar todas las opciones gratis y solo pagar cuando encontrás uno que te gusta. Incluye también versiones para redes sociales, papelería y tarjetas de presentación.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Explorar gratis</span><span class="tag-info">USD 20 logo final</span></div>
+  </a>
+
+  <a href="https://www.remove.bg" target="_blank" class="tool-card" style="--tc:#fbbf24">
+    <div class="tool-header"><div class="tool-ico">🪄</div><div><div class="tool-nombre">Remove.bg</div><div class="tool-maker">Kaleido AI · Un solo truco, hecho perfecto</div></div></div>
+    <div class="tool-slogan">"Hace una sola cosa: sacar el fondo de imágenes. Y lo hace mejor que cualquier otro."</div>
+    <div class="tool-body">
+      Sube una foto, en 3 segundos tenés la persona o el objeto sin fondo. Gratis para imágenes pequeñas. El caso de uso de IA más simple, más rápido y más usado del diseño digital.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span></div>
+  </a>
 </div>
 
-<!-- MARKETING -->
+<!-- ═══ MARKETING ═══ -->
 <div class="section" id="marketing">
-<div class="sec-title">IA para Marketing</div>
-<div class="sec-sub">Las que automatizan campañas y análisis de competencia. <em>Donde la IA tiene más retorno de inversión comprobado.</em></div>
-<div class="tools-grid">
-<a href="https://www.adcreative.ai" target="_blank" class="tool full" style="--tc:#f87171"><div class="ti">📣</div><div class="tr"><div class="tn">AdCreative.ai</div><div class="tm">AdCreative · Anuncios que convierten</div><div class="td" style="margin-top:5px">Genera creatividades de publicidad optimizadas para conversión. Analiza qué anuncios funcionan mejor en tu industria. <strong>El favorito de las agencias de performance marketing.</strong></div><div class="tt" style="margin-top:6px"><span class="tag tp">USD 21/mes</span></div></div></a>
-<a href="https://jasper.ai" target="_blank" class="tool" style="--tc:#fbbf24"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🚀</div><div><div class="tn">Jasper</div><div class="tm">Jasper AI</div></div></div><div class="td">IA especializada en marketing: posts, emails, landing pages. Aprende el tono de tu marca. <strong>El más usado por equipos de marketing.</strong></div><div class="tt"><span class="tag tp">USD 39/mes</span></div></a>
-<a href="https://www.semrush.com" target="_blank" class="tool" style="--tc:#f97316"><div style="display:flex;gap:9px;align-items:center"><div class="ti">📊</div><div><div class="tn">SEMrush</div><div class="tm">SEMrush</div></div></div><div class="td">SEO, análisis de competencia, keywords, backlinks. Con IA que sugiere estrategia. <strong>El más completo para SEO.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 129/mes</span></div></a>
-<a href="https://claude.ai" target="_blank" class="tool" style="--tc:#c084fc"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🧠</div><div><div class="tn">Claude para Marketing</div><div class="tm">Anthropic</div></div></div><div class="td">Estrategia, análisis de competencia, copies. <strong>La IA que mejor entiende el tono de marca.</strong></div><div class="tt"><span class="tag tf">Freemium</span></div></a>
-<a href="https://www.synthesia.io" target="_blank" class="tool" style="--tc:#818cf8"><div style="display:flex;gap:9px;align-items:center"><div class="ti">📹</div><div><div class="tn">Synthesia</div><div class="tm">Synthesia</div></div></div><div class="td">Videos con avatares de IA para marketing. Sin cámara ni edición. <strong>Videos de producto en minutos.</strong></div><div class="tt"><span class="tag tp">USD 22/mes</span></div></a>
-<a href="https://surfer.com" target="_blank" class="tool" style="--tc:#4ade80"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🏄</div><div><div class="tn">Surfer SEO</div><div class="tm">Surfer</div></div></div><div class="td">Optimización de contenido para SEO en tiempo real. <strong>Para rankear en Google.</strong></div><div class="tt"><span class="tag tp">USD 69/mes</span></div></a>
-</div>
+  <div class="sec-title">IA para Marketing</div>
+  <div class="sec-sub">Las que automatizan campañas, generan copies y analizan la competencia. <em>Donde la IA tiene el mayor retorno de inversión comprobado.</em></div>
+
+  <a href="https://www.adcreative.ai" target="_blank" class="tool-card" style="--tc:#f87171">
+    <div class="tool-header"><div class="tool-ico">📣</div><div><div class="tool-nombre">AdCreative</div><div class="tool-maker">AdCreative.ai · Los anuncios que convierten</div></div></div>
+    <div class="tool-slogan">"Genera creatividades de publicidad y analiza cuáles convierten mejor en tu industria. El favorito de las agencias de performance."</div>
+    <div class="tool-body">
+      Crea banners, copies e imágenes para anuncios optimizados para conversión. Aprende de qué formatos funcionan en tu industria y genera variaciones automáticamente. Las agencias que lo adoptaron reportan reducción de tiempo de producción de hasta 70%.
+    </div>
+    <div class="tool-tags"><span class="tag-pago">USD 21/mes</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> agencias de publicidad, e-commerce, cualquiera que haga publicidad paga en Meta o Google.</div>
+  </a>
+
+  <a href="https://jasper.ai" target="_blank" class="tool-card" style="--tc:#fbbf24">
+    <div class="tool-header"><div class="tool-ico">🚀</div><div><div class="tool-nombre">Jasper</div><div class="tool-maker">Jasper AI · El redactor de marketing</div></div></div>
+    <div class="tool-slogan">"Aprende el tono de tu marca y escribe como vos. Emails, posts, landing pages, ads. El asistente de marketing que trabaja 24/7."</div>
+    <div class="tool-body">
+      IA especializada en marketing con más de 50 plantillas específicas para cada tipo de contenido. Aprende el brand voice de tu empresa y lo mantiene consistente en todo lo que genera. Usado por equipos de marketing de empresas medianas y grandes.
+    </div>
+    <div class="tool-tags"><span class="tag-pago">USD 39/mes</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> equipos de marketing que necesitan volumen de contenido consistente con el tono de marca.</div>
+  </a>
+
+  <a href="https://www.semrush.com" target="_blank" class="tool-card" style="--tc:#f97316">
+    <div class="tool-header"><div class="tool-ico">📊</div><div><div class="tool-nombre">SEMrush</div><div class="tool-maker">SEMrush · El todo en uno de SEO</div></div></div>
+    <div class="tool-slogan">"SEO, análisis de competencia, keywords, backlinks y ahora con IA que te sugiere la estrategia de contenido completa."</div>
+    <div class="tool-body">
+      La herramienta más completa para posicionamiento en buscadores. Muestra qué keywords usa la competencia, de dónde vienen sus links, qué contenido les funciona. Con IA integrada que genera estrategias de contenido basadas en los datos reales del mercado.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium limitado</span><span class="tag-info">USD 129/mes Pro</span></div>
+  </a>
+
+  <a href="https://www.synthesia.io" target="_blank" class="tool-card" style="--tc:#818cf8">
+    <div class="tool-header"><div class="tool-ico">📹</div><div><div class="tool-nombre">Synthesia</div><div class="tool-maker">Synthesia · Videos de marketing sin cámara</div></div></div>
+    <div class="tool-slogan">"Escribís el guión, elegís el avatar, en 10 minutos tenés un video profesional. Sin cámara, sin micrófono, sin edición."</div>
+    <div class="tool-body">
+      Videos con avatares de IA para marketing, capacitación y onboarding. Disponible en más de 120 idiomas. Muy usado por empresas para contenido de training que antes requería producción de video costosa.
+    </div>
+    <div class="tool-tags"><span class="tag-pago">USD 22/mes</span></div>
+  </a>
 </div>
 
-<!-- REDACCIÓN -->
+<!-- ═══ REDACCIÓN ═══ -->
 <div class="section" id="redaccion">
-<div class="sec-title">Redacción y escritura</div>
-<div class="sec-sub">Para escribir mejor, más rápido y sin errores. <em>Del copy publicitario al informe corporativo.</em></div>
-<div class="tools-grid">
-<a href="https://copy.ai" target="_blank" class="tool" style="--tc:#00d4ff"><div style="display:flex;gap:9px;align-items:center"><div class="ti">✒️</div><div><div class="tn">Copy.ai</div><div class="tm">Copy.ai</div></div></div><div class="td">Copy publicitario, emails, descripciones de producto. 90+ plantillas. <strong>El más específico para marketing.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 36/mes</span></div></a>
-<a href="https://grammarly.com" target="_blank" class="tool" style="--tc:#4ade80"><div style="display:flex;gap:9px;align-items:center"><div class="ti">✅</div><div><div class="tn">Grammarly</div><div class="tm">Grammarly</div></div></div><div class="td">Corrección en tiempo real en el navegador. <strong>Imprescindible si escribís en inglés.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 12/mes</span></div></a>
-<a href="https://wordtune.com" target="_blank" class="tool" style="--tc:#f472b6"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🔄</div><div><div class="tn">Wordtune</div><div class="tm">AI21 Labs</div></div></div><div class="td">Reescribe frases mejorando el estilo. <strong>Para cuando sabés lo que querés decir pero no cómo.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 10/mes</span></div></a>
-<a href="https://writesonic.com" target="_blank" class="tool" style="--tc:#fbbf24"><div style="display:flex;gap:9px;align-items:center"><div class="ti">⚡</div><div><div class="tn">WriteSonic</div><div class="tm">WriteSonic</div></div></div><div class="td">Artículos, emails, landing pages. Con acceso a internet. <strong>El más rápido para generar volumen.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 16/mes</span></div></a>
-<a href="https://hemingwayapp.com" target="_blank" class="tool" style="--tc:#818cf8"><div style="display:flex;gap:9px;align-items:center"><div class="ti">📝</div><div><div class="tn">Hemingway Editor</div><div class="tm">Hemingway</div></div></div><div class="td">Marca frases complejas y voz pasiva. <strong>La app que fuerza a escribir simple y claro.</strong></div><div class="tt"><span class="tag tg">Gratis online</span></div></a>
-<a href="https://quillbot.com" target="_blank" class="tool" style="--tc:#4ade80"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🦜</div><div><div class="tn">Quillbot</div><div class="tm">Quillbot</div></div></div><div class="td">Parafraseo, resumen y corrección gramatical. <strong>Para reformular sin cambiar el significado.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 8/mes</span></div></a>
-</div>
+  <div class="sec-title">Redacción y escritura</div>
+  <div class="sec-sub">Para escribir mejor, más rápido y sin errores. <em>Del copy publicitario al informe corporativo.</em></div>
+
+  <a href="https://copy.ai" target="_blank" class="tool-card" style="--tc:#00d4ff">
+    <div class="tool-header"><div class="tool-ico">✒️</div><div><div class="tool-nombre">Copy.ai</div><div class="tool-maker">Copy.ai · El especialista en copy</div></div></div>
+    <div class="tool-slogan">"90 plantillas de copy para cada situación de marketing. El email de ventas, el post de Instagram, la descripción del producto. Todo ya pensado."</div>
+    <div class="tool-body">
+      Específicamente diseñado para copy de marketing. No es un chatbot general: es una herramienta con flujos de trabajo pensados para cada tipo de texto comercial. Para quienes necesitan producir mucho contenido de marketing rápido.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 36/mes</span></div>
+  </a>
+
+  <a href="https://grammarly.com" target="_blank" class="tool-card" style="--tc:#4ade80">
+    <div class="tool-header"><div class="tool-ico">✅</div><div><div class="tool-nombre">Grammarly</div><div class="tool-maker">Grammarly · El corrector en tiempo real</div></div></div>
+    <div class="tool-slogan">"Se instala en el navegador y corrige mientras escribís. En cualquier campo de texto, en cualquier sitio web."</div>
+    <div class="tool-body">
+      Corrección de gramática, estilo y tono en inglés. Detecta no solo errores gramaticales sino también oraciones confusas, tono inapropiado para el contexto y sugerencias de reformulación.
+      <br><br>
+      <strong>Para quienes escriben en inglés:</strong> imprescindible. Para quienes escriben en español, las opciones son más limitadas aunque mejorando.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 12/mes Premium</span></div>
+  </a>
+
+  <a href="https://wordtune.com" target="_blank" class="tool-card" style="--tc:#f472b6">
+    <div class="tool-header"><div class="tool-ico">🔄</div><div><div class="tool-nombre">Wordtune</div><div class="tool-maker">AI21 Labs · El reformulador</div></div></div>
+    <div class="tool-slogan">"Para cuando sabés lo que querés decir pero no encontrás la forma de decirlo bien. Reescribe sin cambiar el significado."</div>
+    <div class="tool-body">
+      Seleccionás cualquier frase y te da múltiples versiones reformuladas manteniendo la idea. Puede hacer una oración más formal, más casual, más corta o más elaborada. Muy útil para escritores que quieren un segundo criterio.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 10/mes</span></div>
+  </a>
+
+  <a href="https://writesonic.com" target="_blank" class="tool-card" style="--tc:#fbbf24">
+    <div class="tool-header"><div class="tool-ico">⚡</div><div><div class="tool-nombre">WriteSonic</div><div class="tool-maker">WriteSonic · El de volumen</div></div></div>
+    <div class="tool-slogan">"Para quien necesita producir mucho contenido rápido. Con acceso a internet para información actualizada."</div>
+    <div class="tool-body">
+      Artículos de blog, copies de ads, emails, landing pages. Con Chatsonic (similar a ChatGPT pero con acceso a internet) integrado. El más orientado a quienes necesitan volumen de contenido escrito de forma constante.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 16/mes</span></div>
+  </a>
+
+  <a href="https://quillbot.com" target="_blank" class="tool-card" style="--tc:#818cf8">
+    <div class="tool-header"><div class="tool-ico">🦜</div><div><div class="tool-nombre">Quillbot</div><div class="tool-maker">Quillbot · El académico</div></div></div>
+    <div class="tool-slogan">"Parafrasea, resume y corrige. Muy usado en el ámbito académico para reformular sin cambiar el significado."</div>
+    <div class="tool-body">
+      Herramienta de parafraseo con diferentes modos: estándar, fluido, formal, creativo. También tiene resumen de textos largos y corrección gramatical. El más usado por estudiantes universitarios.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 8/mes</span></div>
+  </a>
 </div>
 
-<!-- PRESENTACIONES -->
+<!-- ═══ PRESENTACIONES ═══ -->
 <div class="section" id="presentaciones">
-<div class="sec-title">Presentaciones con IA</div>
-<div class="sec-sub">De un párrafo a 15 slides en 30 segundos. <em>El PowerPoint murió. Bienvenidos a la nueva era.</em></div>
-<div class="tools-grid">
-<a href="https://gamma.app" target="_blank" class="tool full" style="--tc:#818cf8"><div class="ti">⚡</div><div class="tr"><div class="tn">Gamma</div><div class="tm">Gamma · El más rápido del mercado</div><div class="td" style="margin-top:5px">Escribís un párrafo, elegís estilo, en 30 segundos tenés 15 slides con contenido, diseño e imágenes. <strong>La presentación para mañana, lista en 15 minutos.</strong></div><div class="tt" style="margin-top:6px"><span class="tag tf">Freemium</span><span class="tag ti2">USD 8/mes</span></div></div></a>
-<a href="https://tome.app" target="_blank" class="tool" style="--tc:#f472b6"><div style="display:flex;gap:9px;align-items:center"><div class="ti">📖</div><div><div class="tn">Tome</div><div class="tm">Tome</div></div></div><div class="td">Presentaciones con narrativa cinematográfica. <strong>Más storytelling que slides. Ideal para pitch decks.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 16/mes</span></div></a>
-<a href="https://www.beautiful.ai" target="_blank" class="tool" style="--tc:#4ade80"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🌟</div><div><div class="tn">Beautiful.ai</div><div class="tm">Beautiful.ai</div></div></div><div class="td">Slides que se diseñan solos al cambiar el contenido. <strong>PowerPoint sin pelear con el diseño.</strong></div><div class="tt"><span class="tag tp">USD 12/mes</span></div></a>
-<a href="https://simplified.com" target="_blank" class="tool" style="--tc:#fbbf24"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🎯</div><div><div class="tn">Simplified</div><div class="tm">Simplified</div></div></div><div class="td">Diseño, texto, video y presentaciones en una plataforma. <strong>La opción más completa todo en uno.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 12/mes</span></div></a>
-<a href="https://www.synthesia.io" target="_blank" class="tool" style="--tc:#c084fc"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🎬</div><div><div class="tn">Synthesia</div><div class="tm">Synthesia</div></div></div><div class="td">Presentaciones en video con avatar de IA que narra el contenido. <strong>Slides convertidas en video automáticamente.</strong></div><div class="tt"><span class="tag tp">USD 22/mes</span></div></a>
-<a href="https://www.canva.com/presentations/" target="_blank" class="tool" style="--tc:#00c4cc"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🎨</div><div><div class="tn">Canva Presentations</div><div class="tm">Canva</div></div></div><div class="td">Magic Design genera la presentación desde un texto. <strong>Si ya usás Canva, no necesitás otra herramienta.</strong></div><div class="tt"><span class="tag tf">Freemium</span></div></a>
-</div>
+  <div class="sec-title">Presentaciones con IA</div>
+  <div class="sec-sub">De un párrafo a 15 slides en 30 segundos. <em>La presentación para mañana, lista hoy.</em></div>
+
+  <a href="https://gamma.app" target="_blank" class="tool-card" style="--tc:#818cf8">
+    <div class="tool-header"><div class="tool-ico">⚡</div><div><div class="tool-nombre">Gamma</div><div class="tool-maker">Gamma · El más rápido</div></div></div>
+    <div class="tool-slogan">"Describís lo que necesitás en un párrafo, elegís el estilo, y en 30 segundos tenés 15 slides con contenido, diseño e imágenes generadas. Todo."</div>
+    <div class="tool-body">
+      El punto de entrada ideal para presentaciones con IA. No requiere ningún conocimiento de diseño. El resultado no es el más elegante del mercado pero es funcional, rápido y bien organizado.
+      <br><br>
+      <strong>Diferencial:</strong> las presentaciones de Gamma son páginas web interactivas, no solo slides estáticas. Se pueden embeber en sitios web y se actualizan en tiempo real.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 8/mes</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> cualquiera que necesite una presentación rápida sin complicaciones.</div>
+  </a>
+
+  <a href="https://tome.app" target="_blank" class="tool-card" style="--tc:#f472b6">
+    <div class="tool-header"><div class="tool-ico">📖</div><div><div class="tool-nombre">Tome</div><div class="tool-maker">Tome · El narrativo</div></div></div>
+    <div class="tool-slogan">"Para presentaciones que cuentan una historia, no solo muestran información. El favorito para pitch decks de startups."</div>
+    <div class="tool-body">
+      Más storytelling que slides tradicionales. El diseño es cinematográfico y fluye como una narrativa. Especialmente bueno para presentar proyectos e ideas donde la historia importa tanto como los datos.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 16/mes</span></div>
+  </a>
+
+  <a href="https://www.beautiful.ai" target="_blank" class="tool-card" style="--tc:#4ade80">
+    <div class="tool-header"><div class="tool-ico">🌟</div><div><div class="tool-nombre">Beautiful.ai</div><div class="tool-maker">Beautiful.ai · El que se diseña solo</div></div></div>
+    <div class="tool-slogan">"Cada vez que cambiás el contenido, el slide se rediseña solo para que quede bien. PowerPoint sin pelear con el diseño."</div>
+    <div class="tool-body">
+      Las plantillas de Beautiful.ai son "inteligentes": se adaptan automáticamente cuando agregás o sacás contenido. No más slides deformes porque agregaste una bala más de lo que entraba.
+    </div>
+    <div class="tool-tags"><span class="tag-pago">USD 12/mes</span></div>
+  </a>
+
+  <a href="https://simplified.com" target="_blank" class="tool-card" style="--tc:#fbbf24">
+    <div class="tool-header"><div class="tool-ico">🎯</div><div><div class="tool-nombre">Simplified</div><div class="tool-maker">Simplified · El todo en uno</div></div></div>
+    <div class="tool-slogan">"Diseño, texto, video y presentaciones en una sola plataforma. Para quien no quiere tener 10 herramientas distintas."</div>
+    <div class="tool-body">
+      Suite completa con IA generativa integrada para diseño, redacción y video. Si buscás una sola plataforma que cubra la mayoría de las necesidades de contenido, Simplified es una opción seria.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 12/mes</span></div>
+  </a>
 </div>
 
-<!-- REDES SOCIALES -->
+<!-- ═══ REDES SOCIALES ═══ -->
 <div class="section" id="rrss">
-<div class="sec-title">IA para redes sociales</div>
-<div class="sec-sub">Las que gestionan, programan y generan contenido. <em>Para hacer en 2 horas lo que antes llevaba una semana.</em></div>
-<div class="tools-grid">
-<a href="https://sproutsocial.com" target="_blank" class="tool" style="--tc:#4ade80"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🌱</div><div><div class="tn">Sprout Social</div><div class="tm">Sprout Social</div></div></div><div class="td">Gestión completa: programación, análisis, escucha social. <strong>El estándar para agencias profesionales.</strong></div><div class="tt"><span class="tag tp">USD 249/mes</span></div></a>
-<a href="https://emplifi.io" target="_blank" class="tool" style="--tc:#818cf8"><div style="display:flex;gap:9px;align-items:center"><div class="ti">📊</div><div><div class="tn">Emplifi</div><div class="tm">Emplifi</div></div></div><div class="td">Suite para marcas. Análisis de competencia, benchmarking. <strong>Para múltiples cuentas y mercados.</strong></div><div class="tt"><span class="tag tp">Enterprise</span></div></a>
-<a href="https://www.lately.ai" target="_blank" class="tool" style="--tc:#fbbf24"><div style="display:flex;gap:9px;align-items:center"><div class="ti">⏰</div><div><div class="tn">Lately AI</div><div class="tm">Lately</div></div></div><div class="td">Convierte un video largo en docenas de posts automáticamente. <strong>El repurposing de contenido automatizado.</strong></div><div class="tt"><span class="tag tp">USD 49/mes</span></div></a>
-<a href="https://www.brandwatch.com" target="_blank" class="tool" style="--tc:#f87171"><div style="display:flex;gap:9px;align-items:center"><div class="ti">👁️</div><div><div class="tn">Brandwatch</div><div class="tm">Brandwatch</div></div></div><div class="td">Escucha social avanzada. Análisis de sentimiento, alertas. <strong>Para gestión de reputación y crisis.</strong></div><div class="tt"><span class="tag tp">Enterprise</span></div></a>
-<a href="https://buffer.com" target="_blank" class="tool" style="--tc:#00d4ff"><div style="display:flex;gap:9px;align-items:center"><div class="ti">📅</div><div><div class="tn">Buffer</div><div class="tm">Buffer</div></div></div><div class="td">Programación en todas las redes. IA que sugiere horarios y variantes. <strong>La más accesible para emprendedores.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 6/mes</span></div></a>
-<a href="https://hootsuite.com" target="_blank" class="tool" style="--tc:#c084fc"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🦉</div><div><div class="tn">Hootsuite</div><div class="tm">Hootsuite</div></div></div><div class="td">El gestor más veterano. OwlyWriter IA genera captions. <strong>Muy completo para equipos.</strong></div><div class="tt"><span class="tag tp">USD 99/mes</span></div></a>
-</div>
+  <div class="sec-title">IA para redes sociales</div>
+  <div class="sec-sub">Las que gestionan, programan y generan contenido. <em>Para hacer en 2 horas lo que antes llevaba una semana.</em></div>
+
+  <a href="https://buffer.com" target="_blank" class="tool-card" style="--tc:#00d4ff">
+    <div class="tool-header"><div class="tool-ico">📅</div><div><div class="tool-nombre">Buffer</div><div class="tool-maker">Buffer · La más accesible</div></div></div>
+    <div class="tool-slogan">"Programás todos tus posts de la semana en una hora del lunes. La IA sugiere los mejores horarios y genera variantes del copy."</div>
+    <div class="tool-body">
+      Programación de posts en todas las redes sociales con IA que analiza cuándo tu audiencia está más activa y sugiere el mejor horario para cada red. Tiene generador de captions con IA integrado. La más accesible para emprendedores y creadores independientes.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 6/mes Essentials</span></div>
+  </a>
+
+  <a href="https://sproutsocial.com" target="_blank" class="tool-card" style="--tc:#4ade80">
+    <div class="tool-header"><div class="tool-ico">🌱</div><div><div class="tool-nombre">Sprout Social</div><div class="tool-maker">Sprout Social · El de las agencias</div></div></div>
+    <div class="tool-slogan">"Gestión completa de redes para equipos: programación, análisis, escucha social, reportes. El estándar de la industria para agencias."</div>
+    <div class="tool-body">
+      Suite completa que incluye publicación, análisis, escucha de marca y atención al cliente en redes. La IA analiza el sentimiento de los comentarios, sugiere contenido y genera reportes automáticos. Para agencias y marcas con equipos dedicados a redes.
+    </div>
+    <div class="tool-tags"><span class="tag-pago">USD 249/mes Standard</span></div>
+  </a>
+
+  <a href="https://www.lately.ai" target="_blank" class="tool-card" style="--tc:#fbbf24">
+    <div class="tool-header"><div class="tool-ico">⏰</div><div><div class="tool-nombre">Lately AI</div><div class="tool-maker">Lately · El repurposing automático</div></div></div>
+    <div class="tool-slogan">"Subís un video de una hora o un artículo largo. La IA lo convierte en 30 posts para LinkedIn, Twitter e Instagram. Automáticamente."</div>
+    <div class="tool-body">
+      El repurposing de contenido automatizado. Para quienes producen contenido largo (podcasts, webinars, artículos) y quieren maximizar el alcance convirtiendo ese contenido en múltiples piezas más cortas para redes.
+    </div>
+    <div class="tool-tags"><span class="tag-pago">USD 49/mes</span></div>
+  </a>
+
+  <a href="https://www.brandwatch.com" target="_blank" class="tool-card" style="--tc:#f87171">
+    <div class="tool-header"><div class="tool-ico">👁️</div><div><div class="tool-nombre">Brandwatch</div><div class="tool-maker">Brandwatch · La escucha social</div></div></div>
+    <div class="tool-slogan">"Ve todo lo que dicen de tu marca en internet, en tiempo real. Para saber cuándo hay que apagar un incendio antes de que sea un incendio."</div>
+    <div class="tool-body">
+      Monitoreo avanzado de marca en todas las plataformas. Análisis de sentimiento con IA, alertas de crisis, tendencias del mercado, análisis de la competencia. Para empresas que toman la gestión de reputación online en serio.
+    </div>
+    <div class="tool-tags"><span class="tag-pago">Enterprise</span></div>
+  </a>
 </div>
 
-<!-- CHATBOTS -->
+<!-- ═══ CHATBOTS ═══ -->
 <div class="section" id="chatbots">
-<div class="sec-title">Chatbots e IA conversacional</div>
-<div class="sec-sub">Para atención al cliente y automatización. <em>Los que trabajan 24/7 sin quejarse.</em></div>
-<div class="tools-grid">
-<a href="https://dante-ai.com" target="_blank" class="tool" style="--tc:#f87171"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🤖</div><div><div class="tn">Dante AI</div><div class="tm">Dante AI</div></div></div><div class="td">Tu propio chatbot entrenado con tus documentos. <strong>Instalás en tu web y responde con tu información.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 9/mes</span></div></a>
-<a href="https://air.ai" target="_blank" class="tool" style="--tc:#818cf8"><div style="display:flex;gap:9px;align-items:center"><div class="ti">📞</div><div><div class="tn">Air AI</div><div class="tm">Air AI</div></div></div><div class="td">Hace llamadas telefónicas de ventas y soporte autónomamente. <strong>El agente que trabaja 24/7.</strong></div><div class="tt"><span class="tag tp">Contactar ventas</span></div></a>
-<a href="https://www.chatsimple.ai" target="_blank" class="tool" style="--tc:#4ade80"><div style="display:flex;gap:9px;align-items:center"><div class="ti">💬</div><div><div class="tn">ChatSimple</div><div class="tm">ChatSimple</div></div></div><div class="td">Chatbot para sitios web fácil de instalar. Captura leads, responde FAQs. <strong>Para PYMES sin complejidad técnica.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 29/mes</span></div></a>
-<a href="https://zapier.com/ai" target="_blank" class="tool" style="--tc:#fbbf24"><div style="display:flex;gap:9px;align-items:center"><div class="ti">⚡</div><div><div class="tn">Zapier AI</div><div class="tm">Zapier</div></div></div><div class="td">Conecta apps entre sí con IA. Si pasa X en Gmail hace Y en Slack. <strong>El pegamento inteligente entre tus apps.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 20/mes</span></div></a>
-<a href="https://tidio.com" target="_blank" class="tool" style="--tc:#c084fc"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🎯</div><div><div class="tn">Tidio</div><div class="tm">Tidio</div></div></div><div class="td">Chat en vivo + chatbot IA para e-commerce. Resuelve el 70% de consultas solo. <strong>Para tiendas online.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 19/mes</span></div></a>
-<a href="https://www.intercom.com" target="_blank" class="tool" style="--tc:#00d4ff"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🌐</div><div><div class="tn">Intercom Fin</div><div class="tm">Intercom</div></div></div><div class="td">Chatbot de soporte avanzado con GPT-4. <strong>Para empresas con soporte técnico serio.</strong></div><div class="tt"><span class="tag tp">USD 74/mes</span></div></a>
-</div>
+  <div class="sec-title">Chatbots e IA conversacional</div>
+  <div class="sec-sub">Para atención al cliente y automatización de procesos. <em>Los que trabajan 24/7 sin quejarse, sin pedirte aumento y sin cometer errores humanos.</em></div>
+
+  <a href="https://dante-ai.com" target="_blank" class="tool-card" style="--tc:#f87171">
+    <div class="tool-header"><div class="tool-ico">🤖</div><div><div class="tool-nombre">Dante AI</div><div class="tool-maker">Dante AI · Tu chatbot con tu información</div></div></div>
+    <div class="tool-slogan">"Subís tus documentos, catálogos o FAQs. El chatbot los aprende y responde las preguntas de tus clientes con tu información exacta."</div>
+    <div class="tool-body">
+      Creás tu propio chatbot entrenado con tus documentos. Lo instalás en tu web con una línea de código. Los clientes le preguntan y responde usando únicamente la información que vos le diste. Sin inventar, sin salirse del tema.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 9/mes</span></div>
+    <div class="tool-ideal"><strong>Ideal para:</strong> cualquier negocio que recibe las mismas preguntas de siempre por mail o WhatsApp.</div>
+  </a>
+
+  <a href="https://zapier.com/ai" target="_blank" class="tool-card" style="--tc:#fbbf24">
+    <div class="tool-header"><div class="tool-ico">⚡</div><div><div class="tool-nombre">Zapier AI</div><div class="tool-maker">Zapier · El pegamento inteligente</div></div></div>
+    <div class="tool-slogan">"Conecta todas tus apps entre sí con IA. Cuando pasa X en Gmail, hace Y en Slack y Z en tu CRM. Sin escribir código, sin contratar un programador."</div>
+    <div class="tool-body">
+      La automatización de procesos más accesible del mercado. Con IA integrada que ayuda a construir los flujos y los ejecuta automáticamente. Para equipos que pierden tiempo en tareas manuales repetitivas entre distintas aplicaciones.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 20/mes</span></div>
+  </a>
+
+  <a href="https://www.chatsimple.ai" target="_blank" class="tool-card" style="--tc:#4ade80">
+    <div class="tool-header"><div class="tool-ico">💬</div><div><div class="tool-nombre">ChatSimple</div><div class="tool-maker">ChatSimple · Para PYMES sin complejidad</div></div></div>
+    <div class="tool-slogan">"Chatbot en tu web en 5 minutos sin saber programar. Captura leads, responde preguntas y califica clientes mientras dormís."</div>
+    <div class="tool-body">
+      El chatbot más fácil de implementar para negocios medianos y pequeños. Instalación en minutos, sin técnicos, con integración directa a WhatsApp Business. Ideal para negocios que reciben consultas fuera del horario comercial.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 29/mes</span></div>
+  </a>
+
+  <a href="https://tidio.com" target="_blank" class="tool-card" style="--tc:#c084fc">
+    <div class="tool-header"><div class="tool-ico">🎯</div><div><div class="tool-nombre">Tidio</div><div class="tool-maker">Tidio · Para e-commerce</div></div></div>
+    <div class="tool-slogan">"Lyro IA resuelve el 70% de las consultas de tus clientes solo. El 30% restante lo pasás a un humano. El equipo de soporte se libera para lo que importa."</div>
+    <div class="tool-body">
+      Chat en vivo más chatbot IA especialmente pensado para tiendas online. Se integra con Shopify, WooCommerce y otras plataformas. Rastrea el comportamiento del visitante y puede intervenir proactivamente cuando detecta que alguien está por abandonar el carrito.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 19/mes</span></div>
+  </a>
 </div>
 
-<!-- PRODUCTIVIDAD -->
+<!-- ═══ PRODUCTIVIDAD ═══ -->
 <div class="section" id="productividad">
-<div class="sec-title">Productividad y trabajo</div>
-<div class="sec-sub">Las que multiplican lo que podés hacer solo. <em>La IA integrada en el trabajo diario.</em></div>
-<div class="tools-grid">
-<a href="https://github.com/features/copilot" target="_blank" class="tool" style="--tc:#4ade80"><div style="display:flex;gap:9px;align-items:center"><div class="ti">💻</div><div><div class="tn">GitHub Copilot</div><div class="tm">Microsoft/GitHub</div></div></div><div class="td">Completa código, escribe funciones, genera tests. <strong>55% más rápido medido por GitHub.</strong></div><div class="tt"><span class="tag tp">USD 10/mes</span></div></a>
-<a href="https://cursor.com" target="_blank" class="tool" style="--tc:#818cf8"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🖱️</div><div><div class="tn">Cursor</div><div class="tm">Cursor AI</div></div></div><div class="td">IDE completo con IA. Editás el código conversando. <strong>El preferido de devs que quieren IA profunda.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 20/mes</span></div></a>
-<a href="https://notion.so/ai" target="_blank" class="tool" style="--tc:#fbbf24"><div style="display:flex;gap:9px;align-items:center"><div class="ti">📓</div><div><div class="tn">Notion AI</div><div class="tm">Notion</div></div></div><div class="td">Preguntale a tus notas, resumí páginas, generá contenido. <strong>La memoria organizacional perfecta.</strong></div><div class="tt"><span class="tag tp">USD 8/mes extra</span></div></a>
-<a href="https://taskade.com" target="_blank" class="tool" style="--tc:#c084fc"><div style="display:flex;gap:9px;align-items:center"><div class="ti">✅</div><div><div class="tn">Taskade</div><div class="tm">Taskade</div></div></div><div class="td">Gestión de tareas con agentes IA. <strong>Los agentes investigan y organizan solos dentro de tus proyectos.</strong></div><div class="tt"><span class="tag tf">Freemium</span><span class="tag ti2">USD 8/mes</span></div></a>
-<a href="https://fathom.video" target="_blank" class="tool" style="--tc:#f87171"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🐋</div><div><div class="tn">Fathom</div><div class="tm">Fathom</div></div></div><div class="td">Graba reuniones, transcribe y resume. El resumen llega al email al terminar. <strong>Completamente gratis.</strong></div><div class="tt"><span class="tag tg">Gratis individual</span></div></a>
-<a href="https://gamma.app" target="_blank" class="tool" style="--tc:#00d4ff"><div style="display:flex;gap:9px;align-items:center"><div class="ti">⚡</div><div><div class="tn">Gamma</div><div class="tm">Gamma</div></div></div><div class="td">Presentaciones completas en 30 segundos desde un párrafo. <strong>La presentación de mañana, hoy.</strong></div><div class="tt"><span class="tag tf">Freemium</span></div></a>
-</div>
+  <div class="sec-title">IA para trabajo y productividad</div>
+  <div class="sec-sub">Las que multiplican lo que podés hacer solo. <em>No reemplazan el trabajo: lo transforman.</em></div>
+
+  <a href="https://github.com/features/copilot" target="_blank" class="tool-card" style="--tc:#4ade80">
+    <div class="tool-header"><div class="tool-ico">💻</div><div><div class="tool-nombre">GitHub Copilot</div><div class="tool-maker">Microsoft · El asistente de programación</div></div></div>
+    <div class="tool-slogan">"Vive dentro del editor de código. Completa funciones enteras, escribe tests, explica errores. Los programadores que lo usan no entienden cómo trabajaban antes."</div>
+    <div class="tool-body">
+      El asistente de programación más usado del mercado. GitHub midió que los programadores con Copilot completan tareas <strong>55% más rápido.</strong> No los reemplaza pero los hace significativamente más productivos.
+      <br><br>
+      <strong>Alternativas:</strong> Cursor (IDE completo con IA, muy popular en 2024), Codeium (gratis).
+    </div>
+    <div class="tool-tags"><span class="tag-pago">USD 10/mes</span></div>
+  </a>
+
+  <a href="https://notion.so/ai" target="_blank" class="tool-card" style="--tc:#fbbf24">
+    <div class="tool-header"><div class="tool-ico">📓</div><div><div class="tool-nombre">Notion AI</div><div class="tool-maker">Notion · La memoria organizacional</div></div></div>
+    <div class="tool-slogan">"Tenés 500 páginas de notas de trabajo. Le preguntás 'cuánto costaba el proveedor X' y te responde con la fuente exacta. La memoria perfecta."</div>
+    <div class="tool-body">
+      IA integrada en Notion que puede resumir páginas, generar contenido, traducir y — lo más poderoso — <strong>responder preguntas sobre tus propias notas con citas exactas.</strong> Para equipos que ya usan Notion, el valor es inmediato.
+    </div>
+    <div class="tool-tags"><span class="tag-pago">USD 8/mes extra sobre Notion</span></div>
+  </a>
+
+  <a href="https://fathom.video" target="_blank" class="tool-card" style="--tc:#818cf8">
+    <div class="tool-header"><div class="tool-ico">🐋</div><div><div class="tool-nombre">Fathom</div><div class="tool-maker">Fathom · El asistente de reuniones gratis</div></div></div>
+    <div class="tool-slogan">"Entra a tus reuniones de Zoom, escucha, transcribe y te manda el resumen al email cuando termina. Completamente gratis para uso individual."</div>
+    <div class="tool-body">
+      Graba reuniones, transcribe y resume automáticamente. Al terminar la reunión tenés: transcripción completa, resumen ejecutivo y lista de tareas asignadas. Sin pagar nada para uso personal.
+      <br><br>
+      <em>— "Nunca más perderse una reunión por tomar mal las notas."</em>
+    </div>
+    <div class="tool-tags"><span class="tag-gratis">Gratis individual</span></div>
+  </a>
+
+  <a href="https://taskade.com" target="_blank" class="tool-card" style="--tc:#c084fc">
+    <div class="tool-header"><div class="tool-ico">✅</div><div><div class="tool-nombre">Taskade</div><div class="tool-maker">Taskade · Los agentes que trabajan solos</div></div></div>
+    <div class="tool-slogan">"Tiene agentes de IA que investigan, redactan y organizan tareas dentro de tus proyectos. El gestor de proyectos del futuro."</div>
+    <div class="tool-body">
+      Gestión de tareas con agentes de IA integrados. Los agentes pueden investigar un tema, redactar documentos, organizar información y completar subtareas de forma autónoma dentro de tus proyectos. El primer paso hacia los flujos de trabajo totalmente automatizados.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span><span class="tag-info">USD 8/mes</span></div>
+  </a>
 </div>
 
-<!-- INVESTIGACIÓN -->
-<div class="section" id="investigacion">
-<div class="sec-title">Investigación y conocimiento</div>
-<div class="sec-sub">Las que convierten montañas de información en conocimiento accionable.</div>
-<div class="tools-grid">
-<a href="https://notebooklm.google.com" target="_blank" class="tool full" style="--tc:#fbbf24"><div class="ti">🎙️</div><div class="tr"><div class="tn">NotebookLM</div><div class="tm">Google · El más impresionante de 2024</div><div class="td" style="margin-top:5px">Subís tus documentos y genera un <strong>podcast de dos personas discutiendo y explicando el contenido</strong> con voces naturales. También responde preguntas citando la fuente exacta. La herramienta de estudio más revolucionaria del año. <strong>100% gratis.</strong></div><div class="tt" style="margin-top:6px"><span class="tag tg">Gratis</span></div></div></a>
-<a href="https://perplexity.ai" target="_blank" class="tool" style="--tc:#0070f3"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🔍</div><div><div class="tn">Perplexity</div><div class="tm">Perplexity AI</div></div></div><div class="td">Busca y cita cada dato. <strong>El buscador que lee los resultados por vos.</strong></div><div class="tt"><span class="tag tf">Freemium</span></div></a>
-<a href="https://elicit.com" target="_blank" class="tool" style="--tc:#c084fc"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🔬</div><div><div class="tn">Elicit</div><div class="tm">Elicit</div></div></div><div class="td">Papers científicos resumidos. Extrae datos de múltiples papers para comparar. <strong>Investigación académica seria.</strong></div><div class="tt"><span class="tag tf">Freemium</span></div></a>
-<a href="https://www.researchrabbit.ai" target="_blank" class="tool" style="--tc:#f87171"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🐇</div><div><div class="tn">Research Rabbit</div><div class="tm">Research Rabbit</div></div></div><div class="td">Mapa visual de cómo los papers se relacionan. <strong>Para no perderse papers clave.</strong></div><div class="tt"><span class="tag tg">Gratis</span></div></a>
-<a href="https://glasp.co" target="_blank" class="tool" style="--tc:#4ade80"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🖍️</div><div><div class="tn">Glasp</div><div class="tm">Glasp</div></div></div><div class="td">Resalta artículos web y PDFs. IA que resume y conecta tus highlights. <strong>Para construir tu base de conocimiento.</strong></div><div class="tt"><span class="tag tg">Gratis</span></div></a>
-<a href="https://harpa.ai" target="_blank" class="tool" style="--tc:#818cf8"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🕵️</div><div><div class="tn">HARPA AI</div><div class="tm">HARPA</div></div></div><div class="td">Extensión de Chrome que lee y resume cualquier página. Extrae datos, monitorea precios. <strong>La IA dentro del navegador.</strong></div><div class="tt"><span class="tag tf">Freemium</span></div></a>
-<a href="https://www.wolframalpha.com" target="_blank" class="tool" style="--tc:#fbbf24"><div style="display:flex;gap:9px;align-items:center"><div class="ti">🧮</div><div><div class="tn">Wolfram Alpha</div><div class="tm">Wolfram</div></div></div><div class="td">Motor computacional exacto. Matemáticas, física, química. <strong>Donde ChatGPT puede equivocarse, Wolfram siempre es exacto.</strong></div><div class="tt"><span class="tag tf">Freemium</span></div></a>
-</div>
+<!-- ═══ ESTUDIO ═══ -->
+<div class="section" id="estudio">
+  <div class="sec-title">IA para estudiar e investigar</div>
+  <div class="sec-sub">Las que hacen que aprender sea más eficiente. <em>Y las que podrían hacer trampa — con una advertencia honesta.</em></div>
+
+  <a href="https://notebooklm.google.com" target="_blank" class="tool-card" style="--tc:#fbbf24">
+    <div class="tool-header"><div class="tool-ico">🎙️</div><div><div class="tool-nombre">NotebookLM</div><div class="tool-maker">Google · El más revolucionario de 2024</div></div></div>
+    <div class="tool-slogan">"Subís tus apuntes y te genera un podcast de dos personas discutiéndolos con voces naturales. Para escuchar mientras manejás, hacés ejercicio o lavás los platos."</div>
+    <div class="tool-body">
+      Subís documentos (PDFs, notas, artículos) y NotebookLM responde preguntas sobre ellos citando la fuente exacta, genera resúmenes y preguntas de estudio.
+      <br><br>
+      <strong>El feature estrella:</strong> Audio Overview — genera un podcast de dos personas discutiendo y explicando el contenido de tus documentos con voces naturales, debates y ejemplos. Completamente gratis.
+      <br><br>
+      <em>— "Subí mi tesis de 80 páginas y en 5 minutos tenía un podcast de 20 minutos con dos personas debatiéndola. Gratis."</em>
+    </div>
+    <div class="tool-tags"><span class="tag-gratis">Completamente gratis</span></div>
+  </a>
+
+  <a href="https://elicit.com" target="_blank" class="tool-card" style="--tc:#c084fc">
+    <div class="tool-header"><div class="tool-ico">🔬</div><div><div class="tool-nombre">Elicit</div><div class="tool-maker">Elicit · Google Scholar con cerebro</div></div></div>
+    <div class="tool-slogan">"Buscás un tema de investigación y te devuelve los papers más relevantes con resúmenes automáticos. Ahorrás semanas de lectura."</div>
+    <div class="tool-body">
+      Busca papers científicos y los resume automáticamente. Puede extraer datos específicos de múltiples papers y hacer una tabla comparativa. Para tesis, monografías y cualquier investigación que requiera revisar literatura académica.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span></div>
+  </a>
+
+  <a href="https://www.wolframalpha.com" target="_blank" class="tool-card" style="--tc:#818cf8">
+    <div class="tool-header"><div class="tool-ico">🧮</div><div><div class="tool-nombre">Wolfram Alpha</div><div class="tool-maker">Wolfram · El matemático exacto</div></div></div>
+    <div class="tool-slogan">"Donde ChatGPT puede equivocarse en matemáticas complejas, Wolfram Alpha siempre es exacto. Son herramientas distintas para cosas distintas."</div>
+    <div class="tool-body">
+      No es un LLM: es un motor computacional. Resuelve matemáticas, física, química y estadística con resultados exactos y el proceso paso a paso.
+      <br><br>
+      <strong>La combinación ganadora:</strong> ChatGPT para entender el concepto → Wolfram Alpha para resolver el ejercicio exacto.
+    </div>
+    <div class="tool-tags"><span class="tag-freemium">Freemium</span></div>
+  </a>
+
+  <div class="card" style="--ca:#f87171">
+    <div class="card-head"><div class="card-name">La trampa del "haceme el trabajo"</div><span class="badge b-warn">Honestidad necesaria</span></div>
+    <div class="card-body">
+      Usar IA para que haga el trabajo práctico, la tesis o el parcial tiene dos víctimas: el sistema educativo y vos mismo.
+      <br><br>
+      <strong>Por qué te perjudica:</strong> aprendés a delegar el pensamiento pero no a pensar. En el trabajo real, el empleador espera que puedas hacer lo que el título dice. La IA puede escribir el parcial pero no puede aprender por vos.
+      <br><br>
+      <strong>El uso correcto:</strong> usar la IA para entender mejor, para verificar tu razonamiento, para explorar ángulos que no viste.
+      <br><em>— "La IA es el mejor tutor que existió. El peor atajo que existe. Depende de cómo la uses."</em>
+    </div>
+  </div>
 </div>
 
-<!-- PROMPTS -->
+<!-- ═══ PROMPTS ═══ -->
 <div class="section" id="prompts">
-<div class="sec-title">Cómo hablarle bien a la IA</div>
-<div class="sec-sub">La diferencia entre una respuesta mediocre y una excelente está en cómo preguntás.</div>
-<div class="ic" style="--ca:#818cf8"><h3>El principio fundamental</h3><p>La IA no lee tu mente. Si la pregunta es vaga, la respuesta es genérica. Si es específica con contexto claro, la respuesta es útil y precisa. <strong>Hablale como si le explicaras a una persona muy inteligente que no conoce tu situación.</strong></p></div>
-<div class="pc"><div class="pt">1. Dar contexto y rol</div><div class="pm">"Escribí un email para mi cliente"</div><div class="pb">"Soy consultor de marketing digital. Mi cliente es una PYME de indumentaria argentina. Escribí un email profesional pero cercano para proponer renovar nuestro contrato 6 meses más, mencionando: 40% más seguidores y ventas online duplicadas."</div><div class="pn">El contexto convierte una respuesta genérica en un email que podés usar directamente.</div></div>
-<div class="pc"><div class="pt">2. Pedir el formato exacto</div><div class="pm">"Explicame la inflación"</div><div class="pb">"Explicame qué es la inflación como si tuviera 12 años, con un ejemplo de Argentina. Máximo 3 párrafos. Al final agregá 2 preguntas que alguien haría al escuchar esto por primera vez."</div><div class="pn">Longitud, audiencia, ejemplos locales y el formato exacto.</div></div>
-<div class="pc"><div class="pt">3. Pedirle que piense paso a paso</div><div class="pm">"¿Debería aceptar este trabajo?"</div><div class="pb">"Tengo una oferta: [descripción]. Mi situación: [descripción]. Analizá paso a paso: pros, contras, preguntas que me ayuden a clarificar qué es más importante para mí, y tu perspectiva honesta."</div><div class="pn">El "paso a paso" fuerza razonamiento en lugar de respuesta por inercia.</div></div>
-<div class="pc"><div class="pt">4. Darle material y pedir múltiples versiones</div><div class="pm">"Resumí este texto"</div><div class="pb">"Abajo te pego mi contrato. Quiero: 1) Resumen de cláusulas importantes en lenguaje simple, 2) Cláusulas inusuales o desfavorables marcadas, 3) Preguntas para hacer al abogado. [TEXTO]"</div><div class="pn">Con material concreto + estructura pedida, el resultado es directamente usable.</div></div>
-<div class="tip tp-p"><strong>💡 Los atajos más útiles:</strong><br>
-• <strong>"Actuá como [rol]"</strong> → cambia completamente el tono y profundidad<br>
-• <strong>"Dame 3 versiones"</strong> → siempre mejor tener opciones para elegir<br>
-• <strong>"¿Qué me estoy perdiendo?"</strong> → pedile qué ángulo no consideró<br>
-• <strong>"Sé honesto aunque no sea lo que quiero escuchar"</strong> → las IAs son complacientes, esto las hace más útiles</div>
+  <div class="sec-title">Cómo hablarle bien a la IA</div>
+  <div class="sec-sub">La diferencia entre una respuesta mediocre y una excelente está en cómo preguntás. <em>La IA es tan buena como la pregunta que le hacés.</em></div>
+
+  <div class="card" style="--ca:#818cf8">
+    <div class="card-head"><div class="card-name">El principio fundamental</div><span class="badge b-mid">Empezá por acá</span></div>
+    <div class="card-body">
+      La IA no lee tu mente. Responde exactamente a lo que preguntás. Si la pregunta es vaga, la respuesta es genérica. Si es específica con contexto claro, la respuesta es útil y precisa.
+      <br><br>
+      <strong>El modelo mental correcto:</strong> no hablés con la IA como si fuera Google (palabras clave sueltas). Hablale como si le explicaras a una persona muy inteligente que no conoce nada de tu situación específica.
+    </div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-titulo">1. Dar contexto y rol</div>
+    <div class="prompt-malo">"Escribí un email para mi cliente"</div>
+    <div class="prompt-bueno">"Soy consultor de marketing digital. Mi cliente es una PYME de indumentaria femenina en Argentina. Escribí un email profesional pero cercano para proponerle renovar nuestro contrato 6 meses más, mencionando que logramos 40% más seguidores y ventas online duplicadas."</div>
+    <div class="prompt-nota">El contexto transforma una respuesta genérica en un email que podés usar directamente.</div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-titulo">2. Pedir el formato exacto</div>
+    <div class="prompt-malo">"Explicame la inflación"</div>
+    <div class="prompt-bueno">"Explicame qué es la inflación como si tuviera 12 años, con un ejemplo de Argentina. Máximo 3 párrafos cortos. Al final agregá 2 preguntas que podría hacer alguien que escucha esto por primera vez."</div>
+    <div class="prompt-nota">Longitud, audiencia, ejemplos locales y el formato exacto que necesitás.</div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-titulo">3. Pedirle que piense paso a paso</div>
+    <div class="prompt-malo">"¿Debería aceptar este trabajo?"</div>
+    <div class="prompt-bueno">"Tengo una oferta de trabajo: [descripción]. Mi situación actual: [descripción]. Analizá esto paso a paso: primero los pros, después los contras, después hacé preguntas que me ayuden a clarificar qué es lo más importante para mí, y por último dame tu perspectiva honesta."</div>
+    <div class="prompt-nota">El "paso a paso" fuerza a la IA a razonar en vez de responder por inercia.</div>
+  </div>
+
+  <div class="prompt-card">
+    <div class="prompt-titulo">4. Iterar y mejorar</div>
+    <div class="prompt-malo">Aceptar la primera respuesta y cerrar la ventana</div>
+    <div class="prompt-bueno">"Está bien pero quiero que sea más informal, que el segundo párrafo sea más corto y que el cierre incluya una pregunta al cliente para invitarlo a responder."</div>
+    <div class="prompt-nota">La IA recuerda toda la conversación. La primera respuesta es el borrador. Las siguientes son el refinamiento.</div>
+  </div>
+
+  <div class="tip tip-purple">
+    <strong>💡 Los atajos más útiles:</strong><br>
+    • <strong>"Actuá como [rol]"</strong> → "Actuá como un abogado explicándome este contrato" cambia completamente el tono y la profundidad.<br>
+    • <strong>"Dame 3 versiones"</strong> → para emails, títulos, ideas. Siempre tener opciones es mejor.<br>
+    • <strong>"¿Qué me estoy perdiendo?"</strong> → pedile qué ángulo no consideró o qué objeciones tendría alguien que no está de acuerdo.<br>
+    • <strong>"Sé honesto aunque no sea lo que quiero escuchar"</strong> → las IAs tienden a ser complacientes. Esta instrucción las hace más críticas y útiles.
+  </div>
 </div>
 
-<!-- FUTURO -->
+<!-- ═══ EL FUTURO ═══ -->
 <div class="section" id="futuro">
-<div class="sec-title">La IA y el futuro del trabajo</div>
-<div class="sec-sub">La pregunta que todos tienen pero pocos responden con honestidad.</div>
-<div class="ic" style="--ca:#818cf8"><h3>La respuesta honesta</h3><p>Sí, la IA va a cambiar la mayoría de los trabajos. No del modo apocalíptico, sino gradual y constante. La historia dice que cada revolución tecnológica eliminó trabajos y creó otros. La diferencia: esta es más rápida y afecta trabajos cognitivos que históricamente eran "seguros".<br><br><em>— "La IA no va a reemplazar a los humanos. Los humanos que usen IA van a reemplazar a los humanos que no la usen."</em></p></div>
+  <div class="sec-title">La IA y el futuro del trabajo</div>
+  <div class="sec-sub">La pregunta que todos tienen pero pocos se animan a responder con honestidad. <em>¿La IA va a reemplazar mi trabajo?</em></div>
 
-<div class="tr-c"><div class="tr-i">✍️</div><div><div class="tr-t">Redacción y contenido genérico</div><div class="tr-d">Artículos estándar, reportes rutinarios. <strong>La IA ya lo hace mejor para contenido genérico.</strong> Quien agrega perspectiva y experiencia real, no está en riesgo.</div><span class="trtg r">Alto riesgo</span></div></div>
-<div class="tr-c"><div class="tr-i">💻</div><div><div class="tr-t">Programación</div><div class="tr-d">El código rutinario lo genera la IA. <strong>Los programadores se convierten en directores de IA.</strong> La demanda no bajó: cambió el perfil.</div><span class="trtg e">Se transforma profundamente</span></div></div>
-<div class="tr-c"><div class="tr-i">🎨</div><div><div class="tr-t">Diseño gráfico</div><div class="tr-d">Los flyers simples los hace la IA. <strong>El diseñador con criterio estético produce el doble usando IA.</strong></div><span class="trtg e">Se transforma</span></div></div>
-<div class="tr-c"><div class="tr-i">⚕️</div><div><div class="tr-t">Medicina</div><div class="tr-d">La IA supera a radiólogos en detección de ciertos cánceres. Pero la medicina requiere empatía. <strong>El médico + IA supera al médico solo.</strong></div><span class="trtg s">Relativamente seguro</span></div></div>
-<div class="tr-c"><div class="tr-i">👷</div><div><div class="tr-t">Trabajo físico especializado</div><div class="tr-d">Plomeros, electricistas, mecánicos. La robótica en entornos no estructurados es difícil. <strong>El plomero está más seguro que el contador de declaraciones estándar.</strong></div><span class="trtg s">Seguro a mediano plazo</span></div></div>
-<div class="tr-c"><div class="tr-i">🚀</div><div><div class="tr-t">Trabajos nuevos que crea la IA</div><div class="tr-d"><strong>Prompt engineer, AI trainer, especialista en automatización.</strong> Igual que la PC creó al programador, la IA crea profesiones que en 2020 no tenían nombre.</div><span class="trtg n">Trabajo nuevo</span></div></div>
+  <div class="card" style="--ca:#818cf8">
+    <div class="card-head"><div class="card-name">La respuesta honesta</div><span class="badge b-mid">Sin verso</span></div>
+    <div class="card-body">
+      Sí, la IA va a cambiar la mayoría de los trabajos. No del modo apocalíptico que muestran las películas, sino de forma gradual pero constante.
+      <br><br>
+      <strong>Lo que la historia dice:</strong> cada revolución tecnológica eliminó trabajos y creó otros. La imprenta eliminó a los copistas. La industrialización eliminó artesanías. La computadora eliminó a los mecanógrafos. Pero cada vez el empleo total creció.
+      <br><br>
+      <strong>La diferencia con esta revolución:</strong> es más rápida que las anteriores y afecta trabajos cognitivos — los que históricamente eran "seguros". Por primera vez, las profesiones universitarias son tan vulnerables como las manuales.
+      <br><em>— "La IA no va a reemplazar a los humanos. Los humanos que usen IA van a reemplazar a los humanos que no la usen."</em>
+    </div>
+  </div>
 
-<div class="tip tp-g" style="margin-top:16px"><strong>💡 Qué hacer hoy:</strong><br>
-<strong>1.</strong> Aprender a usar las herramientas — no hay que ser experto, hay que saber cuál usar para qué.<br>
-<strong>2.</strong> Apostar a habilidades que la IA no tiene — empatía, liderazgo, pensamiento crítico.<br>
-<strong>3.</strong> Ser el que dirige la IA, no el que compite con ella.<br>
-<strong>4.</strong> Actualización continua — los modelos cambian cada 6 meses. Ya no es opcional.</div>
+  <div style="margin-top:20px;margin-bottom:14px"><div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:1px;">Trabajo por trabajo</div></div>
 
-<div class="ic" style="--ca:#c084fc;margin-top:14px"><h3>El timeline 2025–2030</h3><p>
-<strong>2025–2026:</strong> Agentes IA autónomos que gestionan tareas completas solos.<br>
-<strong>2026–2027:</strong> Lentes AR con IA. El celular empieza a quedar obsoleto.<br>
-<strong>2027–2029:</strong> Primera IA que pasa el Test de Turing. Debate sobre derechos de las IAs.<br>
-<strong>2030+:</strong> AGI si los modelos escalan como se espera. El cambio más grande desde la agricultura.<br><br>
-<em>— "En 2019 sonaba a ciencia ficción que en 2023 una IA ganaría concursos de fotografía. Acostúmbrate a que el futuro llegue antes de lo esperado."</em>
-</p></div>
+  <div class="trabajo-card">
+    <div class="trabajo-ico">✍️</div><div>
+      <div class="trabajo-titulo">Redacción y contenido genérico</div>
+      <div class="trabajo-desc">Artículos de blog estándar, descripciones de productos, reportes rutinarios. <strong>La IA ya lo hace mejor y más rápido para contenido genérico.</strong> El que agrega perspectiva, experiencia personal y contexto profundo, no.</div>
+      <span class="t-riesgo">Alto riesgo</span>
+    </div>
+  </div>
+
+  <div class="trabajo-card">
+    <div class="trabajo-ico">💻</div><div>
+      <div class="trabajo-titulo">Programación</div>
+      <div class="trabajo-desc">El código rutinario lo genera la IA. <strong>Los programadores se están convirtiendo en directores de IA</strong>, revisando y orquestando código generado automáticamente. La demanda no bajó: cambió qué tipo de programador se necesita.</div>
+      <span class="t-evoluciona">Se transforma profundamente</span>
+    </div>
+  </div>
+
+  <div class="trabajo-card">
+    <div class="trabajo-ico">🎨</div><div>
+      <div class="trabajo-titulo">Diseño gráfico</div>
+      <div class="trabajo-desc">El diseño de stock, los flyers simples, las variaciones de campaña. <strong>El diseñador con criterio estético y que dirige proyectos complejos es más valioso que antes</strong> porque puede producir el doble usando IA.</div>
+      <span class="t-evoluciona">Se transforma</span>
+    </div>
+  </div>
+
+  <div class="trabajo-card">
+    <div class="trabajo-ico">⚕️</div><div>
+      <div class="trabajo-titulo">Medicina</div>
+      <div class="trabajo-desc">La IA ya supera a los radiólogos en detección de ciertos cánceres. Pero la medicina requiere empatía, contacto humano y juicio ético. <strong>El médico + IA va a superar al médico solo.</strong></div>
+      <span class="t-seguro">Relativamente seguro</span>
+    </div>
+  </div>
+
+  <div class="trabajo-card">
+    <div class="trabajo-ico">👷</div><div>
+      <div class="trabajo-titulo">Trabajo físico especializado</div>
+      <div class="trabajo-desc">Plomeros, electricistas, carpinteros, mecánicos. La robótica en entornos no estructurados es difícil y cara. <strong>El plomero que arregla una cañería vieja está más seguro que el contador que hace declaraciones estándar.</strong></div>
+      <span class="t-seguro">Seguro a mediano plazo</span>
+    </div>
+  </div>
+
+  <div class="trabajo-card">
+    <div class="trabajo-ico">🚀</div><div>
+      <div class="trabajo-titulo">Trabajos nuevos que crea la IA</div>
+      <div class="trabajo-desc"><strong>Prompt engineer, AI trainer, AI ethics officer, especialista en automatización.</strong> Igual que la computadora creó al programador, la IA crea profesiones que en 2020 no tenían nombre.</div>
+      <span class="t-nuevo">Trabajo nuevo</span>
+    </div>
+  </div>
+
+  <div class="card" style="--ca:#4ade80;margin-top:20px">
+    <div class="card-head"><div class="card-name">¿Qué hacer hoy?</div><span class="badge b-ok">La respuesta práctica</span></div>
+    <div class="card-body">
+      <strong>1. Aprender a usar las herramientas.</strong> No hay que ser experto en IA. Hay que saber qué herramienta usar para qué tarea. Eso ya te pone adelante del 80% de la gente.<br><br>
+      <strong>2. Apostar a habilidades que la IA no tiene.</strong> Empatía, liderazgo, creatividad estratégica, relaciones humanas, pensamiento crítico, ética. Son las más difíciles de replicar.<br><br>
+      <strong>3. Ser el que dirige la IA, no el que compite con ella.</strong> El director de cine no desapareció cuando llegó la cámara digital. Se adaptó y ahora tiene herramientas más poderosas.<br><br>
+      <strong>4. Actualización continua.</strong> Los modelos cambian cada 6 meses. Mantenerse informado ya no es opcional.
+      <br><em>— "La IA es la revolución industrial de la mente. Los que aprendan a trabajar con ella van a notar la diferencia cada día más."</em>
+    </div>
+  </div>
+
+  <div class="card" style="--ca:#c084fc;margin-top:14px">
+    <div class="card-head"><div class="card-name">El timeline del futuro cercano</div><span class="badge b-high">2025–2030+</span></div>
+    <div class="card-body">
+      <strong>2025–2026:</strong> Agentes de IA autónomos que completan tareas enteras solos. Gestión de agenda, reservas, redacción de informes sin intervención humana.<br><br>
+      <strong>2026–2027:</strong> Lentes AR con IA integrada. Traducción simultánea visible. El celular empieza a quedar obsoleto.<br><br>
+      <strong>2027–2029:</strong> Primera IA que pasa el Test de Turing de forma consistente. El debate sobre derechos de las IAs entra en los parlamentos.<br><br>
+      <strong>2030+:</strong> AGI (Inteligencia Artificial General) si los modelos escalan como se espera. El cambio más grande en la historia humana desde la agricultura.<br><br>
+      <em>— "En 2019 también sonaba a ciencia ficción que en 2023 una IA iba a ganar concursos de fotografía. Acostúmbrate a que el futuro llegue antes de lo esperado."</em>
+    </div>
+  </div>
 </div>
 
 </main>
 
-<div class="float-btns">
-  <a href="index.html" class="hm-b"><span>🏠</span><span>Inicio</span></a>
-  <a href="#" class="wa-b" id="waBtn"><span>💬</span><span>Compartir</span></a>
+<div class="relacionadas" style="max-width:640px;margin:0 auto;padding:0 16px 20px;">
+  <div class="rel-title">📚 También te puede interesar</div>
+  <div class="rel-grid">
+    <a href="agarrate-se-viene.html" class="rel-link">⚡ Se viene, se viene</a>
+    <a href="lentes-inteligentes.html" class="rel-link">🥽 Lentes Inteligentes</a>
+    <a href="celulares.html" class="rel-link">📱 Celulares</a>
+    <a href="notebooks.html" class="rel-link">💻 Notebooks</a>
+  </div>
 </div>
 
+<!-- BOTONES FLOTANTES -->
+<div class="float-btns">
+  <a href="index.html" class="home-float"><span>🏠</span><span>Inicio</span></a>
+  <a href="#" class="wa-btn" id="waBtn"><span>💬</span><span>Compartir</span></a>
+</div>
+
+<div id="ttBubble"></div>
 <script>
-function goTab(id,el){
+// ══════════════════════════════════════
+// BACKGROUNDS POR SECCIÓN
+// ══════════════════════════════════════
+const BG = {
+  historia:       'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1400&q=70&auto=format',
+  texto:          'https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=1400&q=70&auto=format',
+  imagenes:       'https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1400&q=70&auto=format',
+  video:          'https://images.unsplash.com/photo-1536240478700-b869ad10e128?w=1400&q=70&auto=format',
+  diseno:         'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1400&q=70&auto=format',
+  marketing:      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&q=70&auto=format',
+  redaccion:      'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1400&q=70&auto=format',
+  presentaciones: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1400&q=70&auto=format',
+  rrss:           'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=1400&q=70&auto=format',
+  chatbots:       'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=1400&q=70&auto=format',
+  productividad:  'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1400&q=70&auto=format',
+  estudio:        'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1400&q=70&auto=format',
+  prompts:        'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1400&q=70&auto=format',
+  futuro:         'https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?w=1400&q=70&auto=format'
+};
+
+Object.values(BG).forEach(function(url){ var img=new Image(); img.src=url; });
+
+// ══════════════════════════════════════
+// AUDIO CONTEXT COMPARTIDO
+// ══════════════════════════════════════
+let audioCtx = null;
+let sfxOn = true;
+let musicOn = false;
+
+// Nodos de música
+let musicMaster = null, musicStarted = false;
+let musicNodes = [];
+
+function getCtx(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  return audioCtx;
+}
+
+// ══════════════════════════════════════
+// MÚSICA AMBIENT GENERATIVA — Lo-fi AI
+// ══════════════════════════════════════
+// Escala: Am pentatónica  A2-C3-D3-E3-G3-A3-C4-D4-E4-G4-A4
+const SCALE = [110,130.81,146.83,164.81,196,220,261.63,293.66,329.63,392,440];
+
+function startMusic(){
+  var c = getCtx();
+  if(musicMaster) return;
+
+  // Master gain
+  musicMaster = c.createGain();
+  musicMaster.gain.value = (document.getElementById('volSlider').value / 100) * 0.35;
+  musicMaster.connect(c.destination);
+
+  // ── Reverb (convolution simple con delay) ──
+  var convolver = c.createConvolver();
+  var rLen = c.sampleRate * 2.5;
+  var rBuf = c.createBuffer(2, rLen, c.sampleRate);
+  for(var ch=0; ch<2; ch++){
+    var rD = rBuf.getChannelData(ch);
+    for(var i=0; i<rLen; i++) rD[i] = (Math.random()*2-1) * Math.pow(1-i/rLen, 2.5);
+  }
+  convolver.buffer = rBuf;
+  var reverbGain = c.createGain(); reverbGain.gain.value = 0.35;
+  convolver.connect(reverbGain); reverbGain.connect(musicMaster);
+
+  // ── Pad de acordes (Am - F - C - G) ──
+  var chords = [
+    [220,277.18,329.63],   // Am
+    [174.61,220,261.63],   // F
+    [130.81,164.81,196],   // C
+    [196,246.94,293.66]    // G
+  ];
+  var chordIdx = 0;
+  var chordNodes = [];
+
+  function playChord(freqs, time, dur){
+    freqs.forEach(function(freq){
+      var o = c.createOscillator();
+      var g = c.createGain();
+      o.type = 'sine';
+      o.frequency.value = freq;
+      o.connect(g);
+      var dryG = c.createGain(); dryG.gain.value = 0.12;
+      g.connect(dryG); dryG.connect(musicMaster);
+      g.connect(convolver);
+      g.gain.setValueAtTime(0, time);
+      g.gain.linearRampToValueAtTime(0.18, time + 0.8);
+      g.gain.setValueAtTime(0.18, time + dur - 0.8);
+      g.gain.linearRampToValueAtTime(0, time + dur);
+      o.start(time); o.stop(time + dur + 0.1);
+      musicNodes.push(o);
+
+      // Sub-octave muy suave
+      var o2 = c.createOscillator();
+      var g2 = c.createGain();
+      o2.type = 'sine'; o2.frequency.value = freq * 0.5;
+      o2.connect(g2); g2.connect(musicMaster);
+      g2.gain.setValueAtTime(0, time);
+      g2.gain.linearRampToValueAtTime(0.06, time+1);
+      g2.gain.linearRampToValueAtTime(0, time+dur);
+      o2.start(time); o2.stop(time+dur+0.1);
+      musicNodes.push(o2);
+    });
+  }
+
+  // Programar acordes en loop
+  var chordDur = 4.0; // segundos por acorde
+  var numChords = 8;  // cuántos acordes antes de reschedulear
+  var nextTime = c.currentTime + 0.05;
+
+  function scheduleChords(){
+    for(var i=0; i<numChords; i++){
+      var ci = (chordIdx + i) % chords.length;
+      playChord(chords[ci], nextTime + i*chordDur, chordDur + 0.5);
+    }
+    chordIdx = (chordIdx + numChords) % chords.length;
+    var totalDur = numChords * chordDur;
+    var schedTimer = setTimeout(scheduleChords, (totalDur - 2) * 1000);
+    musicNodes._schedTimer = schedTimer;
+  }
+  scheduleChords();
+
+  // ── Melodía suave (notas de la escala Am pent.) ──
+  var melNotes = [440,392,440,329.63,392,261.63,293.66,329.63,
+                  220,261.63,293.66,329.63,261.63,220,196,220];
+  var melIdx = 0;
+  var melRhythm = [0.5,0.5,1,0.5,0.5,1,0.5,0.5,0.75,0.25,0.5,0.5,1,0.5,0.5,1];
+
+  function scheduleMelody(){
+    var t = c.currentTime + 0.05;
+    for(var i=0; i<8; i++){
+      var ni = (melIdx + i) % melNotes.length;
+      var dur = melRhythm[ni % melRhythm.length] * 0.8;
+      var gap = melRhythm[ni % melRhythm.length];
+      (function(freq, startT, d){
+        var o = c.createOscillator();
+        var g = c.createGain();
+        o.type = 'triangle';
+        o.frequency.value = freq;
+        o.connect(g);
+        var dG = c.createGain(); dG.gain.value = 0.08;
+        g.connect(dG); dG.connect(musicMaster);
+        g.connect(convolver);
+        g.gain.setValueAtTime(0, startT);
+        g.gain.linearRampToValueAtTime(0.22, startT + 0.04);
+        g.gain.exponentialRampToValueAtTime(0.001, startT + d);
+        o.start(startT); o.stop(startT + d + 0.05);
+        musicNodes.push(o);
+      })(melNotes[ni], t, dur);
+      t += gap * 0.8 + 0.1;
+    }
+    melIdx = (melIdx + 8) % melNotes.length;
+    var melDur = melRhythm.slice(melIdx % melRhythm.length, melIdx % melRhythm.length + 8)
+                          .reduce(function(a,b){return a+b;}, 0) * 0.8 + 0.8;
+    var mTimer = setTimeout(scheduleMelody, (melDur - 0.5) * 1000);
+    musicNodes._melTimer = mTimer;
+  }
+  scheduleMelody();
+
+  // ── Kick sutil (bombo a 60 BPM) ──
+  function scheduleKick(){
+    var t = c.currentTime;
+    for(var i=0; i<4; i++){
+      (function(bt){
+        var o = c.createOscillator();
+        var g = c.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(80, bt);
+        o.frequency.exponentialRampToValueAtTime(30, bt+0.15);
+        o.connect(g); g.connect(musicMaster);
+        g.gain.setValueAtTime(0.18, bt);
+        g.gain.exponentialRampToValueAtTime(0.001, bt+0.25);
+        o.start(bt); o.stop(bt+0.3);
+        musicNodes.push(o);
+      })(t + i * 1.0);
+    }
+    var kTimer = setTimeout(scheduleKick, 3500);
+    musicNodes._kTimer = kTimer;
+  }
+  scheduleKick();
+
+  // ── Hi-hat suave ──
+  function scheduleHat(){
+    var t = c.currentTime;
+    for(var i=0; i<8; i++){
+      (function(bt, vel){
+        var buf = c.createBuffer(1, c.sampleRate*0.04, c.sampleRate);
+        var d = buf.getChannelData(0);
+        for(var j=0;j<d.length;j++) d[j]=(Math.random()*2-1)*Math.pow(1-j/d.length,1.5);
+        var s = c.createBufferSource();
+        var f = c.createBiquadFilter(); f.type='highpass'; f.frequency.value=8000;
+        var g = c.createGain(); g.gain.value = vel * 0.06;
+        s.buffer=buf; s.connect(f); f.connect(g); g.connect(musicMaster);
+        s.start(bt);
+        musicNodes.push(s);
+      })(t + i*0.5, i%2===0 ? 1 : 0.5);
+    }
+    var hTimer = setTimeout(scheduleHat, 3800);
+    musicNodes._hTimer = hTimer;
+  }
+  scheduleHat();
+
+  musicStarted = true;
+  document.getElementById('eqViz').classList.remove('paused');
+}
+
+function stopMusic(){
+  // Parar todos los timers de programación
+  if(musicNodes._schedTimer) clearTimeout(musicNodes._schedTimer);
+  if(musicNodes._melTimer)   clearTimeout(musicNodes._melTimer);
+  if(musicNodes._kTimer)     clearTimeout(musicNodes._kTimer);
+  if(musicNodes._hTimer)     clearTimeout(musicNodes._hTimer);
+
+  if(musicMaster){
+    try{
+      musicMaster.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1.5);
+      setTimeout(function(){
+        musicNodes.forEach(function(n){ try{ n.stop(); }catch(e){} });
+        musicNodes = [];
+        if(musicMaster){ musicMaster.disconnect(); musicMaster = null; }
+        musicStarted = false;
+      }, 1600);
+    } catch(e){
+      musicNodes = []; musicMaster = null; musicStarted = false;
+    }
+  }
+  document.getElementById('eqViz').classList.add('paused');
+}
+
+// ══════════════════════════════════════
+// EFECTOS DE SONIDO POR SECCIÓN
+// ══════════════════════════════════════
+const SOUNDS = {
+  historia: function(){
+    var c=getCtx();
+    [0,0.12,0.24,0.36].forEach(function(t,i){
+      var o=c.createOscillator(), g=c.createGain();
+      o.connect(g); g.connect(c.destination);
+      o.type='square'; o.frequency.value=180*(i+1);
+      g.gain.setValueAtTime(0.08,c.currentTime+t);
+      g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+t+0.1);
+      o.start(c.currentTime+t); o.stop(c.currentTime+t+0.12);
+    });
+  },
+  texto: function(){
+    var c=getCtx();
+    var buf=c.createBuffer(1,c.sampleRate*0.04,c.sampleRate);
+    var d=buf.getChannelData(0);
+    for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,2);
+    var s=c.createBufferSource(), f=c.createBiquadFilter();
+    f.type='bandpass'; f.frequency.value=3000; f.Q.value=0.8;
+    s.buffer=buf; s.connect(f); f.connect(c.destination); s.start();
+  },
+  imagenes: function(){
+    var c=getCtx();
+    var o=c.createOscillator(), g=c.createGain();
+    o.type='sine'; o.frequency.value=800;
+    o.connect(g); g.connect(c.destination);
+    g.gain.setValueAtTime(0.15,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.06);
+    o.start(); o.stop(c.currentTime+0.07);
+    var buf2=c.createBuffer(1,c.sampleRate*0.03,c.sampleRate);
+    var d2=buf2.getChannelData(0);
+    for(var j=0;j<d2.length;j++) d2[j]=(Math.random()*2-1)*(1-j/d2.length);
+    var s2=c.createBufferSource(), g2=c.createGain();
+    g2.gain.value=0.3; s2.buffer=buf2; s2.connect(g2); g2.connect(c.destination);
+    s2.start(c.currentTime+0.02);
+  },
+  video: function(){
+    var c=getCtx();
+    [0,0.08,0.16,0.24].forEach(function(t){
+      var o=c.createOscillator(), g=c.createGain();
+      o.type='sawtooth'; o.frequency.value=120;
+      o.connect(g); g.connect(c.destination);
+      g.gain.setValueAtTime(0.07,c.currentTime+t);
+      g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+t+0.06);
+      o.start(c.currentTime+t); o.stop(c.currentTime+t+0.07);
+    });
+  },
+  diseno: function(){
+    var c=getCtx();
+    var buf=c.createBuffer(1,c.sampleRate*0.12,c.sampleRate);
+    var d=buf.getChannelData(0);
+    for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*0.15*(1-i/d.length);
+    var s=c.createBufferSource(), f=c.createBiquadFilter();
+    f.type='highpass'; f.frequency.value=2000;
+    s.buffer=buf; s.connect(f); f.connect(c.destination); s.start();
+  },
+  marketing: function(){
+    var c=getCtx();
+    var o=c.createOscillator(), g=c.createGain();
+    o.type='sine';
+    o.frequency.setValueAtTime(1200,c.currentTime);
+    o.frequency.exponentialRampToValueAtTime(900,c.currentTime+0.15);
+    o.connect(g); g.connect(c.destination);
+    g.gain.setValueAtTime(0.12,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.2);
+    o.start(); o.stop(c.currentTime+0.22);
+  },
+  redaccion: function(){
+    var c=getCtx();
+    var buf=c.createBuffer(1,c.sampleRate*0.08,c.sampleRate);
+    var d=buf.getChannelData(0);
+    for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*0.1*Math.sin(Math.PI*i/d.length);
+    var s=c.createBufferSource(), f=c.createBiquadFilter();
+    f.type='bandpass'; f.frequency.value=4000; f.Q.value=2;
+    s.buffer=buf; s.connect(f); f.connect(c.destination); s.start();
+  },
+  presentaciones: function(){
+    var c=getCtx();
+    var buf=c.createBuffer(1,c.sampleRate*0.18,c.sampleRate);
+    var d=buf.getChannelData(0);
+    for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*0.15*Math.sin(Math.PI*i/d.length);
+    var s=c.createBufferSource(), f=c.createBiquadFilter();
+    f.type='bandpass'; f.frequency.setValueAtTime(800,c.currentTime);
+    f.frequency.exponentialRampToValueAtTime(200,c.currentTime+0.18);
+    s.buffer=buf; s.connect(f); f.connect(c.destination); s.start();
+  },
+  rrss: function(){
+    var c=getCtx();
+    var o=c.createOscillator(), g=c.createGain();
+    o.type='sine';
+    o.frequency.setValueAtTime(600,c.currentTime);
+    o.frequency.exponentialRampToValueAtTime(1000,c.currentTime+0.05);
+    o.frequency.exponentialRampToValueAtTime(800,c.currentTime+0.12);
+    o.connect(g); g.connect(c.destination);
+    g.gain.setValueAtTime(0.13,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.18);
+    o.start(); o.stop(c.currentTime+0.2);
+  },
+  chatbots: function(){
+    var c=getCtx();
+    [[0,440],[0.1,660]].forEach(function(p){
+      var o=c.createOscillator(), g=c.createGain();
+      o.type='square'; o.frequency.value=p[1];
+      o.connect(g); g.connect(c.destination);
+      g.gain.setValueAtTime(0.07,c.currentTime+p[0]);
+      g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+p[0]+0.08);
+      o.start(c.currentTime+p[0]); o.stop(c.currentTime+p[0]+0.09);
+    });
+  },
+  productividad: function(){
+    var c=getCtx();
+    [[0,523],[0.1,659],[0.2,784]].forEach(function(p){
+      var o=c.createOscillator(), g=c.createGain();
+      o.type='sine'; o.frequency.value=p[1];
+      o.connect(g); g.connect(c.destination);
+      g.gain.setValueAtTime(0.1,c.currentTime+p[0]);
+      g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+p[0]+0.25);
+      o.start(c.currentTime+p[0]); o.stop(c.currentTime+p[0]+0.28);
+    });
+  },
+  estudio: function(){
+    var c=getCtx();
+    var buf=c.createBuffer(1,c.sampleRate*0.15,c.sampleRate);
+    var d=buf.getChannelData(0);
+    for(var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*0.12*(i/d.length)*(1-i/d.length)*4;
+    var s=c.createBufferSource(), f=c.createBiquadFilter();
+    f.type='lowpass'; f.frequency.value=1500;
+    s.buffer=buf; s.connect(f); f.connect(c.destination); s.start();
+  },
+  prompts: function(){
+    var c=getCtx();
+    var o=c.createOscillator(), g=c.createGain();
+    o.type='sine'; o.frequency.value=200;
+    o.connect(g); g.connect(c.destination);
+    g.gain.setValueAtTime(0.12,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.08);
+    o.start(); o.stop(c.currentTime+0.09);
+  },
+  futuro: function(){
+    var c=getCtx();
+    var o=c.createOscillator(), g=c.createGain();
+    o.type='sine';
+    o.frequency.setValueAtTime(1800,c.currentTime);
+    o.frequency.exponentialRampToValueAtTime(200,c.currentTime+0.5);
+    o.connect(g); g.connect(c.destination);
+    g.gain.setValueAtTime(0.1,c.currentTime);
+    g.gain.linearRampToValueAtTime(0.12,c.currentTime+0.1);
+    g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.55);
+    o.start(); o.stop(c.currentTime+0.6);
+    var o2=c.createOscillator(), g2=c.createGain();
+    o2.type='sine';
+    o2.frequency.setValueAtTime(900,c.currentTime);
+    o2.frequency.exponentialRampToValueAtTime(100,c.currentTime+0.5);
+    o2.connect(g2); g2.connect(c.destination);
+    g2.gain.setValueAtTime(0.05,c.currentTime);
+    g2.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.55);
+    o2.start(); o2.stop(c.currentTime+0.6);
+  }
+};
+
+// ══════════════════════════════════════
+// CONTROLES DE UI
+// ══════════════════════════════════════
+var musicBtn = document.getElementById('musicBtn');
+var sfxBtn   = document.getElementById('sfxBtn');
+var volSlider= document.getElementById('volSlider');
+var musicBar = document.getElementById('musicBar');
+var eqViz    = document.getElementById('eqViz');
+var bgEl     = document.getElementById('sectionBg');
+
+// Botón música
+musicBtn.addEventListener('click', function(){
+  getCtx(); // unlock AudioContext en iOS
+  musicOn = !musicOn;
+  if(musicOn){
+    startMusic();
+    musicBtn.textContent = '🎵';
+    musicBtn.classList.add('active');
+    musicBar.classList.remove('hidden');
+  } else {
+    stopMusic();
+    musicBtn.classList.remove('active');
+    musicBar.classList.add('hidden');
+  }
+});
+
+// Botón SFX
+sfxBtn.addEventListener('click', function(){
+  sfxOn = !sfxOn;
+  sfxBtn.textContent = sfxOn ? '🔊' : '🔇';
+  sfxBtn.classList.toggle('active', sfxOn);
+  sfxBtn.classList.toggle('off', !sfxOn);
+});
+
+// Volumen de música
+volSlider.addEventListener('input', function(){
+  if(musicMaster){
+    musicMaster.gain.value = (this.value/100) * 0.35;
+  }
+});
+
+// Ocultar barra de volumen al inicio
+musicBar.classList.add('hidden');
+eqViz.classList.add('paused');
+
+// ══════════════════════════════════════
+// GOTAB — cambio de sección
+// ══════════════════════════════════════
+function goTab(id, el){
   document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
   document.getElementById(id).classList.add('active');
   el.classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
+
+  // Fondo
+  if(BG[id]){
+    bgEl.style.opacity='0';
+    setTimeout(function(){
+      bgEl.style.backgroundImage='url('+BG[id]+')';
+      bgEl.style.opacity='0.11';
+    },150);
+  }
+
+  // Sonido
+  if(sfxOn && SOUNDS[id]){
+    try{ SOUNDS[id](); } catch(e){}
+  }
 }
+
+// WhatsApp dinámico
 document.getElementById('waBtn').addEventListener('click',function(e){
   e.preventDefault();
   var url=encodeURIComponent(window.location.href);
   var msg=encodeURIComponent('Mirá esta guía de SIN VERSO sobre Inteligencia Artificial 🤖: ');
   window.open('https://wa.me/?text='+msg+url,'_blank');
 });
+
+// Tooltips
+var bubble=document.getElementById('ttBubble');
+var timer;
+document.querySelectorAll('.tt').forEach(function(el){
+  el.addEventListener('click',function(e){
+    e.stopPropagation();
+    bubble.textContent=this.dataset.tip;
+    bubble.classList.add('on');
+    var r=this.getBoundingClientRect();
+    var top=r.bottom+10, left=r.left;
+    if(left+280>window.innerWidth) left=window.innerWidth-285;
+    if(top+140>window.innerHeight) top=r.top-145;
+    bubble.style.top=top+'px';
+    bubble.style.left=left+'px';
+    clearTimeout(timer);
+    timer=setTimeout(function(){bubble.classList.remove('on');},5000);
+  });
+});
+document.addEventListener('click',function(){bubble.classList.remove('on');});
+
+// Fondo inicial
+bgEl.style.backgroundImage='url('+BG.historia+')';
+setTimeout(function(){ bgEl.style.opacity='0.11'; }, 600);
 </script>
 </body>
 </html>
