@@ -47,15 +47,21 @@
     margin:0 auto;
     position:relative;
   }
-  header::before{
-    content:'9:41';
-    display:block;
+  .statusbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
     width:100%;
     font-size:13px;
     font-weight:700;
     letter-spacing:.4px;
     color:rgba(255,255,255,.82);
     margin-bottom:24px;
+  }
+  .status-icons{
+    color:rgba(255,255,255,.72);
+    font-size:11px;
+    letter-spacing:4px;
   }
   header::after{
     content:'●  ●  ▰';
@@ -255,6 +261,24 @@
   }
   #no-results.visible{display:block;}
 
+  .settings-btn{position:fixed;right:18px;top:18px;z-index:999;width:46px;height:46px;border-radius:17px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.14);color:#fff;font-size:22px;backdrop-filter:blur(18px);box-shadow:0 12px 30px rgba(0,0,0,.26);cursor:pointer;}
+  .settings-panel{position:fixed;top:72px;right:16px;z-index:998;width:min(300px,calc(100% - 32px));padding:14px;border-radius:24px;border:1px solid rgba(255,255,255,.16);background:rgba(18,18,34,.82);backdrop-filter:blur(24px);box-shadow:0 22px 60px rgba(0,0,0,.38);display:none;}
+  .settings-panel.open{display:block;}
+  .settings-title{font-weight:900;font-size:14px;margin-bottom:10px;color:#fff;}
+  .theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .theme-dot{min-height:54px;border:1px solid rgba(255,255,255,.14);border-radius:18px;color:#fff;font-family:'DM Sans',sans-serif;font-weight:800;font-size:11px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.20);}
+  .theme-dot[data-theme="noche"]{background:linear-gradient(145deg,#050511,#24245a);}
+  .theme-dot[data-theme="violeta"]{background:linear-gradient(145deg,#2e1065,#c026d3);}
+  .theme-dot[data-theme="azul"]{background:linear-gradient(145deg,#082f49,#0284c7);}
+  .theme-dot[data-theme="verde"]{background:linear-gradient(145deg,#052e16,#16a34a);}
+  .theme-dot[data-theme="fuego"]{background:linear-gradient(145deg,#431407,#ea580c);}
+  .theme-dot[data-theme="gris"]{background:linear-gradient(145deg,#111827,#64748b);}
+  body.theme-violeta{background:radial-gradient(circle at 20% 0%,rgba(216,180,254,.42),transparent 34%),radial-gradient(circle at 85% 18%,rgba(244,114,182,.30),transparent 30%),linear-gradient(145deg,#14051f 0%,#3b0764 56%,#09090f 100%);}
+  body.theme-azul{background:radial-gradient(circle at 20% 0%,rgba(56,189,248,.38),transparent 34%),radial-gradient(circle at 85% 18%,rgba(59,130,246,.28),transparent 30%),linear-gradient(145deg,#03121f 0%,#0c4a6e 56%,#020617 100%);}
+  body.theme-verde{background:radial-gradient(circle at 20% 0%,rgba(74,222,128,.34),transparent 34%),radial-gradient(circle at 85% 18%,rgba(20,184,166,.26),transparent 30%),linear-gradient(145deg,#03140b 0%,#14532d 56%,#020617 100%);}
+  body.theme-fuego{background:radial-gradient(circle at 20% 0%,rgba(251,146,60,.38),transparent 34%),radial-gradient(circle at 85% 18%,rgba(239,68,68,.30),transparent 30%),linear-gradient(145deg,#1c0703 0%,#7c2d12 56%,#080808 100%);}
+  body.theme-gris{background:radial-gradient(circle at 20% 0%,rgba(148,163,184,.30),transparent 34%),radial-gradient(circle at 85% 18%,rgba(255,255,255,.16),transparent 30%),linear-gradient(145deg,#020617 0%,#334155 56%,#0f172a 100%);}
+
   .wa-float{
     position:fixed;
     bottom:18px;
@@ -281,7 +305,22 @@
 </head>
 <body>
 
+<button class="settings-btn" type="button" aria-label="Cambiar fondo" onclick="toggleSettings()">&#9881;&#65039;</button>
+<div class="settings-panel" id="settingsPanel">
+  <div class="settings-title">Cambiar fondo</div>
+  <div class="theme-grid">
+    <button class="theme-dot" data-theme="noche" onclick="setTheme('noche')">Noche</button>
+    <button class="theme-dot" data-theme="violeta" onclick="setTheme('violeta')">Violeta</button>
+    <button class="theme-dot" data-theme="azul" onclick="setTheme('azul')">Azul</button>
+    <button class="theme-dot" data-theme="verde" onclick="setTheme('verde')">Verde</button>
+    <button class="theme-dot" data-theme="fuego" onclick="setTheme('fuego')">Fuego</button>
+    <button class="theme-dot" data-theme="gris" onclick="setTheme('gris')">Gris</button>
+  </div>
+</div>
+
 <header>
+  <div class="statusbar"><span id="liveClock">--:--</span><span class="status-icons">&bull;  &bull;  &#9645;</span></div>
+
   <div class="logo">SIN VERSO</div>
   <p class="tagline">El manual de socorro adulto que nadie te dio. <strong>Sin humo. Sin jerga. Sin verso.</strong></p>
   <div class="search-bar">
@@ -481,10 +520,40 @@
   <p style="margin-top:6px">Precios en USD orientativos · Sin publicidad · Sin verso</p>
 </footer>
 
-<a href="https://wa.me/?text=Mirá SIN VERSO — el manual de compras que necesitaba: sinverso.com" class="wa-float" target="_blank">💬</a>
+<a href="https://wa.me/?text=Mira%20SIN%20VERSO%20-%20el%20manual%20de%20socorro%20adulto%2C%20sin%20humo%20y%20sin%20verso%3A%20https%3A%2F%2Fsinverso.com%2F" class="wa-float" id="waShare" target="_blank" rel="noopener">💬</a>
 
 <script>
+function updateClock(){
+  const el=document.getElementById('liveClock');
+  if(!el)return;
+  const now=new Date();
+  el.textContent=now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',hour12:false});
+}
+updateClock();
+setInterval(updateClock,30000);
+
+function toggleSettings(){
+  document.getElementById('settingsPanel')?.classList.toggle('open');
+}
+function setTheme(theme){
+  document.body.classList.remove('theme-violeta','theme-azul','theme-verde','theme-fuego','theme-gris');
+  if(theme && theme!=='noche')document.body.classList.add('theme-'+theme);
+  localStorage.setItem('sinverso-theme',theme||'noche');
+  document.getElementById('settingsPanel')?.classList.remove('open');
+}
+setTheme(localStorage.getItem('sinverso-theme')||'noche');
+
+function configurarWhatsapp(){
+  const link=document.getElementById('waShare');
+  if(!link)return;
+  const url=(location.protocol.startsWith('http') ? location.href : 'https://sinverso.com/');
+  const texto="Mira SIN VERSO - el manual de socorro adulto, sin humo y sin verso: "+url;
+  link.href='https://wa.me/?text='+encodeURIComponent(texto);
+}
+configurarWhatsapp();
+
 function buscar(q){
+
   q=q.toLowerCase().trim();
   let total=0;
   document.querySelectorAll('.guia-card').forEach(card=>{
