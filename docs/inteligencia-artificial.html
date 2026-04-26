@@ -190,9 +190,203 @@
   @keyframes eq-anim{0%{transform:scaleY(0.3);}100%{transform:scaleY(1);}}
   .eq.paused .eq-bar{animation-play-state:paused;transform:scaleY(0.3);}
 
+
+/* ══════════════════════════════════════
+   SIN VERSO APP STYLE — IA PAGE
+   Adaptación escritorio celular
+══════════════════════════════════════ */
+:root{
+  --wall1:#111827;
+  --wall2:#312e81;
+  --glass:rgba(255,255,255,.08);
+  --glass2:rgba(255,255,255,.13);
+  --shadow:0 18px 60px rgba(0,0,0,.38);
+}
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(129,140,248,.26), transparent 28%),
+    radial-gradient(circle at 85% 0%, rgba(240,171,252,.18), transparent 30%),
+    linear-gradient(160deg,var(--wall1),var(--wall2) 54%,#080810);
+  background-attachment:fixed;
+}
+body.light{
+  --bg:#eef2ff;
+  --surface:rgba(255,255,255,.68);
+  --card:rgba(255,255,255,.78);
+  --border:rgba(40,40,80,.15);
+  --text:#151527;
+  --muted:#5f6380;
+  --soft:#4b506d;
+  --wall1:#dbeafe;
+  --wall2:#f5d0fe;
+  --glass:rgba(255,255,255,.55);
+  --glass2:rgba(255,255,255,.78);
+  color:var(--text);
+}
+body.light header h1{-webkit-text-fill-color:transparent;}
+body.light .home-float,body.light .audio-btn,body.light .music-bar,body.light .theme-btn{background:rgba(255,255,255,.72);border-color:rgba(30,30,80,.14);}
+body.light .wa-btn span{color:#04100a;}
+body.light .tab.active{color:#fff;}
+body.light .card-body em, body.light .tool-body em{color:#646987;}
+
+#appStatus{
+  position:sticky;top:0;z-index:1000;
+  height:30px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px;
+  background:rgba(7,7,16,.42);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  font-size:12px;font-weight:800;color:var(--text);
+}
+body.light #appStatus{background:rgba(255,255,255,.46);border-bottom-color:rgba(20,20,60,.08);}
+#appStatus .sys-right{display:flex;gap:8px;align-items:center;color:var(--muted);}
+
+header{
+  margin:14px auto 0;
+  max-width:760px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:0 0 34px 34px;
+  background:linear-gradient(145deg,rgba(12,12,28,.74),rgba(22,16,48,.58)) !important;
+  backdrop-filter:blur(20px);
+  box-shadow:var(--shadow);
+}
+body.light header{background:linear-gradient(145deg,rgba(255,255,255,.76),rgba(239,246,255,.62)) !important;}
+header::after{
+  content:'';
+  position:absolute;left:50%;bottom:12px;transform:translateX(-50%);
+  width:86px;height:4px;border-radius:10px;background:rgba(255,255,255,.22);
+}
+.home-btn{
+  border-radius:999px;
+  background:var(--glass2);
+  color:var(--text);
+  backdrop-filter:blur(12px);
+}
+.ia-badge{box-shadow:0 8px 28px rgba(129,140,248,.16);}
+
+.audio-controls{top:42px;}
+.theme-btn{
+  position:fixed;top:42px;left:14px;z-index:999;
+  width:38px;height:38px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.2);
+  background:rgba(10,10,20,.75);backdrop-filter:blur(12px);
+  color:var(--text);font-size:16px;cursor:pointer;
+}
+
+.tabs{
+  position:sticky;top:30px;z-index:900;
+  max-width:760px;margin:12px auto 0;
+  padding:12px 14px;
+  background:rgba(8,8,16,.46);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:24px;
+  backdrop-filter:blur(18px);
+}
+body.light .tabs{background:rgba(255,255,255,.52);border-color:rgba(30,30,80,.1);}
+.tab{
+  min-height:38px;border-radius:16px;
+  background:var(--glass);
+  box-shadow:0 4px 18px rgba(0,0,0,.12);
+}
+main{
+  max-width:760px;
+  background:rgba(8,8,16,.24);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:30px 30px 0 0;
+  backdrop-filter:blur(10px);
+  margin-top:14px;
+}
+body.light main{background:rgba(255,255,255,.32);border-color:rgba(30,30,80,.08);}
+.sec-title{
+  font-size:38px;
+  color:var(--text);
+  text-shadow:0 8px 28px rgba(0,0,0,.25);
+}
+.sec-sub{
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,.1);
+  padding:14px 16px;border-radius:18px;
+  backdrop-filter:blur(10px);
+}
+.card,.tool-card,.trabajo-card,.prompt-card,.relacionadas{
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(16px);
+  box-shadow:0 12px 38px rgba(0,0,0,.18);
+}
+body.light .card,body.light .tool-card,body.light .trabajo-card,body.light .prompt-card,body.light .relacionadas{
+  background:rgba(255,255,255,.72);
+  border-color:rgba(30,30,80,.12);
+}
+.tool-card{padding-right:54px;}
+.fav-btn{
+  position:absolute;right:14px;top:14px;z-index:3;
+  width:32px;height:32px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(0,0,0,.16);color:var(--muted);
+  cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.fav-btn:hover{transform:scale(1.08);color:#facc15;}
+.fav-btn.on{color:#facc15;background:rgba(250,204,21,.14);border-color:rgba(250,204,21,.35);}
+#favPanel{
+  max-width:760px;margin:12px auto 0;padding:12px 14px;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(8,8,16,.42);backdrop-filter:blur(18px);
+  border-radius:22px;display:none;
+}
+body.light #favPanel{background:rgba(255,255,255,.52);border-color:rgba(30,30,80,.1);}
+#favPanel.on{display:block;}
+.fav-title{font-size:12px;font-weight:900;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
+.fav-list{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;}
+.fav-list::-webkit-scrollbar{display:none;}
+.fav-chip{
+  white-space:nowrap;text-decoration:none;color:var(--text);
+  background:var(--glass2);border:1px solid rgba(255,255,255,.12);
+  border-radius:999px;padding:8px 11px;font-size:12px;font-weight:800;
+}
+.float-btns{bottom:18px;}
+.home-float{background:rgba(10,10,20,.72);}
+.wa-btn{background:#25D366;}
+@media(max-width:520px){
+  header{margin-top:0;border-radius:0 0 28px 28px;padding-top:42px;}
+  .audio-controls{top:38px;right:10px;}
+  .theme-btn{top:38px;left:10px;}
+  .music-bar{display:none;}
+  .tabs{margin:10px 10px 0;border-radius:20px;}
+  main{margin:10px 10px 0;border-radius:24px 24px 0 0;padding-left:14px;padding-right:14px;}
+  .sec-title{font-size:32px;}
+}
+
+
+/* ── IA como carpeta de apps ── */
+.ia-folder-wrap{max-width:720px;margin:0 auto;padding:18px 16px 10px;position:relative;z-index:1;}
+.folder-card{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.035));border:1px solid rgba(255,255,255,.14);border-radius:32px;padding:18px 14px 20px;box-shadow:0 20px 60px rgba(0,0,0,.22);backdrop-filter:blur(18px);}
+.folder-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 6px 14px;}
+.folder-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:1.5px;color:var(--text);line-height:1;}
+.folder-sub{font-size:12px;color:var(--muted);margin-top:4px;}
+.folder-pill{font-size:11px;font-weight:800;color:#050510;background:var(--accent);border-radius:999px;padding:7px 11px;white-space:nowrap;}
+.app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px 10px;padding:8px 2px 4px;}
+.folder-app{border:0;background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0;}
+.folder-app .app-ico{width:62px;height:62px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:29px;background:linear-gradient(145deg,var(--c1),var(--c2));box-shadow:0 10px 24px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.25);transition:transform .18s ease, filter .18s ease;position:relative;overflow:hidden;}
+.folder-app .app-ico::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.30),transparent 42%);opacity:.55;}
+.folder-app:hover .app-ico{transform:translateY(-3px) scale(1.04);filter:saturate(1.15);}
+.folder-app .app-name{font-size:11.5px;line-height:1.15;color:var(--text);text-shadow:0 2px 8px rgba(0,0,0,.35);max-width:74px;}
+#appBackBtn{display:none;margin:0 0 18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:var(--text);border-radius:999px;padding:10px 14px;font-size:13px;font-weight:800;cursor:pointer;backdrop-filter:blur(14px);}
+#appBackBtn.on{display:inline-flex;align-items:center;gap:8px;}
+#folderScreen.hidden{display:none;}
+body.light .folder-card{background:rgba(255,255,255,.68);border-color:rgba(30,30,80,.12);box-shadow:0 18px 50px rgba(70,70,120,.15);}
+body.light .folder-app .app-name{text-shadow:none;color:#17172a;}
+body.light #appBackBtn{background:rgba(255,255,255,.75);border-color:rgba(30,30,80,.14);color:#17172a;}
+@media(max-width:480px){.app-grid{grid-template-columns:repeat(4,1fr);gap:16px 5px}.folder-app .app-ico{width:56px;height:56px;border-radius:16px;font-size:26px}.folder-app .app-name{font-size:10.5px;max-width:68px}.folder-title{font-size:27px}.ia-folder-wrap{padding-left:12px;padding-right:12px;}}
+@media(max-width:360px){.app-grid{grid-template-columns:repeat(3,1fr);}.folder-app .app-ico{width:60px;height:60px;}.folder-app .app-name{max-width:72px;}}
+
 </style>
 </head>
 <body>
+<div id="appStatus"><span id="appClock">--:--</span><span class="sys-right">SIN VERSO IA <span>▰▰▰</span></span></div>
+<button class="theme-btn" id="themeBtn" title="Modo claro/oscuro">🌙</button>
 
 <div id="sectionBg"></div>
 
@@ -218,28 +412,44 @@
   <h1>Inteligencia Artificial</h1>
   <p class="subtitle">La tecnología más transformadora de la historia.<br><strong>Explicada sin humo, sin hype y sin verso.</strong></p>
 </header>
+<section id="favPanel" aria-label="Favoritos">
+  <div class="fav-title">⭐ Favoritos de IA</div>
+  <div class="fav-list" id="favList"></div>
+</section>
 
-<div class="tabs">
-  <div class="tab active" onclick="goTab('historia',this)">📖 Historia</div>
-  <div class="tab" onclick="goTab('texto',this)">💬 IAs de texto</div>
-  <div class="tab" onclick="goTab('imagenes',this)">🎨 Imágenes</div>
-  <div class="tab" onclick="goTab('video',this)">🎬 Video y audio</div>
-  <div class="tab" onclick="goTab('diseno',this)">✏️ Diseño</div>
-  <div class="tab" onclick="goTab('marketing',this)">📣 Marketing</div>
-  <div class="tab" onclick="goTab('redaccion',this)">✒️ Redacción</div>
-  <div class="tab" onclick="goTab('presentaciones',this)">📊 Presentaciones</div>
-  <div class="tab" onclick="goTab('rrss',this)">📱 Redes sociales</div>
-  <div class="tab" onclick="goTab('chatbots',this)">🤝 Chatbots</div>
-  <div class="tab" onclick="goTab('productividad',this)">💼 Productividad</div>
-  <div class="tab" onclick="goTab('estudio',this)">📚 Estudio</div>
-  <div class="tab" onclick="goTab('prompts',this)">✍️ Cómo hablarle</div>
-  <div class="tab" onclick="goTab('futuro',this)">🔮 El futuro</div>
-</div>
+<section class="ia-folder-wrap" id="folderScreen" aria-label="Carpeta de Inteligencia Artificial">
+  <div class="folder-card">
+    <div class="folder-top">
+      <div>
+        <div class="folder-title">Carpeta IA</div>
+        <div class="folder-sub">Tocá una app y chusmeá cada tema</div>
+      </div>
+      <div class="folder-pill">14 apps</div>
+    </div>
+    <div class="app-grid">
+      <button class="folder-app" onclick="goTab('historia',this)" style="--c1:#fbbf24;--c2:#fb923c"><span class="app-ico">📖</span><span class="app-name">Historia</span></button>
+      <button class="folder-app" onclick="goTab('texto',this)" style="--c1:#818cf8;--c2:#00a67e"><span class="app-ico">💬</span><span class="app-name">IAs de texto</span></button>
+      <button class="folder-app" onclick="goTab('imagenes',this)" style="--c1:#f472b6;--c2:#7c3aed"><span class="app-ico">🎨</span><span class="app-name">Imágenes</span></button>
+      <button class="folder-app" onclick="goTab('video',this)" style="--c1:#f87171;--c2:#f59e0b"><span class="app-ico">🎬</span><span class="app-name">Video/audio</span></button>
+      <button class="folder-app" onclick="goTab('diseno',this)" style="--c1:#00c4cc;--c2:#4285f4"><span class="app-ico">✏️</span><span class="app-name">Diseño</span></button>
+      <button class="folder-app" onclick="goTab('marketing',this)" style="--c1:#f97316;--c2:#e11d48"><span class="app-ico">📣</span><span class="app-name">Marketing</span></button>
+      <button class="folder-app" onclick="goTab('redaccion',this)" style="--c1:#00d4ff;--c2:#6366f1"><span class="app-ico">✒️</span><span class="app-name">Redacción</span></button>
+      <button class="folder-app" onclick="goTab('presentaciones',this)" style="--c1:#22c55e;--c2:#14b8a6"><span class="app-ico">📊</span><span class="app-name">Presentaciones</span></button>
+      <button class="folder-app" onclick="goTab('rrss',this)" style="--c1:#f0abfc;--c2:#ec4899"><span class="app-ico">📱</span><span class="app-name">Redes</span></button>
+      <button class="folder-app" onclick="goTab('chatbots',this)" style="--c1:#a78bfa;--c2:#4f46e5"><span class="app-ico">🤝</span><span class="app-name">Chatbots</span></button>
+      <button class="folder-app" onclick="goTab('productividad',this)" style="--c1:#34d399;--c2:#0ea5e9"><span class="app-ico">💼</span><span class="app-name">Productividad</span></button>
+      <button class="folder-app" onclick="goTab('estudio',this)" style="--c1:#60a5fa;--c2:#8b5cf6"><span class="app-ico">📚</span><span class="app-name">Estudio</span></button>
+      <button class="folder-app" onclick="goTab('prompts',this)" style="--c1:#facc15;--c2:#84cc16"><span class="app-ico">✍️</span><span class="app-name">Prompts</span></button>
+      <button class="folder-app" onclick="goTab('futuro',this)" style="--c1:#c084fc;--c2:#00d4ff"><span class="app-ico">🔮</span><span class="app-name">El futuro</span></button>
+    </div>
+  </div>
+</section>
 
 <main>
+<button id="appBackBtn" onclick="backToFolder()">← Volver a la carpeta IA</button>
 
 <!-- ═══ HISTORIA ═══ -->
-<div class="section active" id="historia">
+<div class="section" id="historia">
   <div class="sec-title">De dónde viene la IA</div>
   <div class="sec-sub">No empezó con ChatGPT. Tiene 70 años de historia. <em>Y los últimos 3 años cambiaron todo.</em></div>
 
@@ -1537,9 +1747,14 @@ eqViz.classList.add('paused');
 // ══════════════════════════════════════
 function goTab(id, el){
   document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
-  document.getElementById(id).classList.add('active');
-  el.classList.add('active');
+  document.querySelectorAll('.folder-app').forEach(function(t){t.classList.remove('active');});
+  var sec=document.getElementById(id);
+  if(sec) sec.classList.add('active');
+  if(el) el.classList.add('active');
+  var folder=document.getElementById('folderScreen');
+  var back=document.getElementById('appBackBtn');
+  if(folder) folder.classList.add('hidden');
+  if(back) back.classList.add('on');
   window.scrollTo({top:0,behavior:'smooth'});
 
   // Fondo
@@ -1556,14 +1771,16 @@ function goTab(id, el){
     try{ SOUNDS[id](); } catch(e){}
   }
 }
-
-// WhatsApp dinámico
-document.getElementById('waBtn').addEventListener('click',function(e){
-  e.preventDefault();
-  var url=encodeURIComponent(window.location.href);
-  var msg=encodeURIComponent('Mirá esta guía de SIN VERSO sobre Inteligencia Artificial 🤖: ');
-  window.open('https://wa.me/?text='+msg+url,'_blank');
-});
+function backToFolder(){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.folder-app').forEach(function(t){t.classList.remove('active');});
+  var folder=document.getElementById('folderScreen');
+  var back=document.getElementById('appBackBtn');
+  if(folder) folder.classList.remove('hidden');
+  if(back) back.classList.remove('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(sfxOn && SOUNDS.historia){ try{SOUNDS.historia();}catch(e){} }
+}
 
 // Tooltips
 var bubble=document.getElementById('ttBubble');
@@ -1584,6 +1801,101 @@ document.querySelectorAll('.tt').forEach(function(el){
   });
 });
 document.addEventListener('click',function(){bubble.classList.remove('on');});
+
+
+// ══════════════════════════════════════
+// APP UI: reloj, tema, favoritos y compartir limpio
+// ══════════════════════════════════════
+const PAGE_URL = 'https://sinverso.com/inteligencia-artificial.html';
+const HOME_URL = 'index.html';
+
+function updateAppClock(){
+  var d=new Date();
+  var hh=String(d.getHours()).padStart(2,'0');
+  var mm=String(d.getMinutes()).padStart(2,'0');
+  var el=document.getElementById('appClock');
+  if(el) el.textContent=hh+':'+mm;
+}
+updateAppClock();
+setInterval(updateAppClock,1000);
+
+(function initTheme(){
+  var saved=localStorage.getItem('sv-theme')||'dark';
+  document.body.classList.toggle('light', saved==='light');
+  var btn=document.getElementById('themeBtn');
+  function paint(){ btn.textContent=document.body.classList.contains('light')?'☀️':'🌙'; }
+  if(btn){
+    paint();
+    btn.addEventListener('click',function(){
+      document.body.classList.toggle('light');
+      localStorage.setItem('sv-theme', document.body.classList.contains('light')?'light':'dark');
+      paint();
+    });
+  }
+})();
+
+document.querySelectorAll('.home-btn,.home-float').forEach(function(a){ a.setAttribute('href',HOME_URL); });
+var wa=document.getElementById('waBtn');
+if(wa){
+  wa.setAttribute('href','https://wa.me/?text='+encodeURIComponent('Mirá esta guía de SIN VERSO sobre Inteligencia Artificial 🤖: '+PAGE_URL));
+  wa.setAttribute('target','_blank');
+  wa.addEventListener('click',function(e){
+    e.preventDefault();
+    window.open(this.href,'_blank');
+  });
+}
+
+const FAV_KEY='sv-ia-favs';
+function favIdFor(card){
+  return (card.querySelector('.tool-nombre,.card-name,.tl-name')?.textContent||card.textContent||'favorito').trim().toLowerCase().replace(/\s+/g,'-').replace(/[^\w\-áéíóúñ]/gi,'').slice(0,80);
+}
+function favTitleFor(card){
+  return (card.querySelector('.tool-nombre,.card-name,.tl-name')?.textContent||'Favorito').trim();
+}
+function getFavs(){ try{return JSON.parse(localStorage.getItem(FAV_KEY)||'[]');}catch(e){return [];} }
+function setFavs(v){ localStorage.setItem(FAV_KEY,JSON.stringify(v)); }
+
+document.querySelectorAll('.tool-card').forEach(function(card,idx){
+  if(!card.id) card.id='app-'+favIdFor(card)+'-'+idx;
+  var b=document.createElement('button');
+  b.className='fav-btn';
+  b.type='button';
+  b.innerHTML='☆';
+  b.title='Agregar a favoritos';
+  card.appendChild(b);
+  b.addEventListener('click',function(e){
+    e.preventDefault(); e.stopPropagation();
+    var favs=getFavs();
+    var item={id:card.id,title:favTitleFor(card),href:'#'+card.id};
+    var exists=favs.some(function(x){return x.id===item.id;});
+    favs=exists?favs.filter(function(x){return x.id!==item.id;}):[item].concat(favs).slice(0,16);
+    setFavs(favs);
+    renderFavs();
+  });
+});
+function renderFavs(){
+  var favs=getFavs();
+  var panel=document.getElementById('favPanel');
+  var list=document.getElementById('favList');
+  if(!panel||!list)return;
+  panel.classList.toggle('on',favs.length>0);
+  list.innerHTML=favs.map(function(f){return '<a class="fav-chip" href="'+f.href+'" data-target="'+f.id+'">⭐ '+f.title+'</a>';}).join('');
+  list.querySelectorAll('.fav-chip').forEach(function(a){a.addEventListener('click',function(e){
+    var target=document.getElementById(this.dataset.target);
+    if(target){
+      var sec=target.closest('.section');
+      if(sec){ e.preventDefault(); goTab(sec.id,null); setTimeout(function(){target.scrollIntoView({behavior:'smooth',block:'center'});},220); }
+    }
+  });});
+  document.querySelectorAll('.fav-btn').forEach(function(btn){
+    var card=btn.closest('.tool-card');
+    var on=favs.some(function(f){return f.id===card.id;});
+    btn.classList.toggle('on',on);
+    btn.innerHTML=on?'★':'☆';
+  });
+}
+renderFavs();
+
 
 // Fondo inicial
 bgEl.style.backgroundImage='url('+BG.historia+')';
