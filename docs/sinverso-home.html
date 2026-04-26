@@ -301,9 +301,49 @@
   .wa-float::before{content:'🏠';font-size:25px;}
   .wa-float::after{content:'💬';font-size:28px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:17px;background:#25D366;box-shadow:0 8px 20px rgba(37,211,102,.35);}
   .wa-float:hover{transform:translateX(50%) translateY(-2px);}
+
+
+  /* LOCKSCREEN */
+  .lockscreen{position:fixed;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at 22% 12%,rgba(240,171,252,.34),transparent 30%),radial-gradient(circle at 82% 25%,rgba(129,140,248,.34),transparent 28%),radial-gradient(circle at 50% 100%,rgba(34,211,238,.18),transparent 38%),linear-gradient(145deg,#050511,#151536 55%,#070713);transition:opacity .55s ease,visibility .55s ease,transform .55s ease;}
+  .lockscreen::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),transparent 85%);}
+  .lockscreen.unlocked{opacity:0;visibility:hidden;transform:scale(1.03);pointer-events:none;}
+  .lock-card{position:relative;width:min(430px,100%);min-height:76vh;border-radius:42px;padding:26px 22px 22px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);backdrop-filter:blur(22px);box-shadow:0 30px 90px rgba(0,0,0,.45);display:flex;flex-direction:column;justify-content:space-between;text-align:center;overflow:hidden;}
+  .lock-card::after{content:'';position:absolute;left:50%;top:14px;transform:translateX(-50%);width:86px;height:24px;border-radius:0 0 18px 18px;background:rgba(0,0,0,.38);}
+  .lock-top{padding-top:42px;}.lock-clock{font-family:'Bebas Neue',sans-serif;font-size:clamp(76px,25vw,118px);line-height:.85;letter-spacing:2px;text-shadow:0 16px 40px rgba(0,0,0,.38);}.lock-date{margin-top:12px;font-weight:800;color:rgba(255,255,255,.76);}.lock-logo{font-family:'Bebas Neue',sans-serif;font-size:54px;letter-spacing:3px;margin-bottom:4px;background:linear-gradient(135deg,#fff,#f0abfc,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}.lock-frase{color:rgba(255,255,255,.72);font-size:14px;line-height:1.45;max-width:300px;margin:0 auto 20px;}.unlock-btn{width:100%;border:1px solid rgba(255,255,255,.18);border-radius:26px;background:rgba(255,255,255,.14);color:#fff;font-weight:900;font-family:'DM Sans',sans-serif;padding:16px 18px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 14px 36px rgba(0,0,0,.24);}.unlock-hint{font-size:12px;color:rgba(255,255,255,.55);margin-top:10px;}
+
+  /* NOTIFICACIONES */
+  .notify-btn{position:fixed;left:18px;top:18px;z-index:999;width:46px;height:46px;border-radius:17px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.14);color:#fff;font-size:22px;backdrop-filter:blur(18px);box-shadow:0 12px 30px rgba(0,0,0,.26);cursor:pointer;}.notify-dot{position:absolute;right:9px;top:8px;width:9px;height:9px;border-radius:50%;background:#f43f5e;box-shadow:0 0 0 3px rgba(244,63,94,.18);}.notifications-panel{position:fixed;top:72px;left:16px;z-index:998;width:min(340px,calc(100% - 32px));padding:14px;border-radius:28px;border:1px solid rgba(255,255,255,.16);background:rgba(18,18,34,.84);backdrop-filter:blur(24px);box-shadow:0 22px 60px rgba(0,0,0,.38);display:none;}.notifications-panel.open{display:block;animation:popIn .18s ease-out;}@keyframes popIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}.notifications-title{display:flex;justify-content:space-between;align-items:center;font-weight:900;font-size:14px;margin-bottom:10px;color:#fff;}.notification{display:flex;gap:11px;padding:12px;border-radius:20px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.10);margin-top:8px;}.notification-ico{width:38px;height:38px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12);font-size:20px;flex-shrink:0;}.notification strong{display:block;font-size:12.5px;color:#fff;margin-bottom:2px;}.notification span{display:block;font-size:11.5px;line-height:1.35;color:rgba(255,255,255,.66);}
+
+  /* MINI PLAYER */
+  .music-widget{max-width:780px;margin:18px auto 0;padding:12px;border-radius:26px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(18px);box-shadow:0 14px 36px rgba(0,0,0,.22);display:grid;grid-template-columns:50px 1fr auto;gap:12px;align-items:center;}.music-cover{width:50px;height:50px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,rgba(240,171,252,.75),rgba(129,140,248,.55));box-shadow:inset 0 1px 0 rgba(255,255,255,.30);font-size:24px;}.music-title{font-weight:900;font-size:13px;color:#fff;line-height:1.15;}.music-sub{font-size:11px;color:rgba(255,255,255,.58);margin-top:4px;}.music-controls{display:flex;gap:8px;}.music-controls button{width:40px;height:40px;border-radius:15px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.12);color:#fff;font-size:16px;cursor:pointer;}@media(max-width:420px){.music-widget{grid-template-columns:44px 1fr;}.music-controls{grid-column:1/-1;justify-content:center}.music-cover{width:44px;height:44px;border-radius:16px}}
+
 </style>
 </head>
 <body>
+
+<div class="lockscreen" id="lockscreen">
+  <div class="lock-card">
+    <div class="lock-top">
+      <div class="lock-clock" id="lockClock">--:--</div>
+      <div class="lock-date" id="lockDate">SIN VERSO</div>
+    </div>
+    <div class="lock-bottom">
+      <div class="lock-logo">SIN VERSO</div>
+      <p class="lock-frase">El manual de socorro adulto. Entrá, buscá, compará y comprá sin humo.</p>
+      <button class="unlock-btn" type="button" onclick="unlockScreen()">Deslizar para entrar →</button>
+      <div class="unlock-hint">También podés tocar dos veces la pantalla</div>
+    </div>
+  </div>
+</div>
+
+<button class="notify-btn" type="button" aria-label="Ver notificaciones" onclick="toggleNotifications()">🔔<span class="notify-dot"></span></button>
+<div class="notifications-panel" id="notificationsPanel">
+  <div class="notifications-title"><span>Notificaciones</span><span>Ahora</span></div>
+  <div class="notification"><div class="notification-ico">⚠️</div><div><strong>Oferta con olor raro</strong><span>Si el precio es demasiado perfecto y sólo acepta transferencia, revisá dos veces.</span></div></div>
+  <div class="notification"><div class="notification-ico">💸</div><div><strong>Plata Inteligente</strong><span>Nuevo recordatorio: contado no siempre gana si la cuota queda pisada por inflación.</span></div></div>
+  <div class="notification"><div class="notification-ico">🧮</div><div><strong>Calculadoras listas</strong><span>BTU, consumo eléctrico, UPS y paneles solares desde el escritorio.</span></div></div>
+</div>
+
 
 <button class="settings-btn" type="button" aria-label="Cambiar fondo" onclick="toggleSettings()">&#9881;&#65039;</button>
 <div class="settings-panel" id="settingsPanel">
@@ -330,6 +370,18 @@
     <div class="stat"><div class="stat-num">45</div><div class="stat-label">Guías</div></div>
     <div class="stat"><div class="stat-num">8</div><div class="stat-label">Secciones</div></div>
     <div class="stat"><div class="stat-num">0</div><div class="stat-label">Verso</div></div>
+  </div>
+  <div class="music-widget" aria-label="Reproductor tranquilo">
+    <div class="music-cover">🎧</div>
+    <div>
+      <div class="music-title" id="trackTitle">Modo tranquilo</div>
+      <div class="music-sub" id="trackSub">Ambiente suave · sin distracciones</div>
+    </div>
+    <div class="music-controls">
+      <button type="button" onclick="prevTrack()" aria-label="Tema anterior">⏮</button>
+      <button type="button" onclick="toggleMusic()" id="playBtn" aria-label="Reproducir o pausar">▶</button>
+      <button type="button" onclick="nextTrack()" aria-label="Tema siguiente">⏭</button>
+    </div>
   </div>
 </header>
 
@@ -567,6 +619,25 @@ function buscar(q){
   });
   document.getElementById('no-results').classList.toggle('visible',total===0&&q.length>0);
 }
+
+
+function updateLockDate(){const d=document.getElementById('lockDate');if(!d)return;const now=new Date();d.textContent=now.toLocaleDateString('es-AR',{weekday:'long',day:'2-digit',month:'long'});}
+function syncLockClock(){const live=document.getElementById('liveClock')?.textContent || '--:--';const lock=document.getElementById('lockClock');if(lock)lock.textContent=live;updateLockDate();}
+setInterval(syncLockClock,1000);syncLockClock();
+function unlockScreen(){document.getElementById('lockscreen')?.classList.add('unlocked');localStorage.setItem('sinverso-unlocked','1');}
+document.getElementById('lockscreen')?.addEventListener('dblclick',unlockScreen);
+if(localStorage.getItem('sinverso-unlocked')==='1'){document.getElementById('lockscreen')?.classList.add('unlocked');}
+function toggleNotifications(){document.getElementById('notificationsPanel')?.classList.toggle('open');}
+const tracks=[{title:'Modo tranquilo',sub:'Ambiente suave · sin distracciones',freq:196},{title:'Noche violeta',sub:'Synth lento · lectura y mate',freq:220},{title:'Ruta calma',sub:'Pulso bajo · concentración',freq:174},{title:'Café de fondo',sub:'Lo-fi mínimo · navegar guías',freq:246}];
+let currentTrack=0;let audioCtx=null,osc1=null,osc2=null,gain=null,playing=false;
+function renderTrack(){const t=tracks[currentTrack];const title=document.getElementById('trackTitle');const sub=document.getElementById('trackSub');if(title)title.textContent=t.title;if(sub)sub.textContent=t.sub;}
+function startTone(){audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();stopTone(false);const base=tracks[currentTrack].freq;gain=audioCtx.createGain();gain.gain.setValueAtTime(0.0001,audioCtx.currentTime);gain.gain.exponentialRampToValueAtTime(0.035,audioCtx.currentTime+.35);osc1=audioCtx.createOscillator();osc2=audioCtx.createOscillator();osc1.type='sine';osc2.type='triangle';osc1.frequency.value=base;osc2.frequency.value=base*1.5;osc1.connect(gain);osc2.connect(gain);gain.connect(audioCtx.destination);osc1.start();osc2.start();playing=true;document.getElementById('playBtn').textContent='⏸';}
+function stopTone(update=true){try{if(gain&&audioCtx){gain.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+.12);}if(osc1){setTimeout(()=>{try{osc1.stop()}catch(e){}},140)}if(osc2){setTimeout(()=>{try{osc2.stop()}catch(e){}},140)}}catch(e){}osc1=null;osc2=null;gain=null;if(update){playing=false;document.getElementById('playBtn').textContent='▶';}}
+function toggleMusic(){if(playing){stopTone(true)}else{startTone()}}
+function nextTrack(){currentTrack=(currentTrack+1)%tracks.length;renderTrack();if(playing)startTone();}
+function prevTrack(){currentTrack=(currentTrack-1+tracks.length)%tracks.length;renderTrack();if(playing)startTone();}
+renderTrack();
+
 </script>
 </body>
 </html>
