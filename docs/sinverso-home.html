@@ -279,29 +279,41 @@
   body.theme-fuego{background:radial-gradient(circle at 20% 0%,rgba(251,146,60,.38),transparent 34%),radial-gradient(circle at 85% 18%,rgba(239,68,68,.30),transparent 30%),linear-gradient(145deg,#1c0703 0%,#7c2d12 56%,#080808 100%);}
   body.theme-gris{background:radial-gradient(circle at 20% 0%,rgba(148,163,184,.30),transparent 34%),radial-gradient(circle at 85% 18%,rgba(255,255,255,.16),transparent 30%),linear-gradient(145deg,#020617 0%,#334155 56%,#0f172a 100%);}
 
-  .wa-float{
-    position:fixed;
-    bottom:18px;
-    right:50%;
-    transform:translateX(50%);
-    z-index:888;
-    width:min(420px,calc(100% - 34px));
-    height:66px;
-    border-radius:26px;
-    display:flex;
-    align-items:center;
-    justify-content:space-around;
-    font-size:0;
-    text-decoration:none;
-    background:rgba(255,255,255,.13);
-    border:1px solid rgba(255,255,255,.18);
-    backdrop-filter:blur(22px);
-    box-shadow:0 18px 50px rgba(0,0,0,.34);
+  .bottom-dock{
+    position:fixed;bottom:18px;right:50%;transform:translateX(50%);z-index:888;
+    width:min(420px,calc(100% - 34px));min-height:66px;border-radius:26px;
+    display:flex;align-items:center;justify-content:space-around;gap:10px;padding:8px 12px;
+    background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(22px);box-shadow:0 18px 50px rgba(0,0,0,.34);
   }
-  .wa-float::before{content:'🏠';font-size:25px;}
-  .wa-float::after{content:'💬';font-size:28px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border-radius:17px;background:#25D366;box-shadow:0 8px 20px rgba(37,211,102,.35);}
-  .wa-float:hover{transform:translateX(50%) translateY(-2px);}
-
+  .dock-btn{width:50px;height:50px;border-radius:18px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;text-decoration:none;cursor:pointer;transition:transform .18s,background .18s;}
+  .dock-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.18);}
+  .dock-btn.whatsapp{background:#25D366;box-shadow:0 8px 20px rgba(37,211,102,.35);}
+  .dock-btn.favorite-open{position:relative;}
+  .dock-count{position:absolute;right:-4px;top:-5px;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:#f43f5e;color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid rgba(18,18,34,.95);}
+  .favorites-panel{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);z-index:887;width:min(420px,calc(100% - 34px));max-height:55vh;overflow:auto;padding:14px;border-radius:28px;border:1px solid rgba(255,255,255,.16);background:rgba(18,18,34,.86);backdrop-filter:blur(24px);box-shadow:0 22px 60px rgba(0,0,0,.38);display:none;}
+  .favorites-panel.open{display:block;animation:popIn .18s ease-out;}
+  .favorites-title{display:flex;justify-content:space-between;align-items:center;font-weight:900;font-size:14px;margin-bottom:10px;color:#fff;}
+  .favorites-empty{font-size:12px;color:rgba(255,255,255,.64);line-height:1.45;padding:10px 4px 4px;}
+  .favorites-list{display:grid;gap:8px;}
+  .favorite-item{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;padding:10px;border-radius:18px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.10);}
+  .favorite-item span:first-child{width:38px;height:38px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12);font-size:20px;flex-shrink:0;}
+  .favorite-item strong{font-size:12.5px;line-height:1.2;}
+  .fav-btn{position:absolute;top:-4px;right:calc(50% - 42px);z-index:5;width:25px;height:25px;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.32);color:rgba(255,255,255,.86);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(10px);box-shadow:0 6px 16px rgba(0,0,0,.22);}
+  .fav-btn.active{background:#facc15;color:#3b2f00;border-color:rgba(255,255,255,.5);}
+  .mode-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+  .mode-btn{min-height:42px;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:rgba(255,255,255,.10);color:#fff;font-family:'DM Sans',sans-serif;font-weight:900;cursor:pointer;}
+  body.light-mode{--text:#171127;--muted:#5b5570;--glass:rgba(255,255,255,.62);--glass-strong:rgba(255,255,255,.86);--border:rgba(20,20,36,.12);--dock:rgba(255,255,255,.48);--shadow:0 18px 50px rgba(72,52,120,.18);background:radial-gradient(circle at 20% 0%,rgba(216,180,254,.42),transparent 34%),radial-gradient(circle at 85% 18%,rgba(125,211,252,.36),transparent 30%),radial-gradient(circle at 50% 95%,rgba(187,247,208,.26),transparent 36%),linear-gradient(145deg,#f8f7ff 0%,#eef2ff 54%,#fff7ed 100%);color:var(--text);}
+  body.light-mode .statusbar,body.light-mode header::after,body.light-mode .tagline,body.light-mode .bloque-sub,body.light-mode footer,body.light-mode #no-results{color:rgba(23,17,39,.66);}
+  body.light-mode .search-bar input,body.light-mode .stat,body.light-mode .bloque,body.light-mode .music-widget,body.light-mode .bottom-dock{background:rgba(255,255,255,.62);border-color:rgba(23,17,39,.12);color:#171127;}
+  body.light-mode .search-bar input::placeholder{color:rgba(23,17,39,.46);}
+  body.light-mode .guia-nombre{color:#171127;text-shadow:0 2px 10px rgba(255,255,255,.45);}
+  body.light-mode .music-title,body.light-mode .settings-title,body.light-mode .notifications-title,body.light-mode .favorites-title{color:#171127;}
+  body.light-mode .music-sub{color:rgba(23,17,39,.58);}
+  body.light-mode .settings-panel,body.light-mode .notifications-panel,body.light-mode .favorites-panel{background:rgba(255,255,255,.88);border-color:rgba(23,17,39,.12);}
+  body.light-mode .notification,body.light-mode .favorite-item{background:rgba(23,17,39,.06);border-color:rgba(23,17,39,.08);color:#171127;}
+  body.light-mode .notification strong,body.light-mode .notification span,body.light-mode .favorites-empty{color:rgba(23,17,39,.72);}
+  body.light-mode .dock-btn,body.light-mode .mode-btn,body.light-mode .music-controls button{background:rgba(23,17,39,.08);border-color:rgba(23,17,39,.12);color:#171127;}
+  body.light-mode .dock-btn.whatsapp{background:#25D366;color:#fff;}
 
   /* LOCKSCREEN */
   .lockscreen{position:fixed;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at 22% 12%,rgba(240,171,252,.34),transparent 30%),radial-gradient(circle at 82% 25%,rgba(129,140,248,.34),transparent 28%),radial-gradient(circle at 50% 100%,rgba(34,211,238,.18),transparent 38%),linear-gradient(145deg,#050511,#151536 55%,#070713);transition:opacity .55s ease,visibility .55s ease,transform .55s ease;}
@@ -347,6 +359,11 @@
 
 <button class="settings-btn" type="button" aria-label="Cambiar fondo" onclick="toggleSettings()">&#9881;&#65039;</button>
 <div class="settings-panel" id="settingsPanel">
+  <div class="settings-title">Apariencia</div>
+  <div class="mode-row">
+    <button class="mode-btn" type="button" onclick="setMode('dark')">🌙 Oscuro</button>
+    <button class="mode-btn" type="button" onclick="setMode('light')">☀️ Claro</button>
+  </div>
   <div class="settings-title">Cambiar fondo</div>
   <div class="theme-grid">
     <button class="theme-dot" data-theme="noche" onclick="setTheme('noche')">Noche</button>
@@ -572,7 +589,17 @@
   <p style="margin-top:6px">Precios en USD orientativos · Sin publicidad · Sin verso</p>
 </footer>
 
-<a href="https://wa.me/?text=Mira%20SIN%20VERSO%20-%20el%20manual%20de%20socorro%20adulto%2C%20sin%20humo%20y%20sin%20verso%3A%20https%3A%2F%2Fsinverso.com%2F" class="wa-float" id="waShare" target="_blank" rel="noopener">💬</a>
+<div class="favorites-panel" id="favoritesPanel">
+  <div class="favorites-title"><span>Favoritos</span><span id="favoritesTitleCount">0</span></div>
+  <div class="favorites-list" id="favoritesList"></div>
+  <div class="favorites-empty" id="favoritesEmpty">Tocá la estrellita de cualquier app para guardarla acá.</div>
+</div>
+
+<nav class="bottom-dock" aria-label="Accesos rápidos">
+  <button class="dock-btn" type="button" aria-label="Ir al inicio" onclick="goHome()">🏠</button>
+  <button class="dock-btn favorite-open" type="button" aria-label="Ver favoritos" onclick="toggleFavorites()">⭐<span class="dock-count" id="favoriteCount">0</span></button>
+  <a href="https://wa.me/?text=Mira%20SIN%20VERSO%20-%20el%20manual%20de%20socorro%20adulto%2C%20sin%20humo%20y%20sin%20verso%3A%20https%3A%2F%2Fsinverso.com%2F" class="dock-btn whatsapp" id="waShare" target="_blank" rel="noopener" aria-label="Compartir por WhatsApp">💬</a>
+</nav>
 
 <script>
 function updateClock(){
@@ -594,6 +621,8 @@ function setTheme(theme){
   document.getElementById('settingsPanel')?.classList.remove('open');
 }
 setTheme(localStorage.getItem('sinverso-theme')||'noche');
+function setMode(mode){document.body.classList.toggle('light-mode',mode==='light');localStorage.setItem('sinverso-mode',mode==='light'?'light':'dark');}
+setMode(localStorage.getItem('sinverso-mode')||'dark');
 
 function configurarWhatsapp(){
   const link=document.getElementById('waShare');
@@ -637,6 +666,16 @@ function toggleMusic(){if(playing){stopTone(true)}else{startTone()}}
 function nextTrack(){currentTrack=(currentTrack+1)%tracks.length;renderTrack();if(playing)startTone();}
 function prevTrack(){currentTrack=(currentTrack-1+tracks.length)%tracks.length;renderTrack();if(playing)startTone();}
 renderTrack();
+
+function goHome(){window.scrollTo({top:0,behavior:'smooth'});document.getElementById('favoritesPanel')?.classList.remove('open');}
+function getFavs(){try{return JSON.parse(localStorage.getItem('sinverso-favs')||'[]')}catch(e){return []}}
+function saveFavs(favs){localStorage.setItem('sinverso-favs',JSON.stringify(favs));}
+function cardData(card){return {href:card.getAttribute('href'),title:card.querySelector('.guia-nombre')?.textContent.trim()||'Guía',icon:card.querySelector('.guia-ico')?.textContent.trim()||'⭐'};}
+function initFavorites(){document.querySelectorAll('.guia-card').forEach(card=>{if(card.querySelector('.fav-btn'))return;const b=document.createElement('button');b.className='fav-btn';b.type='button';b.setAttribute('aria-label','Agregar a favoritos');b.textContent='☆';b.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();toggleFavorite(card);});card.appendChild(b);});renderFavorites();}
+function toggleFavorite(card){const data=cardData(card);let favs=getFavs();const exists=favs.some(f=>f.href===data.href);favs=exists?favs.filter(f=>f.href!==data.href):[data,...favs].slice(0,24);saveFavs(favs);renderFavorites();}
+function renderFavorites(){const favs=getFavs();const list=document.getElementById('favoritesList');const empty=document.getElementById('favoritesEmpty');const count=document.getElementById('favoriteCount');const titleCount=document.getElementById('favoritesTitleCount');if(count)count.textContent=favs.length;if(titleCount)titleCount.textContent=favs.length;document.querySelectorAll('.guia-card').forEach(card=>{const active=favs.some(f=>f.href===card.getAttribute('href'));const b=card.querySelector('.fav-btn');if(b){b.classList.toggle('active',active);b.textContent=active?'★':'☆';}});if(!list)return;list.innerHTML='';favs.forEach(f=>{const a=document.createElement('a');a.className='favorite-item';a.href=f.href;a.innerHTML='<span>'+f.icon+'</span><strong>'+f.title+'</strong>';list.appendChild(a);});if(empty)empty.style.display=favs.length?'none':'block';}
+function toggleFavorites(){renderFavorites();document.getElementById('favoritesPanel')?.classList.toggle('open');}
+initFavorites();
 
 </script>
 </body>
