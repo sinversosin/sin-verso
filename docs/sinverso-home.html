@@ -6,457 +6,72 @@
 <title>SIN VERSO — El manual de socorro adulto</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#070713;
-    --glass:rgba(20,20,36,.58);
-    --glass-strong:rgba(28,28,48,.78);
-    --border:rgba(255,255,255,.12);
-    --text:#f5f3ff;
-    --muted:#b8b2d8;
-    --dock:rgba(255,255,255,.10);
-    --shadow:0 18px 50px rgba(0,0,0,.38);
-  }
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;}
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html{scroll-behavior:smooth;}
-  body{
-    min-height:100vh;
-    background:
-      radial-gradient(circle at 20% 0%,rgba(129,140,248,.35),transparent 34%),
-      radial-gradient(circle at 85% 18%,rgba(240,171,252,.26),transparent 30%),
-      radial-gradient(circle at 50% 95%,rgba(34,211,238,.16),transparent 36%),
-      linear-gradient(145deg,#050511 0%,#12122a 54%,#070713 100%);
-    background-attachment:fixed;
-    color:var(--text);
-    font-family:'DM Sans',sans-serif;
-    font-size:16px;
-    overflow-x:hidden;
-  }
-  body::before{
-    content:'';
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
-    background-size:34px 34px;
-    mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),transparent 80%);
-  }
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
 
-  header{
-    padding:18px 16px 18px;
-    max-width:780px;
-    margin:0 auto;
-    position:relative;
-  }
-  .statusbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    width:100%;
-    font-size:13px;
-    font-weight:700;
-    letter-spacing:.4px;
-    color:rgba(255,255,255,.82);
-    margin-bottom:24px;
-  }
-  .status-icons{
-    color:rgba(255,255,255,.72);
-    font-size:11px;
-    letter-spacing:4px;
-  }
-  header::after{
-    content:'●  ●  ▰';
-    position:absolute;
-    top:18px;
-    right:18px;
-    color:rgba(255,255,255,.72);
-    font-size:11px;
-    letter-spacing:4px;
-  }
-  /* ── BRAND HEADER ── */
-  .brand-wrap{display:flex;flex-direction:column;align-items:center;text-align:center;margin:8px 0 4px;}
-  .brand-row{display:flex;align-items:center;justify-content:center;gap:16px;}
-  .sos-badge{
-    width:clamp(50px,11vw,78px);height:clamp(50px,11vw,78px);
-    border-radius:50%;
-    background:linear-gradient(145deg,#e11d48,#be123c);
-    border:3px solid rgba(255,255,255,.25);
-    box-shadow:0 0 0 4px rgba(225,29,72,.25),0 10px 28px rgba(225,29,72,.45);
-    display:flex;align-items:center;justify-content:center;
-    flex-shrink:0;
-    animation:sosPulse 2.8s ease-in-out infinite;
-  }
-  @keyframes sosPulse{
-    0%,100%{box-shadow:0 0 0 4px rgba(225,29,72,.22),0 10px 28px rgba(225,29,72,.4);}
-    50%{box-shadow:0 0 0 11px rgba(225,29,72,.10),0 14px 38px rgba(225,29,72,.5);}
-  }
-  .sos-text{font-family:'Bebas Neue',sans-serif;font-size:clamp(17px,4.5vw,26px);color:#fff;letter-spacing:3px;line-height:1;}
-  .logo{
-    font-family:'Bebas Neue',sans-serif;
-    font-size:clamp(52px,14vw,104px);
-    letter-spacing:4px;line-height:.9;
-    background:linear-gradient(135deg,#fff 18%,#f0abfc 58%,#818cf8 100%);
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-    filter:drop-shadow(0 10px 32px rgba(129,140,248,.26));
-  }
-  .manual-label{
-    font-family:'Bebas Neue',sans-serif;
-    font-size:clamp(12px,3.2vw,18px);
-    letter-spacing:6px;color:rgba(245,243,255,.48);
-    margin-top:5px;
-  }
-  .tagline{
-    margin-top:8px;max-width:520px;
-    color:rgba(245,243,255,.65);font-size:13px;line-height:1.45;text-align:center;
-  }
-  .tagline strong{color:#f0abfc;font-style:normal;}
-  body.light-mode .manual-label{color:rgba(23,17,39,.42);}
-  body.light-mode .tagline{color:rgba(23,17,39,.58);}
+  header{padding:60px 20px 50px;text-align:center;position:relative;overflow:hidden;background:linear-gradient(180deg,#0c0c1a,#080810);}
+  header::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(129,140,248,.10) 0%,rgba(240,171,252,.06) 40%,transparent 70%);pointer-events:none;}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,14vw,120px);letter-spacing:4px;line-height:1;background:linear-gradient(135deg,#fff 30%,#c084fc 70%,#818cf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .tagline{margin-top:10px;color:var(--muted);font-size:16px;font-style:italic;}
+  .tagline strong{color:#c084fc;font-style:normal;}
 
-  .search-bar{
-    margin:24px auto 0;
-    max-width:780px;
-    position:relative;
-  }
-  .search-bar input{
-    width:100%;
-    background:rgba(255,255,255,.12);
-    backdrop-filter:blur(18px);
-    border:1px solid rgba(255,255,255,.14);
-    border-radius:26px;
-    padding:15px 18px;
-    font-size:15px;
-    color:var(--text);
-    font-family:'DM Sans',sans-serif;
-    outline:none;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 12px 34px rgba(0,0,0,.18);
-  }
-  .search-bar input:focus{border-color:rgba(240,171,252,.55);background:rgba(255,255,255,.16);}
-  .search-bar input::placeholder{color:rgba(245,243,255,.56);}
+  .search-bar{margin:28px auto 0;max-width:480px;position:relative;}
+  .search-bar input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:30px;padding:14px 50px 14px 20px;font-size:15px;color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
+  .search-bar input:focus{border-color:#818cf8;}
+  .search-bar input::placeholder{color:var(--muted);}
 
-  .stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-    margin:18px 0 0;
-  }
-  .stat{
-    text-align:center;
-    border:1px solid rgba(255,255,255,.12);
-    background:rgba(255,255,255,.08);
-    backdrop-filter:blur(14px);
-    border-radius:20px;
-    padding:12px 8px 10px;
-  }
-  .stat-num{font-family:'Bebas Neue',sans-serif;font-size:32px;color:#fff;line-height:1;}
-  .stat-label{font-size:10px;color:rgba(245,243,255,.58);letter-spacing:1.6px;text-transform:uppercase;margin-top:2px;}
+  .stats{display:flex;justify-content:center;gap:32px;margin:24px 20px 0;flex-wrap:wrap;}
+  .stat{text-align:center;}
+  .stat-num{font-family:'Bebas Neue',sans-serif;font-size:32px;color:#818cf8;line-height:1;}
+  .stat-label{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
 
-  main{padding:8px 16px 112px;max-width:780px;margin:0 auto;}
-  main::before{
-    content:'Apps';
-    display:block;
-    margin:8px 2px 14px;
-    color:rgba(245,243,255,.78);
-    font-weight:800;
-    font-size:14px;
-    letter-spacing:.4px;
-  }
+  main{padding:16px 16px 80px;max-width:680px;margin:0 auto;}
 
-  .bloque{
-    margin-bottom:18px;
-    background:var(--glass);
-    border:1px solid rgba(255,255,255,.11);
-    border-radius:34px;
-    padding:16px;
-    backdrop-filter:blur(20px);
-    box-shadow:var(--shadow);
-  }
-  .bloque-header{
-    display:grid;
-    grid-template-columns:74px 1fr;
-    align-items:center;
-    gap:14px;
-    margin-bottom:16px;
-    padding:0;
-  }
-  .bloque-ico{
-    width:74px;
-    height:74px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:36px;
-    border-radius:24px;
-    background:linear-gradient(145deg,rgba(255,255,255,.24),rgba(255,255,255,.07));
-    border:1px solid rgba(255,255,255,.15);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 14px 28px rgba(0,0,0,.22);
-  }
-  .bloque-titulo{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1.1px;color:var(--text);line-height:.95;}
-  .bloque-sub{font-size:12px;color:rgba(245,243,255,.58);margin-top:6px;line-height:1.35;}
+  .bloque{margin-bottom:36px;}
+  .bloque-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:0 4px;}
+  .bloque-ico{font-size:26px;}
+  .bloque-titulo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;color:var(--text);}
+  .bloque-sub{font-size:12px;color:var(--muted);margin-top:1px;}
 
-  .guias-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:18px 10px;
-  }
-  @media(max-width:560px){.guias-grid{grid-template-columns:repeat(3,1fr);} }
-  @media(max-width:360px){.guias-grid{grid-template-columns:repeat(2,1fr);} }
+  .guias-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+  @media(max-width:400px){.guias-grid{grid-template-columns:1fr;}}
 
-  .guia-card,
-  .guia-card.full,
-  .guia-card.special,
-  .guia-card.solar,
-  .guia-card.calc{
-    grid-column:auto;
-    background:transparent!important;
-    border:0!important;
-    border-radius:0;
-    padding:0;
-    text-decoration:none;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:8px;
-    min-height:122px;
-    color:var(--text);
-    transition:transform .18s,filter .18s;
-    position:relative;
-    overflow:visible;
-  }
-  .guia-card:hover{transform:translateY(-3px);filter:brightness(1.08);}
-  .guia-card::before{display:none;}
-  .guia-card::after{
-    content:'';
-    width:58px;
-    height:5px;
-    position:absolute;
-    top:59px;
-    border-radius:50%;
-    background:rgba(0,0,0,.22);
-    filter:blur(6px);
-    z-index:-1;
-  }
-  .guia-ico{
-    width:62px;
-    height:62px;
-    flex-shrink:0;
-    margin:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:30px;
-    border-radius:20px;
-    background:
-      radial-gradient(circle at 26% 18%,rgba(255,255,255,.65),transparent 16%),
-      linear-gradient(145deg,var(--gc),rgba(255,255,255,.10));
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 22px rgba(0,0,0,.26);
-  }
-  .guia-card>div:last-child{width:100%;text-align:center;}
-  .guia-nombre{font-weight:800;color:var(--text);font-size:11.5px;line-height:1.12;margin:0 auto;max-width:92px;text-shadow:0 2px 10px rgba(0,0,0,.45);}
-  .guia-desc{display:none;}
+  .guia-card{background:var(--card);border:1px solid var(--border);border-radius:15px;padding:14px;text-decoration:none;display:flex;align-items:flex-start;gap:11px;transition:all .2s;position:relative;overflow:hidden;}
+  .guia-card:hover{border-color:var(--gc);transform:translateY(-2px);background:rgba(255,255,255,.03);}
+  .guia-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--gc);border-radius:15px 0 0 15px;}
+  .guia-ico{font-size:24px;flex-shrink:0;margin-top:1px;}
+  .guia-nombre{font-weight:700;color:var(--text);font-size:13px;line-height:1.2;margin-bottom:3px;}
+  .guia-desc{font-size:11px;color:var(--muted);line-height:1.4;}
 
-  .sep{display:none;}
-  footer{
-    max-width:780px;
-    margin:0 auto 24px;
-    text-align:center;
-    padding:18px 20px;
-    color:rgba(245,243,255,.58);
-    font-size:12px;
-  }
-  footer strong{color:#f0abfc;}
+  .guia-card.full{grid-column:1/-1;}
+  .guia-card.special{background:linear-gradient(135deg,rgba(240,171,252,.07),rgba(129,140,248,.04));border-color:rgba(240,171,252,.22);}
+  .guia-card.special:hover{border-color:rgba(240,171,252,.5);}
+  .guia-card.solar{background:linear-gradient(135deg,rgba(74,222,128,.07),rgba(34,211,238,.03));border-color:rgba(74,222,128,.22);}
+  .guia-card.solar:hover{border-color:rgba(74,222,128,.5);}
+  .guia-card.calc{background:linear-gradient(135deg,rgba(129,140,248,.07),rgba(0,212,255,.03));border-color:rgba(129,140,248,.25);}
+  .guia-card.calc:hover{border-color:rgba(129,140,248,.6);}
 
-  .guia-card.hidden{display:none!important;}
-  #no-results{
-    text-align:center;
-    color:rgba(245,243,255,.7);
-    padding:34px 20px;
-    display:none;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.12);
-    border-radius:28px;
-    backdrop-filter:blur(16px);
-  }
+  .sep{height:1px;background:var(--border);margin:4px 0 24px;}
+
+  footer{text-align:center;padding:28px 20px;border-top:1px solid var(--border);color:var(--muted);font-size:13px;}
+  footer strong{color:#c084fc;}
+
+  .guia-card.hidden{display:none;}
+  #no-results{text-align:center;color:var(--muted);padding:40px 20px;display:none;}
   #no-results.visible{display:block;}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  .bottom-dock{
-    position:fixed;bottom:18px;right:50%;transform:translateX(50%);z-index:888;
-    width:min(420px,calc(100% - 34px));min-height:66px;border-radius:26px;
-    display:flex;align-items:center;justify-content:space-around;gap:10px;padding:8px 12px;
-    background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(22px);box-shadow:0 18px 50px rgba(0,0,0,.34);
-  }
-  .dock-btn{width:50px;height:50px;border-radius:18px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;text-decoration:none;cursor:pointer;transition:transform .18s,background .18s;}
-  .dock-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.18);}
-  .dock-btn.whatsapp{background:#25D366;box-shadow:0 8px 20px rgba(37,211,102,.35);}
-  .dock-btn.favorite-open{position:relative;}
-  .dock-count{position:absolute;right:-4px;top:-5px;min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:#f43f5e;color:#fff;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid rgba(18,18,34,.95);}
-  .favorites-panel{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);z-index:887;width:min(420px,calc(100% - 34px));max-height:55vh;overflow:auto;padding:14px;border-radius:28px;border:1px solid rgba(255,255,255,.16);background:rgba(18,18,34,.86);backdrop-filter:blur(24px);box-shadow:0 22px 60px rgba(0,0,0,.38);display:none;}
-  .favorites-panel.open{display:block;animation:popIn .18s ease-out;}
-  .favorites-title{display:flex;justify-content:space-between;align-items:center;font-weight:900;font-size:14px;margin-bottom:10px;color:#fff;}
-  .favorites-empty{font-size:12px;color:rgba(255,255,255,.64);line-height:1.45;padding:10px 4px 4px;}
-  .favorites-list{display:grid;gap:8px;}
-  .favorite-item{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;padding:10px;border-radius:18px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.10);}
-  .favorite-item span:first-child{width:38px;height:38px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12);font-size:20px;flex-shrink:0;}
-  .favorite-item strong{font-size:12.5px;line-height:1.2;}
-  .fav-btn{position:absolute;top:-4px;right:calc(50% - 42px);z-index:5;width:25px;height:25px;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.32);color:rgba(255,255,255,.86);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(10px);box-shadow:0 6px 16px rgba(0,0,0,.22);}
-  .fav-btn.active{background:#facc15;color:#3b2f00;border-color:rgba(255,255,255,.5);}
-
-
-  body.light-mode{--text:#171127;--muted:#5b5570;--glass:rgba(255,255,255,.62);--glass-strong:rgba(255,255,255,.86);--border:rgba(20,20,36,.12);--dock:rgba(255,255,255,.48);--shadow:0 18px 50px rgba(72,52,120,.18);background:radial-gradient(circle at 20% 0%,rgba(216,180,254,.42),transparent 34%),radial-gradient(circle at 85% 18%,rgba(125,211,252,.36),transparent 30%),radial-gradient(circle at 50% 95%,rgba(187,247,208,.26),transparent 36%),linear-gradient(145deg,#f8f7ff 0%,#eef2ff 54%,#fff7ed 100%);color:var(--text);}
-  body.light-mode .statusbar,body.light-mode header::after,body.light-mode .tagline,body.light-mode .bloque-sub,body.light-mode footer,body.light-mode #no-results{color:rgba(23,17,39,.66);}
-  body.light-mode .search-bar input,body.light-mode .stat,body.light-mode .bloque,body.light-mode .bottom-dock{background:rgba(255,255,255,.62);border-color:rgba(23,17,39,.12);color:#171127;}
-  body.light-mode .search-bar input::placeholder{color:rgba(23,17,39,.46);}
-  body.light-mode .guia-nombre{color:#171127;text-shadow:0 2px 10px rgba(255,255,255,.45);}
-
-
-  body.light-mode .notification,body.light-mode .favorite-item{background:rgba(23,17,39,.06);border-color:rgba(23,17,39,.08);color:#171127;}
-  body.light-mode .notification strong,body.light-mode .notification span,body.light-mode .favorites-empty{color:rgba(23,17,39,.72);}
-
-  body.light-mode .dock-btn.whatsapp{background:#25D366;color:#fff;}
-
-  /* LOCKSCREEN */
-  .lockscreen{position:fixed;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at 22% 12%,rgba(240,171,252,.34),transparent 30%),radial-gradient(circle at 82% 25%,rgba(129,140,248,.34),transparent 28%),radial-gradient(circle at 50% 100%,rgba(34,211,238,.18),transparent 38%),linear-gradient(145deg,#050511,#151536 55%,#070713);transition:opacity .55s ease,visibility .55s ease,transform .55s ease;}
-  .lockscreen::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),transparent 85%);}
-  .lockscreen.unlocked{opacity:0;visibility:hidden;transform:scale(1.03);pointer-events:none;}
-  .lock-card{position:relative;width:min(430px,100%);min-height:76vh;border-radius:42px;padding:26px 22px 22px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);backdrop-filter:blur(22px);box-shadow:0 30px 90px rgba(0,0,0,.45);display:flex;flex-direction:column;justify-content:space-between;text-align:center;overflow:hidden;}
-  .lock-card::after{content:'';position:absolute;left:50%;top:14px;transform:translateX(-50%);width:86px;height:24px;border-radius:0 0 18px 18px;background:rgba(0,0,0,.38);}
-  .lock-top{padding-top:42px;}.lock-clock{font-family:'Bebas Neue',sans-serif;font-size:clamp(76px,25vw,118px);line-height:.85;letter-spacing:2px;text-shadow:0 16px 40px rgba(0,0,0,.38);}.lock-date{margin-top:12px;font-weight:800;color:rgba(255,255,255,.76);}.lock-logo{font-family:'Bebas Neue',sans-serif;font-size:54px;letter-spacing:3px;margin-bottom:4px;background:linear-gradient(135deg,#fff,#f0abfc,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}.lock-frase{color:rgba(255,255,255,.72);font-size:14px;line-height:1.45;max-width:300px;margin:0 auto 20px;}.unlock-btn{width:100%;border:1px solid rgba(255,255,255,.18);border-radius:26px;background:rgba(255,255,255,.14);color:#fff;font-weight:900;font-family:'DM Sans',sans-serif;padding:16px 18px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 14px 36px rgba(0,0,0,.24);}.unlock-hint{font-size:12px;color:rgba(255,255,255,.55);margin-top:10px;}
-
-  /* NOTIFICACIONES */
-  .notify-btn{position:fixed;left:18px;top:18px;z-index:999;width:46px;height:46px;border-radius:17px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.14);color:#fff;font-size:22px;backdrop-filter:blur(18px);box-shadow:0 12px 30px rgba(0,0,0,.26);cursor:pointer;}.notify-dot{position:absolute;right:9px;top:8px;width:9px;height:9px;border-radius:50%;background:#f43f5e;box-shadow:0 0 0 3px rgba(244,63,94,.18);}.notifications-panel{position:fixed;top:72px;left:16px;z-index:998;width:min(340px,calc(100% - 32px));padding:14px;border-radius:28px;border:1px solid rgba(255,255,255,.16);background:rgba(18,18,34,.84);backdrop-filter:blur(24px);box-shadow:0 22px 60px rgba(0,0,0,.38);display:none;}.notifications-panel.open{display:block;animation:popIn .18s ease-out;}@keyframes popIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}.notifications-title{display:flex;justify-content:space-between;align-items:center;font-weight:900;font-size:14px;margin-bottom:10px;color:#fff;}.notification{display:flex;gap:11px;padding:12px;border-radius:20px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.10);margin-top:8px;}.notification-ico{width:38px;height:38px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12);font-size:20px;flex-shrink:0;}.notification strong{display:block;font-size:12.5px;color:#fff;margin-bottom:2px;}.notification span{display:block;font-size:11.5px;line-height:1.35;color:rgba(255,255,255,.66);}
-
-
-
-
-  /* BOTON MODO CLARO/OSCURO — reemplaza la ruedita, derecha arriba */
-  .darkmode-btn{
-    position:fixed;right:18px;top:18px;z-index:999;
-    width:46px;height:46px;border-radius:17px;
-    border:1px solid rgba(255,255,255,.18);
-    background:rgba(255,255,255,.14);
-    color:#fff;font-size:22px;
-    backdrop-filter:blur(18px);
-    box-shadow:0 12px 30px rgba(0,0,0,.26);
-    cursor:pointer;
-    transition:all .2s;
-  }
-  .darkmode-btn:hover{background:rgba(255,255,255,.22);}
-  body.light-mode .darkmode-btn{background:rgba(255,255,255,.72);border-color:rgba(23,17,39,.14);color:#171127;}
-
-
-  /* ── ICONOS ANIMADOS ── */
-  @keyframes iconBounce{0%{transform:scale(1) translateY(0);}30%{transform:scale(1.18) translateY(-6px);}55%{transform:scale(0.96) translateY(-2px);}75%{transform:scale(1.06) translateY(-3px);}100%{transform:scale(1) translateY(0);}}
-  @keyframes iconWobble{0%,100%{transform:rotate(0deg) scale(1);}20%{transform:rotate(-8deg) scale(1.1);}40%{transform:rotate(8deg) scale(1.1);}60%{transform:rotate(-5deg) scale(1.05);}80%{transform:rotate(5deg) scale(1.05);}}
-  @keyframes iconGlow{0%{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 22px rgba(0,0,0,.26);}100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 14px 32px rgba(0,0,0,.4),0 0 20px rgba(255,255,255,.15);}}
-
-  /* Desktop — hover suave con glow */
-  @media(hover:hover){
-    .guia-card:hover .guia-ico{
-      animation:iconBounce .5s cubic-bezier(.36,.07,.19,.97) both;
-    }
-  }
-  /* Mobile — tap con wobble */
-  @media(hover:none){
-    .guia-card:active .guia-ico{
-      animation:iconWobble .4s ease both;
-    }
-  }
-
-  /* ── FONDOS POR SECCIÓN ── */
-  .bloque{position:relative;overflow:hidden;}
-  .bloque::before{display:none;} /* resetear el pseudo heredado */
-  .bloque-bg{
-    position:absolute;inset:0;border-radius:34px;
-    background-size:cover;background-position:center;
-    opacity:0;transition:opacity .6s ease;
-    pointer-events:none;z-index:0;
-    filter:blur(1px) saturate(0.7);
-  }
-  .bloque:hover .bloque-bg{opacity:0.09;}
-  .bloque-bg.loaded{opacity:0.07;}
-  .bloque:hover .bloque-bg.loaded{opacity:0.12;}
-  .bloque>*:not(.bloque-bg){position:relative;z-index:1;}
-
-  /* ── WIDGET DE CLIMA ── */
-  .clima-widget{
-    display:flex;align-items:center;gap:10px;
-    margin-top:16px;
-    padding:12px 16px;
-    background:rgba(255,255,255,.10);
-    border:1px solid rgba(255,255,255,.14);
-    border-radius:20px;
-    backdrop-filter:blur(16px);
-    transition:all .3s;
-  }
-  .clima-ico{font-size:28px;flex-shrink:0;line-height:1;}
-  .clima-info{flex:1;min-width:0;}
-  .clima-temp{font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fff;line-height:1;}
-  .clima-desc{font-size:11px;color:rgba(245,243,255,.62);margin-top:2px;}
-  .clima-consejo{font-size:12px;font-weight:700;color:#f0abfc;margin-top:4px;line-height:1.3;}
-  .clima-loading{font-size:12px;color:rgba(245,243,255,.5);font-style:italic;}
-  body.light-mode .clima-widget{background:rgba(255,255,255,.62);border-color:rgba(23,17,39,.12);}
-  body.light-mode .clima-temp{color:#171127;}
-  body.light-mode .clima-desc{color:rgba(23,17,39,.56);}
-  body.light-mode .clima-consejo{color:#7c3aed;}
-
+  /* WA FLOTANTE */
+  .wa-float{position:fixed;bottom:22px;right:18px;z-index:888;background:#25D366;border-radius:50%;width:52px;height:52px;display:flex;align-items:center;justify-content:center;font-size:24px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s;}
+  .wa-float:hover{transform:scale(1.1);}
 </style>
 </head>
 <body>
 
-<div class="lockscreen" id="lockscreen">
-  <div class="lock-card">
-    <div class="lock-top">
-      <div class="lock-clock" id="lockClock">--:--</div>
-      <div class="lock-date" id="lockDate">SIN VERSO</div>
-    </div>
-    <div class="lock-bottom">
-      <div class="lock-logo">SIN VERSO</div>
-      <p class="lock-frase">El manual de socorro adulto. Entrá, buscá, compará y comprá sin humo.</p>
-      <button class="unlock-btn" type="button" onclick="unlockScreen()">Deslizar para entrar →</button>
-      <div class="unlock-hint">También podés tocar dos veces la pantalla</div>
-    </div>
-  </div>
-</div>
-
-<button class="notify-btn" type="button" aria-label="Ver notificaciones" onclick="toggleNotifications()">🔔<span class="notify-dot"></span></button>
-<div class="notifications-panel" id="notificationsPanel">
-  <div class="notifications-title"><span>Notificaciones</span><span>Ahora</span></div>
-  <div class="notification"><div class="notification-ico">⚠️</div><div><strong>Oferta con olor raro</strong><span>Si el precio es demasiado perfecto y sólo acepta transferencia, revisá dos veces.</span></div></div>
-  <div class="notification"><div class="notification-ico">💸</div><div><strong>Plata Inteligente</strong><span>Nuevo recordatorio: contado no siempre gana si la cuota queda pisada por inflación.</span></div></div>
-  <div class="notification"><div class="notification-ico">🧮</div><div><strong>Calculadoras listas</strong><span>BTU, consumo eléctrico, UPS y paneles solares desde el escritorio.</span></div></div>
-</div>
-
-
-<button class="darkmode-btn" id="darkmodeBtn" type="button" aria-label="Modo claro/oscuro" onclick="toggleDarkMode()">🌙</button>
-
 <header>
-  <div class="statusbar"><span id="liveClock">--:--</span><span class="status-icons">&bull;  &bull;  &#9645;</span></div>
-
-  <div class="brand-wrap">
-    <div class="brand-row">
-      <div class="sos-badge"><span class="sos-text">S.O.S</span></div>
-      <div class="logo">SIN VERSO</div>
-    </div>
-    <div class="manual-label">Manual de Socorro Adulto</div>
-    <p class="tagline">El que nadie te dio. <strong>Sin humo. Sin jerga. Sin verso.</strong></p>
-  </div>
+  <div class="logo">SIN VERSO</div>
+  <p class="tagline">El manual de socorro adulto que nadie te dio. <strong>Sin humo. Sin jerga. Sin verso.</strong></p>
   <div class="search-bar">
     <input type="text" id="buscador" placeholder="🔍  Buscá una guía..." oninput="buscar(this.value)">
   </div>
@@ -465,22 +80,13 @@
     <div class="stat"><div class="stat-num">8</div><div class="stat-label">Secciones</div></div>
     <div class="stat"><div class="stat-num">0</div><div class="stat-label">Verso</div></div>
   </div>
-
-  <div class="clima-widget" id="climaWidget" style="display:none">
-    <div class="clima-ico" id="climaIco">🌤️</div>
-    <div class="clima-info">
-      <div class="clima-temp" id="climaTemp">--°C</div>
-      <div class="clima-desc" id="climaDesc">Cargando...</div>
-      <div class="clima-consejo" id="climaConsejo"></div>
-    </div>
-  </div>
 </header>
 
 <main>
 
 
 <!-- IA DESTACADA -->
-<div class="bloque" id="b-ia"><div class="bloque-bg" data-src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&q=60&auto=format"></div>
+<div class="bloque" id="b-ia">
   <div class="bloque-header">
     <div class="bloque-ico">🤖</div>
     <div>
@@ -501,7 +107,7 @@
 <div class="sep"></div>
 
 <!-- HERRAMIENTAS RÁPIDAS -->
-<div class="bloque" id="b-tools"><div class="bloque-bg" data-src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=60&auto=format"></div>
+<div class="bloque" id="b-tools">
   <div class="bloque-header">
     <div class="bloque-ico">🧮</div>
     <div>
@@ -519,14 +125,16 @@
     <a href="plata-inteligente.html" class="guia-card" style="--gc:#4ade80" data-s="plata cuotas garantía mercado libre negociar precio trampa">
       <div class="guia-ico">💰</div><div><div class="guia-nombre">Plata Inteligente</div><div class="guia-desc">Cuotas vs contado, garantías y cómo no caer en MercadoLibre</div></div>
     </a>
-
+    <a href="auto-basico.html" class="guia-card" style="--gc:#fb923c" data-s="auto neumáticos aceite batería luces tablero VTV inspección">
+      <div class="guia-ico">🚗</div><div><div class="guia-nombre">Auto Básico</div><div class="guia-desc">Neumáticos, fluidos, batería, luces de tablero y VTV</div></div>
+    </a>
   </div>
 </div>
 
 <div class="sep"></div>
 
 <!-- TECNOLOGÍA -->
-<div class="bloque" id="b-tech"><div class="bloque-bg" data-src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=60&auto=format"></div>
+<div class="bloque" id="b-tech">
   <div class="bloque-header">
     <div class="bloque-ico">🖥️</div>
     <div>
@@ -569,7 +177,7 @@
 <div class="sep"></div>
 
 <!-- HOGAR -->
-<div class="bloque" id="b-hogar"><div class="bloque-bg" data-src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=60&auto=format"></div>
+<div class="bloque" id="b-hogar">
   <div class="bloque-header">
     <div class="bloque-ico">🏠</div>
     <div>
@@ -600,7 +208,7 @@
 <div class="sep"></div>
 
 <!-- RETRO -->
-<div class="bloque" id="b-retro"><div class="bloque-bg" data-src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=60&auto=format"></div>
+<div class="bloque" id="b-retro">
   <div class="bloque-header">
     <div class="bloque-ico">📼</div>
     <div>
@@ -622,7 +230,7 @@
 <div class="sep"></div>
 
 <!-- SALUD -->
-<div class="bloque" id="b-salud"><div class="bloque-bg" data-src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=60&auto=format"></div>
+<div class="bloque" id="b-salud">
   <div class="bloque-header">
     <div class="bloque-ico">❤️</div>
     <div>
@@ -661,47 +269,10 @@
   <p style="margin-top:6px">Precios en USD orientativos · Sin publicidad · Sin verso</p>
 </footer>
 
-<div class="favorites-panel" id="favoritesPanel">
-  <div class="favorites-title"><span>Favoritos</span><span id="favoritesTitleCount">0</span></div>
-  <div class="favorites-list" id="favoritesList"></div>
-  <div class="favorites-empty" id="favoritesEmpty">Tocá la estrellita de cualquier app para guardarla acá.</div>
-</div>
-
-<nav class="bottom-dock" aria-label="Accesos rápidos">
-  <button class="dock-btn" type="button" aria-label="Ir al inicio" onclick="goHome()">🏠</button>
-  <button class="dock-btn favorite-open" type="button" aria-label="Ver favoritos" onclick="toggleFavorites()">⭐<span class="dock-count" id="favoriteCount">0</span></button>
-  <a href="https://wa.me/?text=Mira%20SIN%20VERSO%20-%20el%20manual%20de%20socorro%20adulto%2C%20sin%20humo%20y%20sin%20verso%3A%20https%3A%2F%2Fsinverso.com%2F" class="dock-btn whatsapp" id="waShare" target="_blank" rel="noopener" aria-label="Compartir por WhatsApp">💬</a>
-</nav>
+<a href="https://wa.me/?text=Mirá SIN VERSO — el manual de compras que necesitaba: sinverso.com" class="wa-float" target="_blank">💬</a>
 
 <script>
-function updateClock(){
-  const el=document.getElementById('liveClock');
-  if(!el)return;
-  const now=new Date();
-  el.textContent=now.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',hour12:false});
-}
-updateClock();
-setInterval(updateClock,30000);
-
-
-
-function setMode(mode){document.body.classList.toggle('light-mode',mode==='light');localStorage.setItem('sinverso-mode',mode==='light'?'light':'dark');const btn=document.getElementById('darkmodeBtn');if(btn)btn.textContent=mode==='light'?'🌙':'☀️';}
-function toggleDarkMode(){const isLight=document.body.classList.contains('light-mode');setMode(isLight?'dark':'light');}
-setMode(localStorage.getItem('sinverso-mode')||'dark');
-// Ícono inicial correcto
-(function(){const btn=document.getElementById('darkmodeBtn');if(!btn)return;const m=localStorage.getItem('sinverso-mode')||'dark';btn.textContent=m==='light'?'🌙':'☀️';})();
-
-function configurarWhatsapp(){
-  const link=document.getElementById('waShare');
-  if(!link)return;
-  const url=(location.protocol.startsWith('http') ? location.href : 'https://sinverso.com/');
-  const texto="Mira SIN VERSO - el manual de socorro adulto, sin humo y sin verso: "+url;
-  link.href='https://wa.me/?text='+encodeURIComponent(texto);
-}
-configurarWhatsapp();
-
 function buscar(q){
-
   q=q.toLowerCase().trim();
   let total=0;
   document.querySelectorAll('.guia-card').forEach(card=>{
@@ -715,127 +286,6 @@ function buscar(q){
   });
   document.getElementById('no-results').classList.toggle('visible',total===0&&q.length>0);
 }
-
-
-function updateLockDate(){const d=document.getElementById('lockDate');if(!d)return;const now=new Date();d.textContent=now.toLocaleDateString('es-AR',{weekday:'long',day:'2-digit',month:'long'});}
-function syncLockClock(){const live=document.getElementById('liveClock')?.textContent || '--:--';const lock=document.getElementById('lockClock');if(lock)lock.textContent=live;updateLockDate();}
-setInterval(syncLockClock,1000);syncLockClock();
-function unlockScreen(){document.getElementById('lockscreen')?.classList.add('unlocked');localStorage.setItem('sinverso-unlocked','1');}
-document.getElementById('lockscreen')?.addEventListener('dblclick',unlockScreen);
-if(localStorage.getItem('sinverso-unlocked')==='1'){document.getElementById('lockscreen')?.classList.add('unlocked');}
-function toggleNotifications(){document.getElementById('notificationsPanel')?.classList.toggle('open');}
-
-
-function goHome(){window.scrollTo({top:0,behavior:'smooth'});document.getElementById('favoritesPanel')?.classList.remove('open');}
-function getFavs(){try{return JSON.parse(localStorage.getItem('sinverso-favs')||'[]')}catch(e){return []}}
-function saveFavs(favs){localStorage.setItem('sinverso-favs',JSON.stringify(favs));}
-function cardData(card){return {href:card.getAttribute('href'),title:card.querySelector('.guia-nombre')?.textContent.trim()||'Guía',icon:card.querySelector('.guia-ico')?.textContent.trim()||'⭐'};}
-function initFavorites(){document.querySelectorAll('.guia-card').forEach(card=>{if(card.querySelector('.fav-btn'))return;const b=document.createElement('button');b.className='fav-btn';b.type='button';b.setAttribute('aria-label','Agregar a favoritos');b.textContent='☆';b.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();toggleFavorite(card);});card.appendChild(b);});renderFavorites();}
-function toggleFavorite(card){const data=cardData(card);let favs=getFavs();const exists=favs.some(f=>f.href===data.href);favs=exists?favs.filter(f=>f.href!==data.href):[data,...favs].slice(0,24);saveFavs(favs);renderFavorites();}
-function renderFavorites(){const favs=getFavs();const list=document.getElementById('favoritesList');const empty=document.getElementById('favoritesEmpty');const count=document.getElementById('favoriteCount');const titleCount=document.getElementById('favoritesTitleCount');if(count)count.textContent=favs.length;if(titleCount)titleCount.textContent=favs.length;document.querySelectorAll('.guia-card').forEach(card=>{const active=favs.some(f=>f.href===card.getAttribute('href'));const b=card.querySelector('.fav-btn');if(b){b.classList.toggle('active',active);b.textContent=active?'★':'☆';}});if(!list)return;list.innerHTML='';favs.forEach(f=>{const a=document.createElement('a');a.className='favorite-item';a.href=f.href;a.innerHTML='<span>'+f.icon+'</span><strong>'+f.title+'</strong>';list.appendChild(a);});if(empty)empty.style.display=favs.length?'none':'block';}
-function toggleFavorites(){renderFavorites();document.getElementById('favoritesPanel')?.classList.toggle('open');}
-initFavorites();
-
-
-// ══════════════════════════════════════
-// WIDGET DE CLIMA — Open-Meteo (sin API key)
-// ══════════════════════════════════════
-function climaIco(code){
-  if(code===0) return '☀️';
-  if(code<=3)  return '⛅';
-  if(code<=48) return '🌫️';
-  if(code<=55) return '🌦️';
-  if(code<=65) return '🌧️';
-  if(code<=77) return '❄️';
-  if(code<=82) return '🌦️';
-  return '⛈️';
-}
-function climaDesc(code){
-  if(code===0) return 'Cielo despejado';
-  if(code<=2)  return 'Mayormente despejado';
-  if(code<=3)  return 'Parcialmente nublado';
-  if(code<=48) return 'Niebla';
-  if(code<=55) return 'Llovizna';
-  if(code<=65) return 'Lluvia';
-  if(code<=77) return 'Nieve / aguanieve';
-  if(code<=82) return 'Chaparrones';
-  return 'Tormenta';
-}
-function climaConsejo(code, temp){
-  // Primero condición, después temperatura
-  if(code>=95) return '⛈️ Tormenta. Quedáte en casa y leé SIN VERSO.';
-  if(code>=80) return '☔ Chaparrones. Salí entre cortes o te mojás igual.';
-  if(code>=61) return '🌧️ Lluvia. Llevá paraguas en serio, no el roto de hace 3 meses.';
-  if(code>=51) return '🌂 Llovizna. Llevá el paraguas chico, no seas optimista.';
-  if(code>=71) return '❄️ Nieve o aguanieve. Abrigate como si vivieras en Siberia.';
-  if(code>=45) return '🌫️ Hay niebla. Manejá con cuidado y prendé las luces.';
-  // Por temperatura
-  if(temp>=36) return '🥵 Más de 35°. Tomá mucha agua y no hagas changas al mediodía.';
-  if(temp>=29) return '☀️ Calorcito serio. Protector solar antes de salir, en serio.';
-  if(temp>=23) return '😎 Temperatura perfecta. Ideal para salir.';
-  if(temp>=16) return '🧥 Fresquito. Con una campera alcanza.';
-  if(temp>=9)  return '🧤 Frío. Abrigate bien antes de salir.';
-  return '🥶 Mucho frío. Abrigo grueso, medias dobles y mate caliente.';
-}
-
-function cargarClima(){
-  if(!navigator.geolocation) return;
-  navigator.geolocation.getCurrentPosition(function(pos){
-    var lat = pos.coords.latitude.toFixed(4);
-    var lon = pos.coords.longitude.toFixed(4);
-    var url = 'https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&current=temperature_2m,weather_code,wind_speed_10m&timezone=auto';
-    fetch(url).then(function(r){return r.json();}).then(function(d){
-      var temp = Math.round(d.current.temperature_2m);
-      var code = d.current.weather_code;
-      document.getElementById('climaIco').textContent  = climaIco(code);
-      document.getElementById('climaTemp').textContent = temp+'°C';
-      document.getElementById('climaDesc').textContent = climaDesc(code);
-      document.getElementById('climaConsejo').textContent = climaConsejo(code, temp);
-      var w = document.getElementById('climaWidget');
-      w.style.display = 'flex';
-      w.style.opacity = '0';
-      setTimeout(function(){ w.style.transition='opacity .6s'; w.style.opacity='1'; }, 50);
-    }).catch(function(){});
-  }, function(){}, {timeout:8000});
-}
-cargarClima();
-
-// ══════════════════════════════════════
-// LAZY LOAD FONDOS DE SECCIÓN
-// ══════════════════════════════════════
-function lazyLoadBgs(){
-  document.querySelectorAll('.bloque-bg[data-src]').forEach(function(el){
-    var img = new Image();
-    img.onload = function(){
-      el.style.backgroundImage = 'url('+el.dataset.src+')';
-      el.classList.add('loaded');
-    };
-    img.src = el.dataset.src;
-  });
-}
-// Cargar cuando el navegador esté idle, o a los 2s
-if('requestIdleCallback' in window){
-  requestIdleCallback(lazyLoadBgs);
-} else {
-  setTimeout(lazyLoadBgs, 2000);
-}
-
-// ══════════════════════════════════════
-// ANIMACIÓN EXTRA TAP en mobile (rebote más notorio)
-// ══════════════════════════════════════
-var isTouchDevice = window.matchMedia('(hover:none)').matches;
-if(isTouchDevice){
-  document.addEventListener('click', function(e){
-    var card = e.target.closest('.guia-card');
-    if(!card) return;
-    var ico = card.querySelector('.guia-ico');
-    if(!ico) return;
-    ico.style.animation = 'none';
-    void ico.offsetWidth; // reflow
-    ico.style.animation = 'iconBounce .45s cubic-bezier(.36,.07,.19,.97) both';
-  }, {passive:true});
-}
-
 </script>
 </body>
 </html>
