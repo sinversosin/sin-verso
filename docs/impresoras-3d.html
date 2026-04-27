@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Impresoras 3D</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--soft:#aaaacc;--accent:#f97316;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{background:
+    radial-gradient(circle at 18% 10%,rgba(249,115,22,.24),transparent 28%),
+    radial-gradient(circle at 85% 0%,rgba(251,146,60,.16),transparent 30%),
+    linear-gradient(160deg,#111827,#1c0f04 54%,#080810);
+    background-attachment:fixed;
+    color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  body.light{
+    background:radial-gradient(circle at 18% 10%,rgba(249,115,22,.2),transparent 28%),
+      radial-gradient(circle at 85% 0%,rgba(251,146,60,.14),transparent 30%),
+      linear-gradient(160deg,#fff7ed,#ffedd5 54%,#fff7f0)!important;
+    color:#1c0a00;}
+  /* appStatus */
+  #appStatus{position:sticky;top:0;z-index:1000;height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(7,7,16,.45);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);font-size:12px;font-weight:800;color:rgba(255,255,255,.8);}
+  body.light #appStatus{background:rgba(255,255,255,.52);border-bottom-color:rgba(20,20,60,.08);color:#444;}
+  #appStatus .sys-r{display:flex;gap:8px;align-items:center;opacity:.7;}
+  /* header */
+  header{margin:12px auto 0;max-width:760px;border:1px solid rgba(255,255,255,.11);border-radius:0 0 32px 32px;background:linear-gradient(145deg,rgba(12,12,28,.74),rgba(22,16,48,.58));backdrop-filter:blur(20px);box-shadow:0 18px 60px rgba(0,0,0,.38);padding:44px 24px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:500px;height:220px;background:radial-gradient(ellipse,rgba(249,115,22,.15),transparent 70%);pointer-events:none;}
+  body.light header{background:linear-gradient(145deg,rgba(255,255,255,.76),rgba(255,237,213,.62))!important;}
+  .ia-badge{display:inline-block;background:linear-gradient(135deg,rgba(249,115,22,.2),rgba(251,146,60,.15));border:1px solid rgba(249,115,22,.4);border-radius:20px;padding:5px 18px;font-size:12px;font-weight:700;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,9vw,88px);letter-spacing:3px;line-height:1;background:linear-gradient(135deg,#fff 20%,#f97316 55%,#fb923c 80%,#fbbf24 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:12px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  /* folder */
+  .folder-wrap{max-width:760px;margin:14px auto 0;padding:0 14px 10px;position:relative;z-index:1;}
+  .folder-card{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.13);border-radius:30px;padding:18px 14px 20px;box-shadow:0 20px 60px rgba(0,0,0,.22);backdrop-filter:blur(18px);}
+  body.light .folder-card{background:rgba(255,255,255,.72);border-color:rgba(30,30,80,.12);}
+  .folder-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 6px 14px;}
+  .folder-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1.5px;color:var(--text);line-height:1;}
+  .folder-sub{font-size:12px;color:var(--muted);margin-top:3px;}
+  .folder-count{font-size:11px;font-weight:800;color:#050510;background:var(--accent);border-radius:999px;padding:6px 11px;white-space:nowrap;}
+  .app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 10px;padding:6px 2px 4px;}
+  @media(max-width:360px){.app-grid{grid-template-columns:repeat(3,1fr);}}
+  .app-btn{border:0;background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;-webkit-tap-highlight-color:transparent;}
+  .app-ico{width:62px;height:62px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;background:linear-gradient(145deg,var(--c1),var(--c2));box-shadow:0 10px 24px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .18s ease,filter .18s ease;position:relative;overflow:hidden;}
+  .app-ico::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.30),transparent 42%);opacity:.55;}
+  @media(hover:hover){.app-btn:hover .app-ico{transform:translateY(-3px) scale(1.08);filter:saturate(1.2);}}
+  @media(hover:none){.app-btn:active .app-ico{transform:scale(.93);}}
+  .app-name{font-size:11px;line-height:1.15;color:var(--text);text-shadow:0 2px 8px rgba(0,0,0,.35);max-width:72px;font-weight:700;}
+  body.light .app-name{text-shadow:none;color:#17172a;}
+  #folderScreen.hidden{display:none;}
+  .back-btn{display:none;margin:0 16px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:var(--text);border-radius:999px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer;backdrop-filter:blur(14px);}
+  .back-btn.on{display:inline-flex;align-items:center;gap:8px;}
+  body.light .back-btn{background:rgba(255,255,255,.8);border-color:rgba(30,30,80,.14);color:#17172a;}
+  /* tabs ocultos */
+  .tabs{display:none!important;}
+  /* main */
+  main{max-width:760px;background:rgba(8,8,16,.22);border:1px solid rgba(255,255,255,.06);border-radius:28px 28px 0 0;backdrop-filter:blur(10px);margin:0 auto;padding:24px 16px 96px;}
+  body.light main{background:rgba(255,255,255,.30);border-color:rgba(30,30,80,.07);color:#1c0a00;}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09);padding:12px 15px;border-radius:16px;backdrop-filter:blur(10px);color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);font-style:italic;}
+  body.light .sec-sub{background:rgba(255,255,255,.5);border-color:rgba(30,30,80,.08);color:#555;}
+  /* cards */
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;backdrop-filter:blur(14px);}
+  .card:hover{border-color:rgba(249,115,22,.4);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  body.light .card{background:rgba(255,255,255,.72)!important;border-color:rgba(30,30,80,.12)!important;}
+  body.light .card-name{color:#1c0a00!important;}
+  body.light .card-body{color:#555!important;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3);}
+  .b-mid{background:rgba(249,115,22,.12);color:var(--accent);border:1px solid rgba(249,115,22,.3);}
+  .b-high{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tip{background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.2);border-radius:14px;padding:14px 16px;margin-top:18px;font-size:14px;line-height:1.65;color:#fdba74;}
+  .tip strong{color:var(--accent);}
+  .tip-green{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);color:#a0e8b4;}
+  .tip-green strong{color:#4ade80;}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-blue{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);color:#a0e4f0;}
+  .tip-blue strong{color:#00d4ff;}
+  .tabla{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px;}
+  .tabla th{background:rgba(255,255,255,.07);color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:10px 12px;text-align:left;border-bottom:2px solid var(--border);}
+  .tabla td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.06);color:var(--muted);line-height:1.5;}
+  .tabla td:first-child{color:var(--text);font-weight:700;}
+  .tabla tr:hover td{background:rgba(255,255,255,.02);}
+  .cat-header{display:flex;align-items:center;gap:10px;margin:22px 0 14px;}
+  .cat-ico{font-size:20px;}.cat-titulo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:1px;}
+  .cat-sep{flex:1;height:1px;background:rgba(255,255,255,.1);}
+  .related{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px;margin-top:28px;}
+  .rel-title{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--muted);letter-spacing:1px;margin-bottom:12px;}
+  .rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .rel-link{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:8px 14px;text-decoration:none;font-size:12px;font-weight:700;color:var(--text);transition:all .2s;}
+  .rel-link:hover{border-color:var(--accent);}
+  /* theme btn */
+  .sv-darkmode-btn{position:fixed;right:14px;top:36px;z-index:999;width:40px;height:40px;border-radius:13px;border:1px solid rgba(255,255,255,.18);background:rgba(10,10,20,.75);color:#fff;font-size:18px;backdrop-filter:blur(14px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+  body.light .sv-darkmode-btn{background:rgba(255,255,255,.85);border-color:rgba(20,20,80,.15);color:#333;}
+  /* dock */
+  .sv-dock{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:888;display:flex;align-items:center;gap:10px;padding:8px 14px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);border-radius:24px;backdrop-filter:blur(20px);box-shadow:0 14px 40px rgba(0,0,0,.32);}
+  body.light .sv-dock{background:rgba(255,255,255,.72);border-color:rgba(20,20,80,.14);}
+  .sv-dock-btn{width:46px;height:46px;border-radius:16px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;text-decoration:none;cursor:pointer;transition:transform .18s;}
+  .sv-dock-btn:hover{transform:translateY(-2px);}
+  .sv-dock-btn.wa{background:#25D366;box-shadow:0 6px 18px rgba(37,211,102,.4);}
+  body.light .sv-dock-btn{background:rgba(20,20,80,.08);color:#333;}
+</style>
+</head>
+<body>
+
+<div id="appStatus">
+  <span id="svClock">--:--</span>
+  <span class="sys-r">SIN VERSO · IMPRESORAS 3D <span>▰▰▰</span></span>
+</div>
+
+<button class="sv-darkmode-btn" id="svDarkBtn" onclick="svToggleDark()">☀️</button>
+
+<header>
+  <div class="ia-badge">🖨️ Guía completa</div>
+  <h1>Impresoras 3D</h1>
+  <p class="subtitle">De la pantalla al objeto físico.<br><strong>Sin humo, sin filamento perdido y sin verso.</strong></p>
+</header>
+
+<!-- CARPETA DE APPS -->
+<section class="folder-wrap" id="folderScreen">
+  <div class="folder-card">
+    <div class="folder-top">
+      <div>
+        <div class="folder-title">Impresoras 3D</div>
+        <div class="folder-sub">Tocá una sección para entrar</div>
+      </div>
+      <div class="folder-count">9 secciones</div>
+    </div>
+    <div class="app-grid">
+      <button class="app-btn" onclick="goTab('quees')"><span class="app-ico" style="--c1:#f97316;--c2:#ea580c">🖨️</span><span class="app-name">¿Qué es?</span></button>
+      <button class="app-btn" onclick="goTab('specs')"><span class="app-ico" style="--c1:#64748b;--c2:#334155">⚙️</span><span class="app-name">Specs</span></button>
+      <button class="app-btn" onclick="goTab('materiales')"><span class="app-ico" style="--c1:#22c55e;--c2:#15803d">🧵</span><span class="app-name">Materiales</span></button>
+      <button class="app-btn" onclick="goTab('marcas')"><span class="app-ico" style="--c1:#fbbf24;--c2:#d97706">🏆</span><span class="app-name">Las marcas</span></button>
+      <button class="app-btn" onclick="goTab('presupuesto')"><span class="app-ico" style="--c1:#4ade80;--c2:#22c55e">💰</span><span class="app-name">Presupuesto</span></button>
+      <button class="app-btn" onclick="goTab('usos')"><span class="app-ico" style="--c1:#818cf8;--c2:#6366f1">🎯</span><span class="app-name">Usos reales</span></button>
+      <button class="app-btn" onclick="goTab('nadie')"><span class="app-ico" style="--c1:#f87171;--c2:#dc2626">⚠️</span><span class="app-name">Lo que nadie cuenta</span></button>
+      <button class="app-btn" onclick="goTab('accesorios')"><span class="app-ico" style="--c1:#34d399;--c2:#0d9488">🧰</span><span class="app-name">Accesorios</span></button>
+      <button class="app-btn" onclick="goTab('checklist')"><span class="app-ico" style="--c1:#22c55e;--c2:#16a34a">🛒</span><span class="app-name">Antes de comprar</span></button>
+    </div>
+  </div>
+</section>
+
+<main>
+<button class="back-btn" id="backBtn" onclick="showFolder()">← Volver</button>
+
+<!-- ═══ QUÉ ES ═══ -->
+<div class="section" id="quees">
+  <div class="sec-title">¿Qué es una impresora 3D?</div>
+  <div class="sec-sub">Una máquina que convierte un archivo digital en un objeto físico real. <em>Lo que hace 10 años era ciencia ficción, hoy se compra en Mercado Libre.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">FDM — La más popular</div><span class="badge b-ok">Para empezar</span></div>
+      <div class="card-body">
+        <strong>Fused Deposition Modeling</strong> — deposita filamento plástico fundido capa por capa. Es la tecnología más usada, más barata y más accesible. Lo que imaginás cuando pensás en "impresora 3D".
+        <br><br>
+        <strong>Cómo funciona:</strong> un carrete de filamento (como hilo de plástico) se calienta hasta fundirse y se deposita en capas muy finas sobre la base. Capa por capa, el objeto toma forma.
+        <br><br>
+        <strong>Lo bueno:</strong> barata, materiales accesibles, fácil de mantener, muchos modelos disponibles.<br>
+        <strong>Lo malo:</strong> las líneas de capa se notan, necesita soporte para partes que "flotan", post-proceso para acabado liso.
+        <br><em>— "El 90% de lo que querés hacer en casa, lo hace FDM perfectamente."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">💰 <span>Desde USD 200</span></div>
+        <div class="chip">🧵 <span>PLA / ABS / PETG</span></div>
+        <div class="chip">📐 <span>Capas de 0.1-0.3mm</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#c084fc">
+      <div class="card-head"><div class="card-name">Resina (MSLA/SLA)</div><span class="badge b-high">Alta definición</span></div>
+      <div class="card-body">
+        Usa resina líquida fotosensible que se solidifica con luz UV. El resultado es impresionante en detalle — ideal para miniaturas, joyería, dental y piezas con geometría muy fina.
+        <br><br>
+        <strong>Cómo funciona:</strong> una pantalla UV proyecta cada capa sobre la resina. La resina expuesta se endurece, la cubeta baja y se expone la siguiente capa.
+        <br><br>
+        <strong>Lo bueno:</strong> detalle increíble, superficies lisas, capas imperceptibles.<br>
+        <strong>Lo malo:</strong> resina tóxica (requiere guantes y ventilación), lavado y curado post-impresión, más costosa de operar, volumen de impresión más chico.
+        <br><em>— "Si FDM es la herramienta de taller, resina es el bisturí de cirugía."</em>
+      </div>
+      <div class="chips">
+        <div class="chip">💰 <span>Desde USD 150</span></div>
+        <div class="chip">🧪 <span>Resina fotopolímero</span></div>
+        <div class="chip">📐 <span>Capas de 0.01-0.05mm</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">SLS — Sinterizado por láser</div><span class="badge b-top">Profesional</span></div>
+      <div class="card-body">
+        Usa un láser para fundir polvo (nylon, metal, cerámica). Sin necesidad de soportes, piezas muy resistentes, materiales industriales. Tecnología de ingeniería y manufactura.
+        <br><br>
+        <strong>Precio real:</strong> USD 5.000 a USD 500.000. No es para uso doméstico. Se nombra para que sepas que existe cuando en el laburo alguien mencione "impresión 3D en metal".
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 FDM vs Resina — La decisión simple:</strong><br>
+    ¿Querés hacer piezas funcionales, repuestos, carcasas, objetos decorativos grandes? → <strong>FDM</strong><br>
+    ¿Querés miniaturas de juegos de mesa, joyería, piezas dentales, figuras con mucho detalle? → <strong>Resina</strong><br>
+    ¿Sos nuevo y no sabés por dónde empezar? → <strong>FDM sin dudarlo</strong>
+  </div>
+</div>
+
+<!-- ═══ SPECS ═══ -->
+<div class="section" id="specs">
+  <div class="sec-title">Los specs importantes</div>
+  <div class="sec-sub">Lo que importa de verdad. <em>Y lo que es marketing puro.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">Área de impresión</div><span class="badge b-mid">Crítico</span></div>
+      <div class="card-body">
+        El tamaño máximo del objeto que podés imprimir. Se expresa como X×Y×Z en mm.<br><br>
+        <strong>Estándar (220×220×250mm):</strong> suficiente para el 80% de los usos domésticos. Entra una figura, un repuesto, una maceta.<br>
+        <strong>Grande (300×300mm+):</strong> para piezas grandes o imprimir varias cosas juntas. Bambu X1, Creality K1 Max.<br><br>
+        <em>— "La mayoría compra grande y después imprime cosas chicas. El 90% de los objetos entran en 220×220."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Velocidad de impresión</div><span class="badge b-mid">Importa más de lo que creés</span></div>
+      <div class="card-body">
+        Se mide en mm/s. Las impresoras "viejas" andan a 50-80 mm/s. Las modernas (Bambu, Creality K1) van a 300-600 mm/s sin perder calidad.<br><br>
+        <strong>Por qué importa:</strong> una figura que antes tardaba 8 horas, ahora tarda 2. Para uso frecuente, la velocidad multiplica lo que podés producir.<br><br>
+        <strong>Ojo:</strong> velocidad máxima vs velocidad real son distintas. Un objeto chico con muchos detalles no va a 600 mm/s aunque la máquina pueda.
+      </div>
+    </div>
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">Tipo de extrusor</div><span class="badge b-high">Afecta los materiales</span></div>
+      <div class="card-body">
+        <strong>Bowden (extrusor alejado del cabezal):</strong> más liviano, más veloz, pero más difícil con materiales flexibles. El clásico de impresoras económicas.<br><br>
+        <strong>Direct Drive (extrusor en el cabezal):</strong> más control, compatible con TPU y materiales técnicos, retracciones más precisas. Preferible para uso avanzado.
+      </div>
+    </div>
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">Nivelación de la cama</div><span class="badge b-ok">El dolor de cabeza clásico</span></div>
+      <div class="card-body">
+        La cama tiene que estar perfectamente nivelada para que la primera capa adhiera bien. Si no está nivelada, la impresión falla.<br><br>
+        <strong>Manual:</strong> lo hacés vos con tornillos y papel. Tedioso pero funcional.<br>
+        <strong>Auto Bed Leveling (ABL):</strong> un sensor mide la cama y corrige automáticamente. En 2024 ya casi todas las impresoras nuevas lo traen. Si no lo trae, fijate si se puede agregar.
+      </div>
+    </div>
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">Temperatura del hotend y cama</div><span class="badge b-mid">Define qué materiales podés usar</span></div>
+      <div class="card-body">
+        <strong>Hotend hasta 220-240°C:</strong> PLA, PETG. Suficiente para el 80% de los usos.<br>
+        <strong>Hotend hasta 300°C+:</strong> ABS, ASA, nylon, PC, materiales técnicos.<br>
+        <strong>Cama calefaccionada:</strong> necesaria para ABS y muchos otros materiales. Mejora la adhesión del PLA también.
+      </div>
+    </div>
+  </div>
+
+  <table class="tabla">
+    <thead><tr><th>Spec</th><th>Básico</th><th>Intermedio</th><th>Avanzado</th></tr></thead>
+    <tbody>
+      <tr><td>Área impresión</td><td>220×220mm</td><td>235×235mm</td><td>300×300mm+</td></tr>
+      <tr><td>Velocidad</td><td>50-80 mm/s</td><td>100-200 mm/s</td><td>300-600 mm/s</td></tr>
+      <tr><td>Nivelación</td><td>Manual</td><td>ABL básico</td><td>ABL avanzado</td></tr>
+      <tr><td>Extrusor</td><td>Bowden</td><td>Direct Drive</td><td>Direct multi-material</td></tr>
+      <tr><td>Hotend</td><td>240°C</td><td>260°C</td><td>300°C+</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ MATERIALES ═══ -->
+<div class="section" id="materiales">
+  <div class="sec-title">Los materiales (filamentos)</div>
+  <div class="sec-sub">El material que elegís define la resistencia, el acabado y el costo final. <em>Empezá por PLA. Siempre.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">PLA</div><span class="badge b-ok">El primero que vas a usar</span></div>
+      <div class="card-body">
+        El material de entrada al mundo 3D. Fácil de imprimir, no necesita cama muy caliente, no emite gases peligrosos, es biodegradable (en condiciones industriales).<br><br>
+        <strong>Para qué sirve:</strong> figuras, decoración, prototipos, macetas, juguetes, soportes, objetos del hogar que no van a estar al sol.<br>
+        <strong>Limitaciones:</strong> se deforma con calor (60-65°C). No lo dejes en el auto en verano.
+      </div>
+      <div class="chips">
+        <div class="chip">💰 <span>~USD 15-20/kg</span></div>
+        <div class="chip">🌡️ <span>180-220°C hotend</span></div>
+        <div class="chip">✅ <span>Sin cama caliente</span></div>
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">PETG</div><span class="badge b-mid">El PLA mejorado</span></div>
+      <div class="card-body">
+        Más resistente al calor que el PLA, más flexible, resistente al agua y a algunos químicos. El segundo material que aprendés a imprimir.<br><br>
+        <strong>Para qué sirve:</strong> piezas funcionales, repuestos, contenedores para líquidos, piezas mecánicas livianas, carcasas de electrónica.<br>
+        <strong>Truco:</strong> tiende a ser "pegajoso" entre capas — bueno para resistencia, malo si querés separar soportes.
+      </div>
+      <div class="chips">
+        <div class="chip">💰 <span>~USD 18-25/kg</span></div>
+        <div class="chip">🌡️ <span>230-250°C</span></div>
+        <div class="chip">🛏️ <span>Cama 70-85°C</span></div>
+      </div>
+    </div>
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">ABS</div><span class="badge b-warn">Para usuarios con experiencia</span></div>
+      <div class="card-body">
+        El clásico plástico de los LEGO. Resistente al calor y a impactos. Pero difícil de imprimir: se contrae al enfriarse y se "levanta" de la cama (warping). Emite vapores que no son agradables — ventilación necesaria.<br><br>
+        <strong>Cuándo lo necesitás:</strong> piezas que van a estar expuestas a calor o golpes. Repuestos de electrodomésticos, piezas de motor, etc.
+      </div>
+      <div class="chips">
+        <div class="chip">💰 <span>~USD 15-20/kg</span></div>
+        <div class="chip">🌡️ <span>230-260°C</span></div>
+        <div class="chip">🏠 <span>Necesita enclosure</span></div>
+      </div>
+    </div>
+    <div class="card" style="--ca:#c084fc">
+      <div class="card-head"><div class="card-name">TPU</div><span class="badge b-high">Flexible</span></div>
+      <div class="card-body">
+        Termoplástico poliuretano — flexible y elástico. Para fundas de celular, ruedas de juguetes, juntas, protectores, suelas.<br><br>
+        <strong>Requiere direct drive</strong> — con Bowden es muy difícil de imprimir porque el filamento flexible se dobla en el tubo.
+      </div>
+      <div class="chips">
+        <div class="chip">💰 <span>~USD 22-30/kg</span></div>
+        <div class="chip">🔄 <span>Direct drive</span></div>
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Filamentos especiales</div><span class="badge b-top">El mundo avanzado</span></div>
+      <div class="card-body">
+        <strong>ASA:</strong> como el ABS pero resistente a los rayos UV. Para piezas en exterior.<br>
+        <strong>Nylon:</strong> muy resistente al desgaste, flexible y duro a la vez. Para piezas mecánicas serias.<br>
+        <strong>PLA con relleno (madera, metal, carbono):</strong> aspecto visual diferente, propiedades mecánicas ligeramente distintas.<br>
+        <strong>PC (Policarbonato):</strong> durísimo, transparente, requiere hotend de 300°C+.
+      </div>
+    </div>
+  </div>
+
+  <div class="tip tip-green">
+    <strong>💡 La regla de oro:</strong> Empezá con PLA de buena marca (eSun, Bambu, Polymaker, Prusament). No ahorres en filamento barato al principio — el filamento de calidad dudosa es la causa del 50% de los problemas de impresión.
+  </div>
+</div>
+
+<!-- ═══ MARCAS ═══ -->
+<div class="section" id="marcas">
+  <div class="sec-title">Las marcas</div>
+  <div class="sec-sub">El mercado cambió radicalmente con Bambu Lab. <em>Lo que era bueno hace 3 años, hoy puede quedarse corto.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">Bambu Lab</div><span class="badge b-top">Nuevo estándar</span></div>
+      <div class="card-body">
+        Llegó en 2022 y revolucionó el mercado. <strong>Velocidad de 500mm/s, auto-nivelación, enclosure integrado, multi-material (AMS), app y ecosistema completo.</strong> Lo que antes requería meses de tuning, acá viene configurado de fábrica.<br><br>
+        <strong>P1S:</strong> la bestia cerrada. Con enclosure, ideal para materiales técnicos. ~USD 700.<br>
+        <strong>P1P:</strong> la abierta. Más accesible. ~USD 500.<br>
+        <strong>A1 Mini:</strong> la de entrada. Compacta, rápida, multicolor. ~USD 300.<br><br>
+        <em>— "Es el MacBook de las impresoras 3D. Funciona desde el primer día sin saber nada."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">Creality</div><span class="badge b-mid">El clásico popular</span></div>
+      <div class="card-body">
+        La marca china más vendida históricamente. La Ender 3 fue la impresora que popularizó el 3D doméstico. Hoy la <strong>K1 y K1 Max</strong> son su respuesta a Bambu — buenas máquinas a menor precio pero con más curva de aprendizaje.
+        <br><br>
+        <strong>Ender 3 V3 SE:</strong> la de entrada más vendida del mercado. ~USD 180. Para quien quiere aprender y no le importa tuning.<br>
+        <strong>K1:</strong> alta velocidad, buena relación precio-rendimiento. ~USD 350.
+      </div>
+    </div>
+    <div class="card" style="--ca:#c084fc">
+      <div class="card-head"><div class="card-name">Prusa</div><span class="badge b-high">La referencia europea</span></div>
+      <div class="card-body">
+        La marca checa que definió los estándares de calidad durante años. Open source, excelente documentación, soporte excepcional. La comunidad más activa del mundo 3D.<br><br>
+        <strong>MK4:</strong> la impresora "seria" de gama media-alta. ~USD 800 armada.<br>
+        <strong>MINI+:</strong> compacta y excelente para el precio. ~USD 400.<br><br>
+        <em>— "Si comprás Prusa, comprás también años de soporte, documentación y comunidad."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">Anycubic</div><span class="badge b-ok">Especialistas en resina</span></div>
+      <div class="card-body">
+        Líderes en impresoras de resina asequibles. La <strong>Photon Mono</strong> y sus variantes son las más vendidas del segmento resina.<br><br>
+        También tienen FDM (Kobra 2) pero su fuerte real es resina. Si querés empezar con resina, Anycubic es el primer nombre a mirar.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PRESUPUESTO ═══ -->
+<div class="section" id="presupuesto">
+  <div class="sec-title">Por presupuesto</div>
+  <div class="sec-sub">Cuánto necesitás para empezar. <em>Ojo: el precio de la máquina no es el único costo.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">Entrada — hasta USD 250</div><span class="badge b-ok">Para empezar</span></div>
+      <div class="card-body">
+        <strong>Creality Ender 3 V3 SE (~USD 180):</strong> la más vendida del mundo para comenzar. Auto-nivelación básica, velocidad decente, enorme comunidad.<br>
+        <strong>Bambu A1 Mini (~USD 300):</strong> si podés estirar un poco, la experiencia es radicalmente mejor. Plug and play real.
+        <br><br>
+        <strong>Costo total real para empezar:</strong> máquina + filamento + accesorios básicos = ~USD 250-350.
+      </div>
+    </div>
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">Intermedio — USD 300-600</div><span class="badge b-mid">La zona feliz</span></div>
+      <div class="card-body">
+        <strong>Bambu P1P (~USD 500):</strong> la mejor relación calidad-velocidad del mercado. Para quien ya sabe que va a usar la impresora seguido.<br>
+        <strong>Creality K1 (~USD 350):</strong> rápida, buen ecosistema, más barata que Bambu con resultados muy buenos.<br>
+        <strong>Prusa MK4 (~USD 800):</strong> si preferís calidad a velocidad y valorás el soporte.
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Avanzado — USD 600+</div><span class="badge b-top">Para uso intensivo</span></div>
+      <div class="card-body">
+        <strong>Bambu P1S (~USD 700):</strong> enclosure integrado, materiales técnicos, velocidad máxima. La de quien imprime todos los días con materiales exigentes.<br>
+        <strong>Bambu X1 Carbon (~USD 1.200):</strong> el tope de gama doméstico. Con AMS multi-material, lidar, cámara AI. Para uso profesional o freaks del 3D.
+      </div>
+    </div>
+  </div>
+
+  <div class="tip tip-warn">
+    <strong>⚠️ Los costos ocultos que nadie te dice:</strong><br>
+    Filamento: ~USD 15-25/kg (consumís 1-2 kg por mes si imprimís seguido)<br>
+    Cama de repuesto: ~USD 15-30<br>
+    Boquillas (nozzles): ~USD 2-15 c/u (se desgastan)<br>
+    Adhesivos para la cama: spray, pritt, laca (~USD 5-10)<br>
+    Actualizaciones / mejoras: podés gastarte otro tanto mejorando la máquina<br><br>
+    <strong>Presupuesto año 1 realista = precio máquina × 1.5</strong>
+  </div>
+</div>
+
+<!-- ═══ USOS REALES ═══ -->
+<div class="section" id="usos">
+  <div class="sec-title">Usos reales</div>
+  <div class="sec-sub">Lo que la gente realmente imprime. <em>No solo juguetitos de plástico.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">Repuestos del hogar</div><span class="badge b-ok">El caso de uso más útil</span></div>
+      <div class="card-body">
+        La tapa del depósito del inodoro que no se consigue. El engranaje de la batidora que discontinuaron. El soporte de la persiana que se rompió. <strong>El 80% de las piezas de plástico del hogar se pueden reproducir.</strong><br><br>
+        Sitios como <a href="https://www.thingiverse.com" target="_blank" style="color:var(--accent)">Thingiverse</a> y <a href="https://www.printables.com" target="_blank" style="color:var(--accent)">Printables</a> tienen millones de archivos gratuitos.
+      </div>
+    </div>
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">Miniaturas y hobby</div><span class="badge b-mid">El más popular</span></div>
+      <div class="card-body">
+        Miniaturas de Warhammer, D&D, figuras de videojuegos, dioramas. Una figura de resina que en tienda cuesta USD 15-30, vos la imprimís por USD 1-2 de material.
+        <br><br>
+        <em>— "El hobby más caro que se paga solo."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">Prototipos y diseño</div><span class="badge b-high">Profesional</span></div>
+      <div class="card-body">
+        Probar si un diseño funciona antes de mandarlo a fabricar en cantidad. Productos, packaging, componentes mecánicos. Lo que antes costaba semanas y miles de dólares, hoy es horas y pocos dólares.
+      </div>
+    </div>
+    <div class="card" style="--ca:#00d4ff">
+      <div class="card-head"><div class="card-name">Arte y decoración</div><span class="badge b-mid">El más visible</span></div>
+      <div class="card-body">
+        Macetas, floreros, lámparas, esculturas, cuadros 3D, marcos de fotos, adornos de Navidad personalizados. El límite es la imaginación y el tiempo de impresión.
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Educación y ciencia</div><span class="badge b-ok">El más subestimado</span></div>
+      <div class="card-body">
+        Modelos anatómicos, maquetas geológicas, piezas para experimentos, ayudas visuales para enseñar. Colegios y universidades usan impresoras 3D cada vez más.<br><br>
+        Una impresora en una escuela puede cambiar cómo se enseña física, biología y diseño.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LO QUE NADIE TE CUENTA ═══ -->
+<div class="section" id="nadie">
+  <div class="sec-title">Lo que nadie te cuenta</div>
+  <div class="sec-sub">La parte que los youtubers no muestran en el video de unboxing. <em>Todo eso que descubrís después de comprar.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">La curva de aprendizaje real</div><span class="badge b-warn">Preparate</span></div>
+      <div class="card-body">
+        Tener la impresora funcionando es el 20% del trabajo. El 80% restante es:
+        <strong>aprender a modelar o encontrar archivos</strong>, entender el slicer (software que convierte el modelo en instrucciones para la impresora), resolver fallas de impresión, calibrar parámetros.
+        <br><br>
+        Con una Bambu moderna, la curva bajó muchísimo. Con una Creality básica, puede llevar semanas hasta sacar resultados consistentes.
+        <br><em>— "Tu primera impresión va a quedar bien. Tu décima va a quedar mucho mejor. Eso es el proceso."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">El tiempo de impresión</div><span class="badge b-warn">El dato que sorprende</span></div>
+      <div class="card-body">
+        Una figura pequeña tarda 2-4 horas. Una pieza mediana, 6-12 horas. Un objeto grande puede tardar 24-48 horas. Y durante ese tiempo la impresora no puede hacer otra cosa.
+        <br><br>
+        <strong>Implicancia real:</strong> para producción en volumen necesitás varias impresoras o mucha paciencia.
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">El filamento se arruina</div><span class="badge b-mid">La humedad es el enemigo</span></div>
+      <div class="card-body">
+        El filamento absorbe humedad del aire y cuando lo imprimís hace ruido (como maíz pochoclo), forma burbujas y arruina la calidad.
+        <br><br>
+        <strong>Solución:</strong> guardar el filamento en bolsas selladas con silica gel, o usar una "caja seca" (dry box) durante la impresión. Los secadores de filamento (filament dryers) son accesorios que valen la pena.
+      </div>
+    </div>
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">El ruido y el olor</div><span class="badge b-mid">Para tener en cuenta</span></div>
+      <div class="card-body">
+        Las impresoras modernas son más silenciosas que las viejas pero igual generan ruido — como un ventilador constante. Si la ponés en el cuarto donde dormís, vas a notar la diferencia.
+        <br><br>
+        El ABS emite vapores que no huelen bien y no son buenos para respirar. El PLA tiene un olor más suave pero en espacios cerrados también conviene ventilación.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ACCESORIOS ═══ -->
+<div class="section" id="accesorios">
+  <div class="sec-title">Accesorios</div>
+  <div class="sec-sub">Lo que vas a querer después de tener la impresora. <em>Algunos son necesarios, otros son convenientes y algunos son para los obsesivos del 3D.</em></div>
+
+  <div class="cat-header"><div class="cat-ico">🔧</div><div class="cat-titulo">Herramientas esenciales</div><div class="cat-sep"></div></div>
+  <div class="cards">
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">Kit de espátulas y removedores</div><span class="badge b-ok">Imprescindible</span></div>
+      <div class="card-body">
+        Para despegar las piezas de la cama sin romperlas ni dañar la superficie. Una espátula flexible de metal es tu mejor amiga desde el primer día. Vienen en kits de USD 5-15.
+      </div>
+    </div>
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">Pinzas y cortantes</div><span class="badge b-ok">Post-proceso</span></div>
+      <div class="card-body">
+        Pinzas para sacar soportes, cortante diagonal (flush cutter) para limpiar hilos de plástico y cortar filamento. Cualquier kit básico de electrónica tiene lo que necesitás.
+      </div>
+    </div>
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">Lija y materiales de acabado</div><span class="badge b-mid">Para resultados profesionales</span></div>
+      <div class="card-body">
+        Papel lija de distintas granulometrías (100, 200, 400, 800 grit) para lijar y suavizar las líneas de capa. Con paciencia y lija se puede lograr un acabado casi como de molde.
+        <br><br>
+        <strong>Pintura:</strong> PLA y PETG se pintan muy bien con acrílicos. Primer (imprimación) antes de pintar para mejor resultado.
+      </div>
+    </div>
+  </div>
+
+  <div class="cat-header"><div class="cat-ico">🏠</div><div class="cat-titulo">Mejoras de la impresora</div><div class="cat-sep"></div></div>
+  <div class="cards">
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">Enclosure (carcasa)</div><span class="badge b-mid">Para ABS y materiales técnicos</span></div>
+      <div class="card-body">
+        Una caja que encierra la impresora para mantener temperatura constante. Esencial para imprimir ABS sin warping. Algunos modelos ya vienen con enclosure (Bambu P1S, X1). Para los que no tienen, se consiguen enclosures aftermarket o se improvisan con cajas de cartón y aluminio.
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Secador de filamento</div><span class="badge b-mid">Vale la pena</span></div>
+      <div class="card-body">
+        Calienta suavemente el carrete de filamento para eliminar la humedad absorbida. La diferencia en calidad de impresión es notable, especialmente con nylon y TPU que absorben mucho.
+        <br><br>
+        <strong>Marcas:</strong> Sunlu, eSun, Bambu. Precios de USD 20-40.
+      </div>
+    </div>
+    <div class="card" style="--ca:#c084fc">
+      <div class="card-head"><div class="card-name">Mejoras de hotend y extrusor</div><span class="badge b-high">Para avanzados</span></div>
+      <div class="card-body">
+        <strong>Boquillas de acero endurecido:</strong> para materiales abrasivos (filamentos con carbono, metal, madera). Las de latón estándar se desgastan rápido.<br>
+        <strong>Bi-metal hotend:</strong> para temperaturas más altas y materiales técnicos.<br>
+        <strong>Extrusor Orbiter / LGX:</strong> mejoras aftermarket para impresoras Creality y similares.
+      </div>
+    </div>
+  </div>
+
+  <div class="cat-header"><div class="cat-ico">🧹</div><div class="cat-titulo">Adhesivos y superficies</div><div class="cat-sep"></div></div>
+  <div class="cards">
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">Adhesivos para la cama</div><span class="badge b-ok">Los básicos</span></div>
+      <div class="card-body">
+        <strong>Pegamento en barra (Pritt / UHU):</strong> el truco de la abuela del 3D. Una capa finita mejora mucho la adhesión del PLA. Y cuando se enfría, la pieza se suelta sola.
+        <br>
+        <strong>Laca para el pelo:</strong> el otro clásico. Funciona sorprendentemente bien para ABS.
+        <br>
+        <strong>Magigoo / DimaFix:</strong> adhesivos especiales para 3D. Más consistentes que los caseros.
+      </div>
+    </div>
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">Camas de repuesto</div><span class="badge b-ok">Tener una de backup</span></div>
+      <div class="card-body">
+        Las camas de resorte magnéticas son la opción más cómoda — flexionás la placa y la pieza sale sola. Tener una de repuesto evita tiempos muertos si la original se daña o desgasta.
+        <br>
+        Compatibles según el modelo: Creality, Bambu y Prusa tienen sus propias superficies.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CHECKLIST ═══ -->
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de comprar</div>
+  <div class="sec-sub">Las preguntas que hay que hacerse antes de gastar. <em>Honéstate con cada una.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">¿Para qué la vas a usar concretamente?</div></div>
+      <div class="card-body">
+        No "para hacer cosas". <strong>Específico: ¿qué objetos querés imprimir?</strong> Si la respuesta es vaga, probablemente la impresora va a terminar en el fondo del placard en 3 meses. Si tenés una lista de 10 cosas que querés hacer, la vas a usar.
+      </div>
+    </div>
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">¿Tenés tiempo para aprender?</div></div>
+      <div class="card-body">
+        Las primeras semanas van a incluir fallas, ajustes y aprendizaje. Si buscás algo plug and play desde el día uno, Bambu es la única opción real. Si te gusta el proceso de aprender y tunear, Creality o Prusa son más satisfactorias.
+      </div>
+    </div>
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">¿Dónde la vas a poner?</div></div>
+      <div class="card-body">
+        Necesita una superficie estable, cerca de una toma de corriente. El ruido puede molestar en ambientes de trabajo o dormitorios. Las impresoras de resina además necesitan ventilación y un espacio para lavar las piezas.
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Presupuesto real completo</div></div>
+      <div class="card-body">
+        Máquina + filamento para empezar (~1-2 kg) + accesorios básicos + posibles mejoras = estimá al menos 1.3x el precio de la máquina como inversión inicial.
+      </div>
+    </div>
+  </div>
+
+  <div class="tip tip-blue">
+    <strong>💡 La recomendación sin verso:</strong><br>
+    Primera impresora → <strong>Bambu A1 Mini</strong> si podés gastar ~USD 300. Funciona desde el primer día, comunidad enorme, resultados inmediatos.<br>
+    Si el presupuesto es ajustado → <strong>Creality Ender 3 V3 SE</strong>. Más aprendizaje, más satisfacción a la larga si te gusta el proceso.<br>
+    Si ya sabés que vas a usar seguido → <strong>Bambu P1P o P1S</strong>. No hay vuelta atrás.
+  </div>
+
+  <div class="related">
+    <div class="rel-title">📚 También te puede interesar</div>
+    <div class="rel-grid">
+      <a href="impresoras.html" class="rel-link">🖨️ Impresoras de tinta y láser</a>
+      <a href="discos-pendrives.html" class="rel-link">💾 Discos y Pendrives</a>
+      <a href="herramientas-hogar.html" class="rel-link">🔧 Herramientas del hogar</a>
+      <a href="notebooks.html" class="rel-link">💻 Notebooks</a>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- DOCK -->
+<nav class="sv-dock">
+  <a href="index.html" class="sv-dock-btn">🏠</a>
+  <a href="#" id="svWaBtn" class="sv-dock-btn wa">💬</a>
+</nav>
+
+<script>
+function showFolder(){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('folderScreen').classList.remove('hidden');
+  document.getElementById('backBtn').classList.remove('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goTab(id){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  var sec=document.getElementById(id);
+  if(sec) sec.classList.add('active');
+  document.getElementById('folderScreen').classList.add('hidden');
+  document.getElementById('backBtn').classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function svToggleDark(){
+  var isLight=document.body.classList.toggle('light');
+  document.getElementById('svDarkBtn').textContent=isLight?'🌙':'☀️';
+  localStorage.setItem('sv-mode',isLight?'light':'dark');
+}
+(function(){
+  var m=localStorage.getItem('sv-mode')||'dark';
+  if(m==='light'){document.body.classList.add('light');document.getElementById('svDarkBtn').textContent='🌙';}
+  else{document.getElementById('svDarkBtn').textContent='☀️';}
+  function tick(){var el=document.getElementById('svClock');if(!el)return;var n=new Date();el.textContent=n.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',hour12:false});}
+  tick();setInterval(tick,30000);
+  var wa=document.getElementById('svWaBtn');
+  if(wa){wa.addEventListener('click',function(e){e.preventDefault();window.open('https://wa.me/?text='+encodeURIComponent('Mirá esta guía de SIN VERSO: ')+encodeURIComponent(window.location.href),'_blank');});}
+})();
+</script>
+</body>
+</html>

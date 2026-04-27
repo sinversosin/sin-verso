@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Lectores de eBooks</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--soft:#aaaacc;--accent:#8b5cf6;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{background:
+    radial-gradient(circle at 18% 10%,rgba(139,92,246,.24),transparent 28%),
+    radial-gradient(circle at 85% 0%,rgba(109,40,217,.16),transparent 30%),
+    linear-gradient(160deg,#111827,#1a0a3c 54%,#080810);
+    background-attachment:fixed;
+    color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  body.light{
+    background:radial-gradient(circle at 18% 10%,rgba(139,92,246,.18),transparent 28%),
+      radial-gradient(circle at 85% 0%,rgba(109,40,217,.12),transparent 30%),
+      linear-gradient(160deg,#f5f3ff,#ede9fe 54%,#f8f4ff)!important;
+    color:#1c0a3a;}
+  #appStatus{position:sticky;top:0;z-index:1000;height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(7,7,16,.45);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);font-size:12px;font-weight:800;color:rgba(255,255,255,.8);}
+  body.light #appStatus{background:rgba(255,255,255,.52);border-bottom-color:rgba(20,20,60,.08);color:#444;}
+  #appStatus .sys-r{display:flex;gap:8px;align-items:center;opacity:.7;}
+  header{margin:12px auto 0;max-width:760px;border:1px solid rgba(255,255,255,.11);border-radius:0 0 32px 32px;background:linear-gradient(145deg,rgba(12,12,28,.74),rgba(22,16,48,.58));backdrop-filter:blur(20px);box-shadow:0 18px 60px rgba(0,0,0,.38);padding:44px 24px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:500px;height:220px;background:radial-gradient(ellipse,rgba(139,92,246,.15),transparent 70%);pointer-events:none;}
+  body.light header{background:linear-gradient(145deg,rgba(255,255,255,.76),rgba(237,233,254,.62))!important;}
+  .ia-badge{display:inline-block;background:linear-gradient(135deg,rgba(139,92,246,.2),rgba(109,40,217,.15));border:1px solid rgba(139,92,246,.4);border-radius:20px;padding:5px 18px;font-size:12px;font-weight:700;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,9vw,88px);letter-spacing:3px;line-height:1;background:linear-gradient(135deg,#fff 20%,#8b5cf6 55%,#c084fc 80%,#e9d5ff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:12px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .folder-wrap{max-width:760px;margin:14px auto 0;padding:0 14px 10px;position:relative;z-index:1;}
+  .folder-card{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.13);border-radius:30px;padding:18px 14px 20px;box-shadow:0 20px 60px rgba(0,0,0,.22);backdrop-filter:blur(18px);}
+  body.light .folder-card{background:rgba(255,255,255,.72);border-color:rgba(30,30,80,.12);}
+  .folder-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 6px 14px;}
+  .folder-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1.5px;color:var(--text);line-height:1;}
+  .folder-sub{font-size:12px;color:var(--muted);margin-top:3px;}
+  .folder-count{font-size:11px;font-weight:800;color:#050510;background:var(--accent);border-radius:999px;padding:6px 11px;white-space:nowrap;}
+  .app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 10px;padding:6px 2px 4px;}
+  @media(max-width:360px){.app-grid{grid-template-columns:repeat(3,1fr);}}
+  .app-btn{border:0;background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;}
+  .app-ico{width:62px;height:62px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;background:linear-gradient(145deg,var(--c1),var(--c2));box-shadow:0 10px 24px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .18s ease,filter .18s ease;position:relative;overflow:hidden;}
+  .app-ico::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.30),transparent 42%);opacity:.55;}
+  @media(hover:hover){.app-btn:hover .app-ico{transform:translateY(-3px) scale(1.08);filter:saturate(1.2);}}
+  @media(hover:none){.app-btn:active .app-ico{transform:scale(.93);}}
+  .app-name{font-size:11px;line-height:1.15;color:var(--text);text-shadow:0 2px 8px rgba(0,0,0,.35);max-width:72px;font-weight:700;}
+  body.light .app-name{text-shadow:none;color:#17172a;}
+  #folderScreen.hidden{display:none;}
+  .back-btn{display:none;margin:0 16px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:var(--text);border-radius:999px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer;backdrop-filter:blur(14px);}
+  .back-btn.on{display:inline-flex;align-items:center;gap:8px;}
+  body.light .back-btn{background:rgba(255,255,255,.8);border-color:rgba(30,30,80,.14);color:#17172a;}
+  .tabs{display:none!important;}
+  main{max-width:760px;background:rgba(8,8,16,.22);border:1px solid rgba(255,255,255,.06);border-radius:28px 28px 0 0;backdrop-filter:blur(10px);margin:0 auto;padding:24px 16px 96px;}
+  body.light main{background:rgba(255,255,255,.30);border-color:rgba(30,30,80,.07);}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09);padding:12px 15px;border-radius:16px;backdrop-filter:blur(10px);color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);}
+  body.light .sec-sub{background:rgba(255,255,255,.5);color:#555;}
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;backdrop-filter:blur(14px);}
+  .card:hover{border-color:rgba(139,92,246,.4);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  body.light .card{background:rgba(255,255,255,.72)!important;border-color:rgba(30,30,80,.12)!important;}
+  body.light .card-name{color:#1c0a3a!important;}
+  body.light .card-body{color:#555!important;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3);}
+  .b-mid{background:rgba(139,92,246,.12);color:var(--accent);border:1px solid rgba(139,92,246,.3);}
+  .b-high{background:rgba(0,212,255,.12);color:#00d4ff;border:1px solid rgba(0,212,255,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tip{background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.2);border-radius:14px;padding:14px 16px;margin-top:18px;font-size:14px;line-height:1.65;color:#c4b5fd;}
+  .tip strong{color:var(--accent);}
+  .tip-green{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);color:#a0e8b4;}
+  .tip-green strong{color:#4ade80;}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-blue{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);color:#a0e4f0;}
+  .tip-blue strong{color:#00d4ff;}
+  .tabla{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px;}
+  .tabla th{background:rgba(255,255,255,.07);color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:10px 12px;text-align:left;border-bottom:2px solid rgba(255,255,255,.1);}
+  .tabla td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.06);color:var(--muted);line-height:1.5;}
+  .tabla td:first-child{color:var(--text);font-weight:700;}
+  .cat-header{display:flex;align-items:center;gap:10px;margin:22px 0 14px;}
+  .cat-ico{font-size:20px;}.cat-titulo{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent);letter-spacing:1px;}
+  .cat-sep{flex:1;height:1px;background:rgba(255,255,255,.1);}
+  .related{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px;margin-top:28px;}
+  .rel-title{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--muted);letter-spacing:1px;margin-bottom:12px;}
+  .rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .rel-link{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:8px 14px;text-decoration:none;font-size:12px;font-weight:700;color:var(--text);transition:all .2s;}
+  .rel-link:hover{border-color:var(--accent);}
+  .sv-darkmode-btn{position:fixed;right:14px;top:36px;z-index:999;width:40px;height:40px;border-radius:13px;border:1px solid rgba(255,255,255,.18);background:rgba(10,10,20,.75);color:#fff;font-size:18px;backdrop-filter:blur(14px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+  body.light .sv-darkmode-btn{background:rgba(255,255,255,.85);border-color:rgba(20,20,80,.15);color:#333;}
+  .sv-dock{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:888;display:flex;align-items:center;gap:10px;padding:8px 14px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);border-radius:24px;backdrop-filter:blur(20px);box-shadow:0 14px 40px rgba(0,0,0,.32);}
+  body.light .sv-dock{background:rgba(255,255,255,.72);border-color:rgba(20,20,80,.14);}
+  .sv-dock-btn{width:46px;height:46px;border-radius:16px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;text-decoration:none;cursor:pointer;transition:transform .18s;}
+  .sv-dock-btn:hover{transform:translateY(-2px);}
+  .sv-dock-btn.wa{background:#25D366;box-shadow:0 6px 18px rgba(37,211,102,.4);}
+  body.light .sv-dock-btn{background:rgba(20,20,80,.08);color:#333;}
+</style>
+</head>
+<body>
+
+<div id="appStatus">
+  <span id="svClock">--:--</span>
+  <span class="sys-r">SIN VERSO · EBOOKS <span>▰▰▰</span></span>
+</div>
+
+<button class="sv-darkmode-btn" id="svDarkBtn" onclick="svToggleDark()">☀️</button>
+
+<header>
+  <div class="ia-badge">📖 Guía completa</div>
+  <h1>Lectores de eBooks</h1>
+  <p class="subtitle">Leer más, leer mejor y con los ojos sanos.<br><strong>Sin DRM confuso, sin ecosistemas trampa y sin verso.</strong></p>
+</header>
+
+<section class="folder-wrap" id="folderScreen">
+  <div class="folder-card">
+    <div class="folder-top">
+      <div>
+        <div class="folder-title">Lectores de eBooks</div>
+        <div class="folder-sub">Tocá una sección para entrar</div>
+      </div>
+      <div class="folder-count">8 secciones</div>
+    </div>
+    <div class="app-grid">
+      <button class="app-btn" onclick="goTab('paraquien')"><span class="app-ico" style="--c1:#8b5cf6;--c2:#6d28d9">📖</span><span class="app-name">¿Para quién?</span></button>
+      <button class="app-btn" onclick="goTab('pantalla')"><span class="app-ico" style="--c1:#38bdf8;--c2:#0ea5e9">🖥️</span><span class="app-name">Pantallas</span></button>
+      <button class="app-btn" onclick="goTab('marcas')"><span class="app-ico" style="--c1:#fbbf24;--c2:#d97706">🏆</span><span class="app-name">Las marcas</span></button>
+      <button class="app-btn" onclick="goTab('ecosistemas')"><span class="app-ico" style="--c1:#f97316;--c2:#ea580c">🌐</span><span class="app-name">Ecosistemas</span></button>
+      <button class="app-btn" onclick="goTab('libros')"><span class="app-ico" style="--c1:#22c55e;--c2:#15803d">📚</span><span class="app-name">Dónde leer</span></button>
+      <button class="app-btn" onclick="goTab('usos')"><span class="app-ico" style="--c1:#818cf8;--c2:#6366f1">🎯</span><span class="app-name">Por uso</span></button>
+      <button class="app-btn" onclick="goTab('accesorios')"><span class="app-ico" style="--c1:#34d399;--c2:#0d9488">🧰</span><span class="app-name">Accesorios</span></button>
+      <button class="app-btn" onclick="goTab('checklist')"><span class="app-ico" style="--c1:#22c55e;--c2:#16a34a">🛒</span><span class="app-name">Antes de comprar</span></button>
+    </div>
+  </div>
+</section>
+
+<main>
+<button class="back-btn" id="backBtn" onclick="showFolder()">← Volver</button>
+
+<!-- ═══ PARA QUIÉN ═══ -->
+<div class="section" id="paraquien">
+  <div class="sec-title">¿Para quién es un eReader?</div>
+  <div class="sec-sub">No es para cualquiera. Y tampoco es para los que creen que no es para ellos. <em>La pregunta honesta antes de gastar.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#8b5cf6">
+      <div class="card-head"><div class="card-name">El lector frecuente</div><span class="badge b-ok">El caso obvio</span></div>
+      <div class="card-body">
+        Si leés más de 2 libros por mes, un eReader se paga solo en comodidad. Menos peso que un libro físico, luz integrada para leer en la oscuridad, miles de libros en el bolsillo.
+        <br><br>
+        <strong>El retorno real:</strong> un libro físico cuesta USD 10-20. En digital, el mismo libro a veces cuesta la mitad o menos. Con uso frecuente, el dispositivo se amortiza en 6-12 meses de compras de libros.
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">Ventajas reales sobre papel</div><span class="badge b-mid">Lo que cambia</span></div>
+      <div class="card-body">
+        <strong>Ojos:</strong> la pantalla E-ink no emite luz azul como un celular. Para leer mucho tiempo, los ojos agradecen la diferencia.<br><br>
+        <strong>Peso:</strong> un Kindle Paperwhite pesa 182 gramos. Una saga de 3 tomos pesa 1.5 kg. Para viajes, la diferencia es enorme.<br><br>
+        <strong>Autonomía:</strong> semanas con una carga. No meses, semanas reales de uso moderado.<br><br>
+        <strong>Diccionario integrado:</strong> tocás una palabra y te la define. Para leer en otro idioma, es un game changer.
+      </div>
+    </div>
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Cuándo NO es para vos</div><span class="badge b-warn">La honestidad importa</span></div>
+      <div class="card-body">
+        <strong>Si leés menos de 1 libro por mes:</strong> el celular o la tablet es suficiente. No necesitás un dispositivo dedicado.<br>
+        <strong>Si leés muchos cómics o libros técnicos con gráficos:</strong> la pantalla E-ink no es ideal para imágenes a color ni contenido visual complejo.<br>
+        <strong>Si te gusta el ritual del libro físico:</strong> ningún argumento tecnológico lo reemplaza. Eso está bien.
+      </div>
+    </div>
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">El que "nunca lee" pero podría</div><span class="badge b-ok">El caso sorpresa</span></div>
+      <div class="card-body">
+        Muchos que "no son lectores" empezaron a leer cuando tuvieron un eReader. La comodidad de tener miles de libros disponibles, el tamaño de fuente ajustable, la posibilidad de leer en cualquier posición... baja la fricción de empezar.
+        <br><br>
+        <em>— "Mi mamá no había leído un libro en 10 años. Con el Kindle que le regalamos, leyó 8 en el primer año."</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PANTALLAS ═══ -->
+<div class="section" id="pantalla">
+  <div class="sec-title">Tipos de pantalla</div>
+  <div class="sec-sub">La pantalla E-ink es el corazón de un eReader. <em>Entendela antes de comprar.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#8b5cf6">
+      <div class="card-head"><div class="card-name">E-ink (tinta electrónica)</div><span class="badge b-top">La tecnología del eReader</span></div>
+      <div class="card-body">
+        Usa micropartículas de tinta real que se reorganizan eléctricamente para formar los caracteres. <strong>No emite luz propia</strong> — refleja la luz ambiente como el papel real.
+        <br><br>
+        <strong>Ventajas:</strong> se ve igual bajo el sol que en interiores (no se "lava" la imagen), consume energía solo al cambiar de página, sin parpadeo, sin luz azul intensa.
+        <br>
+        <strong>Desventajas:</strong> solo blanco y negro (en general), refresco lento (no sirve para video o animaciones), contraste algo menor que papel premium.
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">Resolución — Los 300 ppp</div><span class="badge b-mid">El número que importa</span></div>
+      <div class="card-body">
+        La resolución en eReaders se mide en ppi (píxeles por pulgada). <strong>300 ppi es el estándar premium</strong> — las letras se ven igual de nítidas que en papel impreso de calidad.
+        <br><br>
+        Los modelos económicos pueden tener 167 o 212 ppi. A esas resoluciones el texto es legible pero si tenés buena vista notás el "efecto pantalla".
+        <br><br>
+        <strong>Desde 6" en 300 ppi:</strong> Kindle Paperwhite, Kobo Libra 2, PocketBook.
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Luz frontlit</div><span class="badge b-ok">Para leer en la oscuridad</span></div>
+      <div class="card-body">
+        Los eReaders modernos tienen iluminación integrada desde adelante (frontlit) — proyectan luz sobre la pantalla en lugar de desde atrás. El resultado es mucho más suave para los ojos que una pantalla LCD.
+        <br><br>
+        <strong>Luz cálida / fría ajustable:</strong> los modelos premium permiten ajustar la temperatura de color. Para leer de noche, la luz cálida (amarilla) es más amigable con el sueño.
+      </div>
+    </div>
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">Tamaños</div><span class="badge b-ok">Cuántas pulgadas necesitás</span></div>
+      <div class="card-body">
+        <strong>6" (el estándar):</strong> el tamaño de un libro de bolsillo. Cómodo para una mano, entra en el bolsillo de la chaqueta. Kindle Paperwhite, Kobo Sage básico.<br>
+        <strong>7-8" (intermedio):</strong> un poco más de espacio para texto, ideal para PDFs y revistas. Kindle Oasis, Kobo Libra 2.<br>
+        <strong>10"+ (grande):</strong> para PDFs técnicos, cómics, apuntes de estudio. Kindle Scribe, Kobo Elipsa. Más pesado, menos portátil.<br><br>
+        <em>— "El 90% de los lectores está más que satisfecho con 6"."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#c084fc">
+      <div class="card-head"><div class="card-name">E-ink a color</div><span class="badge b-high">Existe pero tiene sus límites</span></div>
+      <div class="card-body">
+        Existe tecnología E-ink a color (Kaleido, Gallery 3). Los cómics y revistas se ven con color. Pero el contraste es inferior al blanco y negro y la velocidad de refresco es más lenta aún.
+        <br><br>
+        <strong>¿Vale la pena?</strong> Para lectura de libros, no. Para cómics o revistas de vez en cuando, es una opción. Para lectura intensiva de texto, el blanco y negro siempre gana.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MARCAS ═══ -->
+<div class="section" id="marcas">
+  <div class="sec-title">Las marcas</div>
+  <div class="sec-sub">El mercado está dominado por dos gigantes y algunos buenos jugadores alternativos. <em>La elección importa más de lo que parece.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">Amazon Kindle</div><span class="badge b-top">La más vendida del mundo</span></div>
+      <div class="card-body">
+        La más vendida, la más conocida, la con mejor ecosistema de compra de libros en inglés. Amazon tiene millones de títulos disponibles.
+        <br><br>
+        <strong>Paperwhite:</strong> la opción perfecta para la mayoría. 300 ppi, frontlit cálida/fría, resistente al agua. ~USD 140.<br>
+        <strong>Oasis:</strong> el premium. Ergonómica, botones físicos, pantalla 7". ~USD 280.<br>
+        <strong>Scribe:</strong> 10.2", con stylus para tomar notas. ~USD 380.<br><br>
+        <strong>La trampa Amazon:</strong> los libros comprados son del ecosistema Kindle. Si dejás Amazon, los perdés. Y el formato nativo MOBI/AZW no es compatible con todos los lectores.
+      </div>
+      <div class="chips">
+        <div class="chip">💰 <span>USD 100-380</span></div>
+        <div class="chip">📚 <span>Ecosistema propio</span></div>
+        <div class="chip">🌐 <span>Mejor en inglés</span></div>
+      </div>
+    </div>
+    <div class="card" style="--ca:#8b5cf6">
+      <div class="card-head"><div class="card-name">Kobo (Rakuten)</div><span class="badge b-high">La alternativa seria</span></div>
+      <div class="card-body">
+        La competencia real del Kindle. <strong>Más abierta que Amazon</strong> — soporta ePub de forma nativa, compatible con Calibre, no te bloquea a un ecosistema cerrado.
+        <br><br>
+        <strong>Clara 2E:</strong> la de entrada, ecológica (plástico reciclado), buena pantalla. ~USD 130.<br>
+        <strong>Libra 2:</strong> 7", botones físicos, resistente al agua, gran opción para manos que prefieren ergonomía. ~USD 180.<br>
+        <strong>Elipsa 2E:</strong> 10.3", con stylus para notas. ~USD 300.<br><br>
+        <strong>Por qué preferirla:</strong> usa ePub estándar, fácil de cargar libros manualmente, más opciones de personalización de tipografía.
+      </div>
+      <div class="chips">
+        <div class="chip">💰 <span>USD 130-300</span></div>
+        <div class="chip">📖 <span>ePub nativo</span></div>
+        <div class="chip">🔓 <span>Más abierta</span></div>
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">PocketBook</div><span class="badge b-mid">La que nadie menciona</span></div>
+      <div class="card-body">
+        Marca europea (ucraniana) con muy buena reputación entre lectores serios. Compatible con más formatos que Kindle y Kobo — PDF, ePub, MOBI, FB2, DJVU, DOC, y más.
+        <br><br>
+        <strong>InkPad 4:</strong> 7.8", alta resolución, muy cómoda para PDFs técnicos.<br>
+        <strong>Touch Lux 5:</strong> la económica, buena relación calidad-precio.<br><br>
+        Excelente para quienes manejan muchos formatos distintos o tienen colecciones de libros técnicos.
+      </div>
+    </div>
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">¿Y leer en el celular?</div><span class="badge b-warn">La pregunta inevitable</span></div>
+      <div class="card-body">
+        Podés leer en el celular con Kindle App, Kobo App o cualquier lector de ePub. Funciona. Pero:<br><br>
+        <strong>Las notificaciones interrumpen.</strong> La batería se acaba en horas. La pantalla LCD cansa más los ojos en sesiones largas. Bajo el sol, no se ve bien.
+        <br><br>
+        Para leer de vez en cuando, el celular alcanza. Para leer en serio y con regularidad, el eReader marca una diferencia real.
+      </div>
+    </div>
+  </div>
+
+  <table class="tabla">
+    <thead><tr><th>Marca</th><th>Mejor para</th><th>Ecosistema</th><th>Precio</th></tr></thead>
+    <tbody>
+      <tr><td>Kindle Paperwhite</td><td>Uso general</td><td>Amazon (cerrado)</td><td>~USD 140</td></tr>
+      <tr><td>Kobo Clara 2E</td><td>Entrada abierta</td><td>Abierto + ePub</td><td>~USD 130</td></tr>
+      <tr><td>Kobo Libra 2</td><td>Ergonomía + tamaño</td><td>Abierto + ePub</td><td>~USD 180</td></tr>
+      <tr><td>PocketBook</td><td>Múltiples formatos</td><td>Muy abierto</td><td>~USD 120-200</td></tr>
+      <tr><td>Kindle Oasis</td><td>Premium ergonómico</td><td>Amazon (cerrado)</td><td>~USD 280</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══ ECOSISTEMAS ═══ -->
+<div class="section" id="ecosistemas">
+  <div class="sec-title">Ecosistemas y formatos</div>
+  <div class="sec-sub">La parte que menos gente entiende antes de comprar. <em>Y la que más arrepentimientos genera después.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">El problema del DRM</div><span class="badge b-warn">El dato que nadie dice</span></div>
+      <div class="card-body">
+        DRM (Digital Rights Management) = protección de copia digital. La mayoría de los libros comprados en tiendas tienen DRM — <strong>son de vos pero solo podés leerlos en el dispositivo o app del vendedor.</strong>
+        <br><br>
+        Si Amazon cierra tu cuenta (pasa), si Amazon deja de existir (improbable pero...), si querés cambiar de Kindle a Kobo — tus libros comprados no se pueden transferir fácilmente.
+        <br><br>
+        <em>— "Con libros físicos, nadie te va a decir que tu biblioteca dejó de funcionar."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#8b5cf6">
+      <div class="card-head"><div class="card-name">ePub — El estándar abierto</div><span class="badge b-ok">El formato que querés</span></div>
+      <div class="card-body">
+        ePub es el formato estándar internacional de libros digitales. Compatible con Kobo, PocketBook, Apple Books, Google Play Books y prácticamente todo excepto Kindle nativo.
+        <br><br>
+        <strong>Kobo y PocketBook</strong> lo leen de forma nativa. Amazon usa su propio formato (AZW3/KFX) pero también puede leer ePub desde 2022.
+      </div>
+    </div>
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">Calibre — La solución a todo</div><span class="badge b-top">Software gratuito</span></div>
+      <div class="card-body">
+        Calibre es el software gratuito que todo lector de eBooks debería conocer. Organiza tu biblioteca, convierte entre formatos (ePub → MOBI → PDF → AZW3), edita metadatos, envía libros al dispositivo.
+        <br><br>
+        <strong>Con Calibre podés:</strong> pasar un PDF a ePub legible, convertir libros de un formato a otro, gestionar una biblioteca de miles de títulos, sincronizar con cualquier eReader.
+        <br>
+        <a href="https://calibre-ebook.com" target="_blank" style="color:var(--accent);font-weight:700">calibre-ebook.com</a> — gratis, open source, para Windows/Mac/Linux.
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">Send to Kindle</div><span class="badge b-mid">El truco de Amazon</span></div>
+      <div class="card-body">
+        Amazon tiene una función "Send to Kindle" — podés enviar cualquier archivo (PDF, ePub, Word) a tu Kindle vía email o la app. El Kindle lo convierte y queda en tu biblioteca.
+        <br><br>
+        Muy útil para cargar documentos de trabajo, apuntes, PDFs que querés leer cómodo.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LIBROS ═══ -->
+<div class="section" id="libros">
+  <div class="sec-title">Dónde conseguir libros</div>
+  <div class="sec-sub">Opciones legales, gratuitas y de pago. <em>Hay más de lo que creés sin gastar nada.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">Gratis — Dominio público</div><span class="badge b-ok">Miles de libros gratis legalmente</span></div>
+      <div class="card-body">
+        Todos los libros publicados hace más de 70-100 años están en dominio público y son de libre acceso.
+        <br><br>
+        <strong>Project Gutenberg</strong> (<a href="https://www.gutenberg.org" target="_blank" style="color:var(--accent)">gutenberg.org</a>): 70.000+ libros en múltiples idiomas, descarga directa en ePub.<br>
+        <strong>Biblioteca Digital Argentina</strong> (<a href="https://www.bnm.me.gov.ar" target="_blank" style="color:var(--accent)">bnm.me.gov.ar</a>): libros en español de dominio público.<br>
+        <strong>Biblioteca Digital Mundial</strong> (<a href="https://archive.org" target="_blank" style="color:var(--accent)">archive.org</a>): préstamo digital de libros físicos escaneados.
+      </div>
+    </div>
+    <div class="card" style="--ca:#8b5cf6">
+      <div class="card-head"><div class="card-name">Tiendas de pago</div><span class="badge b-mid">Para libros nuevos</span></div>
+      <div class="card-body">
+        <strong>Amazon Kindle Store:</strong> el mayor catálogo en inglés. En español, la oferta es buena pero no tan enorme.<br>
+        <strong>Kobo Store:</strong> buen catálogo en español, precios competitivos.<br>
+        <strong>Google Play Books:</strong> compatible con cualquier dispositivo vía app.<br>
+        <strong>Bajalibros:</strong> tienda latinoamericana con foco en castellano, precios en pesos argentinos.<br>
+        <strong>Leamos.com:</strong> otra opción argentina con libros locales.
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">Suscripciones</div><span class="badge b-mid">El Spotify de los libros</span></div>
+      <div class="card-body">
+        <strong>Kindle Unlimited (Amazon):</strong> USD 10/mes, más de 4 millones de títulos en inglés, mucho menos en español.<br>
+        <strong>Scribd:</strong> libros, audiolibros, documentos. USD 12/mes. Mejor catálogo en castellano que KU.
+        <br><br>
+        <strong>¿Vale la pena?</strong> Si leés más de 2-3 libros por mes que estén en el catálogo, sí. Si leés menos o leés autores que no están incluidos, no.
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Biblioteca pública digital</div><span class="badge b-ok">El secreto más subestimado</span></div>
+      <div class="card-body">
+        Muchas bibliotecas públicas de Argentina tienen colecciones digitales accesibles con tu DNI. Sistema de préstamo como el físico pero en digital.
+        <br><br>
+        Consultá tu biblioteca municipal — muchas usan plataformas como BiblioEteca o eBiblio.
+      </div>
+    </div>
+  </div>
+
+  <div class="tip tip-warn">
+    <strong>⚠️ Los libros pirateados:</strong> existen sitios con miles de libros sin DRM. Si bien es ilegal y no lo recomendamos, es una realidad del mercado. Lo que sí podemos decir: apoyar a los autores tiene sentido, especialmente en autores independientes y de habla hispana donde cada venta importa.
+  </div>
+</div>
+
+<!-- ═══ POR USO ═══ -->
+<div class="section" id="usos">
+  <div class="sec-title">Por uso y perfil</div>
+  <div class="sec-sub">Cuál es el mejor eReader según para qué lo vas a usar. <em>Sin vueltas.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#8b5cf6">
+      <div class="card-head"><div class="card-name">Lector casual</div><span class="badge b-ok">1-2 libros por mes</span></div>
+      <div class="card-body">
+        <strong>Kindle Paperwhite o Kobo Clara 2E.</strong> No necesitás gastar más. 6", 300 ppi, frontlit, resistente al agua. Todo lo que necesitás para leer cómodo.
+        <br><br>
+        Si ya tenés contenido en Amazon → Kindle. Si querés más libertad de formatos → Kobo.
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">Viajero frecuente</div><span class="badge b-mid">El que lleva libros al avión</span></div>
+      <div class="card-body">
+        <strong>Kindle Paperwhite o Kobo Libra 2.</strong> Resistencia al agua importante (la playa, la pileta, la lluvia). Batería de semanas, liviano, entra en la cartera de mano. Cargá 50 libros antes de salir y no pensás en eso hasta llegar.
+      </div>
+    </div>
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">Estudiante y académico</div><span class="badge b-high">PDFs y apuntes</span></div>
+      <div class="card-body">
+        <strong>Kobo Elipsa 2E, Kindle Scribe o PocketBook InkPad.</strong> Pantalla de 10" para leer PDFs técnicos sin hacer zoom constantemente. Con stylus para subrayar y tomar notas al margen. El reemplazo del impreso de 200 páginas.
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Adulto mayor</div><span class="badge b-ok">El regalo perfecto</span></div>
+      <div class="card-body">
+        <strong>Kindle Paperwhite o Kobo Clara.</strong> El tamaño de fuente ajustable es un regalo para ojos cansados. Sin necesidad de anteojos de lectura si la fuente se sube lo suficiente. Pantalla sin reflejos, liviano para sostener largo rato.
+        <br><br>
+        <em>— El regalo de cumpleaños que más veces escuché que "cambió la vida de mi mamá/abuela".</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#c084fc">
+      <div class="card-head"><div class="card-name">Niños</div><span class="badge b-mid">¿Tiene sentido?</span></div>
+      <div class="card-body">
+        Para chicos mayores de 8-10 años que ya leen solos, puede funcionar bien. Kindle tiene parental controls y una tienda dedicada a libros infantiles y juveniles.
+        <br><br>
+        Para menores de 8, el libro físico ilustrado no tiene competencia real.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ACCESORIOS ═══ -->
+<div class="section" id="accesorios">
+  <div class="sec-title">Accesorios</div>
+  <div class="sec-sub">Lo que hace más cómoda y duradera la experiencia. <em>Algunos imprescindibles, otros opcionales, uno que muchos compran al mes de tener el eReader.</em></div>
+
+  <div class="cat-header"><div class="cat-ico">🛡️</div><div class="cat-titulo">Protección</div><div class="cat-sep"></div></div>
+  <div class="cards">
+    <div class="card" style="--ca:#8b5cf6">
+      <div class="card-head"><div class="card-name">Funda / tapa</div><span class="badge b-ok">Lo primero que vas a comprar</span></div>
+      <div class="card-body">
+        La pantalla E-ink es relativamente delicada — una caída sin funda puede romperla. Las fundas oficiales de Amazon y Kobo son las más recomendadas porque encajan perfectamente y muchas tienen sensor de apertura/cierre que apaga la pantalla.
+        <br><br>
+        <strong>Funda con tapa tipo libro:</strong> la más popular. Protege adelante y atrás, se usa como soporte para leer con las manos libres.<br>
+        <strong>Funda tipo sleeve:</strong> más delgada y liviana, solo para transporte.<br><br>
+        <strong>Precio:</strong> originales USD 20-40. Alternativas en MercadoLibre USD 8-15. Las alternativas a veces no tienen el sensor de apagado.
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">Lámina protectora</div><span class="badge b-mid">Opcional pero recomendado</span></div>
+      <div class="card-body">
+        La pantalla E-ink no tiene el Gorilla Glass de los celulares. Una lámina templada o de papel texturado (paper-like) protege de rayones y en algunos casos mejora la sensación de escritura con el stylus.
+        <br><br>
+        <strong>Paper-like:</strong> le da textura de papel a la pantalla. Más placentero para escribir anotaciones con el stylus.
+      </div>
+    </div>
+  </div>
+
+  <div class="cat-header"><div class="cat-ico">💡</div><div class="cat-titulo">Lectura</div><div class="cat-sep"></div></div>
+  <div class="cards">
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Luz de lectura externa</div><span class="badge b-ok">Para modelos sin frontlit</span></div>
+      <div class="card-body">
+        Si tenés un modelo antiguo sin iluminación integrada, una clip-on reading light es la solución. Luces LED que se enganchan al eReader o al libro. Precios de USD 8-20.
+        <br><br>
+        Los modelos modernos (Paperwhite, Kobo Clara) ya traen luz integrada — no la necesitás.
+      </div>
+    </div>
+    <div class="card" style="--ca:#c084fc">
+      <div class="card-head"><div class="card-name">Soporte para manos libres</div><span class="badge b-mid">Para leer acostado</span></div>
+      <div class="card-body">
+        Soportes flexibles de cuello o de pie (tipo "lazy arm") que sostienen el eReader frente a vos. Muy popular para leer acostado sin tener que sostener el dispositivo.
+        <br><br>
+        En MercadoLibre desde USD 10-20. El que lee mucho en cama los ama.
+      </div>
+    </div>
+  </div>
+
+  <div class="cat-header"><div class="cat-ico">⚡</div><div class="cat-titulo">Carga y conectividad</div><div class="cat-sep"></div></div>
+  <div class="cards">
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">Cable y cargador</div><span class="badge b-ok">El básico</span></div>
+      <div class="card-body">
+        Los eReaders actuales usan USB-C (algunos más viejos usan micro-USB). La batería dura semanas así que no cargás seguido, pero tener el cable de repuesto en el trabajo o en la cartera tiene sentido.
+        <br><br>
+        Con cualquier cargador de 5W o más funciona. No necesitás carga rápida — la batería es chica y no se calienta.
+      </div>
+    </div>
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">Stylus (para modelos con nota)</div><span class="badge b-mid">Solo si el eReader lo soporta</span></div>
+      <div class="card-body">
+        <strong>Kindle Scribe, Kobo Elipsa, PocketBook InkPad Note</strong> vienen con stylus o lo soportan. Para subrayar, anotar al margen, dibujar.
+        <br><br>
+        Los modelos básicos (Paperwhite, Clara) no tienen pantalla táctil para stylus. No aplica comprarles uno.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CHECKLIST ═══ -->
+<div class="section" id="checklist">
+  <div class="sec-title">Antes de comprar</div>
+  <div class="sec-sub">Las preguntas que ordenan la decisión. <em>Respondelas y la elección se hace sola.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#8b5cf6">
+      <div class="card-head"><div class="card-name">¿Cuánto leés hoy?</div></div>
+      <div class="card-body">
+        Menos de 1 libro por mes → considerá si realmente lo vas a usar. El celular puede alcanzar.<br>
+        1-3 libros por mes → <strong>vale la pena totalmente</strong>. Cualquier eReader básico mejora la experiencia.<br>
+        4+ libros por mes → invertí en un buen modelo. Se amortiza rápido.
+      </div>
+    </div>
+    <div class="card" style="--ca:#4ade80">
+      <div class="card-head"><div class="card-name">¿Ya tenés libros comprados en Amazon?</div></div>
+      <div class="card-body">
+        Si tenés biblioteca en Amazon → <strong>Kindle</strong>. Tus libros ya están ahí.<br>
+        Si empezás de cero → <strong>Kobo o PocketBook</strong>. Más libertad, misma calidad de lectura.
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">¿Leés más ficción o no-ficción técnica?</div></div>
+      <div class="card-body">
+        Ficción y ensayo en texto → <strong>6" estándar perfecto</strong>.<br>
+        PDFs, manuales, libros técnicos con gráficos → <strong>7.8" o 10"</strong>. El tamaño importa para ese contenido.
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">¿Lo vas a llevar a la pileta o la playa?</div></div>
+      <div class="card-body">
+        Si la respuesta es sí, necesitás resistencia al agua (IPX7 o IPX8). Kindle Paperwhite, Kobo Libra 2 y la mayoría de los modelos actuales la tienen. Fijate en las specs antes de comprar.
+      </div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>💡 La recomendación sin verso:</strong><br>
+    La mayoría de la gente → <strong>Kindle Paperwhite</strong> o <strong>Kobo Clara 2E</strong>. Son prácticamente iguales en calidad de lectura. La diferencia es el ecosistema.<br>
+    Querés más libertad y usás mucho ePub → <strong>Kobo</strong>.<br>
+    Ya comprás libros en Amazon → <strong>Kindle</strong>.<br>
+    Usás PDFs técnicos → <strong>Kobo Elipsa o Kindle Scribe</strong>.
+  </div>
+
+  <div class="related">
+    <div class="rel-title">📚 También te puede interesar</div>
+    <div class="rel-grid">
+      <a href="tablets.html" class="rel-link">🪄 Tablets</a>
+      <a href="notebooks.html" class="rel-link">💻 Notebooks</a>
+      <a href="celulares.html" class="rel-link">📱 Celulares</a>
+      <a href="impresoras-3d.html" class="rel-link">🖨️ Impresoras 3D</a>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<nav class="sv-dock">
+  <a href="index.html" class="sv-dock-btn">🏠</a>
+  <a href="#" id="svWaBtn" class="sv-dock-btn wa">💬</a>
+</nav>
+
+<script>
+function showFolder(){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('folderScreen').classList.remove('hidden');
+  document.getElementById('backBtn').classList.remove('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goTab(id){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  var sec=document.getElementById(id);
+  if(sec) sec.classList.add('active');
+  document.getElementById('folderScreen').classList.add('hidden');
+  document.getElementById('backBtn').classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function svToggleDark(){
+  var isLight=document.body.classList.toggle('light');
+  document.getElementById('svDarkBtn').textContent=isLight?'🌙':'☀️';
+  localStorage.setItem('sv-mode',isLight?'light':'dark');
+}
+(function(){
+  var m=localStorage.getItem('sv-mode')||'dark';
+  if(m==='light'){document.body.classList.add('light');document.getElementById('svDarkBtn').textContent='🌙';}
+  else{document.getElementById('svDarkBtn').textContent='☀️';}
+  function tick(){var el=document.getElementById('svClock');if(!el)return;var n=new Date();el.textContent=n.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',hour12:false});}
+  tick();setInterval(tick,30000);
+  var wa=document.getElementById('svWaBtn');
+  if(wa){wa.addEventListener('click',function(e){e.preventDefault();window.open('https://wa.me/?text='+encodeURIComponent('Mirá esta guía de SIN VERSO: ')+encodeURIComponent(window.location.href),'_blank');});}
+})();
+</script>
+</body>
+</html>
