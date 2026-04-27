@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — Tu Era</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--accent:#f472b6;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{
+    background:
+      radial-gradient(circle at 10% 10%,rgba(251,146,60,.22),transparent 26%),
+      radial-gradient(circle at 55% 0%,rgba(244,114,182,.18),transparent 28%),
+      radial-gradient(circle at 90% 5%,rgba(129,140,248,.18),transparent 26%),
+      linear-gradient(160deg,#111827,#1a0a2e 54%,#080810);
+    background-attachment:fixed;
+    color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;
+  }
+  body.light{
+    background:
+      radial-gradient(circle at 10% 10%,rgba(251,146,60,.15),transparent 26%),
+      radial-gradient(circle at 55% 0%,rgba(244,114,182,.12),transparent 28%),
+      radial-gradient(circle at 90% 5%,rgba(129,140,248,.12),transparent 26%),
+      linear-gradient(160deg,#fff7f0,#fdf2f8 54%,#f5f3ff)!important;
+    color:#1a0a1a;
+  }
+
+  /* APP STATUS */
+  #appStatus{position:sticky;top:0;z-index:1000;height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(7,7,16,.45);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);font-size:12px;font-weight:800;color:rgba(255,255,255,.8);}
+  body.light #appStatus{background:rgba(255,255,255,.52);color:#444;}
+  #appStatus .sys-r{display:flex;gap:8px;align-items:center;opacity:.7;}
+
+  /* HEADER */
+  header{margin:12px auto 0;max-width:760px;border:1px solid rgba(255,255,255,.11);border-radius:0 0 32px 32px;background:linear-gradient(145deg,rgba(12,12,28,.74),rgba(26,10,46,.6));backdrop-filter:blur(20px);box-shadow:0 18px 60px rgba(0,0,0,.38);padding:44px 24px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:600px;height:240px;background:radial-gradient(ellipse,rgba(244,114,182,.12) 0%,rgba(251,146,60,.08) 40%,rgba(129,140,248,.08) 70%,transparent 100%);pointer-events:none;}
+  body.light header{background:linear-gradient(145deg,rgba(255,255,255,.76),rgba(253,242,248,.62))!important;}
+  .ia-badge{display:inline-block;background:linear-gradient(135deg,rgba(244,114,182,.2),rgba(251,146,60,.15));border:1px solid rgba(244,114,182,.4);border-radius:20px;padding:5px 18px;font-size:12px;font-weight:700;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(62px,14vw,120px);letter-spacing:4px;line-height:.88;background:linear-gradient(135deg,#fb923c 0%,#f472b6 40%,#818cf8 75%,#c084fc 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:12px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+
+  /* FOLDER */
+  .folder-wrap{max-width:760px;margin:14px auto 0;padding:0 14px 10px;}
+  .folder-card{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.13);border-radius:30px;padding:18px 14px 20px;box-shadow:0 20px 60px rgba(0,0,0,.22);backdrop-filter:blur(18px);}
+  body.light .folder-card{background:rgba(255,255,255,.72);border-color:rgba(30,30,80,.12);}
+  .folder-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 6px 14px;}
+  .folder-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1.5px;color:var(--text);line-height:1;}
+  .folder-sub{font-size:12px;color:var(--muted);margin-top:3px;}
+  .folder-count{font-size:11px;font-weight:800;color:#1a0a1a;background:var(--accent);border-radius:999px;padding:6px 11px;white-space:nowrap;}
+  .app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 10px;padding:6px 2px 4px;}
+  @media(max-width:360px){.app-grid{grid-template-columns:repeat(3,1fr);}}
+  .app-btn{border:0;background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;}
+  .app-ico{width:62px;height:62px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;background:linear-gradient(145deg,var(--c1),var(--c2));box-shadow:0 10px 24px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .18s,filter .18s;position:relative;overflow:hidden;}
+  .app-ico::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.30),transparent 42%);opacity:.55;}
+  @media(hover:hover){.app-btn:hover .app-ico{transform:translateY(-3px) scale(1.08);filter:saturate(1.2);}}
+  @media(hover:none){.app-btn:active .app-ico{transform:scale(.93);}}
+  .app-name{font-size:11px;line-height:1.15;color:var(--text);text-shadow:0 2px 8px rgba(0,0,0,.35);max-width:72px;font-weight:700;}
+  body.light .app-name{text-shadow:none;color:#17172a;}
+  #folderScreen.hidden{display:none;}
+  .back-btn{display:none;margin:0 16px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:var(--text);border-radius:999px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer;}
+  .back-btn.on{display:inline-flex;align-items:center;gap:8px;}
+  body.light .back-btn{background:rgba(255,255,255,.8);color:#1a0a1a;}
+  .tabs{display:none!important;}
+
+  /* MAIN */
+  main{max-width:760px;background:rgba(8,8,16,.22);border:1px solid rgba(255,255,255,.06);border-radius:28px 28px 0 0;backdrop-filter:blur(10px);margin:0 auto;padding:24px 16px 96px;}
+  body.light main{background:rgba(255,255,255,.30);}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09);padding:12px 15px;border-radius:16px;color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);}
+  body.light .sec-sub{background:rgba(255,255,255,.5);color:#555;}
+
+  /* CARDS */
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;backdrop-filter:blur(14px);}
+  .card:hover{border-color:rgba(244,114,182,.4);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  body.light .card{background:rgba(255,255,255,.72)!important;border-color:rgba(30,30,80,.12)!important;}
+  body.light .card-name{color:#1a0a1a!important;}
+  body.light .card-body{color:#555!important;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3);}
+  .b-mid{background:rgba(244,114,182,.12);color:var(--accent);border:1px solid rgba(244,114,182,.3);}
+  .b-high{background:rgba(251,146,60,.12);color:#fb923c;border:1px solid rgba(251,146,60,.3);}
+  .b-top{background:rgba(129,140,248,.12);color:#818cf8;border:1px solid rgba(129,140,248,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .b-gen{font-size:10px;font-weight:800;letter-spacing:1px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+
+  /* TIPS */
+  .tip{border-radius:14px;padding:14px 16px;margin-top:18px;font-size:14px;line-height:1.65;}
+  .tip strong{font-weight:700;}
+  .tip-mill{background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.2);color:#fed7aa;}
+  .tip-mill strong{color:#fb923c;}
+  .tip-cent{background:rgba(244,114,182,.07);border:1px solid rgba(244,114,182,.2);color:#fbcfe8;}
+  .tip-cent strong{color:#f472b6;}
+  .tip-alfa{background:rgba(129,140,248,.07);border:1px solid rgba(129,140,248,.2);color:#c7d2fe;}
+  .tip-alfa strong{color:#818cf8;}
+  .tip-green{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);color:#a0e8b4;}
+  .tip-green strong{color:#4ade80;}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+
+  /* GENERACION BADGE GRANDE */
+  .gen-hero{border-radius:22px;padding:22px 20px;margin-bottom:22px;text-align:center;position:relative;overflow:hidden;}
+  .gen-hero::before{content:'';position:absolute;inset:0;opacity:.06;background-size:cover;background-position:center;}
+  .gen-hero-year{font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;opacity:.7;margin-bottom:6px;}
+  .gen-hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,12vw,88px);letter-spacing:3px;line-height:.88;margin-bottom:8px;}
+  .gen-hero-desc{font-size:14px;opacity:.75;line-height:1.5;max-width:420px;margin:0 auto;}
+  .gen-mill{background:linear-gradient(135deg,rgba(251,146,60,.18),rgba(251,191,36,.12));border:1px solid rgba(251,146,60,.25);}
+  .gen-mill .gen-hero-name{background:linear-gradient(135deg,#fb923c,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .gen-cent{background:linear-gradient(135deg,rgba(244,114,182,.18),rgba(192,132,252,.12));border:1px solid rgba(244,114,182,.25);}
+  .gen-cent .gen-hero-name{background:linear-gradient(135deg,#f472b6,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .gen-alfa{background:linear-gradient(135deg,rgba(129,140,248,.18),rgba(56,189,248,.12));border:1px solid rgba(129,140,248,.25);}
+  .gen-alfa .gen-hero-name{background:linear-gradient(135deg,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+  /* NOSTALGIA GRID */
+  .nost-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:4px;}
+  .nost-item{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:12px 14px;}
+  .nost-ico{font-size:22px;margin-bottom:5px;}
+  .nost-titulo{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
+  .nost-desc{font-size:12px;color:var(--muted);line-height:1.4;}
+  body.light .nost-item{background:rgba(255,255,255,.7);border-color:rgba(30,30,80,.1);}
+  body.light .nost-titulo{color:#1a0a1a;}
+
+  /* TIMELINE SIMPLE */
+  .tl{display:flex;flex-direction:column;gap:0;}
+  .tl-row{display:flex;gap:14px;position:relative;}
+  .tl-row:not(:last-child)::after{content:'';position:absolute;left:19px;top:40px;bottom:0;width:2px;background:linear-gradient(180deg,var(--tc,#f472b6),transparent);}
+  .tl-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:2px;position:relative;z-index:1;border:2px solid var(--tc,#f472b6);background:rgba(8,8,16,.8);}
+  .tl-cuerpo{flex:1;padding-bottom:22px;}
+  .tl-anio{font-size:10px;font-weight:800;letter-spacing:3px;color:var(--tc,#f472b6);margin-bottom:2px;}
+  .tl-nombre{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--text);line-height:1;margin-bottom:4px;}
+  .tl-desc{font-size:13px;color:var(--muted);line-height:1.55;}
+  .tl-desc strong{color:var(--text);}
+
+  /* CHOQUE */
+  .choque-row{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-bottom:12px;}
+  .choque-a{background:rgba(251,146,60,.08);border:1px solid rgba(251,146,60,.2);border-radius:14px;padding:10px 12px;font-size:13px;color:#fed7aa;line-height:1.4;}
+  .choque-b{background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.2);border-radius:14px;padding:10px 12px;font-size:13px;color:#c7d2fe;line-height:1.4;}
+  .choque-vs{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--muted);text-align:center;}
+
+  /* RELATED */
+  .related{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px;margin-top:28px;}
+  .rel-title{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--muted);letter-spacing:1px;margin-bottom:12px;}
+  .rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .rel-link{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:8px 14px;text-decoration:none;font-size:12px;font-weight:700;color:var(--text);transition:all .2s;}
+  .rel-link:hover{border-color:var(--accent);}
+
+  /* CONTROLES */
+  .sv-darkmode-btn{position:fixed;right:14px;top:36px;z-index:999;width:40px;height:40px;border-radius:13px;border:1px solid rgba(255,255,255,.18);background:rgba(10,10,20,.75);color:#fff;font-size:18px;backdrop-filter:blur(14px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+  body.light .sv-darkmode-btn{background:rgba(255,255,255,.85);color:#333;}
+  .sv-dock{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:888;display:flex;align-items:center;gap:10px;padding:8px 14px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);border-radius:24px;backdrop-filter:blur(20px);box-shadow:0 14px 40px rgba(0,0,0,.32);}
+  body.light .sv-dock{background:rgba(255,255,255,.72);}
+  .sv-dock-btn{width:46px;height:46px;border-radius:16px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;text-decoration:none;transition:transform .18s;}
+  .sv-dock-btn:hover{transform:translateY(-2px);}
+  .sv-dock-btn.wa{background:#25D366;box-shadow:0 6px 18px rgba(37,211,102,.4);}
+  body.light .sv-dock-btn{background:rgba(20,20,80,.08);color:#333;}
+</style>
+</head>
+<body>
+
+<div id="appStatus">
+  <span id="svClock">--:--</span>
+  <span class="sys-r">SIN VERSO · TU ERA <span>▰▰▰</span></span>
+</div>
+<button class="sv-darkmode-btn" id="svDarkBtn" onclick="svToggleDark()">☀️</button>
+
+<header>
+  <div class="ia-badge">🕹️ Cultura generacional</div>
+  <h1>Tu Era</h1>
+  <p class="subtitle">Millennials, Centennials y Gen Alfa.<br><strong>Tres mundos, tres idiomas, tres formas de ver la vida.</strong></p>
+</header>
+
+<!-- CARPETA -->
+<section class="folder-wrap" id="folderScreen">
+  <div class="folder-card">
+    <div class="folder-top">
+      <div><div class="folder-title">Tu Era</div><div class="folder-sub">Elegí tu generación o mirá el choque</div></div>
+      <div class="folder-count">6 secciones</div>
+    </div>
+    <div class="app-grid">
+      <button class="app-btn" onclick="goTab('millennials')"><span class="app-ico" style="--c1:#fb923c;--c2:#d97706">📟</span><span class="app-name">Millennials</span></button>
+      <button class="app-btn" onclick="goTab('centennials')"><span class="app-ico" style="--c1:#f472b6;--c2:#db2777">📱</span><span class="app-name">Centennials</span></button>
+      <button class="app-btn" onclick="goTab('genalfa')"><span class="app-ico" style="--c1:#818cf8;--c2:#4f46e5">🤖</span><span class="app-name">Gen Alfa</span></button>
+      <button class="app-btn" onclick="goTab('choque')"><span class="app-ico" style="--c1:#dc2626;--c2:#9f1239">⚔️</span><span class="app-name">El choque</span></button>
+      <button class="app-btn" onclick="goTab('tecnologia')"><span class="app-ico" style="--c1:#0891b2;--c2:#0e7490">🖥️</span><span class="app-name">Tech por era</span></button>
+      <button class="app-btn" onclick="goTab('futuro')"><span class="app-ico" style="--c1:#7c3aed;--c2:#5b21b6">🔮</span><span class="app-name">¿Qué viene?</span></button>
+    </div>
+  </div>
+</section>
+
+<main>
+<button class="back-btn" id="backBtn" onclick="showFolder()">← Volver</button>
+
+<!-- ═══ MILLENNIALS ═══ -->
+<div class="section" id="millennials">
+  <div class="gen-hero gen-mill">
+    <div class="gen-hero-year">1981 — 1996 · Hoy 29 a 44 años</div>
+    <div class="gen-hero-name">Millennials</div>
+    <div class="gen-hero-desc">La generación que vio nacer internet, creció sin GPS y aprendió tecnología por las suyas.</div>
+  </div>
+
+  <div class="sec-sub">Los que recuerdan el mundo analógico <em>y</em> vivieron la transición digital. <em>El puente entre dos mundos completamente distintos.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">Quiénes son</div><span class="badge b-high">El perfil</span></div>
+      <div class="card-body">
+        Los Millennials son la primera generación que creció <strong>con</strong> internet pero no <strong>en</strong> internet. Nacieron en un mundo analógico y la tecnología los fue alcanzando de a poco.
+        <br><br>
+        A los 10 años jugaban en la calle. A los 15 tenían su primer celular con Snake y el Messenger con el dial-up que ocupaba la línea. A los 20 llegó Facebook. A los 25, el smartphone cambió todo.
+        <br><br>
+        <strong>La paradoja millennial:</strong> son la generación más estudiada de la historia, tuvieron más herramientas que cualquier generación anterior, y aun así fueron los primeros en sufrir la precarización laboral masiva y la crisis del acceso a la vivienda.
+        <br><em>— "Hicimos todo bien: estudiamos, nos esforzamos, pusimos en práctica lo que nos enseñaron. Y después llegó 2008."</em>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin:20px 0 14px;font-family:'Bebas Neue',sans-serif;font-size:22px;color:#fb923c;letter-spacing:1px;">📼 La nostalgia millennial</div>
+  <div class="nost-grid">
+    <div class="nost-item"><div class="nost-ico">📟</div><div class="nost-titulo">El Tamagotchi</div><div class="nost-desc">La primera mascota virtual. La dejabas morir en mitad de Matemáticas y te partía el alma.</div></div>
+    <div class="nost-item"><div class="nost-ico">💾</div><div class="nost-titulo">Los disquetes</div><div class="nost-desc">1.44 MB de pura esperanza. El trabajo de la escuela guardado en 3 disquetes. Uno siempre fallaba.</div></div>
+    <div class="nost-item"><div class="nost-ico">📼</div><div class="nost-titulo">Rebobinar el VHS</div><div class="nost-desc">La pesadilla de devolver el casete sin rebobinar al videoclub. Había multa y todo.</div></div>
+    <div class="nost-item"><div class="nost-ico">🎮</div><div class="nost-titulo">Sega / Super Nintendo</div><div class="nost-desc">La guerra más importante que existió. La gente se dividía por consola como hoy por partido político.</div></div>
+    <div class="nost-item"><div class="nost-ico">🖥️</div><div class="nost-titulo">Windows 95/98</div><div class="nost-desc">El "It's now safe to turn off your computer". El sonido de inicio de Windows 95. El Minesweeper.</div></div>
+    <div class="nost-item"><div class="nost-ico">📞</div><div class="nost-titulo">El dial-up</div><div class="nost-desc">Ese sonido del módem conectándose. Esperar 20 minutos para ver una foto. Y rezar para que nadie llame.</div></div>
+    <div class="nost-item"><div class="nost-ico">🎵</div><div class="nost-titulo">El Walkman / Discman</div><div class="nost-desc">Los auriculares en la mochila, el CD saltando en el colectivo. Cada álbum era una decisión de vida.</div></div>
+    <div class="nost-item"><div class="nost-ico">💬</div><div class="nost-titulo">MSN Messenger</div><div class="nost-desc">El estado como mensaje indirecto para esa persona. El sonido del "pop" de mensaje nuevo. El "está escribiendo..."</div></div>
+  </div>
+
+  <div class="cards" style="margin-top:20px">
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">La tecnología que los define</div></div>
+      <div class="card-body">
+        <strong>El celular de teclado físico:</strong> Motorola Razr, Nokia 3310, BlackBerry. Escribir con T9 era una habilidad que orgullecía.<br><br>
+        <strong>Napster y el MP3:</strong> la primera vez que la industria discográfica sintió que el suelo se movía. Bajarse un álbum en 3 horas era hazaña.<br><br>
+        <strong>DVD vs VHS:</strong> vivieron la transición y guardaron sus pelis en ambos formatos. Todavía hay alguien en tu familia con una pila de VHS que "algún día van a digitalizar".<br><br>
+        <strong>Google cuando era joven:</strong> antes de que Google supiera más de vos que tu psicólogo. Cuando buscar algo en internet era emocionante.
+      </div>
+    </div>
+    <div class="card" style="--ca:#f87171">
+      <div class="card-head"><div class="card-name">Lo que nadie entiende de ellos</div></div>
+      <div class="card-body">
+        <strong>No son vagos — son los que más trabajan:</strong> los datos muestran que los millennials trabajan más horas que cualquier generación anterior, con menos estabilidad y peor relación sueldo/costo de vida.<br><br>
+        <strong>El aguacate y el café no son el problema:</strong> el meme de "si no gastarías en café tendrías casa" es matemáticamente absurdo. Un café por día = USD 1.000 por año. Una hipoteca = USD 300.000. Sí, no es lo mismo.<br><br>
+        <strong>Cambiaron el trabajo, no se rindieron:</strong> redefinieron la idea de trabajo estable, carrera lineal y empresa de por vida. No porque sean caprichosos — porque el viejo modelo dejó de funcionar para ellos.
+      </div>
+    </div>
+  </div>
+
+  <div class="tip tip-mill">
+    <strong>💡 El dato que los resume:</strong> son la primera generación de la historia moderna en estar económicamente peor que sus padres a la misma edad. Y también la primera en crear TikTok, Instagram, Airbnb, Uber y la economía de plataformas que cambió el mundo. Paradoja completa.
+  </div>
+</div>
+
+<!-- ═══ CENTENNIALS ═══ -->
+<div class="section" id="centennials">
+  <div class="gen-hero gen-cent">
+    <div class="gen-hero-year">1997 — 2012 · Hoy 13 a 28 años</div>
+    <div class="gen-hero-name">Centennials</div>
+    <div class="gen-hero-desc">La primera generación que nunca conoció el mundo sin internet. Nativos digitales de verdad.</div>
+  </div>
+
+  <div class="sec-sub">Crecieron con smartphone desde chicos, vivieron una pandemia en su adolescencia y tienen más ansiedad documentada que cualquier generación anterior. <em>Y también más capacidad de adaptación.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#f472b6">
+      <div class="card-head"><div class="card-name">Quiénes son</div><span class="badge b-mid">El perfil</span></div>
+      <div class="card-body">
+        Los Centennials (también llamados Gen Z) nunca conocieron un mundo sin Google, sin redes sociales, sin streaming. Para ellos el WiFi es como la electricidad — infraestructura invisible que simplemente tiene que estar.
+        <br><br>
+        <strong>Su relación con la tecnología es distinta a la de los Millennials:</strong> donde los Millennials aprendieron tecnología, los Centennials directamente piensan en tecnología. No adoptaron Instagram — crecieron dentro de Instagram.
+        <br><br>
+        <strong>La pandemia los marcó profundamente:</strong> muchos vivieron su adolescencia completa o parcialmente en pantallas. Graduaciones virtuales, primeros amores por videollamada, el secundario a través de Zoom.
+        <br><em>— "Somos la generación que aprendió a socializar online antes que en persona. Y a veces eso pesa."</em>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin:20px 0 14px;font-family:'Bebas Neue',sans-serif;font-size:22px;color:#f472b6;letter-spacing:1px;">📱 La cultura centennial</div>
+  <div class="nost-grid">
+    <div class="nost-item"><div class="nost-ico">🎵</div><div class="nost-titulo">TikTok</div><div class="nost-desc">El medio que inventaron y que ahora todo el mundo copia. Formato de 60 segundos que reformateó la atención humana.</div></div>
+    <div class="nost-item"><div class="nost-ico">🎮</div><div class="nost-titulo">Fortnite / Roblox</div><div class="nost-desc">No solo juegos — plazas digitales donde se juntaban cuando no podían salir. El recreo del siglo XXI.</div></div>
+    <div class="nost-item"><div class="nost-ico">😂</div><div class="nost-titulo">El meme como idioma</div><div class="nost-desc">Comunicarse con imágenes y referencias compartidas. Si no entendés el meme, no sos del grupo. Simple.</div></div>
+    <div class="nost-item"><div class="nost-ico">🌱</div><div class="nost-titulo">Activismo digital</div><div class="nost-desc">La generación más consciente del cambio climático, la diversidad y la salud mental. Y lo dicen en redes.</div></div>
+    <div class="nost-item"><div class="nost-ico">😰</div><div class="nost-titulo">La ansiedad</div><div class="nost-desc">La generación con más diagnósticos de ansiedad y depresión. La presión de la vida curada en Instagram tiene costo real.</div></div>
+    <div class="nost-item"><div class="nost-ico">🎧</div><div class="nost-titulo">Spotify / streaming</div><div class="nost-desc">Nunca tuvieron que "bajarse" música. El catálogo completo de la humanidad a USD 5 por mes. Siempre fue así.</div></div>
+    <div class="nost-item"><div class="nost-ico">💼</div><div class="nost-titulo">Side hustle</div><div class="nost-desc">Vender en Instagram, hacer contenido, freelancear. El trabajo fijo como meta dejó de tener sentido para muchos.</div></div>
+    <div class="nost-item"><div class="nost-ico">🗣️</div><div class="nost-titulo">Salud mental visible</div><div class="nost-desc">Primera generación que habla abiertamente de terapia, ansiedad y límites. Sin vergüenza. Y tiene sentido.</div></div>
+  </div>
+
+  <div class="cards" style="margin-top:20px">
+    <div class="card" style="--ca:#c084fc">
+      <div class="card-head"><div class="card-name">Lo que nadie entiende de ellos</div></div>
+      <div class="card-body">
+        <strong>No son flojos — tienen otros valores:</strong> el trabajo para vivir, no vivir para trabajar. Si el trabajo no tiene sentido o no respeta su tiempo, se van. Antes eso se llamaba falta de compromiso. Ahora se llama salud mental.
+        <br><br>
+        <strong>La atención corta no es déficit — es adaptación:</strong> crecieron con infinito contenido compitiendo por su atención. Aprendieron a filtrar rápido. Cuando algo les importa, pueden enfocarse horas.
+        <br><br>
+        <strong>La "autenticidad" no es pose:</strong> valoran lo genuino sobre lo perfecto. Los influencers que muestran sus quilombos y sus días malos les generan más confianza que los que siempre están impecables.
+      </div>
+    </div>
+    <div class="card" style="--ca:#f472b6">
+      <div class="card-head"><div class="card-name">El mercado laboral que les tocó</div></div>
+      <div class="card-body">
+        Entraron al mercado laboral en plena pandemia o justo después. Home office como norma, economía de plataformas, trabajo por proyecto, contratos cortos.
+        <br><br>
+        <strong>Lo bueno:</strong> más flexibilidad, posibilidad de trabajo remoto desde cualquier lado, oportunidades globales desde el celu.<br>
+        <strong>Lo malo:</strong> menos estabilidad, menos beneficios sociales, más incertidumbre y más responsabilidad individual sobre la carrera.
+        <br><em>— "Nos dijeron que estudiemos y consigamos trabajo. Nadie nos dijo que el trabajo iba a ser una app."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip tip-cent">
+    <strong>💡 El dato que los resume:</strong> son la generación más diversa, más educada y con más información disponible de la historia. Y también la que tiene más ansiedad documentada. No es coincidencia — tener acceso a toda la información del mundo, incluyendo todas las cosas malas que pasan, tiene un costo psicológico real.
+  </div>
+</div>
+
+<!-- ═══ GEN ALFA ═══ -->
+<div class="section" id="genalfa">
+  <div class="gen-hero gen-alfa">
+    <div class="gen-hero-year">2013 — hoy · Hasta 12 años</div>
+    <div class="gen-hero-name">Gen Alfa</div>
+    <div class="gen-hero-desc">La primera generación completamente criada en el mundo post-smartphone. Todavía están definiendo quiénes son.</div>
+  </div>
+
+  <div class="sec-sub">Nacieron después del lanzamiento del iPad. La IA siempre existió para ellos. El mundo digital no es una extensión de su vida — es parte central de ella. <em>Y todavía son muy chicos para que sepamos bien qué implica eso.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">Quiénes son</div><span class="badge b-top">El perfil</span></div>
+      <div class="card-body">
+        La Gen Alfa (nacidos a partir del 2013) son los hijos de los Millennials y los hermanos menores de los Centennials. Son la primera generación criada completamente en un mundo con redes sociales establecidas, streaming como norma, asistentes de voz en el hogar e IA generativa.
+        <br><br>
+        <strong>Para ellos no existe el "antes de internet":</strong> nunca vieron a sus padres buscar información en una enciclopedia, nunca tuvieron que esperar al noticiero para saber qué pasó en el mundo, nunca usaron un mapa de papel.
+        <br><br>
+        <strong>Son los más estudiados por los marketeros:</strong> para 2025 son 2 mil millones de personas. En 2030 van a ser la generación más grande de la historia humana. Todas las marcas los estudian.
+      </div>
+    </div>
+    <div class="card" style="--ca:#38bdf8">
+      <div class="card-head"><div class="card-name">Su relación con la tecnología</div><span class="badge b-top">Diferente a todo lo anterior</span></div>
+      <div class="card-body">
+        <strong>Tablets antes que libros:</strong> muchos tuvieron una tablet antes de aprender a leer. El scroll es un movimiento natural para ellos como lo era pasar páginas para sus abuelos.
+        <br><br>
+        <strong>YouTube y Roblox como niñeros digitales:</strong> estadísticas muestran que pasan en promedio 4-5 horas diarias en pantallas. El debate sobre si esto es problemático sigue abierto.
+        <br><br>
+        <strong>IA como normalidad:</strong> crecen con Alexa, Siri, Google Assistant, ChatGPT. Para ellos hablarle a una IA es tan natural como hablarle a una persona. No tiene la connotación "futurista" que tiene para sus padres.
+        <br><br>
+        <strong>Creators como modelos a seguir:</strong> en encuestas, más Gen Alfa quiere ser YouTuber o streamer que astronauta, médico o abogado. Para sus padres eso suena a locura. Para ellos es una carrera legítima y rentable.
+      </div>
+    </div>
+  </div>
+
+  <div style="margin:20px 0 14px;font-family:'Bebas Neue',sans-serif;font-size:22px;color:#818cf8;letter-spacing:1px;">🤖 El mundo alfa</div>
+  <div class="nost-grid">
+    <div class="nost-item"><div class="nost-ico">🟥</div><div class="nost-titulo">Roblox</div><div class="nost-desc">No es un juego — es una plataforma de juegos, un metaverso, una plaza social y una economía con su propia moneda.</div></div>
+    <div class="nost-item"><div class="nost-ico">🎬</div><div class="nost-titulo">YouTube Kids</div><div class="nost-desc">El primer contenido que consumieron solos. Millones de horas de unboxings, challenges y animaciones.</div></div>
+    <div class="nost-item"><div class="nost-ico">🤖</div><div class="nost-titulo">IA como herramienta</div><div class="nost-desc">Le preguntan a ChatGPT lo que sus padres le preguntaban a Google. Y esperan respuesta en tiempo real.</div></div>
+    <div class="nost-item"><div class="nost-ico">🧸</div><div class="nost-titulo">Juguetes conectados</div><div class="nost-desc">Peluches con pantalla, robots programables, pistas de autos con app. El juguete analógico coexiste con el digital.</div></div>
+    <div class="nost-item"><div class="nost-ico">📚</div><div class="nost-titulo">El debate educativo</div><div class="nost-desc">¿Tablets en el aula o no? El debate más fuerte en educación primaria hoy. Sin respuesta definitiva todavía.</div></div>
+    <div class="nost-item"><div class="nost-ico">🌍</div><div class="nost-titulo">Cambio climático como realidad</div><div class="nost-desc">Crecen sabiendo que el planeta tiene problemas serios. Es el contexto de fondo de toda su infancia.</div></div>
+  </div>
+
+  <div class="cards" style="margin-top:20px">
+    <div class="card" style="--ca:#7c3aed">
+      <div class="card-head"><div class="card-name">Lo que preocupa y lo que emociona</div></div>
+      <div class="card-body">
+        <strong>Lo que preocupa a los expertos:</strong> el impacto del tiempo de pantalla en el desarrollo del lenguaje, la atención y las habilidades sociales presenciales. Todavía no hay estudios de largo plazo definitivos — son la primera generación en esta situación.<br><br>
+        <strong>Lo que emociona a los expertos:</strong> la capacidad de procesar información visual, la facilidad de adaptación a nuevas herramientas, la naturalidad con que aprenden tecnología compleja y la posibilidad de acceso a educación de calidad global desde cualquier lugar.
+      </div>
+    </div>
+  </div>
+
+  <div class="tip tip-alfa">
+    <strong>💡 El dato más importante:</strong> la Gen Alfa va a ser adulta en 2030-2040. Va a vivir en un mundo donde la IA hace gran parte del trabajo rutinario, donde el cambio climático es una crisis activa y donde las reglas del trabajo, la familia y la sociedad están siendo reescritas. Están siendo criados para un mundo que todavía no existe.
+  </div>
+</div>
+
+<!-- ═══ EL CHOQUE ═══ -->
+<div class="section" id="choque">
+  <div class="sec-title">El choque generacional</div>
+  <div class="sec-sub">Por qué cada generación cree que la otra está equivocada. <em>Y por qué las dos tienen algo de razón y algo de ciego punto.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#dc2626">
+      <div class="card-head"><div class="card-name">En el trabajo</div></div>
+      <div class="card-body">
+        <div class="choque-row">
+          <div class="choque-a">🟠 "Hay que pagar derecho de piso. Yo empecé desde abajo."</div>
+          <div class="choque-vs">VS</div>
+          <div class="choque-b">🔵 "¿Por qué tengo que sufrir porque vos sufriste? Eso no es cultura, es hazing."</div>
+        </div>
+        <div class="choque-row">
+          <div class="choque-a">🟠 "El trabajo es trabajo. No tiene que gustarte ni realizarte."</div>
+          <div class="choque-vs">VS</div>
+          <div class="choque-b">🔵 "Paso un tercio de mi vida en el trabajo. Si no tiene sentido, prefiero ganar menos en algo que importe."</div>
+        </div>
+        <div class="choque-row" style="margin-bottom:0">
+          <div class="choque-a">🟠 "Seis meses en una empresa y ya quiere el puesto del jefe."</div>
+          <div class="choque-vs">VS</div>
+          <div class="choque-b">🔵 "Si no hay crecimiento, me voy. La lealtad ciega que no da frutos no es virtud."</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="--ca:#f472b6">
+      <div class="card-head"><div class="card-name">En la tecnología</div></div>
+      <div class="card-body">
+        <div class="choque-row">
+          <div class="choque-a">🟠 "Estás todo el día en el teléfono, no te enterás de nada de lo que pasa a tu alrededor."</div>
+          <div class="choque-vs">VS</div>
+          <div class="choque-b">🔵 "Estoy conectado a personas de todo el mundo, enterándome de lo que pasa en tiempo real."</div>
+        </div>
+        <div class="choque-row">
+          <div class="choque-a">🟠 "Antes nos juntábamos en persona y éramos más felices."</div>
+          <div class="choque-vs">VS</div>
+          <div class="choque-b">🔵 "El estudio de Harvard de 85 años muestra que las relaciones de calidad importan, no dónde se forman."</div>
+        </div>
+        <div class="choque-row" style="margin-bottom:0">
+          <div class="choque-a">🟠 "La IA les va a robar el trabajo y no saben cómo hacer nada sin tecnología."</div>
+          <div class="choque-vs">VS</div>
+          <div class="choque-b">🔵 "Cada revolución tecnológica generó más trabajo del que eliminó. Y saben usar las herramientas nuevas."</div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">En la crianza y la educación</div></div>
+      <div class="card-body">
+        <div class="choque-row">
+          <div class="choque-a">🟠 "A mí me pegaban y no me pasó nada. Los chicos de hoy son muy sensibles."</div>
+          <div class="choque-vs">VS</div>
+          <div class="choque-b">🔵 "Los estudios de psicología del desarrollo muestran que te pasó algo, solo que no lo asociás."</div>
+        </div>
+        <div class="choque-row">
+          <div class="choque-a">🟠 "Cuando era chico jugaba en la calle. Ahora los chicos solo miran pantallas."</div>
+          <div class="choque-vs">VS</div>
+          <div class="choque-b">🔵 "¿Y quién los tiene adentro? Los adultos que temen dejarlos salir solos."</div>
+        </div>
+        <div class="choque-row" style="margin-bottom:0">
+          <div class="choque-a">🟠 "Demasiada terapia y poca resiliencia."</div>
+          <div class="choque-vs">VS</div>
+          <div class="choque-b">🔵 "La resiliencia sin acompañamiento se llama trauma no procesado."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tip tip-green">
+    <strong>💡 Lo que dicen los que estudian generaciones:</strong> los conflictos generacionales siempre existieron. Los romanos se quejaban de los jóvenes en el 200 A.C. Cada generación piensa que la siguiente es peor. Hasta ahora todas se equivocaron. Las generaciones no son mejores ni peores — son respuestas adaptativas a contextos diferentes.
+  </div>
+</div>
+
+<!-- ═══ TECNOLOGÍA POR ERA ═══ -->
+<div class="section" id="tecnologia">
+  <div class="sec-title">La tecnología de cada era</div>
+  <div class="sec-sub">Cómo cambió el mundo tecnológico de una generación a la siguiente. <em>En 40 años, más cambio que en los 400 anteriores.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#fb923c">
+      <div class="card-head"><div class="card-name">El mundo millennial — Los 80s y 90s</div></div>
+      <div class="card-body">
+        <div class="tl">
+          <div class="tl-row" style="--tc:#fb923c"><div class="tl-dot">🎮</div><div class="tl-cuerpo"><div class="tl-anio">1985</div><div class="tl-nombre">Atari / Commodore / NES</div><div class="tl-desc">La primera generación de chicos que creció con videojuegos en casa. El arcade como lugar de encuentro social.</div></div></div>
+          <div class="tl-row" style="--tc:#fb923c"><div class="tl-dot">💾</div><div class="tl-cuerpo"><div class="tl-anio">1990</div><div class="tl-nombre">La PC llega al hogar</div><div class="tl-desc">Windows 3.1, los primeros juegos en CD-ROM. El Paint como primera experiencia de "diseño". El Encarta en lugar de la enciclopedia.</div></div></div>
+          <div class="tl-row" style="--tc:#fb923c"><div class="tl-dot">🌐</div><div class="tl-cuerpo"><div class="tl-anio">1996</div><div class="tl-nombre">Internet llega a los hogares</div><div class="tl-desc">El dial-up, el AOL, el ICQ. La primera vez que mandaron un email. El mundo conectado pero muy lento.</div></div></div>
+          <div class="tl-row" style="--tc:#fb923c"><div class="tl-dot">📱</div><div class="tl-cuerpo"><div class="tl-anio">2000</div><div class="tl-nombre">El primer celular</div><div class="tl-desc">Nokia 3310, Motorola, el SMS a precio de oro. Escribir con T9. El Snake como pasatiempo universal.</div></div></div>
+          <div class="tl-row" style="--tc:#fb923c"><div class="tl-dot">🎵</div><div class="tl-cuerpo" style="padding-bottom:0"><div class="tl-anio">2003</div><div class="tl-nombre">MP3 / Napster / LimeWire</div><div class="tl-desc">La revolución de la música digital. Bajarse 10 canciones en dos horas era un logro. La industria discográfica en pánico.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#f472b6">
+      <div class="card-head"><div class="card-name">El mundo centennial — Los 2000s y 2010s</div></div>
+      <div class="card-body">
+        <div class="tl">
+          <div class="tl-row" style="--tc:#f472b6"><div class="tl-dot">📱</div><div class="tl-cuerpo"><div class="tl-anio">2007</div><div class="tl-nombre">iPhone — El mundo cambia</div><div class="tl-desc">El smartphone que redefinió todo. Computadora en el bolsillo. Internet siempre disponible. El antes y el después.</div></div></div>
+          <div class="tl-row" style="--tc:#f472b6"><div class="tl-dot">📘</div><div class="tl-cuerpo"><div class="tl-anio">2010</div><div class="tl-nombre">Facebook / Instagram / Twitter</div><div class="tl-desc">Las redes sociales como forma de vida. La identidad digital como extensión de la identidad real. El like como validación.</div></div></div>
+          <div class="tl-row" style="--tc:#f472b6"><div class="tl-dot">🎮</div><div class="tl-cuerpo"><div class="tl-anio">2013</div><div class="tl-nombre">Streaming de gaming — Twitch</div><div class="tl-desc">Ver a alguien jugar como entretenimiento masivo. Millones mirando a otro persona jugar en tiempo real. Los millennials no entendieron — hasta que sí.</div></div></div>
+          <div class="tl-row" style="--tc:#f472b6"><div class="tl-dot">🎵</div><div class="tl-cuerpo"><div class="tl-anio">2017</div><div class="tl-nombre">TikTok — El formato corto</div><div class="tl-desc">El video de 60 segundos que cambió cómo consumimos contenido. Algoritmo de IA que sabe lo que querés ver antes que vos.</div></div></div>
+          <div class="tl-row" style="--tc:#f472b6"><div class="tl-dot">🏠</div><div class="tl-cuerpo" style="padding-bottom:0"><div class="tl-anio">2020</div><div class="tl-nombre">Pandemia — La aceleración</div><div class="tl-desc">El trabajo remoto, la educación virtual, el delivery de todo. La pandemia aceleró 10 años de adopción digital en 1 año.</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="--ca:#818cf8">
+      <div class="card-head"><div class="card-name">El mundo alfa — Los 2020s</div></div>
+      <div class="card-body">
+        <div class="tl">
+          <div class="tl-row" style="--tc:#818cf8"><div class="tl-dot">🤖</div><div class="tl-cuerpo"><div class="tl-anio">2022</div><div class="tl-nombre">ChatGPT — La IA para todos</div><div class="tl-desc">La IA que llegó a todos los hogares. Los más chicos de la Gen Alfa la usan para todo — incluyendo hacer la tarea, para bien o para mal.</div></div></div>
+          <div class="tl-row" style="--tc:#818cf8"><div class="tl-dot">🥽</div><div class="tl-cuerpo"><div class="tl-anio">2023</div><div class="tl-nombre">Vision Pro / AR / VR</div><div class="tl-desc">Las gafas de realidad aumentada como producto de consumo. La mezcla entre mundo físico y digital que la Gen Alfa va a normalizar.</div></div></div>
+          <div class="tl-row" style="--tc:#818cf8"><div class="tl-dot">🎮</div><div class="tl-cuerpo" style="padding-bottom:0"><div class="tl-anio">2025+</div><div class="tl-nombre">El metaverso y los mundos virtuales</div><div class="tl-desc">Roblox ya es un metaverso. La Gen Alfa socializa, juega y aprende en espacios que no son físicos. Para sus padres es raro. Para ellos es normal.</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FUTURO ═══ -->
+<div class="section" id="futuro">
+  <div class="sec-title">¿Qué viene después?</div>
+  <div class="sec-sub">Gen Beta, Gen Gamma y las generaciones que van a crecer en un mundo que todavía no podemos imaginar bien. <em>Pero podemos intuir algunas cosas.</em></div>
+
+  <div class="cards">
+    <div class="card" style="--ca:#7c3aed">
+      <div class="card-head"><div class="card-name">Gen Beta (2025 — 2039)</div><span class="badge b-top">Los que vienen</span></div>
+      <div class="card-body">
+        Los primeros bebés de la Gen Beta ya nacieron. Van a crecer en un mundo donde la IA generativa ya existía antes de que ellos nacieran, donde los autos eléctricos son la norma y donde el trabajo remoto es simplemente "el trabajo".
+        <br><br>
+        <strong>Lo que los va a definir:</strong> serán la primera generación en crecer con IA integrada en la educación desde el jardín de infantes. Sus cerebros se van a desarrollar en interacción constante con sistemas inteligentes.
+        <br><br>
+        <strong>El mundo que les toca:</strong> cambio climático con efectos ya visibles, primer viaje a Marte posible en su infancia, IA que probablemente supere la inteligencia humana en varias áreas antes de que lleguen a la adultez.
+      </div>
+    </div>
+    <div class="card" style="--ca:#0891b2">
+      <div class="card-head"><div class="card-name">Lo que todas las generaciones tienen en común</div><span class="badge b-ok">La parte importante</span></div>
+      <div class="card-body">
+        Más allá de las diferencias generacionales — que son reales y documentadas — hay cosas que no cambian:
+        <br><br>
+        <strong>La necesidad de conexión humana real.</strong> Más pantallas no redujeron la necesidad de amistad, amor y pertenencia — la acentuaron.<br><br>
+        <strong>El deseo de propósito.</strong> Todas las generaciones quieren hacer algo que importe, aunque lo expresen de forma diferente.<br><br>
+        <strong>La capacidad de adaptación.</strong> Cada generación pensó que la siguiente no iba a poder con lo que venía. Hasta ahora, todas pudieron.
+        <br><em>— "Las generaciones no son equipos rivales. Son capas de una misma historia."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#f472b6">
+      <div class="card-head"><div class="card-name">El único consejo que vale entre generaciones</div></div>
+      <div class="card-body">
+        <strong>Para los mayores hablando con los jóvenes:</strong> preguntar antes de dar consejos. El contexto cambió tanto que muchos consejos de "cuando era joven" ya no aplican. Escuchar es más valioso que explicar.
+        <br><br>
+        <strong>Para los jóvenes hablando con los mayores:</strong> la experiencia vivida tiene valor aunque el contexto haya cambiado. El que ya falló en algo que vos estás por hacer tiene algo para decirte, aunque lo diga torpemente.
+        <br><br>
+        <strong>Para todos:</strong> cada generación tiene un punto ciego. Nadie tiene todo el mapa.
+      </div>
+    </div>
+  </div>
+
+  <div class="related">
+    <div class="rel-title">📚 También te puede interesar</div>
+    <div class="rel-grid">
+      <a href="retro.html" class="rel-link">📼 Retro Tech</a>
+      <a href="inteligencia-artificial.html" class="rel-link">🤖 Guía de IA</a>
+      <a href="ia-educacion.html" class="rel-link">🎒 IA y Educación</a>
+      <a href="consolas.html" class="rel-link">🎮 Consolas</a>
+      <a href="agarrate-se-viene.html" class="rel-link">⚡ Se viene</a>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<nav class="sv-dock">
+  <a href="index.html" class="sv-dock-btn">🏠</a>
+  <a href="#" id="svWaBtn" class="sv-dock-btn wa">💬</a>
+</nav>
+
+<script>
+function showFolder(){document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});document.getElementById('folderScreen').classList.remove('hidden');document.getElementById('backBtn').classList.remove('on');window.scrollTo({top:0,behavior:'smooth'});}
+function goTab(id){document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});var sec=document.getElementById(id);if(sec)sec.classList.add('active');document.getElementById('folderScreen').classList.add('hidden');document.getElementById('backBtn').classList.add('on');window.scrollTo({top:0,behavior:'smooth'});}
+function svToggleDark(){var isLight=document.body.classList.toggle('light');document.getElementById('svDarkBtn').textContent=isLight?'🌙':'☀️';localStorage.setItem('sv-mode',isLight?'light':'dark');}
+(function(){
+  var m=localStorage.getItem('sv-mode')||'dark';
+  if(m==='light'){document.body.classList.add('light');document.getElementById('svDarkBtn').textContent='🌙';}
+  else{document.getElementById('svDarkBtn').textContent='☀️';}
+  function tick(){var el=document.getElementById('svClock');if(!el)return;var n=new Date();el.textContent=n.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',hour12:false});}
+  tick();setInterval(tick,30000);
+  var wa=document.getElementById('svWaBtn');
+  if(wa){wa.addEventListener('click',function(e){e.preventDefault();window.open('https://wa.me/?text='+encodeURIComponent('Mirá esta guía de SIN VERSO: ')+encodeURIComponent(window.location.href),'_blank');});}
+})();
+</script>
+</body>
+</html>

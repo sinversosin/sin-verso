@@ -438,6 +438,9 @@
 <button class="notify-btn" type="button" aria-label="Ver notificaciones" onclick="toggleNotifications()">🔔<span class="notify-dot"></span></button>
 <div class="notifications-panel" id="notificationsPanel">
   <div class="notifications-title"><span>Notificaciones</span><span>Ahora</span></div>
+  <div class="notification" onclick="window.location='tu-era.html'" style="cursor:pointer"><div class="notification-ico">🕹️</div><div><strong>Nueva guía — Tu Era</strong><span>Millennials, Centennials y Gen Alfa. El choque generacional explicado sin verso.</span></div></div>
+  <div class="notification" onclick="window.location='ia-ciberseguridad.html'" style="cursor:pointer"><div class="notification-ico">🔒</div><div><strong>Nueva guía — IA y Ciberseguridad</strong><span>Deepfakes, estafas con voz clonada, phishing con IA y cómo protegerte.</span></div></div>
+  <div class="notification" onclick="window.location='ia-educacion.html'" style="cursor:pointer"><div class="notification-ico">🎒</div><div><strong>Nueva guía — IA para Chicos y Educación</strong><span>Para alumnos, padres y docentes. Cómo usar la IA para aprender, no para hacer trampa.</span></div></div>
   <div class="notification" onclick="window.location='impresoras-3d.html'" style="cursor:pointer"><div class="notification-ico">🖨️</div><div><strong>Nueva guía — Impresoras 3D</strong><span>FDM, resina, materiales, marcas y accesorios. Todo para empezar sin perderte.</span></div></div>
   <div class="notification" onclick="window.location='ebooks.html'" style="cursor:pointer"><div class="notification-ico">📖</div><div><strong>Nueva guía — Lectores de eBooks</strong><span>Kindle vs Kobo, formatos, ecosistemas y dónde conseguir libros gratis.</span></div></div>
   <div class="notification"><div class="notification-ico">⚠️</div><div><strong>Oferta con olor raro</strong><span>Si el precio es demasiado perfecto y solo acepta transferencia, revisá dos veces.</span></div></div>
@@ -463,8 +466,8 @@
     <input type="text" id="buscador" placeholder="🔍  Buscá una guía..." oninput="buscar(this.value)">
   </div>
   <div class="stats">
-    <div class="stat"><div class="stat-num">47</div><div class="stat-label">Guías</div></div>
-    <div class="stat"><div class="stat-num">8</div><div class="stat-label">Secciones</div></div>
+    <div class="stat"><div class="stat-num">50</div><div class="stat-label">Guías</div></div>
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">Secciones</div></div>
     <div class="stat"><div class="stat-num">0</div><div class="stat-label">Verso</div></div>
   </div>
 
@@ -491,6 +494,8 @@
     </div>
   </div>
   <div class="guias-grid">
+    <a href="ia-ciberseguridad.html" class="guia-card" style="--gc:#f43f5e" data-s="ciberseguridad deepfake estafa phishing seguridad digital IA hackeo privacidad"><div class="guia-ico">🔒</div><div><div class="guia-nombre">IA y Ciberseguridad</div><div class="guia-desc">Deepfakes, estafas con voz clonada y cómo protegerte</div></div></a>
+    <a href="ia-educacion.html" class="guia-card" style="--gc:#22c55e" data-s="IA educacion chicos alumnos docentes padres aprender estudiar trampa"><div class="guia-ico">🎒</div><div><div class="guia-nombre">IA para Chicos y Educación</div><div class="guia-desc">Cómo usarla para aprender más, no para pensar menos</div></div></a>
     <a href="inteligencia-artificial.html" class="guia-card full" style="--gc:#818cf8;background:linear-gradient(135deg,rgba(129,140,248,.09),rgba(192,132,252,.05));border-color:rgba(129,140,248,.3);" data-s="inteligencia artificial IA ChatGPT Claude Gemini Midjourney imagen video trabajo futuro prompts">
       <div class="guia-ico">🤖</div><div>
         <div class="guia-nombre">Guía completa de Inteligencia Artificial</div>
@@ -533,7 +538,7 @@
     <div class="bloque-ico">🖥️</div>
     <div>
       <div class="bloque-titulo">Tecnología</div>
-      <div class="bloque-sub">25 guías · Todo lo que conecta, carga o tiene pantalla</div>
+      <div class="bloque-sub">27 guías · Todo lo que conecta, carga o tiene pantalla</div>
     </div>
   </div>
   <div class="guias-grid">
@@ -613,6 +618,7 @@
     </div>
   </div>
   <div class="guias-grid">
+    <a href="tu-era.html" class="guia-card" style="--gc:#f472b6" data-s="millennials centennials gen alfa generaciones nostalgia retro cultura digital"><div class="guia-ico">🕹️</div><div><div class="guia-nombre">Tu Era</div><div class="guia-desc">Millennials, Centennials y Gen Alfa — tres mundos, tres idiomas</div></div></a>
     <a href="retro.html" class="guia-card full" style="--gc:#fb923c;background:linear-gradient(135deg,rgba(251,146,60,.07),rgba(250,204,21,.04));border-color:rgba(251,146,60,.25);" data-s="retro 80 90 2000 walkman casete vinilo tocadiscos vhs nintendo game boy ipod dvd">
       <div class="guia-ico">🕹️</div><div>
         <div class="guia-nombre">Los 80, 90 y 2000 — Guía Retro</div>

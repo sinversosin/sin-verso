@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — IA para Chicos y Educación</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--accent:#22c55e;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{background:radial-gradient(circle at 18% 10%,rgba(34,197,94,.22),transparent 28%),radial-gradient(circle at 85% 0%,rgba(16,185,129,.16),transparent 30%),linear-gradient(160deg,#111827,#052e16 54%,#080810);background-attachment:fixed;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  body.light{background:radial-gradient(circle at 18% 10%,rgba(34,197,94,.18),transparent 28%),radial-gradient(circle at 85% 0%,rgba(16,185,129,.12),transparent 30%),linear-gradient(160deg,#f0fdf4,#dcfce7 54%,#f0fff4)!important;color:#052e16;}
+  #appStatus{position:sticky;top:0;z-index:1000;height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(7,7,16,.45);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);font-size:12px;font-weight:800;color:rgba(255,255,255,.8);}
+  body.light #appStatus{background:rgba(255,255,255,.52);color:#444;}
+  #appStatus .sys-r{display:flex;gap:8px;align-items:center;opacity:.7;}
+  header{margin:12px auto 0;max-width:760px;border:1px solid rgba(255,255,255,.11);border-radius:0 0 32px 32px;background:linear-gradient(145deg,rgba(12,12,28,.74),rgba(5,46,22,.6));backdrop-filter:blur(20px);box-shadow:0 18px 60px rgba(0,0,0,.38);padding:44px 24px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:500px;height:220px;background:radial-gradient(ellipse,rgba(34,197,94,.15),transparent 70%);pointer-events:none;}
+  body.light header{background:linear-gradient(145deg,rgba(255,255,255,.76),rgba(220,252,231,.62))!important;}
+  .ia-badge{display:inline-block;background:linear-gradient(135deg,rgba(34,197,94,.2),rgba(16,185,129,.15));border:1px solid rgba(34,197,94,.4);border-radius:20px;padding:5px 18px;font-size:12px;font-weight:700;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,7.5vw,78px);letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 20%,#22c55e 55%,#4ade80 80%,#bbf7d0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:12px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .folder-wrap{max-width:760px;margin:14px auto 0;padding:0 14px 10px;}
+  .folder-card{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.13);border-radius:30px;padding:18px 14px 20px;box-shadow:0 20px 60px rgba(0,0,0,.22);backdrop-filter:blur(18px);}
+  body.light .folder-card{background:rgba(255,255,255,.72);border-color:rgba(30,30,80,.12);}
+  .folder-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 6px 14px;}
+  .folder-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1.5px;color:var(--text);line-height:1;}
+  .folder-sub{font-size:12px;color:var(--muted);margin-top:3px;}
+  .folder-count{font-size:11px;font-weight:800;color:#052e16;background:var(--accent);border-radius:999px;padding:6px 11px;}
+  .app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 10px;padding:6px 2px 4px;}
+  @media(max-width:360px){.app-grid{grid-template-columns:repeat(3,1fr);}}
+  .app-btn{border:0;background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;}
+  .app-ico{width:62px;height:62px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;background:linear-gradient(145deg,var(--c1),var(--c2));box-shadow:0 10px 24px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .18s,filter .18s;position:relative;overflow:hidden;}
+  .app-ico::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.3),transparent 42%);opacity:.55;}
+  @media(hover:hover){.app-btn:hover .app-ico{transform:translateY(-3px) scale(1.08);filter:saturate(1.2);}}
+  @media(hover:none){.app-btn:active .app-ico{transform:scale(.93);}}
+  .app-name{font-size:11px;line-height:1.15;color:var(--text);text-shadow:0 2px 8px rgba(0,0,0,.35);max-width:72px;font-weight:700;}
+  body.light .app-name{text-shadow:none;color:#17172a;}
+  #folderScreen.hidden{display:none;}
+  .back-btn{display:none;margin:0 16px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:var(--text);border-radius:999px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer;}
+  .back-btn.on{display:inline-flex;align-items:center;gap:8px;}
+  body.light .back-btn{background:rgba(255,255,255,.8);color:#052e16;}
+  .tabs{display:none!important;}
+  main{max-width:760px;background:rgba(8,8,16,.22);border:1px solid rgba(255,255,255,.06);border-radius:28px 28px 0 0;backdrop-filter:blur(10px);margin:0 auto;padding:24px 16px 96px;}
+  body.light main{background:rgba(255,255,255,.30);}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09);padding:12px 15px;border-radius:16px;color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);}
+  body.light .sec-sub{background:rgba(255,255,255,.5);color:#555;}
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;backdrop-filter:blur(14px);}
+  .card:hover{border-color:rgba(34,197,94,.4);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  body.light .card{background:rgba(255,255,255,.72)!important;border-color:rgba(30,30,80,.12)!important;}
+  body.light .card-name{color:#052e16!important;}
+  body.light .card-body{color:#555!important;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3);}
+  .b-mid{background:rgba(34,197,94,.12);color:var(--accent);border:1px solid rgba(34,197,94,.3);}
+  .b-high{background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tip{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:14px;padding:14px 16px;margin-top:18px;font-size:14px;line-height:1.65;color:#86efac;}
+  .tip strong{color:var(--accent);}
+  .tip-warn{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.2);color:#f8b4b4;}
+  .tip-warn strong{color:#f87171;}
+  .tip-blue{background:rgba(129,140,248,.06);border:1px solid rgba(129,140,248,.2);color:#c7d2fe;}
+  .tip-blue strong{color:#818cf8;}
+  .tip-gold{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);color:#fde68a;}
+  .tip-gold strong{color:#fbbf24;}
+  .related{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px;margin-top:28px;}
+  .rel-title{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--muted);letter-spacing:1px;margin-bottom:12px;}
+  .rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .rel-link{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:8px 14px;text-decoration:none;font-size:12px;font-weight:700;color:var(--text);transition:all .2s;}
+  .rel-link:hover{border-color:var(--accent);}
+  .sv-darkmode-btn{position:fixed;right:14px;top:36px;z-index:999;width:40px;height:40px;border-radius:13px;border:1px solid rgba(255,255,255,.18);background:rgba(10,10,20,.75);color:#fff;font-size:18px;backdrop-filter:blur(14px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+  body.light .sv-darkmode-btn{background:rgba(255,255,255,.85);color:#333;}
+  .sv-dock{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:888;display:flex;align-items:center;gap:10px;padding:8px 14px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);border-radius:24px;backdrop-filter:blur(20px);box-shadow:0 14px 40px rgba(0,0,0,.32);}
+  body.light .sv-dock{background:rgba(255,255,255,.72);}
+  .sv-dock-btn{width:46px;height:46px;border-radius:16px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;text-decoration:none;transition:transform .18s;}
+  .sv-dock-btn:hover{transform:translateY(-2px);}
+  .sv-dock-btn.wa{background:#25D366;box-shadow:0 6px 18px rgba(37,211,102,.4);}
+  body.light .sv-dock-btn{background:rgba(20,20,80,.08);color:#333;}
+</style>
+</head>
+<body>
+<div id="appStatus"><span id="svClock">--:--</span><span class="sys-r">SIN VERSO · IA & EDUCACIÓN <span>▰▰▰</span></span></div>
+<button class="sv-darkmode-btn" id="svDarkBtn" onclick="svToggleDark()">☀️</button>
+<header>
+  <div class="ia-badge">🎒 Guía especial</div>
+  <h1>IA para Chicos y Educación</h1>
+  <p class="subtitle">Cómo usarla para aprender más, no para pensar menos.<br><strong>Para alumnos, padres y docentes que quieren entender de qué va.</strong></p>
+</header>
+
+<section class="folder-wrap" id="folderScreen">
+  <div class="folder-card">
+    <div class="folder-top">
+      <div><div class="folder-title">IA & Educación</div><div class="folder-sub">Tocá una sección para entrar</div></div>
+      <div class="folder-count">8 secciones</div>
+    </div>
+    <div class="app-grid">
+      <button class="app-btn" onclick="goTab('panorama')"><span class="app-ico" style="--c1:#22c55e;--c2:#15803d">🌍</span><span class="app-name">El panorama</span></button>
+      <button class="app-btn" onclick="goTab('herramientas')"><span class="app-ico" style="--c1:#0ea5e9;--c2:#0369a1">🛠️</span><span class="app-name">Herramientas</span></button>
+      <button class="app-btn" onclick="goTab('bienuso')"><span class="app-ico" style="--c1:#16a34a;--c2:#166534">✅</span><span class="app-name">Buen uso</span></button>
+      <button class="app-btn" onclick="goTab('trampa')"><span class="app-ico" style="--c1:#dc2626;--c2:#991b1b">⚠️</span><span class="app-name">La trampa</span></button>
+      <button class="app-btn" onclick="goTab('docentes')"><span class="app-ico" style="--c1:#7c3aed;--c2:#5b21b6">👩‍🏫</span><span class="app-name">Para docentes</span></button>
+      <button class="app-btn" onclick="goTab('padres')"><span class="app-ico" style="--c1:#d97706;--c2:#92400e">👨‍👩‍👧</span><span class="app-name">Para padres</span></button>
+      <button class="app-btn" onclick="goTab('futuro')"><span class="app-ico" style="--c1:#0891b2;--c2:#155e75">🔮</span><span class="app-name">El futuro</span></button>
+      <button class="app-btn" onclick="goTab('recursos')"><span class="app-ico" style="--c1:#059669;--c2:#064e3b">📚</span><span class="app-name">Recursos gratis</span></button>
+    </div>
+  </div>
+</section>
+
+<main>
+<button class="back-btn" id="backBtn" onclick="showFolder()">← Volver</button>
+
+<!-- PANORAMA -->
+<div class="section" id="panorama">
+  <div class="sec-title">El panorama actual</div>
+  <div class="sec-sub">La IA llegó a las escuelas antes de que las escuelas supieran qué hacer con ella. <em>Y eso no es culpa de los chicos.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#22c55e">
+      <div class="card-head"><div class="card-name">Lo que está pasando en las aulas</div><span class="badge b-ok">La realidad</span></div>
+      <div class="card-body">
+        Los chicos ya usan IA. No el 10% — la mayoría. ChatGPT, Gemini, Copilot. Para hacer la tarea, para responder preguntas, para entender un tema que el profesor explicó mal.
+        <br><br>
+        <strong>El problema no es que la usen — es cómo la usan.</strong> Hay una diferencia enorme entre "pedirle a la IA que entienda por mí" y "usar la IA para entender mejor".
+        <br><br>
+        Las escuelas que prohíben la IA crean una brecha digital — los chicos que la usan igualmente en casa tienen ventaja sobre los que no saben cómo usarla bien.
+        <br><em>— "Prohibir la calculadora no enseñó a nadie a sumar mejor. Enseñar cuándo usarla sí."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#0ea5e9">
+      <div class="card-head"><div class="card-name">Las dos posiciones extremas</div><span class="badge b-mid">Ninguna funciona sola</span></div>
+      <div class="card-body">
+        <strong>"Prohibir todo":</strong> no funciona. Los chicos la usan igual, solo aprenden a esconderlo. Y no aprenden a usarla bien para cuando la necesiten en el trabajo.<br><br>
+        <strong>"Usar sin criterio":</strong> tampoco funciona. Si la IA hace todo el pensamiento, el chico no desarrolla las habilidades que necesita: argumentación, análisis crítico, síntesis, creatividad.<br><br>
+        <strong>Lo que funciona:</strong> enseñar a usar la IA como herramienta — con criterio, con verificación, entendiendo sus límites.
+      </div>
+    </div>
+    <div class="card" style="--ca:#d97706">
+      <div class="card-head"><div class="card-name">La comparación histórica</div><span class="badge b-high">Para contextualizar</span></div>
+      <div class="card-body">
+        Cada vez que llegó una nueva tecnología a la educación, generó el mismo debate:
+        <br><br>
+        📚 <strong>Libros impresos (s.XV):</strong> "los estudiantes no van a memorizar nada si todo está escrito"<br>
+        🧮 <strong>Calculadora (1970s):</strong> "los chicos van a perder la capacidad de calcular"<br>
+        💻 <strong>Internet (1990s):</strong> "van a copiar todo de Wikipedia"<br>
+        📱 <strong>Wikipedia:</strong> "no es una fuente confiable"<br>
+        🤖 <strong>IA (hoy):</strong> "van a dejar de pensar"<br><br>
+        <em>— La pregunta no es si usarla. Es cómo enseñar a usarla bien.</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HERRAMIENTAS -->
+<div class="section" id="herramientas">
+  <div class="sec-title">Herramientas para estudiar</div>
+  <div class="sec-sub">Las que realmente ayudan a aprender más. <em>Algunas gratuitas, todas útiles si se usan bien.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#22c55e">
+      <div class="card-head"><div class="card-name">ChatGPT / Claude / Gemini</div><span class="badge b-ok">El tutor disponible 24/7</span></div>
+      <div class="card-body">
+        Usados bien, son el mejor tutor de historia. Podés preguntar lo mismo de 10 formas distintas hasta que lo entiendas. No te juzga si no entendés, no se cansa de explicar, siempre disponible.
+        <br><br>
+        <strong>Para estudiar bien con IA:</strong><br>
+        ✅ "Explicame la fotosíntesis como si tuviera 12 años"<br>
+        ✅ "Haceme 5 preguntas sobre la Revolución Francesa para que practique"<br>
+        ✅ "Leí esto y no entendí esta parte — ¿qué significa?"<br>
+        ✅ "¿Mi razonamiento en este ejercicio es correcto?"<br><br>
+        ❌ "Escribime el ensayo sobre la Revolución Francesa"
+      </div>
+    </div>
+    <div class="card" style="--ca:#fbbf24">
+      <div class="card-head"><div class="card-name">Khanmigo (Khan Academy con IA)</div><span class="badge b-top">El mejor para matemáticas</span></div>
+      <div class="card-body">
+        Khan Academy integró IA en su plataforma con Khanmigo — un tutor que NO te da las respuestas. Te hace preguntas para que vos llegues a la respuesta. La diferencia pedagógica es enorme.
+        <br><br>
+        <strong>Gratis para estudiantes.</strong> Matemáticas, ciencias, historia, programación. Con soporte en español. El mejor ejemplo de cómo usar IA para enseñar en lugar de reemplazar el aprendizaje.
+        <br>
+        <strong>khanacademy.org</strong>
+      </div>
+    </div>
+    <div class="card" style="--ca:#0ea5e9">
+      <div class="card-head"><div class="card-name">Duolingo y el aprendizaje de idiomas</div><span class="badge b-mid">El caso de éxito</span></div>
+      <div class="card-body">
+        Duolingo usa IA para personalizar el aprendizaje — detecta en qué fallas, cuándo olvidás vocabulario y cuándo reforzar. Sus modelos de IA ajustan el nivel y el ritmo para cada usuario.
+        <br><br>
+        Es uno de los casos donde la IA en educación funciona de forma demostrada — los usuarios aprenden idiomas más rápido que con métodos tradicionales en ciertos contextos.
+      </div>
+    </div>
+    <div class="card" style="--ca:#7c3aed">
+      <div class="card-head"><div class="card-name">NotebookLM (Google)</div><span class="badge b-high">Para estudiar apuntes</span></div>
+      <div class="card-body">
+        Subís tus apuntes o PDFs y NotebookLM genera resúmenes, preguntas de práctica y un podcast de dos personas discutiendo el tema. <strong>Completamente gratis.</strong>
+        <br><br>
+        <strong>Caso de uso ideal:</strong> antes del parcial, subís todos tus apuntes y le pedís que te haga un simulacro de examen con preguntas sobre el material. Identifica qué sabés y qué no.
+      </div>
+    </div>
+    <div class="card" style="--ca:#16a34a">
+      <div class="card-head"><div class="card-name">Photomath y Wolfram Alpha</div><span class="badge b-ok">Para matemáticas</span></div>
+      <div class="card-body">
+        <strong>Photomath:</strong> sacás foto a un ejercicio y te muestra el proceso paso a paso. Útil para entender CÓMO se resuelve, no para copiar el resultado.<br><br>
+        <strong>Wolfram Alpha:</strong> el motor de matemáticas más preciso disponible. Para verificar resultados y ver el proceso completo de resolución.
+        <br><br>
+        <strong>La diferencia:</strong> usarlos para entender el proceso = aprendizaje. Copiar el resultado sin entender = nada aprendido.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BUEN USO -->
+<div class="section" id="bienuso">
+  <div class="sec-title">El buen uso de la IA para estudiar</div>
+  <div class="sec-sub">La diferencia entre usar la IA como atajo y usarla como trampolín. <em>Una te da el pescado, la otra te enseña a pescar.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#22c55e">
+      <div class="card-head"><div class="card-name">El método Feynman con IA</div><span class="badge b-top">El más efectivo</span></div>
+      <div class="card-body">
+        El método Feynman dice que si no podés explicar algo en palabras simples, no lo entendés de verdad. Con IA podés practicarlo fácil:
+        <br><br>
+        <strong>1.</strong> Leés el tema del libro o los apuntes.<br>
+        <strong>2.</strong> Le explicás el tema a la IA con tus propias palabras.<br>
+        <strong>3.</strong> Le pedís que te diga qué está mal o incompleto en tu explicación.<br>
+        <strong>4.</strong> Corregís lo que no entendiste y repetís.<br><br>
+        <em>— "La IA es el mejor interlocutor para practicar este método — disponible, paciente e implacable para detectar cuando no entendés algo."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#0ea5e9">
+      <div class="card-head"><div class="card-name">Simulacros de examen</div><span class="badge b-ok">Para prepararse</span></div>
+      <div class="card-body">
+        <strong>El prompt:</strong> "Soy estudiante de secundaria. Tengo examen de Historia Argentina sobre el Peronismo. Haceme 10 preguntas de examen, una por vez, esperá mi respuesta y después decime si es correcta y qué me faltó."
+        <br><br>
+        La IA hace de examinador. Vos estudiás activamente respondiendo. Es mucho más efectivo que releer los apuntes — el esfuerzo de recordar y responder es lo que fija el conocimiento.
+      </div>
+    </div>
+    <div class="card" style="--ca:#d97706">
+      <div class="card-head"><div class="card-name">Entender, no copiar</div><span class="badge b-mid">La distinción clave</span></div>
+      <div class="card-body">
+        <strong>Si la IA escribe el ensayo y vos lo entregás:</strong> el docente puede detectarlo, no aprendiste nada, y cuando tengás que argumentar oralmente no vas a poder.
+        <br><br>
+        <strong>Si la IA te ayuda a estructurar las ideas, vos escribís y la IA te da feedback:</strong> aprendiste a escribir mejor, el trabajo es tuyo, y podés defenderlo.
+        <br><br>
+        <strong>La pregunta honesta:</strong> ¿si mañana te pregunta el profe, podés explicar lo que entregaste? Si la respuesta es no, algo está mal.
+      </div>
+    </div>
+    <div class="card" style="--ca:#16a34a">
+      <div class="card-head"><div class="card-name">Verificación crítica</div><span class="badge b-ok">La habilidad del siglo XXI</span></div>
+      <div class="card-body">
+        La IA se equivoca. Inventa datos, cita fuentes que no existen, confunde fechas. <strong>Verificar lo que dice la IA es una habilidad esencial que los chicos deben aprender.</strong>
+        <br><br>
+        <strong>El hábito:</strong> cuando la IA da un dato importante (fecha, nombre, número), buscarlo en al menos una fuente externa antes de usarlo.
+        <br><br>
+        Esto enseña pensamiento crítico — la habilidad más valiosa en un mundo donde la información es abundante y la desinformación también.
+      </div>
+    </div>
+  </div>
+  <div class="tip">
+    <strong>💡 La regla de oro:</strong> usá la IA para entender más rápido, no para esforzarte menos. El aprendizaje real requiere esfuerzo cognitivo — cuando la IA hace el esfuerzo por vos, sos vos el que pierde.
+  </div>
+</div>
+
+<!-- LA TRAMPA -->
+<div class="section" id="trampa">
+  <div class="sec-title">La trampa del atajo</div>
+  <div class="sec-sub">Por qué hacer trampa con IA te perjudica a vos, no al sistema. <em>Sin moralizar — con argumentos reales.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#dc2626">
+      <div class="card-head"><div class="card-name">Cómo detectan la IA los docentes</div><span class="badge b-warn">Spoiler: cada vez mejor</span></div>
+      <div class="card-body">
+        <strong>GPTZero, Turnitin AI, Copyleaks:</strong> herramientas específicas para detectar texto generado por IA. Turnitin (el detector de plagio más usado en universidades) ya integró detección de IA y es usado en miles de instituciones.
+        <br><br>
+        <strong>Los patrones evidentes:</strong> estructura perfecta sin personalidad, uso de ciertos conectores típicos de IA ("es importante destacar que", "en conclusión podemos decir que"), ausencia de errores naturales del lenguaje humano, nivel de vocabulario inconsistente con el alumno.
+        <br><br>
+        <strong>La pregunta oral:</strong> muchos docentes simplemente preguntan sobre el trabajo entregado. Si no podés explicarlo, la conversación termina ahí.
+      </div>
+    </div>
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">El problema real no es que te descubran</div><span class="badge b-warn">El argumento de fondo</span></div>
+      <div class="card-body">
+        Podés entregar un trabajo hecho por IA y no ser descubierto. El problema no es ese.
+        <br><br>
+        <strong>El problema es que en 5 años:</strong> vas a estar en una entrevista de trabajo o en una situación que requiere esas habilidades que no desarrollaste. La IA no va a estar ahí para pensar por vos en tiempo real (todavía).
+        <br><br>
+        Las habilidades que se desarrollan escribiendo, argumentando y analizando — pensamiento crítico, síntesis, comunicación — son exactamente las que los empleadores van a valorar más en un mundo donde la IA hace el trabajo rutinario.
+        <br><em>— "La IA va a hacer el trabajo de los que aprendieron a copiar. Los que aprendieron a pensar van a dirigir a la IA."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#7c3aed">
+      <div class="card-head"><div class="card-name">El círculo vicioso</div><span class="badge b-mid">El patrón que preocupa</span></div>
+      <div class="card-body">
+        Chico usa IA para hacer la tarea → aprueba sin aprender → el próximo tema se construye sobre el anterior que no entendió → usa más IA para compensar → llega al examen final sin base → no puede defenderlo oralmente.
+        <br><br>
+        El sistema educativo mide con exámenes escritos y pruebas orales justamente porque son difíciles de delegar a una IA. Cuanto más se usa la IA para tareas, más importante se vuelve rendir bien los exámenes reales.
+      </div>
+    </div>
+  </div>
+  <div class="tip tip-warn">
+    <strong>⚠️ Para los padres que leen esto:</strong> si su hijo usa IA para hacer la tarea "para que no sufra tanto", el favor que le hacen es que aprenda a no esforzarse. El esfuerzo cognitivo es exactamente lo que construye capacidad intelectual. Acompañar no es hacer el trabajo por ellos.
+  </div>
+</div>
+
+<!-- PARA DOCENTES -->
+<div class="section" id="docentes">
+  <div class="sec-title">Para docentes</div>
+  <div class="sec-sub">Cómo usar la IA en el aula de forma que potencia el aprendizaje. <em>No como amenaza — como herramienta.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#7c3aed">
+      <div class="card-head"><div class="card-name">IA para preparar clases</div><span class="badge b-ok">El uso más inmediato</span></div>
+      <div class="card-body">
+        <strong>Generación de ejercicios:</strong> "Haceme 10 ejercicios de matemática sobre fracciones para alumnos de 7mo grado, con dificultad progresiva".<br><br>
+        <strong>Adaptación de contenido:</strong> "Explicame la fotosíntesis de 3 formas distintas: para 6to grado, para alumno con dificultades de aprendizaje, y para alumno avanzado".<br><br>
+        <strong>Rúbricas de evaluación:</strong> "Creame una rúbrica para evaluar un ensayo argumentativo de nivel secundario con criterios de contenido, estructura y expresión".<br><br>
+        <strong>Planificación:</strong> "Ayudame a planificar una unidad de 3 semanas sobre la Segunda Guerra Mundial para secundaria, con actividades variadas".
+      </div>
+    </div>
+    <div class="card" style="--ca:#22c55e">
+      <div class="card-head"><div class="card-name">Actividades que la IA no puede reemplazar</div><span class="badge b-top">El diseño curricular del futuro</span></div>
+      <div class="card-body">
+        <strong>Debate oral:</strong> argumentar en tiempo real, rebatir, improvisar. La IA no puede hacerlo por el alumno presencialmente.<br><br>
+        <strong>Trabajo en equipo:</strong> negociar, dividir tareas, resolver conflictos, liderar. Habilidades sociales que solo se aprenden con otros humanos.<br><br>
+        <strong>Proyectos reales:</strong> entrevistar a alguien de la comunidad, hacer una encuesta, visitar un lugar. El mundo real sigue siendo el mejor aula.<br><br>
+        <strong>Presentaciones orales:</strong> defender las propias ideas frente a otros. Incómodo, formativo, imposible de delegar.
+      </div>
+    </div>
+    <div class="card" style="--ca:#0ea5e9">
+      <div class="card-head"><div class="card-name">Enseñar a usar la IA bien</div><span class="badge b-mid">La nueva alfabetización</span></div>
+      <div class="card-body">
+        En lugar de prohibir la IA, enseñar a usarla bien se está convirtiendo en competencia básica — como enseñar a usar una biblioteca, internet o Excel.
+        <br><br>
+        <strong>Ejercicio propuesto:</strong> pedirles a los alumnos que usen ChatGPT para responder una pregunta, luego verificar la respuesta en fuentes primarias y presentar dónde la IA acertó y dónde se equivocó. Enseña uso crítico y verificación de fuentes al mismo tiempo.
+      </div>
+    </div>
+    <div class="card" style="--ca:#d97706">
+      <div class="card-head"><div class="card-name">Herramientas para docentes</div><span class="badge b-ok">Las más usadas</span></div>
+      <div class="card-body">
+        <strong>MagicSchool AI:</strong> plataforma específica para docentes. Genera planes de clase, rúbricas, comunicaciones a padres, diferenciación de contenido. Gratuito para uso básico.<br><br>
+        <strong>Canva con IA:</strong> para crear materiales visuales atractivos rápidamente.<br><br>
+        <strong>Curipod:</strong> genera presentaciones interactivas con IA para usar en clase.<br><br>
+        <strong>Diffit:</strong> adapta textos a distintos niveles de lectura automáticamente.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PARA PADRES -->
+<div class="section" id="padres">
+  <div class="sec-title">Para padres</div>
+  <div class="sec-sub">Lo que necesitás saber sin ser técnico. <em>Cómo acompañar sin prohibir ni ignorar.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#d97706">
+      <div class="card-head"><div class="card-name">Lo primero: no entrar en pánico</div><span class="badge b-ok">El contexto importa</span></div>
+      <div class="card-body">
+        Tu hijo usa IA. Probablemente ya lo hace. La pregunta no es cómo impedirlo — la pregunta es cómo asegurarte de que lo usa de forma que le sirva.
+        <br><br>
+        Los chicos que crecen sabiendo usar la IA bien van a tener una ventaja enorme en el mercado laboral. Los que no saben usarla ni tampoco aprendieron a pensar solos, van a quedarse atrás.
+        <br><br>
+        <strong>La meta parental:</strong> que use la IA como herramienta, no como muleta.
+      </div>
+    </div>
+    <div class="card" style="--ca:#22c55e">
+      <div class="card-head"><div class="card-name">Cómo acompañar el uso</div><span class="badge b-mid">Conversaciones que funcionan</span></div>
+      <div class="card-body">
+        <strong>Preguntá, no prohibas:</strong> "¿Qué te ayudó la IA a entender?" es mejor que "¿Usaste IA para hacer la tarea?".<br><br>
+        <strong>Interesate:</strong> pedile que te muestre cómo usa la IA. Si puede explicarte qué hizo y por qué, está en el buen camino.<br><br>
+        <strong>El test del "¿y vos qué pensás?":</strong> si puede argumentar su propia posición sobre el tema del trabajo, aprendió. Si solo puede repetir lo que dijo la IA, no aprendió.<br><br>
+        <strong>Límites razonables:</strong> que use la IA para entender y practicar, no para entregar trabajos que no hizo. La honestidad académica sigue siendo un valor.
+      </div>
+    </div>
+    <div class="card" style="--ca:#0ea5e9">
+      <div class="card-head"><div class="card-name">Señales de alerta</div><span class="badge b-warn">Cuándo intervenir</span></div>
+      <div class="card-body">
+        <strong>No puede explicar sus propios trabajos:</strong> si le preguntás del trabajo que entregó y no sabe responder, algo está mal.<br><br>
+        <strong>Entrega trabajos "perfectos" de materias en las que no es fuerte:</strong> la calidad no consistente con el nivel habitual es señal.<br><br>
+        <strong>No puede sostener una conversación sobre el tema:</strong> si escribió 2 páginas sobre la Revolución Industrial pero no puede decir dos oraciones de cabeza, hay un problema.<br><br>
+        <strong>Usa la IA para todo, incluso para cosas simples:</strong> si no puede redactar un párrafo sin consultarle a la IA, está perdiendo autonomía.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EL FUTURO -->
+<div class="section" id="futuro">
+  <div class="sec-title">El futuro de la educación con IA</div>
+  <div class="sec-sub">Cómo van a cambiar las aulas en los próximos años. <em>Y qué habilidades va a necesitar un chico que hoy tiene 10 años cuando tenga 25.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#0891b2">
+      <div class="card-head"><div class="card-name">La personalización total</div><span class="badge b-top">El cambio más grande</span></div>
+      <div class="card-body">
+        Hoy todos los alumnos de una clase aprenden al mismo ritmo con el mismo material. La IA permite que cada alumno aprenda al ritmo que necesita, con ejemplos que le sirven y reforzando donde falla.
+        <br><br>
+        <strong>Khan Academy, Duolingo y Khanmigo</strong> ya hacen esto parcialmente. En 5-10 años, sistemas completos de educación adaptativa van a conocer mejor el estilo de aprendizaje de cada alumno que el propio docente — simplemente porque tienen los datos.
+        <br><br>
+        <em>— "El mejor maestro que existió siempre fue el tutor personal. La IA puede hacer que todos los chicos tengan acceso a eso."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#22c55e">
+      <div class="card-head"><div class="card-name">Las habilidades que van a importar más</div><span class="badge b-high">Para los chicos de hoy</span></div>
+      <div class="card-body">
+        Si la IA puede generar texto, código, imágenes y análisis de datos, ¿qué va a necesitar un humano para ser valioso?
+        <br><br>
+        <strong>Pensamiento crítico:</strong> evaluar si lo que dice la IA (o cualquier fuente) es correcto y relevante.<br>
+        <strong>Creatividad estratégica:</strong> generar ideas originales, conectar conceptos de formas inesperadas.<br>
+        <strong>Inteligencia emocional:</strong> empatía, liderazgo, manejo de conflictos, trabajo en equipo.<br>
+        <strong>Comunicación:</strong> persuadir, negociar, inspirar. Habilidades profundamente humanas.<br>
+        <strong>Saber qué preguntar:</strong> la calidad de lo que produce la IA depende de la calidad de las preguntas. Saber hacer buenas preguntas es la habilidad del siglo XXI.
+      </div>
+    </div>
+    <div class="card" style="--ca:#7c3aed">
+      <div class="card-head"><div class="card-name">El rol del docente va a cambiar</div><span class="badge b-mid">No desaparece — evoluciona</span></div>
+      <div class="card-body">
+        Los docentes que hacen cosas que la IA puede hacer mejor (transmitir información básica, corregir ejercicios mecánicos, generar material estándar) van a enfrentar presión. Los que hacen cosas que la IA no puede reemplazar son irremplazables:
+        <br><br>
+        <strong>Inspirar:</strong> un docente apasionado que transmite amor por una materia cambia la vida de un alumno. Ninguna IA hace eso.<br>
+        <strong>Detectar el problema real:</strong> ver que un alumno está mal en casa o tiene dificultades que van más allá de lo académico.<br>
+        <strong>Construir comunidad:</strong> crear un grupo humano donde los chicos se respetan, colaboran y crecen juntos.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RECURSOS GRATIS -->
+<div class="section" id="recursos">
+  <div class="sec-title">Recursos gratuitos</div>
+  <div class="sec-sub">Lo mejor y más accesible para estudiar con IA. <em>Todo gratis o con versión gratuita suficiente.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#22c55e">
+      <div class="card-head"><div class="card-name">Para aprender cualquier tema</div><span class="badge b-ok">Gratuitos</span></div>
+      <div class="card-body">
+        🎓 <strong>Khan Academy</strong> (khanacademy.org) — matemáticas, ciencias, historia, programación. En español. Con IA Khanmigo.<br><br>
+        🤖 <strong>ChatGPT</strong> (chat.openai.com) — versión gratuita más que suficiente para estudiar.<br><br>
+        🎵 <strong>NotebookLM</strong> (notebooklm.google.com) — subís tus apuntes, genera podcasts y preguntas de práctica.<br><br>
+        📚 <strong>Perplexity</strong> (perplexity.ai) — para investigar con fuentes verificadas.
+      </div>
+    </div>
+    <div class="card" style="--ca:#0ea5e9">
+      <div class="card-head"><div class="card-name">Para matemáticas específicamente</div><span class="badge b-ok">Gratuitos</span></div>
+      <div class="card-body">
+        🔢 <strong>Photomath</strong> — sacás foto al ejercicio, muestra el proceso paso a paso.<br><br>
+        🧮 <strong>Wolfram Alpha</strong> (wolframalpha.com) — resuelve matemática con proceso completo.<br><br>
+        📐 <strong>Desmos</strong> (desmos.com) — graficador de funciones interactivo gratuito.<br><br>
+        🎮 <strong>Prodigy Math</strong> — matemáticas gamificadas para primaria.
+      </div>
+    </div>
+    <div class="card" style="--ca:#d97706">
+      <div class="card-head"><div class="card-name">Para idiomas</div><span class="badge b-ok">Gratuitos o freemium</span></div>
+      <div class="card-body">
+        🦉 <strong>Duolingo</strong> — el más popular. Gamificado, en el celu, progresión bien diseñada.<br><br>
+        🗣️ <strong>Busuu</strong> — con feedback de hablantes nativos reales.<br><br>
+        📖 <strong>Anki</strong> — flashcards con algoritmo de repetición espaciada. El método más efectivo para vocabulario.<br><br>
+        🎬 <strong>Language Reactor</strong> — aprende idiomas viendo Netflix con subtítulos interactivos.
+      </div>
+    </div>
+    <div class="card" style="--ca:#7c3aed">
+      <div class="card-head"><div class="card-name">Para programación</div><span class="badge b-high">El idioma del futuro</span></div>
+      <div class="card-body">
+        💻 <strong>Scratch</strong> (scratch.mit.edu) — programación visual para chicos desde 8 años. Del MIT, gratis.<br><br>
+        🐍 <strong>CS50 de Harvard</strong> (cs50.harvard.edu) — el mejor curso introductorio de programación del mundo. Gratis.<br><br>
+        🤖 <strong>code.org</strong> — cursos de programación para todas las edades, en español.<br><br>
+        🎮 <strong>CodeCombat</strong> — aprender a programar jugando un videojuego de rol.
+      </div>
+    </div>
+  </div>
+
+  <div class="related">
+    <div class="rel-title">📚 También te puede interesar</div>
+    <div class="rel-grid">
+      <a href="inteligencia-artificial.html" class="rel-link">🤖 Guía de IA</a>
+      <a href="ia-ciberseguridad.html" class="rel-link">🔒 IA y Ciberseguridad</a>
+      <a href="tablets.html" class="rel-link">🪄 Tablets</a>
+      <a href="notebooks.html" class="rel-link">💻 Notebooks</a>
+    </div>
+  </div>
+</div>
+</main>
+
+<nav class="sv-dock">
+  <a href="index.html" class="sv-dock-btn">🏠</a>
+  <a href="#" id="svWaBtn" class="sv-dock-btn wa">💬</a>
+</nav>
+<script>
+function showFolder(){document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});document.getElementById('folderScreen').classList.remove('hidden');document.getElementById('backBtn').classList.remove('on');window.scrollTo({top:0,behavior:'smooth'});}
+function goTab(id){document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});var sec=document.getElementById(id);if(sec)sec.classList.add('active');document.getElementById('folderScreen').classList.add('hidden');document.getElementById('backBtn').classList.add('on');window.scrollTo({top:0,behavior:'smooth'});}
+function svToggleDark(){var isLight=document.body.classList.toggle('light');document.getElementById('svDarkBtn').textContent=isLight?'🌙':'☀️';localStorage.setItem('sv-mode',isLight?'light':'dark');}
+(function(){var m=localStorage.getItem('sv-mode')||'dark';if(m==='light'){document.body.classList.add('light');document.getElementById('svDarkBtn').textContent='🌙';}else{document.getElementById('svDarkBtn').textContent='☀️';}function tick(){var el=document.getElementById('svClock');if(!el)return;var n=new Date();el.textContent=n.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',hour12:false});}tick();setInterval(tick,30000);var wa=document.getElementById('svWaBtn');if(wa){wa.addEventListener('click',function(e){e.preventDefault();window.open('https://wa.me/?text='+encodeURIComponent('Mirá esta guía de SIN VERSO: ')+encodeURIComponent(window.location.href),'_blank');});}})();
+</script>
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>SIN VERSO — IA y Ciberseguridad</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080810;--surface:#10101c;--card:#13131f;--border:#20203a;--text:#eeeef5;--muted:#9494b8;--accent:#f43f5e;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  body{background:radial-gradient(circle at 18% 10%,rgba(244,63,94,.22),transparent 28%),radial-gradient(circle at 85% 0%,rgba(239,68,68,.16),transparent 30%),linear-gradient(160deg,#111827,#1f0a0a 54%,#080810);background-attachment:fixed;color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+  body.light{background:radial-gradient(circle at 18% 10%,rgba(244,63,94,.15),transparent 28%),radial-gradient(circle at 85% 0%,rgba(239,68,68,.1),transparent 30%),linear-gradient(160deg,#fff1f2,#ffe4e6 54%,#fff5f5)!important;color:#1a0505;}
+  #appStatus{position:sticky;top:0;z-index:1000;height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:rgba(7,7,16,.45);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);font-size:12px;font-weight:800;color:rgba(255,255,255,.8);}
+  body.light #appStatus{background:rgba(255,255,255,.52);color:#444;}
+  #appStatus .sys-r{display:flex;gap:8px;align-items:center;opacity:.7;}
+  header{margin:12px auto 0;max-width:760px;border:1px solid rgba(255,255,255,.11);border-radius:0 0 32px 32px;background:linear-gradient(145deg,rgba(12,12,28,.74),rgba(30,8,8,.6));backdrop-filter:blur(20px);box-shadow:0 18px 60px rgba(0,0,0,.38);padding:44px 24px 36px;text-align:center;position:relative;overflow:hidden;}
+  header::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:500px;height:220px;background:radial-gradient(ellipse,rgba(244,63,94,.15),transparent 70%);pointer-events:none;}
+  body.light header{background:linear-gradient(145deg,rgba(255,255,255,.76),rgba(255,228,230,.62))!important;}
+  .ia-badge{display:inline-block;background:linear-gradient(135deg,rgba(244,63,94,.2),rgba(239,68,68,.15));border:1px solid rgba(244,63,94,.4);border-radius:20px;padding:5px 18px;font-size:12px;font-weight:700;color:var(--accent);letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;}
+  header h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,8vw,82px);letter-spacing:2px;line-height:1;background:linear-gradient(135deg,#fff 20%,#f43f5e 55%,#fb7185 80%,#fda4af 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{margin-top:12px;color:var(--muted);font-size:15px;font-style:italic;}
+  .subtitle strong{color:var(--accent);font-style:normal;}
+  .folder-wrap{max-width:760px;margin:14px auto 0;padding:0 14px 10px;}
+  .folder-card{background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.13);border-radius:30px;padding:18px 14px 20px;box-shadow:0 20px 60px rgba(0,0,0,.22);backdrop-filter:blur(18px);}
+  body.light .folder-card{background:rgba(255,255,255,.72);border-color:rgba(30,30,80,.12);}
+  .folder-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 6px 14px;}
+  .folder-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1.5px;color:var(--text);line-height:1;}
+  .folder-sub{font-size:12px;color:var(--muted);margin-top:3px;}
+  .folder-count{font-size:11px;font-weight:800;color:#fff;background:var(--accent);border-radius:999px;padding:6px 11px;}
+  .app-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 10px;padding:6px 2px 4px;}
+  @media(max-width:360px){.app-grid{grid-template-columns:repeat(3,1fr);}}
+  .app-btn{border:0;background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0;}
+  .app-ico{width:62px;height:62px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;background:linear-gradient(145deg,var(--c1),var(--c2));box-shadow:0 10px 24px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .18s,filter .18s;position:relative;overflow:hidden;}
+  .app-ico::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.3),transparent 42%);opacity:.55;}
+  @media(hover:hover){.app-btn:hover .app-ico{transform:translateY(-3px) scale(1.08);filter:saturate(1.2);}}
+  @media(hover:none){.app-btn:active .app-ico{transform:scale(.93);}}
+  .app-name{font-size:11px;line-height:1.15;color:var(--text);text-shadow:0 2px 8px rgba(0,0,0,.35);max-width:72px;font-weight:700;}
+  body.light .app-name{text-shadow:none;color:#17172a;}
+  #folderScreen.hidden{display:none;}
+  .back-btn{display:none;margin:0 16px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:var(--text);border-radius:999px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer;}
+  .back-btn.on{display:inline-flex;align-items:center;gap:8px;}
+  body.light .back-btn{background:rgba(255,255,255,.8);color:#17172a;}
+  .tabs{display:none!important;}
+  main{max-width:760px;background:rgba(8,8,16,.22);border:1px solid rgba(255,255,255,.06);border-radius:28px 28px 0 0;backdrop-filter:blur(10px);margin:0 auto;padding:24px 16px 96px;}
+  body.light main{background:rgba(255,255,255,.30);}
+  .section{display:none;}.section.active{display:block;}
+  .sec-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:1px;color:var(--accent);margin-bottom:4px;}
+  .sec-sub{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09);padding:12px 15px;border-radius:16px;color:var(--muted);font-size:15px;margin-bottom:24px;line-height:1.6;}
+  .sec-sub em{color:var(--text);}
+  body.light .sec-sub{background:rgba(255,255,255,.5);color:#555;}
+  .cards{display:flex;flex-direction:column;gap:14px;}
+  .card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);border-radius:18px;padding:20px 20px 20px 24px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;backdrop-filter:blur(14px);}
+  .card:hover{border-color:rgba(244,63,94,.4);transform:translateY(-2px);}
+  .card::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:var(--ca,var(--accent));border-radius:18px 0 0 18px;}
+  .card-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .card-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;color:var(--text);line-height:1;}
+  body.light .card{background:rgba(255,255,255,.72)!important;border-color:rgba(30,30,80,.12)!important;}
+  body.light .card-name{color:#1a0505!important;}
+  body.light .card-body{color:#555!important;}
+  .badge{font-size:10px;font-weight:700;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .b-ok{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3);}
+  .b-mid{background:rgba(244,63,94,.12);color:var(--accent);border:1px solid rgba(244,63,94,.3);}
+  .b-high{background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.3);}
+  .b-top{background:rgba(255,215,0,.12);color:#ffd700;border:1px solid rgba(255,215,0,.3);}
+  .b-warn{background:rgba(248,113,113,.15);color:#f87171;border:1px solid rgba(248,113,113,.3);}
+  .card-body{font-size:14px;color:var(--muted);line-height:1.7;}
+  .card-body strong{color:var(--text);font-weight:600;}
+  .card-body em{color:#9090bb;font-size:13px;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .chip{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:4px 10px;font-size:12px;color:var(--muted);}
+  .chip span{color:var(--text);font-weight:600;}
+  .tip{background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:14px;padding:14px 16px;margin-top:18px;font-size:14px;line-height:1.65;color:#fda4af;}
+  .tip strong{color:var(--accent);}
+  .tip-green{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);color:#a0e8b4;}
+  .tip-green strong{color:#4ade80;}
+  .tip-warn{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);color:#fde68a;}
+  .tip-warn strong{color:#fbbf24;}
+  .tip-blue{background:rgba(129,140,248,.06);border:1px solid rgba(129,140,248,.2);color:#c7d2fe;}
+  .tip-blue strong{color:#818cf8;}
+  .related{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px;margin-top:28px;}
+  .rel-title{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--muted);letter-spacing:1px;margin-bottom:12px;}
+  .rel-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .rel-link{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:8px 14px;text-decoration:none;font-size:12px;font-weight:700;color:var(--text);transition:all .2s;}
+  .rel-link:hover{border-color:var(--accent);}
+  .sv-darkmode-btn{position:fixed;right:14px;top:36px;z-index:999;width:40px;height:40px;border-radius:13px;border:1px solid rgba(255,255,255,.18);background:rgba(10,10,20,.75);color:#fff;font-size:18px;backdrop-filter:blur(14px);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+  body.light .sv-darkmode-btn{background:rgba(255,255,255,.85);color:#333;}
+  .sv-dock{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:888;display:flex;align-items:center;gap:10px;padding:8px 14px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);border-radius:24px;backdrop-filter:blur(20px);box-shadow:0 14px 40px rgba(0,0,0,.32);}
+  body.light .sv-dock{background:rgba(255,255,255,.72);}
+  .sv-dock-btn{width:46px;height:46px;border-radius:16px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;text-decoration:none;transition:transform .18s;}
+  .sv-dock-btn:hover{transform:translateY(-2px);}
+  .sv-dock-btn.wa{background:#25D366;box-shadow:0 6px 18px rgba(37,211,102,.4);}
+  body.light .sv-dock-btn{background:rgba(20,20,80,.08);color:#333;}
+</style>
+</head>
+<body>
+<div id="appStatus"><span id="svClock">--:--</span><span class="sys-r">SIN VERSO · IA & CIBERSEGURIDAD <span>▰▰▰</span></span></div>
+<button class="sv-darkmode-btn" id="svDarkBtn" onclick="svToggleDark()">☀️</button>
+<header>
+  <div class="ia-badge">🔒 Guía especial</div>
+  <h1>IA y Ciberseguridad</h1>
+  <p class="subtitle">Las amenazas cambiaron. La IA las potenció.<br><strong>Lo que tenés que saber para no caer en la trampa.</strong></p>
+</header>
+
+<section class="folder-wrap" id="folderScreen">
+  <div class="folder-card">
+    <div class="folder-top">
+      <div><div class="folder-title">IA & Ciberseguridad</div><div class="folder-sub">Tocá una sección para entrar</div></div>
+      <div class="folder-count">8 secciones</div>
+    </div>
+    <div class="app-grid">
+      <button class="app-btn" onclick="goTab('deepfakes')"><span class="app-ico" style="--c1:#f43f5e;--c2:#be123c">🎭</span><span class="app-name">Deepfakes</span></button>
+      <button class="app-btn" onclick="goTab('estafas')"><span class="app-ico" style="--c1:#f97316;--c2:#c2410c">📞</span><span class="app-name">Estafas con IA</span></button>
+      <button class="app-btn" onclick="goTab('phishing')"><span class="app-ico" style="--c1:#dc2626;--c2:#991b1b">🎣</span><span class="app-name">Phishing IA</span></button>
+      <button class="app-btn" onclick="goTab('hackea')"><span class="app-ico" style="--c1:#7c3aed;--c2:#4c1d95">🔍</span><span class="app-name">IA que hackea</span></button>
+      <button class="app-btn" onclick="goTab('defiende')"><span class="app-ico" style="--c1:#059669;--c2:#065f46">🛡️</span><span class="app-name">IA que defiende</span></button>
+      <button class="app-btn" onclick="goTab('privacidad')"><span class="app-ico" style="--c1:#0284c7;--c2:#075985">🕵️</span><span class="app-name">Privacidad</span></button>
+      <button class="app-btn" onclick="goTab('protegerte')"><span class="app-ico" style="--c1:#16a34a;--c2:#14532d">⚠️</span><span class="app-name">Protegete</span></button>
+      <button class="app-btn" onclick="goTab('fails')"><span class="app-ico" style="--c1:#d97706;--c2:#92400e">😂</span><span class="app-name">Cuando falló</span></button>
+    </div>
+  </div>
+</section>
+
+<main>
+<button class="back-btn" id="backBtn" onclick="showFolder()">← Volver</button>
+
+<!-- DEEPFAKES -->
+<div class="section" id="deepfakes">
+  <div class="sec-title">Deepfakes</div>
+  <div class="sec-sub">Videos e imágenes falsos tan reales que engañan a cualquiera. <em>Ya no necesitás ser Hollywood para hacerlos.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#f43f5e">
+      <div class="card-head"><div class="card-name">¿Qué es un deepfake?</div><span class="badge b-warn">Entendelo primero</span></div>
+      <div class="card-body">
+        Un deepfake es un video, imagen o audio generado o modificado con IA para que parezca real cuando no lo es. El nombre viene de "deep learning" + "fake".
+        <br><br>
+        <strong>Cómo funciona:</strong> un modelo de IA aprende los rasgos faciales de una persona con cientos de fotos y puede superponer esa cara sobre otra persona en un video. El resultado puede ser indistinguible del original.
+        <br><br>
+        <strong>Los más famosos:</strong> el video de Obama diciendo cosas que nunca dijo (hecho por Buzzfeed para demostrar el peligro), deepfakes de políticos en campañas electorales, el caso del CEO de Ferrari que casi estafaron con un video falso de Elkann.
+        <br><em>— "Antes, ver era creer. Ahora, ver ya no alcanza."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">Cómo detectarlos</div><span class="badge b-mid">Los trucos que funcionan</span></div>
+      <div class="card-body">
+        <strong>Los ojos:</strong> los deepfakes fallan en el parpadeo — parpadean con ritmo extraño o casi no parpadean. Mirá fijo los ojos.<br><br>
+        <strong>Los bordes:</strong> el pelo y los bordes de la cara suelen tener "ruido" o aspecto extraño, especialmente cuando hay movimiento.<br><br>
+        <strong>La iluminación:</strong> si la cara tiene una iluminación que no coincide con el ambiente del video, algo está mal.<br><br>
+        <strong>Los dientes:</strong> la IA sigue fallando en generar dientes naturales. Son demasiado perfectos o demasiado raros.<br><br>
+        <strong>Herramientas:</strong> <strong>Deepware Scanner</strong>, <strong>FakeCatcher de Intel</strong> (detecta pulso sanguíneo en el video), <strong>Microsoft Video Authenticator</strong>.
+      </div>
+    </div>
+    <div class="card" style="--ca:#dc2626">
+      <div class="card-head"><div class="card-name">El impacto real</div><span class="badge b-warn">Ya está pasando</span></div>
+      <div class="card-body">
+        <strong>Política:</strong> deepfakes de candidatos diciendo cosas falsas días antes de una elección. Ya ocurrió en Eslovaquia, EEUU, India y Argentina.<br><br>
+        <strong>Finanzas:</strong> en 2024 una empresa de Hong Kong perdió USD 25 millones en una videollamada con deepfakes de sus propios directivos.<br><br>
+        <strong>Acoso sexual:</strong> el 96% de los deepfakes en internet son pornografía no consensuada. En varios países ya es delito.<br><br>
+        <strong>Reputación:</strong> cualquier persona puede ser víctima — no solo famosos. Con fotos de redes sociales alcanza.
+      </div>
+    </div>
+  </div>
+  <div class="tip tip-warn">
+    <strong>💡 La regla de oro:</strong> Si un video de alguien famoso o conocido tuyo dice algo sorprendente, impactante o que pide dinero — <strong>verificá por otro canal antes de reaccionar.</strong> Llamalo directamente. Buscá la fuente original. La velocidad de reacción es lo que aprovechan las estafas.
+  </div>
+</div>
+
+<!-- ESTAFAS -->
+<div class="section" id="estafas">
+  <div class="sec-title">Estafas con IA</div>
+  <div class="sec-sub">El cuento del tío evolucionó. Ahora usa tu propia voz. <em>Los casos que están pasando en Argentina ahora mismo.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">Clonación de voz</div><span class="badge b-warn">El más común en Argentina</span></div>
+      <div class="card-body">
+        Con apenas 10-30 segundos de audio de tu voz (de un video de Instagram, un mensaje de WhatsApp, un video de TikTok), la IA puede clonar tu voz y decir cualquier cosa.
+        <br><br>
+        <strong>El caso típico:</strong> recibís un audio de WhatsApp de "tu hijo" diciendo que tuvo un accidente, está detenido o perdió el celular y necesita plata urgente. La voz suena exactamente igual.
+        <br><br>
+        <strong>En Argentina ya hay casos documentados</strong> de personas que transfirieron dinero escuchando la voz clonada de un familiar.
+        <br><em>— "La voz es la firma del alma, dijeron. Y ahora la pueden falsificar."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#dc2626">
+      <div class="card-head"><div class="card-name">La estafa del CEO / jefe</div><span class="badge b-warn">En empresas</span></div>
+      <div class="card-body">
+        El empleado recibe un mensaje o llamada que parece ser de su jefe, gerente o director pidiendo una transferencia urgente, confidencial y que no debe comentar con nadie.
+        <br><br>
+        <strong>Con IA:</strong> la voz del jefe es clonada, o directamente se hace una videollamada con deepfake en tiempo real. El empleado cree que está hablando con su jefe de verdad.
+        <br><br>
+        <strong>El detalle clave:</strong> siempre hay urgencia, confidencialidad y presión para actuar rápido — las tres señales de alarma de cualquier estafa.
+      </div>
+    </div>
+    <div class="card" style="--ca:#7c3aed">
+      <div class="card-head"><div class="card-name">Romance scams con IA</div><span class="badge b-mid">El más cruel</span></div>
+      <div class="card-body">
+        Perfiles falsos en apps de citas o redes sociales con fotos generadas por IA, conversaciones mantenidas por chatbots y en algunos casos videollamadas con deepfakes en tiempo real.
+        <br><br>
+        La víctima desarrolla una relación emocional durante semanas o meses. Cuando el estafador pide dinero, la persona ya confía completamente.
+        <br><br>
+        <strong>Las víctimas más frecuentes:</strong> adultos mayores y personas en situación de soledad. No es una cuestión de inteligencia — es una cuestión de contexto emocional.
+      </div>
+    </div>
+    <div class="card" style="--ca:#059669">
+      <div class="card-head"><div class="card-name">Cómo no caer</div><span class="badge b-ok">El protocolo</span></div>
+      <div class="card-body">
+        <strong>1. Verificación por otro canal:</strong> si recibís un audio o video sospechoso, llamá directamente a esa persona por teléfono o video por otra plataforma.<br><br>
+        <strong>2. Palabra clave familiar:</strong> acordá con tu familia una palabra clave de emergencia que solo ustedes sepan. Si alguien dice ser tu familiar en apuros, pedile la palabra.<br><br>
+        <strong>3. La regla de las 24 horas:</strong> cualquier pedido urgente de dinero espera 24 horas. Si es real, puede esperar. Si no puede esperar, es estafa.<br><br>
+        <strong>4. Desconfiá de la urgencia:</strong> la urgencia artificial es la herramienta principal de toda estafa. La prisa te hace cortar el pensamiento crítico.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHISHING IA -->
+<div class="section" id="phishing">
+  <div class="sec-title">Phishing potenciado con IA</div>
+  <div class="sec-sub">El email de phishing ya no tiene errores de ortografía. <em>Y ahora sabe tu nombre, tu empresa y lo que compraste la semana pasada.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#dc2626">
+      <div class="card-head"><div class="card-name">El phishing de antes vs el de ahora</div><span class="badge b-warn">La diferencia es enorme</span></div>
+      <div class="card-body">
+        <strong>Antes:</strong> "Estimado cliente, su cuenta fue suspendida. Click aqui para verificar." Con errores de ortografía, traducción automática evidente, sin personalización.<br><br>
+        <strong>Ahora con IA:</strong> "Hola Martín, vimos actividad inusual en tu cuenta de Mercado Libre desde Córdoba (tu ciudad). Tu última compra del sábado puede estar en riesgo. Verificá acá." — Nombre real, ciudad real, comportamiento real, redacción perfecta.
+        <br><br>
+        La IA puede procesar datos filtrados de hackeos anteriores, cruzar información de redes sociales y generar emails hiper-personalizados en segundos para miles de víctimas.
+      </div>
+    </div>
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">Spear phishing — El que apunta a vos</div><span class="badge b-warn">El más peligroso</span></div>
+      <div class="card-body">
+        El spear phishing es phishing dirigido a una persona específica. Antes requería investigación manual — horas de trabajo por víctima. Con IA, se automatiza completamente.
+        <br><br>
+        <strong>Cómo te "investigan":</strong> LinkedIn (tu empresa, tu cargo, tus proyectos), Instagram (tus viajes, tus amigos), Twitter/X (tus opiniones), datos de hackeos previos (contraseñas viejas, emails, teléfonos).
+        <br><br>
+        Con esa información, la IA genera un mensaje que parece de alguien que te conoce, en el contexto correcto, con detalles que solo conocería alguien de tu entorno.
+      </div>
+    </div>
+    <div class="card" style="--ca:#059669">
+      <div class="card-head"><div class="card-name">Cómo identificarlos igual</div><span class="badge b-ok">Aún tienen puntos débiles</span></div>
+      <div class="card-body">
+        <strong>El dominio del remitente:</strong> "mercadolibre-seguridad.com" no es Mercado Libre. El dominio oficial siempre es mercadolibre.com. Revisá antes de hacer click.<br><br>
+        <strong>El link destino:</strong> pasá el mouse sobre cualquier link antes de hacer click. La URL real aparece abajo. Si no coincide con el sitio oficial, no entres.<br><br>
+        <strong>La urgencia y el miedo:</strong> cualquier comunicación que mezcle urgencia + amenaza + link para "resolver" es phishing hasta que se demuestre lo contrario.<br><br>
+        <strong>Entrar directo:</strong> si dudás de un email del banco, abrí el navegador y escribí la URL del banco vos mismo. Nunca uses links de emails sospechosos.
+      </div>
+    </div>
+  </div>
+  <div class="tip tip-blue">
+    <strong>💡 El dato que cambia todo:</strong> el 91% de los hackeos exitosos empiezan con un email de phishing. No con código súper sofisticado — con un email que alguien abrió y un link que alguien clickeó. La primera línea de defensa siempre es vos.
+  </div>
+</div>
+
+<!-- IA QUE HACKEA -->
+<div class="section" id="hackea">
+  <div class="sec-title">IA que hackea</div>
+  <div class="sec-sub">Cómo los atacantes usan IA para hacer su trabajo más fácil, más rápido y más preciso. <em>No para asustarte — para que entiendas de qué te protegés.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#7c3aed">
+      <div class="card-head"><div class="card-name">Generación automática de malware</div><span class="badge b-warn">El más preocupante</span></div>
+      <div class="card-body">
+        Antes hacer malware (software malicioso) requería conocimientos avanzados de programación. Con IA, un atacante puede describir qué quiere que haga el código y obtener variantes funcionales que evaden antivirus.
+        <br><br>
+        Los grandes modelos de IA tienen restricciones para esto, pero existen "darknet LLMs" — modelos sin restricciones vendidos en foros clandestinos — que lo hacen libremente.
+        <br><br>
+        <strong>WormGPT y FraudGPT:</strong> modelos de IA vendidos en la dark web específicamente para generar phishing, malware y estafas. Sin los filtros de ChatGPT.
+      </div>
+    </div>
+    <div class="card" style="--ca:#dc2626">
+      <div class="card-head"><div class="card-name">Fuerza bruta inteligente</div><span class="badge b-mid">Contraseñas en riesgo</span></div>
+      <div class="card-body">
+        Los ataques de "fuerza bruta" (probar contraseñas hasta encontrar la correcta) antes eran lentos y predecibles. Con IA, el sistema aprende patrones de contraseñas humanas y prioriza las más probables.
+        <br><br>
+        <strong>PassGAN</strong> es un sistema que usa IA para generar contraseñas probables basándose en millones de contraseñas reales filtradas. Adivina contraseñas comunes en segundos — incluso las que parecen "complejas" pero siguen patrones predecibles.
+        <br><br>
+        <em>— "Agus2024! no es una contraseña segura. Es exactamente el tipo de patrón que la IA aprende primero."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#f43f5e">
+      <div class="card-head"><div class="card-name">Reconocimiento automatizado</div><span class="badge b-mid">La fase previa</span></div>
+      <div class="card-body">
+        Antes de atacar, los hackers "reconocen" el objetivo — buscan vulnerabilidades, mapean la infraestructura, identifican puntos débiles. Con IA, esto se automatiza completamente.
+        <br><br>
+        En minutos, un sistema puede escanear miles de puertos, identificar versiones de software desactualizadas, cruzar datos de empleados en LinkedIn con contraseñas filtradas y encontrar el punto de entrada más fácil.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IA QUE DEFIENDE -->
+<div class="section" id="defiende">
+  <div class="sec-title">IA que defiende</div>
+  <div class="sec-sub">La misma tecnología que potencia los ataques también potencia la defensa. <em>Y acá la IA tiene una ventaja enorme: puede analizar millones de eventos por segundo.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#059669">
+      <div class="card-head"><div class="card-name">Antivirus de nueva generación</div><span class="badge b-ok">Ya los usás sin saberlo</span></div>
+      <div class="card-body">
+        Los antivirus modernos (CrowdStrike, SentinelOne, Windows Defender con IA) no funcionan solo con firmas de virus conocidos — usan modelos de IA que detectan comportamientos anómalos.
+        <br><br>
+        <strong>La diferencia clave:</strong> el antivirus viejo busca virus que ya conoce. El de IA detecta cuando algo se comporta como virus aunque nunca haya sido visto antes. Detecta el patrón, no la firma.
+      </div>
+    </div>
+    <div class="card" style="--ca:#0284c7">
+      <div class="card-head"><div class="card-name">Detección de anomalías</div><span class="badge b-high">En empresas</span></div>
+      <div class="card-body">
+        Los sistemas de SIEM (Security Information and Event Management) con IA monitorean en tiempo real todo lo que pasa en una red. Cuando algo se desvía del patrón normal, alerta automáticamente.
+        <br><br>
+        <strong>Ejemplo:</strong> si un empleado que siempre trabaja de 9 a 18 de repente descarga 50GB de archivos a las 3AM, la IA lo detecta y bloquea antes de que el dato salga de la empresa.
+      </div>
+    </div>
+    <div class="card" style="--ca:#16a34a">
+      <div class="card-head"><div class="card-name">Filtros anti-phishing inteligentes</div><span class="badge b-ok">En tu email ya</span></div>
+      <div class="card-body">
+        Gmail, Outlook y los grandes servicios de email usan IA para detectar phishing antes de que llegue a tu bandeja. Analizan el remitente, el contenido, los links y los patrones históricos.
+        <br><br>
+        <strong>La estadística:</strong> Gmail bloquea 99.9% del spam y phishing. El 0.1% que pasa es el más sofisticado — y cada vez más, ese 0.1% usa IA para evadir los filtros.
+      </div>
+    </div>
+    <div class="card" style="--ca:#7c3aed">
+      <div class="card-head"><div class="card-name">Autenticación biométrica</div><span class="badge b-mid">El futuro de las contraseñas</span></div>
+      <div class="card-body">
+        El reconocimiento facial, de huella y de voz con IA hacen la autenticación más fácil y más segura que una contraseña. Tu cara o tu huella son únicas y difíciles de replicar en tiempo real.
+        <br><br>
+        <strong>La ironía:</strong> los mismos deepfakes que son amenaza, aceleran el desarrollo de sistemas de detección de deepfakes para que la autenticación facial no sea engañada.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRIVACIDAD -->
+<div class="section" id="privacidad">
+  <div class="sec-title">Privacidad y datos</div>
+  <div class="sec-sub">Qué saben de vos las IAs que usás todos los días. <em>Más de lo que creés, menos de lo que temés.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#0284c7">
+      <div class="card-head"><div class="card-name">¿Qué pasa con tus conversaciones con ChatGPT?</div><span class="badge b-mid">La pregunta que todos tienen</span></div>
+      <div class="card-body">
+        OpenAI guarda tus conversaciones y las usa para mejorar sus modelos (salvo que lo desactivés en configuración). Los empleados pueden revisar conversaciones para evaluar la calidad de las respuestas.
+        <br><br>
+        <strong>La recomendación:</strong> no escribas en ChatGPT información sensible — contraseñas, datos bancarios, información médica privada, datos de terceros que no dieron consentimiento.
+        <br><br>
+        <strong>Cómo desactivarlo:</strong> Configuración → Controles de datos → desactivar "Mejorar el modelo para todos". Tus conversaciones no se usarán para entrenamiento.
+      </div>
+    </div>
+    <div class="card" style="--ca:#7c3aed">
+      <div class="card-head"><div class="card-name">Los datos que alimentan los modelos</div><span class="badge b-high">El debate que no termina</span></div>
+      <div class="card-body">
+        Los grandes modelos de lenguaje fueron entrenados con texto de internet — incluyendo contenido de sitios web, libros, artículos y en muchos casos información que los autores nunca consintieron compartir.
+        <br><br>
+        Los modelos de imagen (Midjourney, DALL-E, Stable Diffusion) fueron entrenados con imágenes de artistas que no dieron permiso. Hay demandas judiciales activas en EEUU y Europa por esto.
+        <br><br>
+        <strong>El debate legal:</strong> ¿usar contenido público para entrenar IA es uso justo o infracción de derechos? Los tribunales todavía están decidiendo.
+      </div>
+    </div>
+    <div class="card" style="--ca:#f43f5e">
+      <div class="card-head"><div class="card-name">Las apps de IA en el celu</div><span class="badge b-warn">Leé los permisos</span></div>
+      <div class="card-body">
+        Muchas apps de IA (especialmente filtros de foto, generadores de avatares, apps de cámara) piden acceso a tu galería completa, contactos y micrófono.
+        <br><br>
+        <strong>El caso FaceApp:</strong> la app rusa que "envejecía" tu foto. Subías tu selfie a sus servidores, les dabas una cara clara tuya vinculada a tu teléfono. El destino final de esos datos fue muy discutido.
+        <br><br>
+        <strong>La regla:</strong> si una app de foto divertida pide acceso a tus contactos, algo no cierra. Revisá qué permisos das antes de instalar.
+      </div>
+    </div>
+  </div>
+  <div class="tip tip-blue">
+    <strong>💡 Tus datos son el producto:</strong> cuando algo es gratis, generalmente vos sos el producto. Las apps de IA gratuitas tienen que pagar sus costos computacionales de alguna forma. Antes de dar tus datos o fotos a una app nueva, preguntáte cuál es el modelo de negocio.
+  </div>
+</div>
+
+<!-- PROTEGERTE -->
+<div class="section" id="protegerte">
+  <div class="sec-title">Cómo protegerte</div>
+  <div class="sec-sub">Pasos concretos, sin paranoia y sin necesitar ser técnico. <em>El 80% de los ataques exitosos se evitan con hábitos básicos.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#16a34a">
+      <div class="card-head"><div class="card-name">Contraseñas — el problema más viejo</div><span class="badge b-ok">Empezá por acá</span></div>
+      <div class="card-body">
+        <strong>El problema:</strong> la gente usa la misma contraseña en todo. Cuando hackean cualquier sitio y obtienen tu contraseña, la prueban en tu email, banco y redes sociales.<br><br>
+        <strong>La solución real:</strong> un gestor de contraseñas. <strong>Bitwarden</strong> (gratis y open source), <strong>1Password</strong> o <strong>Google Password Manager</strong> generan y guardan contraseñas únicas y complejas para cada sitio. Vos solo recordás una contraseña maestra.<br><br>
+        <strong>Contraseña segura de verdad:</strong> una frase larga es más segura que una corta con símbolos. "ElGatoDeMiAbuelaComePescado2024" es más segura que "Ag@$#2!" y más fácil de recordar.
+      </div>
+    </div>
+    <div class="card" style="--ca:#0284c7">
+      <div class="card-head"><div class="card-name">Autenticación de dos factores (2FA)</div><span class="badge b-ok">El escudo más efectivo</span></div>
+      <div class="card-body">
+        El 2FA agrega un segundo paso de verificación — además de la contraseña, necesitás un código que llega al celu o se genera en una app. Aunque te roben la contraseña, no pueden entrar sin el segundo factor.<br><br>
+        <strong>Activalo en:</strong> email, banco, redes sociales, MercadoPago, cualquier cuenta importante.<br><br>
+        <strong>App recomendada:</strong> Google Authenticator o Authy. Mejor que el SMS porque el SMS puede interceptarse (SIM swapping).
+      </div>
+    </div>
+    <div class="card" style="--ca:#f97316">
+      <div class="card-head"><div class="card-name">El protocolo familiar anti-estafa</div><span class="badge b-mid">Para toda la familia</span></div>
+      <div class="card-body">
+        <strong>Palabra clave de emergencia:</strong> acordá una palabra que solo la familia conozca. Si alguien llama o manda audio diciendo ser un familiar en problemas, pedile la palabra. Si no la sabe, es estafa.<br><br>
+        <strong>Regla de verificación:</strong> ante cualquier pedido urgente de dinero por teléfono, WhatsApp o mensaje, colgá y llamá directamente al número guardado de esa persona.<br><br>
+        <strong>Educar a los mayores:</strong> los adultos mayores son el blanco más frecuente. Hablá con tus padres y abuelos sobre estas estafas — no para asustarlos sino para que sepan que existen.
+      </div>
+    </div>
+    <div class="card" style="--ca:#7c3aed">
+      <div class="card-head"><div class="card-name">Actualizaciones — el aburrido que salva vidas digitales</div><span class="badge b-ok">Hacelo ahora</span></div>
+      <div class="card-body">
+        El 60% de los hackeos exitosos aprovechan vulnerabilidades en software desactualizado. Las actualizaciones no son solo nuevas funciones — son parches de seguridad para agujeros conocidos.<br><br>
+        <strong>Actualizá:</strong> el sistema operativo del celu y la compu, el navegador, las apps bancarias, el router (firmware).<br><br>
+        <em>— "El hacker no entró por la puerta principal. Entró por la ventana del baño que nadie arregló hace 3 años."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#059669">
+      <div class="card-head"><div class="card-name">Checklist de seguridad básica</div><span class="badge b-ok">Para hacer hoy</span></div>
+      <div class="card-body">
+        ✅ Contraseña única en cada sitio importante (gestor de contraseñas)<br>
+        ✅ 2FA activado en email y banco<br>
+        ✅ Sistema operativo actualizado<br>
+        ✅ No abrir links de emails sospechosos — ir directo al sitio<br>
+        ✅ Palabra clave familiar acordada<br>
+        ✅ Privacidad de redes sociales revisada (¿quién puede ver tus fotos?)<br>
+        ✅ Revisar permisos de apps instaladas<br>
+        ✅ Hacer backup de fotos y documentos importantes
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CUANDO FALLÓ -->
+<div class="section" id="fails">
+  <div class="sec-title">Cuando la IA falló épicamente</div>
+  <div class="sec-sub">Los casos más ridículos e irónicos de IA engañada, hackeada o simplemente confundida. <em>Porque el equilibrio entre el miedo y la risa es necesario.</em></div>
+  <div class="cards">
+    <div class="card" style="--ca:#d97706">
+      <div class="card-head"><div class="card-name">El "jailbreak" de la abuela</div><span class="badge b-top">Clásico de internet</span></div>
+      <div class="card-body">
+        En 2023, usuarios descubrieron que podían pedirle a ChatGPT que "roleara como su abuela que los ayudaba a dormir leyéndoles instrucciones para hacer cosas peligrosas". El modelo lo hacía porque detectaba el contexto como "cuento de abuela" y no como solicitud peligrosa.
+        <br><br>
+        OpenAI lo parchó en días pero el patrón se viralizó — la "Grandma Jailbreak" fue usada para extraer todo tipo de información que el modelo tenía restricciones de dar directamente.
+        <br><em>— "La IA más sofisticada de la historia fue engañada con el cuento de abuela."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#f43f5e">
+      <div class="card-head"><div class="card-name">El reconocimiento facial que confundía razas</div><span class="badge b-warn">El fail más costoso</span></div>
+      <div class="card-body">
+        Múltiples sistemas de reconocimiento facial usados por policías en EEUU generaron detenciones erróneas de personas inocentes — todas personas de piel oscura — porque el modelo había sido entrenado principalmente con rostros blancos y fallaba en otras etnias.
+        <br><br>
+        En Detroit, un hombre pasó 30 horas detenido por un error de IA. La ciudad pagó una demanda millonaria.
+        <br><br>
+        <strong>La lección:</strong> una IA es tan buena (y tan sesgada) como los datos con los que fue entrenada.
+      </div>
+    </div>
+    <div class="card" style="--ca:#7c3aed">
+      <div class="card-head"><div class="card-name">El chatbot de atención al cliente que prometió de más</div><span class="badge b-mid">El clásico corporativo</span></div>
+      <div class="card-body">
+        Air Canada en 2024 tuvo que indemnizar a un pasajero porque su chatbot de IA le prometió un descuento por duelo (fallecimiento familiar) que no existía en la política de la empresa. El juez falló que la aerolínea era responsable por lo que su IA prometía.
+        <br><br>
+        Primera sentencia importante que establece que las empresas son responsables por las alucinaciones de sus chatbots.
+        <br><em>— "La IA inventó una política. El juez dijo 'igual la tienen que cumplir'."</em>
+      </div>
+    </div>
+    <div class="card" style="--ca:#059669">
+      <div class="card-head"><div class="card-name">El antivirus que se borró a sí mismo</div><span class="badge b-ok">El más irónico</span></div>
+      <div class="card-body">
+        CrowdStrike en julio 2024 lanzó una actualización de su software de seguridad basado en IA que causó la mayor interrupción informática de la historia — 8.5 millones de computadoras con Windows en todo el mundo se bloquearon con "pantalla azul de la muerte".
+        <br><br>
+        El software de seguridad, al actualizarse, detectó sus propios archivos como amenaza y se destruyó a sí mismo. Aeropuertos, hospitales, bancos y gobiernos paralizados.
+        <br><em>— "El guardaespaldas le pegó al jefe."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="related">
+    <div class="rel-title">📚 También te puede interesar</div>
+    <div class="rel-grid">
+      <a href="inteligencia-artificial.html" class="rel-link">🤖 Guía de IA</a>
+      <a href="ia-educacion.html" class="rel-link">🎒 IA para Chicos</a>
+      <a href="celulares.html" class="rel-link">📱 Celulares</a>
+      <a href="smart-home.html" class="rel-link">🏠 Smart Home</a>
+    </div>
+  </div>
+</div>
+</main>
+
+<nav class="sv-dock">
+  <a href="index.html" class="sv-dock-btn">🏠</a>
+  <a href="#" id="svWaBtn" class="sv-dock-btn wa">💬</a>
+</nav>
+<script>
+function showFolder(){document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});document.getElementById('folderScreen').classList.remove('hidden');document.getElementById('backBtn').classList.remove('on');window.scrollTo({top:0,behavior:'smooth'});}
+function goTab(id){document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});var sec=document.getElementById(id);if(sec)sec.classList.add('active');document.getElementById('folderScreen').classList.add('hidden');document.getElementById('backBtn').classList.add('on');window.scrollTo({top:0,behavior:'smooth'});}
+function svToggleDark(){var isLight=document.body.classList.toggle('light');document.getElementById('svDarkBtn').textContent=isLight?'🌙':'☀️';localStorage.setItem('sv-mode',isLight?'light':'dark');}
+(function(){var m=localStorage.getItem('sv-mode')||'dark';if(m==='light'){document.body.classList.add('light');document.getElementById('svDarkBtn').textContent='🌙';}else{document.getElementById('svDarkBtn').textContent='☀️';}function tick(){var el=document.getElementById('svClock');if(!el)return;var n=new Date();el.textContent=n.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',hour12:false});}tick();setInterval(tick,30000);var wa=document.getElementById('svWaBtn');if(wa){wa.addEventListener('click',function(e){e.preventDefault();window.open('https://wa.me/?text='+encodeURIComponent('Mirá esta guía de SIN VERSO: ')+encodeURIComponent(window.location.href),'_blank');});}})();
+</script>
+</body>
+</html>
